@@ -24,7 +24,13 @@ Debug
 autom4te.cache
 dump
 ltmain.sh
+.libs
+*.lo
+*.o
+*.la
 
 syntax: regexp
 ^usb4java-lib/src/main/c/Makefile$
+^usb4java-lib/src/main/Makefile$
+^usb4java-lib/src/Makefile$
 ^usb4java-lib/Makefile$

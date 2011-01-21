@@ -11,6 +11,8 @@ AC_CHECK_HEADERS(usb.h,,echo "ERROR: usb.h not found. Please install libusb"; ex
 
 AC_CONFIG_FILES(
   Makefile 
-  src/Makefile
+  src/Makefile  
+  src/main/Makefile
+  src/main/c/Makefile
 )
 AC_OUTPUT

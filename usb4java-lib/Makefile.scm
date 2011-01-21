@@ -4,6 +4,7 @@ all:
 	
 clean:
 	rm -rf \
+	  Debug \
 	  autom4te.cache \
 	  m4 \
 	  aclocal.m4 \
@@ -23,13 +24,13 @@ clean:
 	  Makefile.in \
 	  missing \
 	  stamp-h1 \
-	  src/Makefile.in \
-	  src/.deps \
-	  src/.libs \
-	  src/*.lo \
-	  src/*.la \
-	  src/*.o \
-	  src/Makefile \
+	  src/main/c/Makefile.in \
+	  src/main/c/.deps \
+	  src/main/c/.libs \
+	  src/main/c/*.lo \
+	  src/main/c/*.la \
+	  src/main/c/*.o \
+	  src/main/c/Makefile \
 	  *.tar.gz \
 	  *.tar.bz2 \
           *~
