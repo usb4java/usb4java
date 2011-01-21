@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <artifactId>maven-java</artifactId>
+    <groupId>de.ailis.maven</groupId>
+    <version>2</version>
+  </parent>
+    
+  <groupId>de.ailis.usb4java</groupId>
+  <artifactId>usb4java</artifactId>
+  <packaging>pom</packaging>
+  <name>usb4java</name>
+  <version>1.0.0-SNAPSHOT</version>
+  <url>http://www.ailis.de/~k/projects/usb4java</url>
+  <description>
+    USB library for Java.
+  </description>
+  <inceptionYear>2011</inceptionYear>
+  <organization>
+    <name>Klaus Reimer</name>
+    <url>http://www.ailis.de/~k/</url>
+  </organization>
+  
+  <licenses>
+    <license>
+      <name>LGPL</name>
+      <url>LICENSE.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+    
+  <developers>
+    <developer>
+      <id>k</id>
+      <name>Klaus Reimer</name>
+      <email>k@ailis.de</email>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>+1</timezone>
+      <url>http://www.ailis.de/~k/</url>
+    </developer>        
+  </developers>
+   
+  <scm>
+    <url>http://www.ailis.de/~k/hg/java/usb4java</url>
+    <connection>scm:hg:http://www.ailis.de/~k/hg/java/usb4java</connection>
+    <developerConnection>scm:hg:ssh://k@ailis.de/hg/java/usb4java</developerConnection>
+  </scm>  
+  
+  <repositories>  
+    <repository>
+      <id>ailis-releases</id>
+      <name>Ailis Maven Releases</name>
+      <url>http://www.ailis.de/nexus/content/groups/public/</url>
+      <releases><enabled>true</enabled></releases>
+      <snapshots><enabled>false</enabled></snapshots>
+    </repository>
+    <repository>
+      <id>ailis-snapshots</id>
+      <name>Ailis Maven Snapshots</name>
+      <url>http://www.ailis.de/nexus/content/groups/public-snapshots/</url>
+      <releases><enabled>false</enabled></releases>
+      <snapshots><enabled>true</enabled></snapshots>
+    </repository>
+  </repositories>
+   
+  <distributionManagement>
+    <site>
+      <id>project-website</id>
+      <url>scpexe://k@ailis.de/home/k/public_html/projects/usb4java/</url>
+    </site>
+  </distributionManagement>
+  
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>de.ailis.usb4java</groupId>
+        <artifactId>usb4java-lib</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>de.ailis.usb4java</groupId>
+        <artifactId>usb4java-jni</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>de.ailis.usb4java</groupId>
+        <artifactId>usb4java-jsr80</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.8.1</version>
+      </dependency> 
+      <dependency>
+        <groupId>commons-logging</groupId>
+        <artifactId>commons-logging</artifactId>
+        <version>1.1.1</version>
+      </dependency> 
+      <dependency>
+        <groupId>javax.usb</groupId>
+        <artifactId>usb</artifactId>
+        <version>1.0.2</version>
+      </dependency> 
+    </dependencies>
+  </dependencyManagement>
+  
+  <modules>
+    <module>usb4java-lib</module>
+    <module>usb4java-jni</module>
+    <module>usb4java-jsr80</module>
+  </modules>
+  
+</project>

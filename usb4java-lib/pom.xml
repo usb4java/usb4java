@@ -1,0 +1,16 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <artifactId>usb4java</artifactId>
+    <groupId>de.ailis.usb4java</groupId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+    
+  <groupId>de.ailis.usb4java</groupId>
+  <artifactId>libusb4java</artifactId>
+  <packaging>pom</packaging>
+  <name>libusb4java</name>
+  <description>The native JNI library of usb4java</description>
+
+</project>
