@@ -7,12 +7,12 @@ package de.ailis.usb4java.jni;
 
 
 /**
- * USB endport descriptor.
+ * USB interface descriptor.
  *
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public class USBEndpointDescriptor
+public class USB_Interface_Descriptor
 {
     /** The low-level pointer to the C structure. */
     final long pointer;
@@ -25,7 +25,7 @@ public class USBEndpointDescriptor
      *            The low-level pointer to the C structure.
      */
 
-    USBEndpointDescriptor(final long pointer)
+    USB_Interface_Descriptor(final long pointer)
     {
         this.pointer = pointer;
     }
@@ -34,17 +34,21 @@ public class USBEndpointDescriptor
 
     public native byte bDescriptorType();
 
-    public native byte bEndpointAddress();
+    public native byte bInterfaceNumber();
 
-    public native byte bmAttributes();
+    public native byte bAlternateSetting();
 
-    public native short wMaxPacketSize();
+    public native byte bNumEndpoints();
 
-    public native byte bInterval();
+    public native byte bInterfaceClass();
 
-    public native byte bRefresh();
+    public native byte bInterfaceSubClass();
 
-    public native byte bSynchAddress();
+    public native byte bInterfaceProtocol();
+
+    public native byte iInterface();
+
+    public native USB_Endpoint_Descriptor[] endpoint();
 
     public native byte[] extra();
 

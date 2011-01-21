@@ -7,13 +7,13 @@ package de.ailis.usb4java.jni;
 
 
 /**
- * This is the main class of the usb4java JNI wrapper. It wraps the necessary
- * global functions of libusb 0.x as static methods. Usage is the same as
+ * This is the main class of the usb4java JNI wrapper. It wraps the global
+ * functions of libusb 0.x and defines all the constants. Usage is the same as
  * documented by libusb.
  *
  * You can use these classes to access USB at a low level but it is recommended
  * to use javax.usb (JSR80) instead which usb4java implements. To do this put
- * the file javax.usb.resources into the classpath with the following content:
+ * the file javax.usb.resources into the class path with the following content:
  *
  * javax.usb.services = de.ailis.usb4java.UsbServicesImpl
  *
@@ -52,16 +52,15 @@ public class USB
     /** USB_CLASS_VENDOR_SPEC constant. */
     public static final short USB_CLASS_VENDOR_SPEC = 0xff;
 
-
     static
     {
         try
         {
-            System.loadLibrary("libusb-java");
+            System.loadLibrary("libusb4java");
         }
         catch (final UnsatisfiedLinkError e)
         {
-            System.loadLibrary("usb-java");
+            System.loadLibrary("usb4java");
         }
     }
 
@@ -113,7 +112,7 @@ public class USB
      * @return The list of USB busses found.
      */
 
-    public static native USBBus usb_get_busses();
+    public static native USB_Bus usb_get_busses();
 
 
     /**
@@ -128,7 +127,7 @@ public class USB
      * @return The USB device handle.
      */
 
-    public static native USBDevHandle usb_open(USBDevice device);
+    public static native USB_Handle usb_open(USB_Device device);
 
 
     /**
@@ -143,7 +142,7 @@ public class USB
      * @return 0 on success or < 0 on error.
      */
 
-    public static native int usb_close(USBDevHandle handle);
+    public static native int usb_close(USB_Handle handle);
 
 
     /**
@@ -167,7 +166,7 @@ public class USB
      * @return The number of bytes read or < 0 on error.
      */
 
-    public static native int usb_get_string(USBDevHandle handle,
+    public static native int usb_get_string(USB_Handle handle,
         int index, int langid, byte[] buffer, int buflen);
 
 
@@ -190,6 +189,6 @@ public class USB
      * @return The number of bytes read or < 0 on error.
      */
 
-    public static native int usb_get_string_simple(USBDevHandle handle,
+    public static native int usb_get_string_simple(USB_Handle handle,
         int index, byte[] buffer, int buflen);
 }

@@ -12,7 +12,7 @@ package de.ailis.usb4java.jni;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public class USBBus
+public class USB_Bus
 {
     /** Pointer to low-level C structure. */
     final long pointer;
@@ -24,7 +24,7 @@ public class USBBus
      *            The low-level C structure pointer.
      */
 
-    USBBus(final long pointer)
+    USB_Bus(final long pointer)
     {
         this.pointer = pointer;
     }
@@ -45,7 +45,7 @@ public class USBBus
      * @return The next USB bus or null if none.
      */
 
-    public native USBBus next();
+    public native USB_Bus next();
 
 
     /**
@@ -54,7 +54,7 @@ public class USBBus
      * @return The previous USB bus or null if none.
      */
 
-    public native USBBus prev();
+    public native USB_Bus prev();
 
 
     /**
@@ -72,7 +72,7 @@ public class USBBus
      * @return The USB devices or null if none.
      */
 
-    public native USBDevice devices();
+    public native USB_Device devices();
 
 
     /**
@@ -81,7 +81,7 @@ public class USBBus
      * @return The USB root device or null if none.
      */
 
-    public native USBDevice root_dev();
+    public native USB_Device root_dev();
 
 
     /**

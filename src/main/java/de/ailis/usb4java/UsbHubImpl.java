@@ -11,7 +11,7 @@ import javax.usb.UsbDevice;
 import javax.usb.UsbHub;
 import javax.usb.UsbPort;
 
-import de.ailis.usb4java.jni.USBDevice;
+import de.ailis.usb4java.jni.USB_Device;
 
 
 /**
@@ -29,7 +29,7 @@ public class UsbHubImpl extends UsbDeviceImpl implements UsbHub
      *            The low-level USB device.
      */
 
-    public UsbHubImpl(final USBDevice device)
+    public UsbHubImpl(final USB_Device device)
     {
         super(device);
 

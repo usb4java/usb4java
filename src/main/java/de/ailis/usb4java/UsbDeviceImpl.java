@@ -20,7 +20,7 @@ import javax.usb.UsbPort;
 import javax.usb.UsbStringDescriptor;
 import javax.usb.event.UsbDeviceListener;
 
-import de.ailis.usb4java.jni.USBDevice;
+import de.ailis.usb4java.jni.USB_Device;
 
 
 /**
@@ -45,7 +45,7 @@ public class UsbDeviceImpl implements UsbDevice
      *            The low-level USB device.
      */
 
-    public UsbDeviceImpl(final USBDevice device)
+    public UsbDeviceImpl(final USB_Device device)
     {
         // TODO Implement me!
     }

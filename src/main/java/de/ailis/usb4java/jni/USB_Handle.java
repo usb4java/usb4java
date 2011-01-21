@@ -12,7 +12,7 @@ package de.ailis.usb4java.jni;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public class USBDevHandle
+public class USB_Handle
 {
     /** The low-level pointer to the C structure. */
     final long pointer;
@@ -25,7 +25,7 @@ public class USBDevHandle
      *            The low-level pointer to the C structure.
      */
 
-    USBDevHandle(final long pointer)
+    USB_Handle(final long pointer)
     {
         this.pointer = pointer;
     }

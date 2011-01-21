@@ -6,14 +6,14 @@
 package de.ailis.usb4java;
 
 import de.ailis.usb4java.jni.USB;
-import de.ailis.usb4java.jni.USBBus;
-import de.ailis.usb4java.jni.USBConfigDescriptor;
-import de.ailis.usb4java.jni.USBDevHandle;
-import de.ailis.usb4java.jni.USBDevice;
-import de.ailis.usb4java.jni.USBDeviceDescriptor;
-import de.ailis.usb4java.jni.USBEndpointDescriptor;
-import de.ailis.usb4java.jni.USBInterface;
-import de.ailis.usb4java.jni.USBInterfaceDescriptor;
+import de.ailis.usb4java.jni.USB_Bus;
+import de.ailis.usb4java.jni.USB_Config_Descriptor;
+import de.ailis.usb4java.jni.USB_Handle;
+import de.ailis.usb4java.jni.USB_Device;
+import de.ailis.usb4java.jni.USB_Device_Descriptor;
+import de.ailis.usb4java.jni.USB_Endpoint_Descriptor;
+import de.ailis.usb4java.jni.USB_Interface;
+import de.ailis.usb4java.jni.USB_Interface_Descriptor;
 
 
 /**
@@ -33,7 +33,7 @@ public class Dump
         for (i = 0; i < level; i++) System.out.format("  ");
     }
 
-    private static void dump_device_descriptor(final USBDeviceDescriptor descriptor)
+    private static void dump_device_descriptor(final USB_Device_Descriptor descriptor)
     {
         indent(); System.out.format("bLength: 0x%02x\n", descriptor.bLength());
         indent(); System.out.format("bDescriptorType: 0x%02x\n", descriptor.bDescriptorType());
@@ -51,7 +51,7 @@ public class Dump
         indent(); System.out.format("bNumConfigurations: 0x%02x\n", descriptor.bNumConfigurations());
     }
 
-    private static void dump_endpoint_descriptor(final USBEndpointDescriptor descriptor)
+    private static void dump_endpoint_descriptor(final USB_Endpoint_Descriptor descriptor)
     {
         int i;
 
@@ -73,7 +73,7 @@ public class Dump
         level--;
     }
 
-    private static void dump_interface_descriptor(final USBInterfaceDescriptor descriptor)
+    private static void dump_interface_descriptor(final USB_Interface_Descriptor descriptor)
     {
         int i;
 
@@ -101,7 +101,7 @@ public class Dump
         level--;
     }
 
-    private static void dump_interface(final USBInterface iface)
+    private static void dump_interface(final USB_Interface iface)
     {
         int i;
 
@@ -116,7 +116,7 @@ public class Dump
         level--;
     }
 
-    private static void dump_config_descriptor(final USBConfigDescriptor config)
+    private static void dump_config_descriptor(final USB_Config_Descriptor config)
     {
         int i;
         final int max;
@@ -144,7 +144,7 @@ public class Dump
         level--;
     }
 
-    private static void dump_device(final USBDevice device)
+    private static void dump_device(final USB_Device device)
     {
         int i;
         final byte[] buffer = new byte[256];
@@ -160,7 +160,7 @@ public class Dump
         dump_device_descriptor(device.descriptor());
         level--;
         // Rename me to USBHandle
-        final USBDevHandle handle = USB.usb_open(device);
+        final USB_Handle handle = USB.usb_open(device);
         i = USB.usb_get_string_simple(handle, device.descriptor().iManufacturer(), buffer, 255);
         indent(); System.out.format("Manufacturer: %s\n", i > 0 ? buffer : "Unknown");
         i = USB.usb_get_string_simple(handle, device.descriptor().iProduct(), buffer, 255);
@@ -210,7 +210,7 @@ public class Dump
         final int dev_count = USB.usb_find_devices();
         System.out.format("Found %i devices\n", dev_count);
 
-        USBBus bus = USB.usb_get_busses();
+        USB_Bus bus = USB.usb_get_busses();
         while (bus != null)
         {
             System.out.format("Bus:\n");
@@ -227,7 +227,7 @@ public class Dump
             level--;
             indent(); System.out.format("devices: \n");
             level++;
-            USBDevice device = bus.devices();
+            USB_Device device = bus.devices();
             while (device != null)
             {
                 dump_device(device);

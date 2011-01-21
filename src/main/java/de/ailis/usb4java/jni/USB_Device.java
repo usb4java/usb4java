@@ -12,7 +12,7 @@ package de.ailis.usb4java.jni;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public class USBDevice
+public class USB_Device
 {
     /** The low-level pointer to the C structure. */
     final long pointer;
@@ -25,7 +25,7 @@ public class USBDevice
      *            The low-level pointer to the C structure.
      */
 
-    USBDevice(final long pointer)
+    USB_Device(final long pointer)
     {
         this.pointer = pointer;
     }
@@ -46,7 +46,7 @@ public class USBDevice
      * @return The next USB device or null if none.
      */
 
-    public native USBDevice next();
+    public native USB_Device next();
 
 
     /**
@@ -55,7 +55,7 @@ public class USBDevice
      * @return The child devices.
      */
 
-    public native USBDevice[] children();
+    public native USB_Device[] children();
 
 
     /**
@@ -64,7 +64,7 @@ public class USBDevice
      * @return The previous USB device or null if none.
      */
 
-    public native USBDevice prev();
+    public native USB_Device prev();
 
 
     /**
@@ -91,7 +91,7 @@ public class USBDevice
      * @return The USB bus.
      */
 
-    public native USBBus bus();
+    public native USB_Bus bus();
 
 
     /**
@@ -100,7 +100,7 @@ public class USBDevice
      * @return The USB device descriptor.
      */
 
-    public native USBDeviceDescriptor descriptor();
+    public native USB_Device_Descriptor descriptor();
 
 
     /**
@@ -109,7 +109,7 @@ public class USBDevice
      * @return The USB config descriptor.
      */
 
-    public native USBConfigDescriptor[] config();
+    public native USB_Config_Descriptor[] config();
 
 
     /**

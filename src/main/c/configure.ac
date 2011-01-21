@@ -1,5 +1,5 @@
 AC_INIT(configure.ac)
-AM_INIT_AUTOMAKE(usb4java, 1.0.0)
+AM_INIT_AUTOMAKE(libusb4java, 1.0.0)
 AM_CONFIG_HEADER(config.h)
 AC_CONFIG_MACRO_DIR([m4])
 

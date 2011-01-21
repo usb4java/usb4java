@@ -7,7 +7,7 @@ package de.ailis.usb4java;
 
 import javax.usb.UsbInterfaceDescriptor;
 
-import de.ailis.usb4java.jni.USBInterfaceDescriptor;
+import de.ailis.usb4java.jni.USB_Interface_Descriptor;
 
 
 /**
@@ -19,7 +19,7 @@ import de.ailis.usb4java.jni.USBInterfaceDescriptor;
 public class UsbInterfaceDescriptorImpl implements UsbInterfaceDescriptor
 {
     /** The low-level USB interface descriptor. */
-    private final USBInterfaceDescriptor descriptor;
+    private final USB_Interface_Descriptor descriptor;
 
 
     /**
@@ -29,7 +29,7 @@ public class UsbInterfaceDescriptorImpl implements UsbInterfaceDescriptor
      *            The low-level USB interface descriptor.
      */
 
-    UsbInterfaceDescriptorImpl(final USBInterfaceDescriptor descriptor)
+    UsbInterfaceDescriptorImpl(final USB_Interface_Descriptor descriptor)
     {
         this.descriptor = descriptor;
     }

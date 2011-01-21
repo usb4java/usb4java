@@ -16,12 +16,12 @@ import javax.usb.UsbServices;
 import javax.usb.event.UsbServicesListener;
 
 import de.ailis.usb4java.jni.USB;
-import de.ailis.usb4java.jni.USBBus;
-import de.ailis.usb4java.jni.USBConfigDescriptor;
-import de.ailis.usb4java.jni.USBDevice;
-import de.ailis.usb4java.jni.USBDeviceDescriptor;
-import de.ailis.usb4java.jni.USBInterface;
-import de.ailis.usb4java.jni.USBInterfaceDescriptor;
+import de.ailis.usb4java.jni.USB_Bus;
+import de.ailis.usb4java.jni.USB_Config_Descriptor;
+import de.ailis.usb4java.jni.USB_Device;
+import de.ailis.usb4java.jni.USB_Device_Descriptor;
+import de.ailis.usb4java.jni.USB_Interface;
+import de.ailis.usb4java.jni.USB_Interface_Descriptor;
 
 
 /**
@@ -107,11 +107,11 @@ public class UsbServicesImpl implements UsbServices
         if (busCount + deviceCount == 0) return;
 
         // Iterate over all USB busses
-        USBBus bus = USB.usb_get_busses();
+        USB_Bus bus = USB.usb_get_busses();
         while (bus != null)
         {
             // Iterate over all USB devices of current bus
-            USBDevice device = bus.devices();
+            USB_Device device = bus.devices();
             while (device != null)
             {
                 if (device.config() != null)
@@ -133,9 +133,9 @@ public class UsbServicesImpl implements UsbServices
      * @return The JSR80 USB device.
      */
 
-    private UsbDevice createDevice(final USBDevice device)
+    private UsbDevice createDevice(final USB_Device device)
     {
-        final USBDeviceDescriptor descriptor = device.descriptor();
+        final USB_Device_Descriptor descriptor = device.descriptor();
         if (descriptor.bDeviceClass() == USB.USB_CLASS_HUB)
         {
             return new UsbHubImpl(device);
@@ -160,7 +160,7 @@ public class UsbServicesImpl implements UsbServices
      * @return The JSR80 USB configuration.
      */
 
-    private UsbConfiguration createConfig(final USBConfigDescriptor config)
+    private UsbConfiguration createConfig(final USB_Config_Descriptor config)
     {
         final UsbConfigurationDescriptor descriptor = new UsbConfigurationDescriptorImpl(
             config);
@@ -169,10 +169,10 @@ public class UsbServicesImpl implements UsbServices
 
         for (int i = 0, iMax = config.bNumInterfaces(); i < iMax; i++)
         {
-            final USBInterface iface = config.interface_()[i];
+            final USB_Interface iface = config.interface_()[i];
             for (int j = 0, jMax = iface.num_altsetting(); j < jMax; j++)
             {
-                final USBInterfaceDescriptor ifaceDescriptor = iface
+                final USB_Interface_Descriptor ifaceDescriptor = iface
                         .altsetting()[j];
                 usbConfig.addUsbInterface(createInterface(ifaceDescriptor));
             }
@@ -191,7 +191,7 @@ public class UsbServicesImpl implements UsbServices
      * @return The JSR80 USB interface.
      */
 
-    private UsbInterface createInterface(final USBInterfaceDescriptor descriptor)
+    private UsbInterface createInterface(final USB_Interface_Descriptor descriptor)
     {
         final UsbInterfaceDescriptor ifaceDescriptor = new UsbInterfaceDescriptorImpl(
             descriptor);

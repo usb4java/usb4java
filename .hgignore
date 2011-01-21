@@ -3,3 +3,46 @@ target
 .settings
 .classpath
 .project
+
+syntax: regexp
+^src/main/c/src/Makefile$
+syntax: glob
+
+syntax: regexp
+^src/main/c/src/Makefile\.in$
+syntax: regexp
+^src/main/c/aclocal\.m4$
+syntax: regexp
+^src/main/c/config\.guess$
+syntax: regexp
+^src/main/c/config\.h$
+syntax: regexp
+^src/main/c/config\.h\.in$
+syntax: regexp
+^src/main/c/config\.status$
+syntax: regexp
+^src/main/c/config\.sub$
+syntax: regexp
+^src/main/c/configure$
+syntax: regexp
+^src/main/c/depcomp$
+syntax: regexp
+^src/main/c/missing$
+syntax: regexp
+^src/main/c/stamp-h1$
+syntax: regexp
+^src/main/c/Makefile$
+syntax: regexp
+^src/main/c/Makefile\.in$
+syntax: regexp
+^src/main/c/ltmain\.sh$
+syntax: regexp
+^src/main/c/libtool$
+syntax: regexp
+^src/main/c/install-sh$
+syntax: regexp
+^src/main/c/src/\.deps$
+syntax: regexp
+^src/main/c/m4$
+syntax: regexp
+^src/main/c/autom4te\.cache$

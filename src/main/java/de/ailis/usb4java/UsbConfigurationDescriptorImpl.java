@@ -7,7 +7,7 @@ package de.ailis.usb4java;
 
 import javax.usb.UsbConfigurationDescriptor;
 
-import de.ailis.usb4java.jni.USBConfigDescriptor;
+import de.ailis.usb4java.jni.USB_Config_Descriptor;
 
 
 /**
@@ -20,7 +20,7 @@ public class UsbConfigurationDescriptorImpl implements
         UsbConfigurationDescriptor
 {
     /** The low-level USB config desciptor. */
-    private final USBConfigDescriptor configDescriptor;
+    private final USB_Config_Descriptor configDescriptor;
 
 
     /**
@@ -30,7 +30,7 @@ public class UsbConfigurationDescriptorImpl implements
      *            The low-level config descriptor.
      */
 
-    UsbConfigurationDescriptorImpl(final USBConfigDescriptor configDescriptor)
+    UsbConfigurationDescriptorImpl(final USB_Config_Descriptor configDescriptor)
     {
         this.configDescriptor = configDescriptor;
     }

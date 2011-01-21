@@ -12,7 +12,7 @@ package de.ailis.usb4java.jni;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public class USBDeviceDescriptor
+public class USB_Device_Descriptor
 {
     /** The low-level pointer to the C structure. */
     final long pointer;
@@ -25,7 +25,7 @@ public class USBDeviceDescriptor
      *            The low-level pointer to the C structure.
      */
 
-    USBDeviceDescriptor(final long pointer)
+    USB_Device_Descriptor(final long pointer)
     {
         this.pointer = pointer;
     }
