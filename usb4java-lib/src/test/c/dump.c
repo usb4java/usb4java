@@ -95,7 +95,7 @@ void dump_interface(struct usb_interface iface)
 
 void dump_config_descriptor(struct usb_config_descriptor config)
 {
-    int i, max;
+    int i;
 
     indent(); printf("Config Descriptor:\n");
     level++;
