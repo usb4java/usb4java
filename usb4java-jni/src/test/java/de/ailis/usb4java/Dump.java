@@ -6,16 +6,24 @@
 package de.ailis.usb4java;
 
 
-
 /**
- * Dump
+ * This program dumps all available information about all USB busses and
+ * devices to the console. This is uses to compare the output to the output
+ * of the "dump" program which is written in plain C. If the output is
+ * exactly the same then it is most likely that the JNI wrapper works
+ * correctly.
  *
  * @author Klaus Reimer (k@ailis.de)
  */
 
 public class Dump
 {
+    /** The current indentation level. */
     private static int level = 0;
+
+    /**
+     * Indents the current line.
+     */
 
     private static void indent()
     {
@@ -23,6 +31,14 @@ public class Dump
 
         for (i = 0; i < level; i++) System.out.format("  ");
     }
+
+
+    /**
+     * Dumps the specified device descriptor.
+     *
+     * @param descriptor
+     *            The device descriptor to dump
+     */
 
     private static void dump_device_descriptor(final USB_Device_Descriptor descriptor)
     {
@@ -41,6 +57,14 @@ public class Dump
         indent(); System.out.format("iSerialNumber: 0x%02x\n", descriptor.iSerialNumber());
         indent(); System.out.format("bNumConfigurations: 0x%02x\n", descriptor.bNumConfigurations());
     }
+
+
+    /**
+     * Dumps the specified endpoint descriptor.
+     *
+     * @param descriptor
+     *            The endpoint descriptor to dump
+     */
 
     private static void dump_endpoint_descriptor(final USB_Endpoint_Descriptor descriptor)
     {
@@ -63,6 +87,14 @@ public class Dump
         System.out.format("\n");
         level--;
     }
+
+
+    /**
+     * Dumps the specified interface descriptor.
+     *
+     * @param descriptor
+     *            The interface descriptor to dump.
+     */
 
     private static void dump_interface_descriptor(final USB_Interface_Descriptor descriptor)
     {
@@ -92,6 +124,14 @@ public class Dump
         level--;
     }
 
+
+    /**
+     * Dumps the specified interface.
+     *
+     * @param iface
+     *            The interface to dump.
+     */
+
     private static void dump_interface(final USB_Interface iface)
     {
         int i;
@@ -107,10 +147,17 @@ public class Dump
         level--;
     }
 
+
+    /**
+     * Dumps the specified config descriptor.
+     *
+     * @param config
+     *            The config descriptor to dump.
+     */
+
     private static void dump_config_descriptor(final USB_Config_Descriptor config)
     {
         int i;
-        final int max;
 
         indent(); System.out.format("Config Descriptor:\n");
         level++;
@@ -134,6 +181,14 @@ public class Dump
         level--;
         level--;
     }
+
+
+    /**
+     * Dumps the specified USB device.
+     *
+     * @param device
+     *            The USB device to dump.
+     */
 
     private static void dump_device(final USB_Device device)
     {
@@ -189,8 +244,12 @@ public class Dump
         level--;
     }
 
+
     /**
      * Main method.
+     *
+     * @param args
+     *            The command line arguments (Ignored.
      */
 
     public static void main(final String[] args)
