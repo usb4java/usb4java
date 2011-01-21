@@ -5,6 +5,14 @@
 
 package de.ailis.usb4java;
 
+import static de.ailis.usb4java.USB.usb_close;
+import static de.ailis.usb4java.USB.usb_find_busses;
+import static de.ailis.usb4java.USB.usb_find_devices;
+import static de.ailis.usb4java.USB.usb_get_busses;
+import static de.ailis.usb4java.USB.usb_get_string_simple;
+import static de.ailis.usb4java.USB.usb_init;
+import static de.ailis.usb4java.USB.usb_open;
+
 
 /**
  * This program dumps all available information about all USB busses and
@@ -206,14 +214,14 @@ public class Dump
         dump_device_descriptor(device.descriptor());
         level--;
         // Rename me to USBHandle
-        final USB_Handle handle = USB.usb_open(device);
-        i = USB.usb_get_string_simple(handle, device.descriptor().iManufacturer(), buffer, 255);
+        final USB_Handle handle = usb_open(device);
+        i = usb_get_string_simple(handle, device.descriptor().iManufacturer(), buffer, 255);
         indent(); System.out.format("Manufacturer: %s\n", i > 0 ? buffer : "Unknown");
-        i = USB.usb_get_string_simple(handle, device.descriptor().iProduct(), buffer, 255);
+        i = usb_get_string_simple(handle, device.descriptor().iProduct(), buffer, 255);
         indent(); System.out.format("Product: %s\n", i > 0 ? buffer : "Unknown");
-        i = USB.usb_get_string_simple(handle, device.descriptor().iSerialNumber(), buffer, 255);
+        i = usb_get_string_simple(handle, device.descriptor().iSerialNumber(), buffer, 255);
         indent(); System.out.format("Serial: %s\n", i > 0 ? buffer : "Unknown");
-        USB.usb_close(handle);
+        usb_close(handle);
         indent(); System.out.format("config descriptors:\n");
         level++;
         final int max = device.descriptor().bNumConfigurations();
@@ -254,13 +262,13 @@ public class Dump
 
     public static void main(final String[] args)
     {
-        USB.usb_init();
-        final int bus_count = USB.usb_find_busses();
+        usb_init();
+        final int bus_count = usb_find_busses();
         System.out.format("Found %i busses\n", bus_count);
-        final int dev_count = USB.usb_find_devices();
+        final int dev_count = usb_find_devices();
         System.out.format("Found %i devices\n", dev_count);
 
-        USB_Bus bus = USB.usb_get_busses();
+        USB_Bus bus = usb_get_busses();
         while (bus != null)
         {
             System.out.format("Bus:\n");
