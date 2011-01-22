@@ -249,11 +249,11 @@ public class USB
         if (len < 0) return null;
         try
         {
-            return new String(buffer, 0, size, "UTF-8");
+            return new String(buffer, 0, len, "UTF-8");
         }
         catch (final UnsupportedEncodingException e)
         {
-            return new String(buffer, 0, size);
+            return new String(buffer, 0, len);
         }
     }
 
@@ -301,11 +301,11 @@ public class USB
         if (len < 0) return null;
         try
         {
-            return new String(buffer, 0, size, "UTF-8");
+            return new String(buffer, 0, len, "UTF-8");
         }
         catch (final UnsupportedEncodingException e)
         {
-            return new String(buffer, 0, size);
+            return new String(buffer, 0, len);
         }
     }
 }
