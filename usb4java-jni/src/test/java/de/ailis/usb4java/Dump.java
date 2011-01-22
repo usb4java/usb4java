@@ -213,7 +213,6 @@ public class Dump
         level++;
         dump_device_descriptor(device.descriptor());
         level--;
-        // Rename me to USBHandle
         final USB_Dev_Handle handle = usb_open(device);
         final String manufacturer = usb_get_string_simple(handle, device.descriptor().iManufacturer(), 255);
         indent(); System.out.format("Manufacturer: %s\n", manufacturer != null ? manufacturer : "Unknown");
