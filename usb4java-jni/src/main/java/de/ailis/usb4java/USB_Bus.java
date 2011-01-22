@@ -7,7 +7,7 @@ package de.ailis.usb4java;
 
 
 /**
- * USB Bus.
+ * The low-level USB Bus.
  *
  * @author Klaus Reimer (k@ailis.de)
  */
@@ -16,6 +16,7 @@ public class USB_Bus
 {
     /** Pointer to low-level C structure. */
     final long pointer;
+
 
     /**
      * Constructor.
@@ -31,9 +32,9 @@ public class USB_Bus
 
 
     /**
-     * Returns the dirname.
+     * Returns the directory name of the USB bus.
      *
-     * @return The dirname.
+     * @return The directory name. Never null.
      */
 
     public native String dirname();
@@ -58,18 +59,23 @@ public class USB_Bus
 
 
     /**
-     * Returns the location.
+     * Returns the location. The original datatype for this information is
+     * an unsigned 32 bit integer. To avoid problems with values larger than
+     * 0x7fffffff the wrapper returns a long integer instead.
      *
-     * @return The location.
+     * @return The location (32 bit unsigned integer).
      */
 
     public native long location();
 
 
     /**
-     * Returns the USB devices.
+     * Returns the USB devices. Actually this returns the first USB device and
+     * you can use the {@link USB_Device#next()} and {@link USB_Device#prev()}
+     * methods to navigate to the other devices. When no USB device was found
+     * then null is returned.
      *
-     * @return The USB devices or null if none.
+     * @return The first USB device or null if none.
      */
 
     public native USB_Device devices();

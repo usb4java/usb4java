@@ -68,18 +68,22 @@ public class USB_Device
 
 
     /**
-     * Returns the device number.
+     * Returns the device number. The original data type for this
+     * information is an unsigned byte. This wrapper returns a short int
+     * instead to avoid problems with values larger then 127.
      *
-     * @return The device number.
+     * @return The device number (unsigned byte).
      */
 
     public native short devnum();
 
 
     /**
-     * Returns the number of child devices.
+     * Returns the number of child devices. The original data type for this
+     * information is an unsigned byte. This wrapper returns a short int
+     * instead to avoid problems with values larger then 127.
      *
-     * @return The number of child devices.
+     * @return The number of child devices (unsigned byte).
      */
 
     public native short num_children();

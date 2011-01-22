@@ -5,6 +5,8 @@
 
 package de.ailis.usb4java;
 
+import java.io.UnsupportedEncodingException;
+
 
 /**
  * This is the main class of the usb4java JNI wrapper. It wraps the global
@@ -22,35 +24,90 @@ package de.ailis.usb4java;
 
 public class USB
 {
-    /** USB_CLASS_PER_INTERFACE constant. */
+    // === USB class constants ===============================================
+
+    /** Per interface class. */
     public static final short USB_CLASS_PER_INTERFACE = 0;
 
-    /** USB_CLASS_AUDIO constant. */
+    /** Audio class. */
     public static final short USB_CLASS_AUDIO = 1;
 
-    /** USB_CLASS_COMM constant. */
+    /** Comm class. */
     public static final short USB_CLASS_COMM = 2;
 
-    /** USB_CLASS_HID constant. */
+    /** HID class. */
     public static final short USB_CLASS_HID = 3;
 
-    /** USB_CLASS_PRINTER constant. */
+    /** Printer class. */
     public static final short USB_CLASS_PRINTER = 7;
 
-    /** USB_CLASS_PTP constant. */
+    /** PTP class. */
     public static final short USB_CLASS_PTP = 6;
 
-    /** USB_CLASS_MASS_STORAGE constant. */
+    /** Mass storage class. */
     public static final short USB_CLASS_MASS_STORAGE = 8;
 
-    /** USB_CLASS_HUB constant. */
+    /** HUB class. */
     public static final short USB_CLASS_HUB = 9;
 
-    /** USB_CLASS_DATA constant. */
+    /** Data class. */
     public static final short USB_CLASS_DATA = 10;
 
-    /** USB_CLASS_VENDOR_SPEC constant. */
+    /** Vendor specific class. */
     public static final short USB_CLASS_VENDOR_SPEC = 0xff;
+
+
+    // === Device descriptor type constants ==================================
+
+
+    /** Device descriptor type. */
+    public static final short USB_DT_DEVICE = 0x01;
+
+    /** Config descriptor type. */
+    public static final short USB_DT_CONFIG = 0x02;
+
+    /** String descriptor type. */
+    public static final short USB_DT_STRING = 0x03;
+
+    /** Interface descriptor type. */
+    public static final short USB_DT_INTERFACE = 0x04;
+
+    /** Endpoint descriptor type. */
+    public static final short USB_DT_ENDPOINT = 0x05;
+
+    /** HID descriptor type. */
+    public static final short USB_DT_HID = 0x21;
+
+    /** Report descriptor type. */
+    public static final short USB_DT_REPORT = 0x22;
+
+    /** Physical descriptor type. */
+    public static final short USB_DT_PHYSICAL = 0x23;
+
+    /** Hub descriptor type. */
+    public static final short USB_DT_HUB = 0x29;
+
+
+    // === Descriptor sizes per descriptor type ==============================
+
+    /** Device type descriptor size. */
+    public static final short USB_DT_DEVICE_SIZE = 18;
+
+    /** Config type descriptor size. */
+    public static final short USB_DT_CONFIG_SIZE = 9;
+
+    /** Interface type descriptor size. */
+    public static final short USB_DT_INTERFACE_SIZE = 9;
+
+    /** Endpoint type descriptor size. */
+    public static final short USB_DT_ENDPOINT_SIZE = 7;
+
+    /** Audio endpoint type descriptor size. */
+    public static final short USB_DT_ENDPOINT_AUDIO_SIZE = 9;
+
+    /** Hub Non-Var type descriptor size. */
+    public static final short USB_DT_HUB_NONVAR_SIZE = 7;
+
 
     static
     {
@@ -127,7 +184,7 @@ public class USB
      * @return The USB device handle.
      */
 
-    public static native USB_Handle usb_open(USB_Device device);
+    public static native USB_Dev_Handle usb_open(USB_Device device);
 
 
     /**
@@ -142,7 +199,7 @@ public class USB
      * @return 0 on success or < 0 on error.
      */
 
-    public static native int usb_close(USB_Handle handle);
+    public static native int usb_close(USB_Dev_Handle handle);
 
 
     /**
@@ -166,8 +223,39 @@ public class USB
      * @return The number of bytes read or < 0 on error.
      */
 
-    public static native int usb_get_string(USB_Handle handle,
+    public static native int usb_get_string(USB_Dev_Handle handle,
         int index, int langid, byte[] buffer, int buflen);
+
+
+    /**
+     * Returns a string descriptor from a device.
+     *
+     * @param handle
+     *            The USB device handle.
+     * @param index
+     *            The string description index.
+     * @param langid
+     *            The language id.
+     * @param size
+     *            The maximum number of bytes to read.
+     * @return The string or null if an error occurred.
+     */
+
+    public static String usb_get_string(final USB_Dev_Handle handle,
+        final int index, final int langid, final int size)
+    {
+        final byte[] buffer = new byte[size];
+        final int len = usb_get_string(handle, index, langid, buffer, size);
+        if (len < 0) return null;
+        try
+        {
+            return new String(buffer, 0, size, "UTF-8");
+        }
+        catch (final UnsupportedEncodingException e)
+        {
+            return new String(buffer, 0, size);
+        }
+    }
 
 
     /**
@@ -189,6 +277,35 @@ public class USB
      * @return The number of bytes read or < 0 on error.
      */
 
-    public static native int usb_get_string_simple(USB_Handle handle,
+    public static native int usb_get_string_simple(USB_Dev_Handle handle,
         int index, byte[] buffer, int buflen);
+
+
+    /**
+     * Returns a string descriptor from a device using the first language.
+     *
+     * @param handle
+     *            The USB device handle.
+     * @param index
+     *            The string description index.
+     * @param size
+     *            The maximum number of bytes to read.
+     * @return The string or null if an error occurred.
+     */
+
+    public static String usb_get_string_simple(final USB_Dev_Handle handle,
+        final int index, final int size)
+    {
+        final byte[] buffer = new byte[size];
+        final int len = usb_get_string_simple(handle, index, buffer, size);
+        if (len < 0) return null;
+        try
+        {
+            return new String(buffer, 0, size, "UTF-8");
+        }
+        catch (final UnsupportedEncodingException e)
+        {
+            return new String(buffer, 0, size);
+        }
+    }
 }

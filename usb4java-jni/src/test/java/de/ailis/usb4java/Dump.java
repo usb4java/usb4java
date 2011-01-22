@@ -88,7 +88,7 @@ public class Dump
         indent(); System.out.format("bInterval: 0x%02x\n", descriptor.bInterval());
         indent(); System.out.format("bRefresh: 0x%02x\n", descriptor.bRefresh());
         indent(); System.out.format("bSynchAddress: 0x%02x\n", descriptor.bSynchAddress());
-        indent(); System.out.format("extralen: 0x%04x\n", descriptor.extralen());
+        indent(); System.out.format("extralen: 0x%08x\n", descriptor.extralen());
         indent(); System.out.format("extra:");
         for (i = 0; i < descriptor.extralen(); i++)
             System.out.format(" %02x", descriptor.extra()[i]);
@@ -119,7 +119,7 @@ public class Dump
         indent(); System.out.format("bInterfaceSubClass: 0x%02x\n", descriptor.bInterfaceSubClass());
         indent(); System.out.format("bInterfaceProtocol: 0x%02x\n", descriptor.bInterfaceProtocol());
         indent(); System.out.format("iInterface: 0x%02x\n", descriptor.iInterface());
-        indent(); System.out.format("extralen: 0x%04x\n", descriptor.extralen());
+        indent(); System.out.format("extralen: 0x%08x\n", descriptor.extralen());
         indent(); System.out.format("extra:");
         for (i = 0; i < descriptor.extralen(); i++)
             System.out.format(" %02x", descriptor.extra()[i]);
@@ -146,7 +146,7 @@ public class Dump
 
         indent(); System.out.format("Interface:\n");
         level++;
-        indent(); System.out.format("num_altsetting: 0x%04x\n", iface.num_altsetting());
+        indent(); System.out.format("num_altsetting: 0x%08x\n", iface.num_altsetting());
         indent(); System.out.format("altsetting:\n");
         level++;
         for (i = 0; i < iface.num_altsetting(); i++)
@@ -176,8 +176,8 @@ public class Dump
         indent(); System.out.format("bConfigurationValue: 0x%02x\n", config.bConfigurationValue());
         indent(); System.out.format("iConfiguration: 0x%02x\n", config.iConfiguration());
         indent(); System.out.format("bmAttributes: 0x%02x\n", config.bmAttributes());
-        indent(); System.out.format("MaxPower: 0x%02x\n", config.MaxPower());
-        indent(); System.out.format("extralen: 0x%04x\n", config.extralen());
+        indent(); System.out.format("MaxPower: 0x%02x\n", config.bMaxPower());
+        indent(); System.out.format("extralen: 0x%08x\n", config.extralen());
         indent(); System.out.format("extra:");
         for (i = 0; i < config.extralen(); i++)
             System.out.format(" %02x", config.extra()[i]);
@@ -185,7 +185,7 @@ public class Dump
         indent(); System.out.format("Interfaces:\n");
         level++;
         for (i = 0; i < config.bNumInterfaces(); i++)
-            dump_interface(config.interface_()[i]);
+            dump_interface(config.iface()[i]);
         level--;
         level--;
     }
@@ -207,20 +207,20 @@ public class Dump
         level++;
         indent(); System.out.format("filename: %s\n", device.filename());
         indent(); System.out.format("bus: %s\n", device.bus().dirname());
-        indent(); System.out.format("devnum: %i\n", device.devnum());
-        indent(); System.out.format("num_children: %i\n", device.num_children());
+        indent(); System.out.format("devnum: %d\n", device.devnum());
+        indent(); System.out.format("num_children: %d\n", device.num_children());
         indent(); System.out.format("descriptor:\n");
         level++;
         dump_device_descriptor(device.descriptor());
         level--;
         // Rename me to USBHandle
-        final USB_Handle handle = usb_open(device);
-        i = usb_get_string_simple(handle, device.descriptor().iManufacturer(), buffer, 255);
-        indent(); System.out.format("Manufacturer: %s\n", i > 0 ? buffer : "Unknown");
-        i = usb_get_string_simple(handle, device.descriptor().iProduct(), buffer, 255);
-        indent(); System.out.format("Product: %s\n", i > 0 ? buffer : "Unknown");
-        i = usb_get_string_simple(handle, device.descriptor().iSerialNumber(), buffer, 255);
-        indent(); System.out.format("Serial: %s\n", i > 0 ? buffer : "Unknown");
+        final USB_Dev_Handle handle = usb_open(device);
+        final String manufacturer = usb_get_string_simple(handle, device.descriptor().iManufacturer(), 255);
+        indent(); System.out.format("Manufacturer: %s\n", manufacturer != null ? manufacturer : "Unknown");
+        final String product = usb_get_string_simple(handle, device.descriptor().iProduct(), 255);
+        indent(); System.out.format("Product: %s\n", product != null ? product : "Unknown");
+        final String serialNumber = usb_get_string_simple(handle, device.descriptor().iSerialNumber(), 255);
+        indent(); System.out.format("Serial: %s\n", serialNumber != null ? serialNumber : "Unknown");
         usb_close(handle);
         indent(); System.out.format("config descriptors:\n");
         level++;
@@ -264,9 +264,9 @@ public class Dump
     {
         usb_init();
         final int bus_count = usb_find_busses();
-        System.out.format("Found %i busses\n", bus_count);
+        System.out.format("Found %d busses\n", bus_count);
         final int dev_count = usb_find_devices();
-        System.out.format("Found %i devices\n", dev_count);
+        System.out.format("Found %d devices\n", dev_count);
 
         USB_Bus bus = usb_get_busses();
         while (bus != null)
@@ -274,7 +274,7 @@ public class Dump
             System.out.format("Bus:\n");
             level++;
             indent(); System.out.format("dirname: %s\n", bus.dirname());
-            indent(); System.out.format("location: %i\n", bus.location());
+            indent(); System.out.format("location: %d\n", bus.location());
             indent(); System.out.format("Root device: ");
             level++;
             if (bus.root_dev() != null)

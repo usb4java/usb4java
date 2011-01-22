@@ -30,7 +30,21 @@ public class USB_Interface
         this.pointer = pointer;
     }
 
+
+    /**
+     * Returns the array with all available interface descriptors.
+     *
+     * @return The array with the interface descriptors.
+     */
+
     public native USB_Interface_Descriptor[] altsetting();
+
+
+    /**
+     * Returns the number of available interface descriptors.
+     *
+     * @return The number of available interface descriptors.
+     */
 
     public native int num_altsetting();
 }
