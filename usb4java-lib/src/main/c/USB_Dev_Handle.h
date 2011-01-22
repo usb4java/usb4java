@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2011 Klaus Reimer (k@ailis.de)
+ * See COPYING file for copying conditions
+ */
+
 #ifndef USB_DEV_HANDLE_H
 #define USB_DEV_HANDLE_H
 

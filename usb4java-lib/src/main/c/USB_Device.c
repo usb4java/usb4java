@@ -1,20 +1,19 @@
 /*
- * $Id$
  * Copyright (C) 2011 Klaus Reimer (k@ailis.de)
  * See COPYING file for copying conditions
  */
 
 /**
- * @name USBDevice
+ * @name USB_Device
  *
- * Native methods for the USBDevice class.
+ * Native methods for the USB_Device class.
  *
  * @author Klaus Reimer <k@ailis.de>
- * @version 0.1
  */
 
 #include <jni.h>
 #include <usb.h>
+#include "usb4java.h"
 #include "USB_Bus.h"
 #include "USB_Device_Descriptor.h"
 #include "USB_Config_Descriptor.h"
@@ -33,7 +32,7 @@
 jobject wrap_usb_device(JNIEnv *env, struct usb_device *device)
 {
     if (!device) return NULL;
-    jclass cls = (*env)->FindClass(env, "de/ailis/libusb/jni/USBDevice");
+    jclass cls = (*env)->FindClass(env, PACKAGE_DIR"/USB_Device");
     if (cls == NULL) return NULL;
     jmethodID constructor = (*env)->GetMethodID(env, cls, "<init>", "(J)V");
     if (constructor == NULL) return NULL;
@@ -54,16 +53,16 @@ jobject wrap_usb_device(JNIEnv *env, struct usb_device *device)
  * @return The array with the USB device wrappers.
  */
 
-static jobjectArray wrap_usb_devices(JNIEnv *env, uint8_t num_children,
-    struct usb_device **children)
+static jobjectArray wrap_usb_devices(JNIEnv *env, uint8_t num_devices,
+    struct usb_device **devices)
 {
     int i;
     
-    jobjectArray array = (jobjectArray) (*env)->NewObjectArray(env, num_children,
-        (*env)->FindClass(env, "de/ailis/libusb/jni/USBDevice"), NULL);
-    for (i = 0; i < num_children; i++)
+    jobjectArray array = (jobjectArray) (*env)->NewObjectArray(env, num_devices,
+        (*env)->FindClass(env, PACKAGE_DIR"/USB_Device"), NULL);
+    for (i = 0; i < num_devices; i++)
         (*env)->SetObjectArrayElement(env, array, i,
-            wrap_usb_device(env, children[i]));
+            wrap_usb_device(env, devices[i]));
     return array;
 }
 
@@ -87,91 +86,91 @@ struct usb_device *unwrap_usb_device(JNIEnv *env, jobject obj)
 
 
 /**
- * Returns the usb device filename.
- *
- * @return The usb device filename.
+ * string filename()
  */
  
-JNIEXPORT jstring JNICALL Java_de_ailis_usb4java_jni_USBDevice_filename(
-    JNIEnv *env, jobject this)
+JNIEXPORT jstring JNICALL METHOD_NAME(USB_1Device, filename)
+(
+    JNIEnv *env, jobject this
+)
 {
     return (*env)->NewStringUTF(env, unwrap_usb_device(env, this)->filename);
 }
 
 
 /**
- * Returns the next usb device.
- *
- * @return The next usb device.
+ * USB_Device next()
  */
  
-JNIEXPORT jobject JNICALL Java_de_ailis_usb4java_jni_USBDevice_next(
-    JNIEnv *env, jobject this)
+JNIEXPORT jobject JNICALL METHOD_NAME(USB_1Device, next)
+(
+    JNIEnv *env, jobject this
+)
 {
     return wrap_usb_device(env, unwrap_usb_device(env, this)->next);
 }
 
 
 /**
- * Returns the previous usb device.
- *
- * @return The previous usb device.
+ * USB_Device prev()
  */
  
-JNIEXPORT jobject JNICALL Java_de_ailis_usb4java_jni_USBDevice_prev(
-    JNIEnv *env, jobject this)
+JNIEXPORT jobject JNICALL METHOD_NAME(USB_1Device, prev)
+(
+    JNIEnv *env, jobject this
+)
 {
     return wrap_usb_device(env, unwrap_usb_device(env, this)->prev);
 }
 
 
 /**
- * Returns the USB bus.
- *
- * @return The USB bus.
+ * USB_Bus bus().
  */
  
-JNIEXPORT jobject JNICALL Java_de_ailis_usb4java_jni_USBDevice_bus(
-    JNIEnv *env, jobject this)
+JNIEXPORT jobject JNICALL METHOD_NAME(USB_1Device, bus)
+(
+    JNIEnv *env, jobject this
+)
 {
     return wrap_usb_bus(env, unwrap_usb_device(env, this)->bus);
 }
 
 
 /**
- * Returns the device number.
- *
- * @return The device number.
+ * short devnum()
  */
  
-JNIEXPORT jshort JNICALL Java_de_ailis_usb4java_jni_USBDevice_devnum(
-    JNIEnv *env, jobject this)
+JNIEXPORT jshort JNICALL METHOD_NAME(USB_1Device, devnum)
+(
+    JNIEnv *env, jobject this
+)
 {
     return (jshort) unwrap_usb_device(env, this)->devnum;
 }
 
 
 /**
- * Returns the number of child devices.
- *
- * @return The number of child devices..
+ * short num_children()
  */
  
-JNIEXPORT jshort JNICALL Java_de_ailis_usb4java_jni_USBDevice_num_1children(
-    JNIEnv *env, jobject this)
+JNIEXPORT jshort JNICALL METHOD_NAME(USB_1Device, num_1children)
+(
+    JNIEnv *env, jobject this
+)
 {
     return (jshort) unwrap_usb_device(env, this)->num_children;
 }
 
 
 /**
- * Returns the child devices.
- *
- * @return The child devices.
+ * USB_Device children()
  */
  
-JNIEXPORT jobject JNICALL Java_de_ailis_usb4java_jni_USBDevice_children(
-    JNIEnv *env, jobject this)
+JNIEXPORT jobject JNICALL METHOD_NAME(USB_1Device, children)
+(
+    JNIEnv *env, jobject this
+)
 {
     struct usb_device *device = unwrap_usb_device(env, this);
     return wrap_usb_devices(env, device->num_children, device->children);
@@ -179,20 +178,20 @@ JNIEXPORT jobject JNICALL Java_de_ailis_usb4java_jni_USBDevice_children(
 
 
 /**
- * Returns the configuration descriptors.
- *
- * @return The configuration descriptors.
+ * USB_Config_Descriptor[] config()
  */
  
-JNIEXPORT jobjectArray JNICALL Java_de_ailis_usb4java_jni_USBDevice_config(
-    JNIEnv *env, jobject this)
+JNIEXPORT jobjectArray JNICALL METHOD_NAME(USB_1Device, config)
+(
+    JNIEnv *env, jobject this
+)
 {
     int i;
     
     struct usb_device *device = unwrap_usb_device(env, this);
     struct usb_config_descriptor *descriptors = device->config;
     unsigned char config_count = device->descriptor.bNumConfigurations;
-    jclass cls = (*env)->FindClass(env, "de/ailis/libusb/jni/USBConfigDescriptor");
+    jclass cls = (*env)->FindClass(env, PACKAGE_DIR"/USB_Config_Descriptor");
     jobjectArray configs = (*env)->NewObjectArray(env, config_count, cls, 0);
     for (i = 0; i < config_count; i++)
     {
@@ -204,16 +203,14 @@ JNIEXPORT jobjectArray JNICALL Java_de_ailis_usb4java_jni_USBDevice_config(
 
 
 /**
- * Returns the USB device descriptor.
- *
- * @return The USB device descriptor.
+ * USB_Device_Descriptor descriptor()
  */
  
-JNIEXPORT jobject JNICALL Java_de_ailis_usb4java_jni_USBDevice_descriptor(
-    JNIEnv *env, jobject this)
+JNIEXPORT jobject JNICALL METHOD_NAME(USB_1Device, descriptor)
+(
+    JNIEnv *env, jobject this
+)
 {
     return wrap_usb_device_descriptor(env, &(unwrap_usb_device(env,
         this)->descriptor));
 }
-
-

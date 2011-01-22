@@ -1,21 +1,20 @@
 /*
- * $Id$
  * Copyright (C) 2011 Klaus Reimer (k@ailis.de)
  * See COPYING file for copying conditions
  */
 
 /**
- * @name USBConfigDescriptor
+ * @name USB_Config_Descriptor
  *
- * Native methods for the USBConfigDescriptor class.
+ * Native methods for the USB_Config_Descriptor class.
  *
  * @author Klaus Reimer <k@ailis.de>
- * @version 0.1
  */
 
 #include <jni.h>
 #include <usb.h>
-
+#include "usb4java.h"
+#include "USB_Interface.h"
 
 /**
  * Creates and returns a new USB config descriptor wrapper object.
@@ -32,7 +31,7 @@ jobject wrap_usb_config_descriptor(JNIEnv *env,
 {
     if (!descriptor) return NULL;
     jclass cls = (*env)->FindClass(env,
-        "de/ailis/libusb/jni/USBConfigDescriptor");
+        PACKAGE_DIR"/USB_Config_Descriptor");
     if (cls == NULL) return NULL;
     jmethodID constructor = (*env)->GetMethodID(env, cls, "<init>", "(J)V");
     if (constructor == NULL) return NULL;
@@ -62,134 +61,150 @@ struct usb_config_descriptor *unwrap_usb_config_descriptor(JNIEnv *env,
 
 
 /**
- * Returns the bLength.
- *
- * @return The bLength.
+ * short bLength()
  */
  
-JNIEXPORT jbyte JNICALL Java_de_ailis_usb4java_jni_USBConfigDescriptor_bLength(
-    JNIEnv *env, jobject this)
+JNIEXPORT jshort JNICALL METHOD_NAME(USB_1Config_1Descriptor, bLength)
+(
+    JNIEnv *env, jobject this
+)
 {
     return unwrap_usb_config_descriptor(env, this)->bLength;
 }
 
 
 /**
- * Returns the bDescriptorType.
- *
- * @return The bDescriptorType.
+ * short bDescriptorType()
  */
  
-JNIEXPORT jbyte JNICALL Java_de_ailis_usb4java_jni_USBConfigDescriptor_bDescriptorType(
-    JNIEnv *env, jobject this)
+JNIEXPORT jshort JNICALL METHOD_NAME(USB_1Config_1Descriptor, bDescriptorType)
+(
+    JNIEnv *env, jobject this
+)
 {
     return unwrap_usb_config_descriptor(env, this)->bDescriptorType;
 }
 
 
 /**
- * Returns the wTotalLength.
- *
- * @return The wTotalLength.
+ * int wTotalLength()
  */
  
-JNIEXPORT jshort JNICALL Java_de_ailis_usb4java_jni_USBConfigDescriptor_wTotalLength(
-    JNIEnv *env, jobject this)
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Config_1Descriptor, wTotalLength)
+(
+    JNIEnv *env, jobject this
+)
 {
     return unwrap_usb_config_descriptor(env, this)->wTotalLength;
 }
 
 
 /**
- * Returns the bNumInterfaces.
- *
- * @return The bNumInterfaces.
+ * short bNumInterfaces()
  */
  
-JNIEXPORT jbyte JNICALL Java_de_ailis_usb4java_jni_USBConfigDescriptor_bNumInterfaces(
-    JNIEnv *env, jobject this)
+JNIEXPORT jshort JNICALL METHOD_NAME(USB_1Config_1Descriptor, bNumInterfaces)
+(
+    JNIEnv *env, jobject this
+)
 {
     return unwrap_usb_config_descriptor(env, this)->bNumInterfaces;
 }
 
 
 /**
- * Returns the bConfigurationValue.
- *
- * @return The bConfigurationValue.
+ * short bConfigurationValue()
  */
  
-JNIEXPORT jbyte JNICALL Java_de_ailis_usb4java_jni_USBConfigDescriptor_bConfigurationValue(
-    JNIEnv *env, jobject this)
+JNIEXPORT jshort JNICALL METHOD_NAME(USB_1Config_1Descriptor, bConfigurationValue)
+(
+    JNIEnv *env, jobject this
+)
 {
     return unwrap_usb_config_descriptor(env, this)->bConfigurationValue;
 }
 
 
 /**
- * Returns the iConfiguration.
- *
- * @return The iConfiguration.
+ * short iConfiguration()
  */
  
-JNIEXPORT jbyte JNICALL Java_de_ailis_usb4java_jni_USBConfigDescriptor_iConfiguration(
-    JNIEnv *env, jobject this)
+JNIEXPORT jshort JNICALL METHOD_NAME(USB_1Config_1Descriptor, iConfiguration)
+(
+    JNIEnv *env, jobject this
+)
 {
     return unwrap_usb_config_descriptor(env, this)->iConfiguration;
 }
 
 
 /**
- * Returns the bmAttributes.
- *
- * @return The bmAttributes.
+ * short bmAttributes()
  */
  
-JNIEXPORT jbyte JNICALL Java_de_ailis_usb4java_jni_USBConfigDescriptor_bmAttributes(
-    JNIEnv *env, jobject this)
+JNIEXPORT jshort JNICALL METHOD_NAME(USB_1Config_1Descriptor, bmAttributes)
+(
+    JNIEnv *env, jobject this
+)
 {
     return unwrap_usb_config_descriptor(env, this)->bmAttributes;
 }
 
 
 /**
- * Returns the MaxPower.
- *
- * @return The MaxPower.
+ * short bMaxPower()
  */
  
-JNIEXPORT jbyte JNICALL Java_de_ailis_usb4java_jni_USBConfigDescriptor_MaxPower(
-    JNIEnv *env, jobject this)
+JNIEXPORT jshort JNICALL METHOD_NAME(USB_1Config_1Descriptor, bMaxPower)
+(
+    JNIEnv *env, jobject this
+)
 {
     return unwrap_usb_config_descriptor(env, this)->MaxPower;
 }
 
 
 /**
- * Returns the extralen.
- *
- * @return The idProduct.
+ * int extralen()
  */
  
-JNIEXPORT jshort JNICALL Java_de_ailis_usb4java_jni_USBConfigDescriptor_extralen(
-    JNIEnv *env, jobject this)
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Config_1Descriptor, extralen)
+(
+    JNIEnv *env, jobject this
+)
 {
     return unwrap_usb_config_descriptor(env, this)->extralen;
 }
 
 
 /**
- * Returns the extra descriptors.
- *
- * @return The extra descriptors.
+ * byte[] extra()
  */
  
-JNIEXPORT jbyteArray JNICALL Java_de_ailis_usb4java_jni_USBConfigDescriptor_extra(
-    JNIEnv *env, jobject this)
+JNIEXPORT jbyteArray JNICALL METHOD_NAME(USB_1Config_1Descriptor, extra)
+(
+    JNIEnv *env, jobject this
+)
 {
     struct usb_config_descriptor *descriptor = unwrap_usb_config_descriptor(env, this);
     jbyteArray array = (*env)->NewByteArray(env, descriptor->extralen);
     (*env)->SetByteArrayRegion(env, array, 0, descriptor->extralen,
         (const jbyte *) descriptor->extra);
     return array;
+}
+
+
+/**
+ * USB_Interface[] iface()
+ */
+
+JNIEXPORT jobjectArray JNICALL METHOD_NAME(USB_1Config_1Descriptor, iface)
+(
+    JNIEnv *env, jobject this
+)
+{
+    struct usb_config_descriptor *descriptor = unwrap_usb_config_descriptor(
+        env, this);
+    return wrap_usb_interfaces(env, descriptor->bNumInterfaces,
+        descriptor->interface);
 }
