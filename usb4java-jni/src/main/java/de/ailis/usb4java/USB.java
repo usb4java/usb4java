@@ -5,7 +5,8 @@
 
 package de.ailis.usb4java;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 
 /**
@@ -24,6 +25,12 @@ import java.io.UnsupportedEncodingException;
 
 public class USB
 {
+    /** The maximum size of a descriptor. */
+    private static final int MAX_DESCRIPTOR_SIZE = 256;
+
+    /** The maximum size of a string. */
+    private static final int MAX_STRING_SIZE = (MAX_DESCRIPTOR_SIZE - 2) / 2;
+
     // === USB class constants ===============================================
 
     /** Per interface class. */
@@ -218,13 +225,11 @@ public class USB
      *            The language id.
      * @param buffer
      *            The buffer to write the string to.
-     * @param buflen
-     *            The maximum number of bytes to read.
      * @return The number of bytes read or < 0 on error.
      */
 
     public static native int usb_get_string(USB_Dev_Handle handle,
-        int index, int langid, byte[] buffer, int buflen);
+        int index, int langid, ByteBuffer buffer);
 
 
     /**
@@ -238,23 +243,35 @@ public class USB
      *            The language id.
      * @param size
      *            The maximum number of bytes to read.
-     * @return The string or null if an error occurred.
+     * @return The string descriptor or null if an error occurred.
      */
 
-    public static String usb_get_string(final USB_Dev_Handle handle,
+    public static USB_String_Descriptor usb_get_string(final USB_Dev_Handle handle,
         final int index, final int langid, final int size)
     {
-        final byte[] buffer = new byte[size];
-        final int len = usb_get_string(handle, index, langid, buffer, size);
+        final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
+        final int len = usb_get_string(handle, index, langid, buffer);
         if (len < 0) return null;
-        try
-        {
-            return new String(buffer, 0, len, "UTF-8");
-        }
-        catch (final UnsupportedEncodingException e)
-        {
-            return new String(buffer, 0, len);
-        }
+        return new USB_String_Descriptor(buffer);
+    }
+
+
+    /**
+     * Returns a string descriptor from a device.
+     *
+     * @param handle
+     *            The USB device handle.
+     * @param index
+     *            The string description index.
+     * @param langid
+     *            The language id.
+     * @return The string descriptor or null if an error occurred.
+     */
+
+    public static USB_String_Descriptor usb_get_string(final USB_Dev_Handle handle,
+        final int index, final int langid)
+    {
+        return usb_get_string(handle, index, langid, MAX_STRING_SIZE * 2);
     }
 
 
@@ -272,40 +289,98 @@ public class USB
      *            The string description index.
      * @param buffer
      *            The buffer to write the string to.
-     * @param buflen
-     *            The maximum number of bytes to read.
      * @return The number of bytes read or < 0 on error.
      */
 
     public static native int usb_get_string_simple(USB_Dev_Handle handle,
-        int index, byte[] buffer, int buflen);
+        int index, ByteBuffer buffer);
 
 
     /**
      * Returns a string descriptor from a device using the first language.
+     * Unlike the native usb_get_string_simple() function this method returns
+     * the string in correct unicode encoding.
      *
      * @param handle
      *            The USB device handle.
      * @param index
      *            The string description index.
      * @param size
-     *            The maximum number of bytes to read.
+     *            The maximum number of characters to read.
      * @return The string or null if an error occurred.
      */
 
     public static String usb_get_string_simple(final USB_Dev_Handle handle,
         final int index, final int size)
     {
-        final byte[] buffer = new byte[size];
-        final int len = usb_get_string_simple(handle, index, buffer, size);
-        if (len < 0) return null;
-        try
-        {
-            return new String(buffer, 0, len, "ISO-8859-15");
-        }
-        catch (final UnsupportedEncodingException e)
-        {
-            return new String(buffer, 0, len);
-        }
+        final short[] languages = usb_get_languages(handle);
+        if (languages == null) return null;
+        final short langid = languages.length == 0 ? 0 : languages[0];
+        final USB_String_Descriptor descriptor = usb_get_string(handle, index, langid, size * 2);
+        if (descriptor == null) return null;
+        return descriptor.toString();
     }
+
+
+    /**
+     * Returns a string descriptor from a device using the first language.
+     * Unlike the native usb_get_string_simple() function this method returns
+     * the string in correct unicode encoding.
+     *
+     * @param handle
+     *            The USB device handle.
+     * @param index
+     *            The string description index.
+     * @return The string or null if an error occurred.
+     */
+
+    public static String usb_get_string_simple(final USB_Dev_Handle handle,
+        final int index)
+    {
+        return usb_get_string_simple(handle, index, MAX_STRING_SIZE);
+    }
+
+
+    /**
+     * Returns the languages the specified device supports.
+     *
+     * @param handle
+     *            The USB device handle.
+     * @return Array with supported language codes.
+     */
+
+    public static short[] usb_get_languages(final USB_Dev_Handle handle)
+    {
+        final ByteBuffer buffer = ByteBuffer
+                .allocateDirect(MAX_DESCRIPTOR_SIZE);
+        final int len = usb_get_descriptor(handle, USB_DT_STRING, 0, buffer);
+        if (len < 0) return null;
+        final short[] languages = new short[(len - 2) / 2];
+        if (languages.length == 0) return languages;
+        buffer.position(2);
+        buffer.order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(languages);
+        return languages;
+    }
+
+
+    /**
+     * Retrieves a descriptor from a device's default control pipe.
+     *
+     * usb_get_descriptor retrieves a descriptor from the device identified by
+     * the type and index of the descriptor from the default control pipe.
+     * Returns number of bytes read for the descriptor or < 0 on error.
+     *
+     * @param handle
+     *            The device handle.
+     * @param type
+     *            The descriptor type.
+     * @param index
+     *            The descriptor index.
+     * @param buffer
+     *            The buffer to put the read bytes in.
+     * @return Number of bytes read or < 0 on error.
+     */
+
+    public static native int usb_get_descriptor(USB_Dev_Handle handle,
+        int type, int index, ByteBuffer buffer);
 }

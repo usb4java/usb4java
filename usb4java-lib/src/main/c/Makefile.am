@@ -12,5 +12,6 @@ libusb4java_la_SOURCES = \
     USB_Dev_Handle.c \
     USB_Interface.c \
     USB_Interface_Descriptor.c \
-    USB_Endpoint_Descriptor.c
+    USB_Endpoint_Descriptor.c \
+    USB_String_Descriptor.c
 	

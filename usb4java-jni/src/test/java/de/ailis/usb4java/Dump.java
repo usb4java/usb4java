@@ -213,12 +213,23 @@ public class Dump
         dump_device_descriptor(device.descriptor());
         level--;
         final USB_Dev_Handle handle = usb_open(device);
-        final String manufacturer = usb_get_string_simple(handle, device.descriptor().iManufacturer(), 255);
+        final String manufacturer = usb_get_string_simple(handle, device.descriptor().iManufacturer());
         indent(); System.out.format("Manufacturer: %s\n", manufacturer != null ? manufacturer : "Unknown");
-        final String product = usb_get_string_simple(handle, device.descriptor().iProduct(), 255);
+        final String product = usb_get_string_simple(handle, device.descriptor().iProduct());
         indent(); System.out.format("Product: %s\n", product != null ? product : "Unknown");
-        final String serialNumber = usb_get_string_simple(handle, device.descriptor().iSerialNumber(), 255);
+        final String serialNumber = usb_get_string_simple(handle, device.descriptor().iSerialNumber());
         indent(); System.out.format("Serial: %s\n", serialNumber != null ? serialNumber : "Unknown");
+        indent(); System.out.print("Languages:");
+        final short[] languages = USB.usb_get_languages(handle);
+        if (languages != null)
+        {
+            for (final short language: languages)
+                System.out.format(" 0x%04x", language);
+            System.out.println();
+        }
+        else
+            System.out.println("Unknown");
+
         usb_close(handle);
         indent(); System.out.format("config descriptors:\n");
         level++;

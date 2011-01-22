@@ -105,41 +105,48 @@ JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1close)
 JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1get_1string)
 (
     JNIEnv *env, jclass class, jobject handle, jint index, jint langid,
-    jbyteArray buffer, jint buflen
+    jobject buffer
 )
 {
-    char *buf = (char*) malloc(buflen);
-    int result = usb_get_string(unwrap_usb_dev_handle(env, handle),
-        index, langid, buf, buflen);
-    if (result >= 0)
-    {
-        (*env)->SetByteArrayRegion(env, buffer, 0, result,
-            (const jbyte *) buf);
-    }
-    free(buf);
-    return result;
+    void *buf = (*env)->GetDirectBufferAddress(env, buffer);
+    if (!buf) return -1;
+    jlong buflen = (*env)->GetDirectBufferCapacity(env, buffer);
+    return usb_get_string(unwrap_usb_dev_handle(env, handle),
+         index, langid, buf, buflen);
 }
 
 
 /**
- * int usb_get_simple_string(USB_Handle handle, int index, byte[] buffer,
- *     int buflen)
+ * int usb_get_simple_string(USB_Handle handle, int index, ByteBuffer buffer)
  */
 
 JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1get_1string_1simple)
 (
-    JNIEnv *env, jclass class, jobject handle, jint index, jbyteArray buffer,
-    jint buflen
+    JNIEnv *env, jclass class, jobject handle, jint index, jobject buffer
 )
 {
-    char *buf = (char*) malloc(buflen);
-    int result = usb_get_string_simple(unwrap_usb_dev_handle(env, handle),
-        index, buf, buflen);
-    if (result >= 0)
-    {
-        (*env)->SetByteArrayRegion(env, buffer, 0, result,
-            (const jbyte *) buf);
-    }
-    free(buf);
-    return result;
+    void *buf = (*env)->GetDirectBufferAddress(env, buffer);
+    if (!buf) return -1;
+    jlong buflen = (*env)->GetDirectBufferCapacity(env, buffer);
+    return usb_get_string_simple(unwrap_usb_dev_handle(env, handle),
+         index, buf, buflen);
+}
+
+
+/**
+ * int usb_get_descriptor(USB_Dev_Handle handle, int type, int index,
+ *    ByteBuffer buffer);
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1get_1descriptor)
+(
+    JNIEnv *env, jclass class, jobject handle, int type, int index,
+    jobject buffer
+)
+{
+    void *buf = (*env)->GetDirectBufferAddress(env, buffer);
+    if (!buf) return -1;
+    jlong buflen = (*env)->GetDirectBufferCapacity(env, buffer);
+    return usb_get_descriptor(unwrap_usb_dev_handle(env, handle),
+        type, index, buf, buflen);
 }
