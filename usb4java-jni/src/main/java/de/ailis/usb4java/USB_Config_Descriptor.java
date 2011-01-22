@@ -7,7 +7,7 @@ package de.ailis.usb4java;
 
 
 /**
- * THe USB configuration descriptor describes information about a specific USB
+ * The USB configuration descriptor describes information about a specific USB
  * device configuration.
  *
  * @author Klaus Reimer (k@ailis.de)
