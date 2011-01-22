@@ -42,7 +42,7 @@ void dump_endpoint_descriptor(struct usb_endpoint_descriptor descriptor)
     indent(); printf("bInterval: 0x%02x\n", descriptor.bInterval);
     indent(); printf("bRefresh: 0x%02x\n", descriptor.bRefresh);
     indent(); printf("bSynchAddress: 0x%02x\n", descriptor.bSynchAddress);
-    indent(); printf("extralen: 0x%04x\n", descriptor.extralen);
+    indent(); printf("extralen: 0x%08x\n", descriptor.extralen);
     indent(); printf("extra:");
     for (i = 0; i < descriptor.extralen; i++)
         printf(" %02x", descriptor.extra[i]);
@@ -65,7 +65,7 @@ void dump_interface_descriptor(struct usb_interface_descriptor descriptor)
     indent(); printf("bInterfaceSubClass: 0x%02x\n", descriptor.bInterfaceSubClass);
     indent(); printf("bInterfaceProtocol: 0x%02x\n", descriptor.bInterfaceProtocol);
     indent(); printf("iInterface: 0x%02x\n", descriptor.iInterface);
-    indent(); printf("extralen: 0x%04x\n", descriptor.extralen);
+    indent(); printf("extralen: 0x%08x\n", descriptor.extralen);
     indent(); printf("extra:");
     for (i = 0; i < descriptor.extralen; i++)
         printf(" %02x", descriptor.extra[i]);
@@ -84,7 +84,7 @@ void dump_interface(struct usb_interface iface)
 
     indent(); printf("Interface:\n");
     level++;
-    indent(); printf("num_altsetting: 0x%04x\n", iface.num_altsetting);
+    indent(); printf("num_altsetting: 0x%08x\n", iface.num_altsetting);
     indent(); printf("altsetting:\n");
     level++;
     for (i = 0; i < iface.num_altsetting; i++)
@@ -107,7 +107,7 @@ void dump_config_descriptor(struct usb_config_descriptor config)
     indent(); printf("iConfiguration: 0x%02x\n", config.iConfiguration);
     indent(); printf("bmAttributes: 0x%02x\n", config.bmAttributes);
     indent(); printf("MaxPower: 0x%02x\n", config.MaxPower);
-    indent(); printf("extralen: 0x%04x\n", config.extralen);
+    indent(); printf("extralen: 0x%08x\n", config.extralen);
     indent(); printf("extra:");
     for (i = 0; i < config.extralen; i++)
         printf(" %02x", config.extra[i]);
@@ -122,7 +122,8 @@ void dump_config_descriptor(struct usb_config_descriptor config)
 
 void dump_device(struct usb_device *device)
 {
-    int i, buffer[256];
+    int i;
+    char buffer[256];
 
     indent(); printf("Device:\n");
     level++;
@@ -134,7 +135,7 @@ void dump_device(struct usb_device *device)
     level++;
     dump_device_descriptor(device->descriptor);
     level--;
-    struct usb_handle *handle = usb_open(device);
+    struct usb_dev_handle *handle = usb_open(device);
     i = usb_get_string_simple(handle, device->descriptor.iManufacturer, buffer, 255);
     indent(); printf("Manufacturer: %s\n", i > 0 ? buffer : "Unknown");
     i = usb_get_string_simple(handle, device->descriptor.iProduct, buffer, 255);
