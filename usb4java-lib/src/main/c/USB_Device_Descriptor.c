@@ -62,32 +62,6 @@ struct usb_device_descriptor *unwrap_usb_device_descriptor(JNIEnv *env,
 
 
 /**
- * short bLength()
- */
- 
-JNIEXPORT jshort JNICALL METHOD_NAME(USB_1Device_1Descriptor, bLength)
-(
-    JNIEnv *env, jobject this
-)
-{
-    return (jshort) unwrap_usb_device_descriptor(env, this)->bLength;
-}
-
-
-/**
- * short bDescriptorType()
- */
- 
-JNIEXPORT jshort JNICALL METHOD_NAME(USB_1Device_1Descriptor, bDescriptorType)
-(
-    JNIEnv *env, jobject this
-)
-{
-    return (jshort) unwrap_usb_device_descriptor(env, this)->bDescriptorType;
-}
-
-
-/**
  * int bcdUSB()
  */
  

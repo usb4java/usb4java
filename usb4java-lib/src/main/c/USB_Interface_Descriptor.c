@@ -88,32 +88,6 @@ struct usb_interface_descriptor *unwrap_usb_interface_descriptor(JNIEnv *env,
 
 
 /**
- * short bLength()
- */
- 
-JNIEXPORT jshort JNICALL METHOD_NAME(USB_1Interface_1Descriptor, bLength)
-(
-    JNIEnv *env, jobject this
-)
-{
-    return (jshort) unwrap_usb_interface_descriptor(env, this)->bLength;
-}
-
-
-/**
- * short bDescriptorType()
- */
- 
-JNIEXPORT jshort JNICALL METHOD_NAME(USB_1Interface_1Descriptor, bDescriptorType)
-(
-    JNIEnv *env, jobject this
-)
-{
-    return (jshort) unwrap_usb_interface_descriptor(env, this)->bDescriptorType;
-}
-
-
-/**
  * short bInterfaceNumber()
  */
 

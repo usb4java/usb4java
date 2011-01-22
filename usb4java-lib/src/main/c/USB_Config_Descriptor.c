@@ -61,32 +61,6 @@ struct usb_config_descriptor *unwrap_usb_config_descriptor(JNIEnv *env,
 
 
 /**
- * short bLength()
- */
- 
-JNIEXPORT jshort JNICALL METHOD_NAME(USB_1Config_1Descriptor, bLength)
-(
-    JNIEnv *env, jobject this
-)
-{
-    return unwrap_usb_config_descriptor(env, this)->bLength;
-}
-
-
-/**
- * short bDescriptorType()
- */
- 
-JNIEXPORT jshort JNICALL METHOD_NAME(USB_1Config_1Descriptor, bDescriptorType)
-(
-    JNIEnv *env, jobject this
-)
-{
-    return unwrap_usb_config_descriptor(env, this)->bDescriptorType;
-}
-
-
-/**
  * int wTotalLength()
  */
  

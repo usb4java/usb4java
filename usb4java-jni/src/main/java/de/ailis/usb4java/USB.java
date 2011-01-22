@@ -301,7 +301,7 @@ public class USB
         if (len < 0) return null;
         try
         {
-            return new String(buffer, 0, len, "UTF-8");
+            return new String(buffer, 0, len, "ISO-8859-15");
         }
         catch (final UnsupportedEncodingException e)
         {

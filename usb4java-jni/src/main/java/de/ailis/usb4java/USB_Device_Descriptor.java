@@ -14,12 +14,8 @@ package de.ailis.usb4java;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public class USB_Device_Descriptor
+public class USB_Device_Descriptor extends USB_Descriptor_Header
 {
-    /** The low-level pointer to the C structure. */
-    final long pointer;
-
-
     /**
      * Constructor.
      *
@@ -29,26 +25,8 @@ public class USB_Device_Descriptor
 
     USB_Device_Descriptor(final long pointer)
     {
-        this.pointer = pointer;
+        super(pointer);
     }
-
-
-    /**
-     * Returns the descriptor size in bytes.
-     *
-     * @return The descriptor size in bytes (unsigned byte).
-     */
-
-    public native short bLength();
-
-
-    /**
-     * Returns the device descriptor type.
-     *
-     * @return The device descriptor type (unsigned byte).
-     */
-
-    public native short bDescriptorType();
 
 
     /**
