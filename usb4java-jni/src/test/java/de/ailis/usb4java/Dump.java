@@ -201,7 +201,6 @@ public class Dump
     private static void dump_device(final USB_Device device)
     {
         int i;
-        final byte[] buffer = new byte[256];
 
         indent(); System.out.format("Device:\n");
         level++;
