@@ -1,0 +1,30 @@
+ -----------------------------------------------------------------------------
+ About
+ -----------------------------------------------------------------------------
+
+What is usb4java?
+
+  usb4java is a Java library to access USB devices. It is based on the native
+  libusb-0.1.x shared library and reflects this API as complete as possible.
+  Java NIO buffers are used for data exchange between libusb and Java. 
+
+News
+
+  * 2011/01/23 - Version 0.1.12-1 has been released.
+
+  []
+
+      
+Getting started
+
+  {{{./download.html}Download}} the latest usb4java and then 
+  read the {{{./manual.html}manual}} for some basic instructions how to use it.
+  If you prefer building usb4java from source then follow
+  {{{./build.html}build instructions}}.  
+
+Report problems
+
+  If you have any problems with usb4java or find bugs in the software or this
+  web site (even if it's just a typo) then please let me know: 
+  {{{mailto:k@ailis.de}k@ailis.de}}
+  

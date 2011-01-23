@@ -33,12 +33,12 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
 
     /**
      * Returns the total size of the data returned for this configuration
-     * including the length of all descriptors returned for this configuration
+     * including the length of all descriptors returned for this configuration.
      *
      * @return The total length of all configuration data (unsigned short).
      */
 
-    public final int wTotalLength()
+    public int wTotalLength()
     {
         this.data.order(ByteOrder.LITTLE_ENDIAN).position(2);
         return this.data.asShortBuffer().get() & 0xffff;
@@ -51,7 +51,7 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
      * @return The number of supported interfaces (unsigned byte).
      */
 
-    public final int bNumInterfaces()
+    public int bNumInterfaces()
     {
         return this.data.get(4) & 0xff;
     }
@@ -64,7 +64,7 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
      * @return The configuration value (unsigned byte).
      */
 
-    public final int bConfigurationValue()
+    public int bConfigurationValue()
     {
         return this.data.get(5) & 0xff;
     }
@@ -77,7 +77,7 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
      *         (unsigned byte).
      */
 
-    public final int iConfiguration()
+    public int iConfiguration()
     {
         return this.data.get(6) & 0xff;
     }
@@ -99,7 +99,7 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
      * @return A bitmap with configuration attributes (unsigned byte).
      */
 
-    public final int bmAttributes()
+    public int bmAttributes()
     {
         return this.data.get(7) & 0xff;
     }
@@ -113,7 +113,7 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
      * @return The maximum power consumption in 2mA units (unsigned byte).
      */
 
-    public final int bMaxPower()
+    public int bMaxPower()
     {
         return this.data.get(8) & 0xff;
     }
@@ -127,7 +127,7 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
      */
 
     @Deprecated
-    public final int MaxPower()
+    public int MaxPower()
     {
         return bMaxPower();
     }
@@ -139,7 +139,7 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
      * @return The length of the extra data block in bytes.
      */
 
-    public final native int extralen();
+    public native int extralen();
 
 
     /**
@@ -148,7 +148,7 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
      * @return The extra data block.
      */
 
-    public final native ByteBuffer extra();
+    public native ByteBuffer extra();
 
 
     /**
@@ -159,5 +159,5 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
      * @return The interfaces of this USB configuration.
      */
 
-    public final native USB_Interface[] iface();
+    public native USB_Interface[] iface();
 }

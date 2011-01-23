@@ -12,10 +12,10 @@ package de.ailis.usb4java;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public class USB_Bus
+public final class USB_Bus
 {
     /** Pointer to low-level C structure. */
-    final long pointer;
+    private final long pointer;
 
 
     /**
@@ -25,7 +25,7 @@ public class USB_Bus
      *            The low-level C structure pointer.
      */
 
-    USB_Bus(final long pointer)
+    private USB_Bus(final long pointer)
     {
         this.pointer = pointer;
     }

@@ -17,7 +17,7 @@ import java.nio.ByteOrder;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public class USB
+public final class USB
 {
     /** The maximum size of a descriptor. */
     private static final int MAX_DESCRIPTOR_SIZE = 256;
@@ -227,6 +227,16 @@ public class USB
 
 
     /**
+     * Private constructor to prevent instantiation.
+     */
+
+    private USB()
+    {
+        // Empty
+    }
+
+
+    /**
      * Initialize libusb.
      *
      * Just like the name implies, usb_init sets up some internal structures.
@@ -288,7 +298,7 @@ public class USB
      * @return The USB device handle.
      */
 
-    public static native USB_Dev_Handle usb_open(USB_Device device);
+    public static native USB_Dev_Handle usb_open(final USB_Device device);
 
 
     /**
@@ -303,7 +313,7 @@ public class USB
      * @return 0 on success or < 0 on error.
      */
 
-    public static native int usb_close(USB_Dev_Handle handle);
+    public static native int usb_close(final USB_Dev_Handle handle);
 
 
     /**
@@ -320,8 +330,8 @@ public class USB
      * @return 0 on success or < 0 on error.
      */
 
-    public static native int usb_set_configuration(USB_Dev_Handle handle,
-        int configuration);
+    public static native int usb_set_configuration(final USB_Dev_Handle handle,
+        final int configuration);
 
 
     /**
@@ -338,8 +348,8 @@ public class USB
      * @return 0 on success or < 0 on error.
      */
 
-    public static native int usb_set_altinterface(USB_Dev_Handle handle,
-        int alternate);
+    public static native int usb_set_altinterface(final USB_Dev_Handle handle,
+        final int alternate);
 
 
     /**
@@ -356,7 +366,8 @@ public class USB
      * @return 0 on success or < 0 on error.
      */
 
-    public static native int usb_clear_halt(USB_Dev_Handle handle, int ep);
+    public static native int usb_clear_halt(final USB_Dev_Handle handle,
+        final int ep);
 
 
     /**
@@ -374,7 +385,7 @@ public class USB
      * @return 0 on success or < 0 on error.
      */
 
-    public static native int usb_reset(USB_Dev_Handle handle);
+    public static native int usb_reset(final USB_Dev_Handle handle);
 
 
     /**
@@ -395,8 +406,8 @@ public class USB
      * @return 0 on success or < 0 on error.
      */
 
-    public static native int usb_claim_interface(USB_Dev_Handle handle,
-        int iface);
+    public static native int usb_claim_interface(final USB_Dev_Handle handle,
+        final int iface);
 
 
     /**
@@ -414,8 +425,8 @@ public class USB
      * @return 0 on success or < 0 on error.
      */
 
-    public static native int usb_release_interface(USB_Dev_Handle handle,
-        int iface);
+    public static native int usb_release_interface(final USB_Dev_Handle handle,
+        final int iface);
 
 
     /**
@@ -452,9 +463,9 @@ public class USB
      * @return The number of bytes written/read or < 0 on error.
      */
 
-    public static native int usb_control_msg(USB_Dev_Handle handle,
-        int requesttype, int request, int value, int index, ByteBuffer bytes,
-        int timeout);
+    public static native int usb_control_msg(final USB_Dev_Handle handle,
+        final int requesttype, final int request, final int value,
+        final int index, final ByteBuffer bytes, final int timeout);
 
 
     /**
@@ -476,8 +487,8 @@ public class USB
      * @return The number of bytes read or < 0 on error.
      */
 
-    public static native int usb_get_string(USB_Dev_Handle handle,
-        int index, int langid, ByteBuffer buffer);
+    public static native int usb_get_string(final USB_Dev_Handle handle,
+        final int index, final int langid, final ByteBuffer buffer);
 
 
     /**
@@ -518,8 +529,7 @@ public class USB
      */
 
     public static USB_String_Descriptor usb_get_string(
-        final USB_Dev_Handle handle,
-        final int index, final int langid)
+        final USB_Dev_Handle handle, final int index, final int langid)
     {
         return usb_get_string(handle, index, langid, MAX_STRING_SIZE * 2);
     }
@@ -542,8 +552,8 @@ public class USB
      * @return The number of bytes read or < 0 on error.
      */
 
-    public static native int usb_get_string_simple(USB_Dev_Handle handle,
-        int index, ByteBuffer buffer);
+    public static native int usb_get_string_simple(final USB_Dev_Handle handle,
+        final int index, final ByteBuffer buffer);
 
 
     /**
@@ -632,8 +642,8 @@ public class USB
      * @return Number of bytes read or < 0 on error.
      */
 
-    public static native int usb_get_descriptor(USB_Dev_Handle handle,
-        int type, int index, ByteBuffer buffer);
+    public static native int usb_get_descriptor(final USB_Dev_Handle handle,
+        final int type, final int index, final ByteBuffer buffer);
 
 
     /**
@@ -658,8 +668,8 @@ public class USB
      */
 
     public static native int usb_get_descriptor_by_endpoint(
-        USB_Dev_Handle handle,
-        int ep, int type, int index, ByteBuffer buffer);
+        final USB_Dev_Handle handle, final int ep, final int type,
+        final int index, final ByteBuffer buffer);
 
 
     /**
@@ -679,8 +689,8 @@ public class USB
      * @return Bytes written on success or < 0 on error.
      */
 
-    public static native int usb_bulk_write(USB_Dev_Handle handle, int ep,
-        ByteBuffer bytes, int timeout);
+    public static native int usb_bulk_write(final USB_Dev_Handle handle,
+        final int ep, final ByteBuffer bytes, final int timeout);
 
 
     /**
@@ -700,8 +710,8 @@ public class USB
      * @return Bytes read on success or < 0 on error.
      */
 
-    public static native int usb_bulk_read(USB_Dev_Handle handle, int ep,
-        ByteBuffer bytes, int timeout);
+    public static native int usb_bulk_read(final USB_Dev_Handle handle,
+        final int ep, final ByteBuffer bytes, final int timeout);
 
 
     /**
@@ -722,8 +732,8 @@ public class USB
      * @return Bytes written on success or < 0 on error.
      */
 
-    public static native int usb_interrupt_write(USB_Dev_Handle handle, int ep,
-        ByteBuffer bytes, int timeout);
+    public static native int usb_interrupt_write(final USB_Dev_Handle handle,
+        final int ep, final ByteBuffer bytes, final int timeout);
 
 
     /**
@@ -743,6 +753,6 @@ public class USB
      * @return Bytes read on success or < 0 on error.
      */
 
-    public static native int usb_interrupt_read(USB_Dev_Handle handle, int ep,
-        ByteBuffer bytes, int timeout);
+    public static native int usb_interrupt_read(final USB_Dev_Handle handle,
+        final int ep, final ByteBuffer bytes, final int timeout);
 }

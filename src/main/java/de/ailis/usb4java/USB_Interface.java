@@ -12,10 +12,10 @@ package de.ailis.usb4java;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public class USB_Interface
+public final class USB_Interface
 {
     /** The low-level pointer to the C structure. */
-    final long pointer;
+    private final long pointer;
 
 
     /**
@@ -25,7 +25,7 @@ public class USB_Interface
      *            The low-level pointer to the C structure.
      */
 
-    USB_Interface(final long pointer)
+    private USB_Interface(final long pointer)
     {
         this.pointer = pointer;
     }
@@ -47,4 +47,17 @@ public class USB_Interface
      */
 
     public native int num_altsetting();
+
+
+
+
+    /**
+     * @see java.lang.Object#toString()
+     */
+
+    @Override
+    public String toString()
+    {
+        return String.format("USB Interface 0x%08x", this.pointer);
+    }
 }

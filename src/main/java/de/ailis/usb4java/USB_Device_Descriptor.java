@@ -40,7 +40,7 @@ public final class USB_Device_Descriptor extends USB_Descriptor_Header
      * @return The USB specification release number (unsigned short).
      */
 
-    public final int bcdUSB()
+    public int bcdUSB()
     {
         this.data.order(ByteOrder.LITTLE_ENDIAN).position(2);
         return this.data.asShortBuffer().get() & 0xffff;
@@ -63,7 +63,7 @@ public final class USB_Device_Descriptor extends USB_Descriptor_Header
      * @return The device class code (unsigned byte).
      */
 
-    public final int bDeviceClass()
+    public int bDeviceClass()
     {
         return this.data.get(4) & 0xff;
     }
@@ -84,7 +84,7 @@ public final class USB_Device_Descriptor extends USB_Descriptor_Header
      * @return The device subclass code (unsigned byte).
      */
 
-    public final int bDeviceSubClass()
+    public int bDeviceSubClass()
     {
         return this.data.get(5) & 0xff;
     }
@@ -109,7 +109,7 @@ public final class USB_Device_Descriptor extends USB_Descriptor_Header
      * @return The device protocol code (unsigned byte).
      */
 
-    public final int bDeviceProtocol()
+    public int bDeviceProtocol()
     {
         return this.data.get(6) & 0xff;
     }
@@ -122,7 +122,7 @@ public final class USB_Device_Descriptor extends USB_Descriptor_Header
      * @return The maximum packet size for endpoint zero (unsigned byte).
      */
 
-    public final int bMaxPacketSize0()
+    public int bMaxPacketSize0()
     {
         return this.data.get(7) & 0xff;
     }
@@ -134,7 +134,7 @@ public final class USB_Device_Descriptor extends USB_Descriptor_Header
      * @return The vendor ID (unsigned short).
      */
 
-    public final int idVendor()
+    public int idVendor()
     {
         this.data.order(ByteOrder.LITTLE_ENDIAN).position(8);
         return this.data.asShortBuffer().get() & 0xffff;
@@ -147,7 +147,7 @@ public final class USB_Device_Descriptor extends USB_Descriptor_Header
      * @return The product ID (unsigned short).
      */
 
-    public final int idProduct()
+    public int idProduct()
     {
         this.data.order(ByteOrder.LITTLE_ENDIAN).position(10);
         return this.data.asShortBuffer().get() & 0xffff;
@@ -160,7 +160,7 @@ public final class USB_Device_Descriptor extends USB_Descriptor_Header
      * @return THe device release number (unsigned short).
      */
 
-    public final int bcdDevice()
+    public int bcdDevice()
     {
         this.data.order(ByteOrder.LITTLE_ENDIAN).position(12);
         return this.data.asShortBuffer().get() & 0xffff;
@@ -173,7 +173,7 @@ public final class USB_Device_Descriptor extends USB_Descriptor_Header
      * @return The index of the manufacturer string descriptor (unsigned byte).
      */
 
-    public final int iManufacturer()
+    public int iManufacturer()
     {
         return this.data.get(14) & 0xff;
     }
@@ -185,7 +185,7 @@ public final class USB_Device_Descriptor extends USB_Descriptor_Header
      * @return The index of the product string descriptor (unsigned byte).
      */
 
-    public final int iProduct()
+    public int iProduct()
     {
         return this.data.get(15) & 0xff;
     }
@@ -197,7 +197,7 @@ public final class USB_Device_Descriptor extends USB_Descriptor_Header
      * @return The index of the serial number string descriptor (unsigned byte).
      */
 
-    public final int iSerialNumber()
+    public int iSerialNumber()
     {
         return this.data.get(16) & 0xff;
     }
@@ -209,7 +209,7 @@ public final class USB_Device_Descriptor extends USB_Descriptor_Header
      * @return The number of configurations (unsigned byte).
      */
 
-    public final int bNumConfigurations()
+    public int bNumConfigurations()
     {
         return this.data.get(17) & 0xff;
     }

@@ -41,7 +41,7 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      * @return The endpoint address (unsigned byte).
      */
 
-    public final int bEndpointAddress()
+    public int bEndpointAddress()
     {
         return this.data.get(2) & 0xff;
     }
@@ -64,7 +64,7 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      * @return The endpoint attributes bitmask (unsigned byte).
      */
 
-    public final int bmAttributes()
+    public int bmAttributes()
     {
         return this.data.get(3) & 0xff;
     }
@@ -85,7 +85,7 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      * @return The maximum packet size of the endpoint (unsigned short).
      */
 
-    public final int wMaxPacketSize()
+    public int wMaxPacketSize()
     {
         this.data.order(ByteOrder.LITTLE_ENDIAN).position(4);
         return this.data.asShortBuffer().get() & 0xffff;
@@ -99,7 +99,7 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      * @return The interval for polling endpoint (unsigned byte).
      */
 
-    public final int bInterval()
+    public int bInterval()
     {
         return this.data.get(6) & 0xff;
     }
@@ -112,7 +112,7 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      * @return The synchronization rate (unsigned byte).
      */
 
-    public final int bRefresh()
+    public int bRefresh()
     {
         return this.data.get(7) & 0xff;
     }
@@ -124,7 +124,7 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      * @return The address of the synch endpoint (unsigned byte).
      */
 
-    public final int bSynchAddress()
+    public int bSynchAddress()
     {
         return this.data.get(8) & 0xff;
     }
@@ -136,7 +136,7 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      * @return The extra descriptor data.
      */
 
-    public final native ByteBuffer extra();
+    public native ByteBuffer extra();
 
 
     /**
@@ -145,5 +145,5 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      * @return The extra descriptor size.
      */
 
-    public final native int extralen();
+    public native int extralen();
 }

@@ -36,7 +36,7 @@ public final class USB_Interface_Descriptor extends USB_Descriptor_Header
      * @return The interface number (unsigned byte).
      */
 
-    public final int bInterfaceNumber()
+    public int bInterfaceNumber()
     {
         return this.data.get(0) & 0xff;
     }
@@ -49,7 +49,7 @@ public final class USB_Interface_Descriptor extends USB_Descriptor_Header
      * @return The value used to select this alternate setting (unsigned byte).
      */
 
-    public final int bAlternateSetting()
+    public int bAlternateSetting()
     {
         return this.data.get(2) & 0xff;
     }
@@ -61,7 +61,7 @@ public final class USB_Interface_Descriptor extends USB_Descriptor_Header
      * @return The number of endpoints (unsigned byte).
      */
 
-    public final int bNumEndpoints()
+    public int bNumEndpoints()
     {
         return this.data.get(3) & 0xff;
     }
@@ -76,7 +76,7 @@ public final class USB_Interface_Descriptor extends USB_Descriptor_Header
      * @return The interface class code (unsigned byte).
      */
 
-    public final int bInterfaceClass()
+    public int bInterfaceClass()
     {
         return this.data.get(4) & 0xff;
     }
@@ -91,7 +91,7 @@ public final class USB_Interface_Descriptor extends USB_Descriptor_Header
      * @return The interface sub class code (unsigned byte).
      */
 
-    public final int bInterfaceSubClass()
+    public int bInterfaceSubClass()
     {
         return this.data.get(5) & 0xff;
     }
@@ -109,7 +109,7 @@ public final class USB_Interface_Descriptor extends USB_Descriptor_Header
      * @return The protocol code (unsigned byte).
      */
 
-    public final int bInterfaceProtocol()
+    public int bInterfaceProtocol()
     {
         return this.data.get(6) & 0xff;
     }
@@ -121,7 +121,7 @@ public final class USB_Interface_Descriptor extends USB_Descriptor_Header
      * @return The string descriptor index (unsigned byte).
      */
 
-    public final int iInterface()
+    public int iInterface()
     {
         return this.data.get(7) & 0xff;
     }
@@ -133,7 +133,7 @@ public final class USB_Interface_Descriptor extends USB_Descriptor_Header
      * @return The array with endpoints.
      */
 
-    public final native USB_Endpoint_Descriptor[] endpoint();
+    public native USB_Endpoint_Descriptor[] endpoint();
 
 
     /**
@@ -142,7 +142,7 @@ public final class USB_Interface_Descriptor extends USB_Descriptor_Header
      * @return The extra descriptor data.
      */
 
-    public final native ByteBuffer extra();
+    public native ByteBuffer extra();
 
 
     /**
@@ -151,5 +151,5 @@ public final class USB_Interface_Descriptor extends USB_Descriptor_Header
      * @return The size of the extra data in bytes.
      */
 
-    public final native int extralen();
+    public native int extralen();
 }

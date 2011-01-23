@@ -37,7 +37,7 @@ public final class USB_String_Descriptor extends USB_Descriptor_Header
      * @return The string data.
      */
 
-    public final char[] wData()
+    public char[] wData()
     {
         this.data.position(2);
         final CharBuffer chars = this.data.order(ByteOrder.LITTLE_ENDIAN)
@@ -53,7 +53,7 @@ public final class USB_String_Descriptor extends USB_Descriptor_Header
      */
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return new String(wData());
     }

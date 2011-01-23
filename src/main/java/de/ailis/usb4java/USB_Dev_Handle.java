@@ -12,10 +12,10 @@ package de.ailis.usb4java;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public class USB_Dev_Handle
+public final class USB_Dev_Handle
 {
     /** The low-level pointer to the C structure. */
-    final long pointer;
+    private final long pointer;
 
 
     /**
@@ -25,8 +25,19 @@ public class USB_Dev_Handle
      *            The low-level pointer to the C structure.
      */
 
-    USB_Dev_Handle(final long pointer)
+    private USB_Dev_Handle(final long pointer)
     {
         this.pointer = pointer;
+    }
+
+
+    /**
+     * @see java.lang.Object#toString()
+     */
+
+    @Override
+    public String toString()
+    {
+        return String.format("USB_Dev_Handle 0x%08x", this.pointer);
     }
 }
