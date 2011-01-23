@@ -14,12 +14,6 @@ import java.nio.ByteOrder;
  * functions of libusb 0.x and defines all the constants. Usage is the same as
  * documented by libusb.
  *
- * You can use these classes to access USB at a low level but it is recommended
- * to use javax.usb (JSR80) instead which usb4java implements. To do this put
- * the file javax.usb.resources into the class path with the following content:
- *
- * javax.usb.services = de.ailis.usb4java.UsbServicesImpl
- *
  * @author Klaus Reimer (k@ailis.de)
  */
 
