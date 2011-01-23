@@ -32,9 +32,11 @@ jobject wrap_usb_endpoint_descriptor(JNIEnv *env,
     if (!descriptor) return NULL;
     jclass cls = (*env)->FindClass(env, PACKAGE_DIR"/USB_Endpoint_Descriptor");
     if (cls == NULL) return NULL;
-    jmethodID constructor = (*env)->GetMethodID(env, cls, "<init>", "(J)V");
+    jmethodID constructor = (*env)->GetMethodID(env, cls, "<init>",
+        "(Ljava/nio/ByteBuffer;)V");
     if (constructor == NULL) return NULL;
-    return (*env)->NewObject(env, cls, constructor, (long) descriptor);
+    jobject buffer = (*env)->NewDirectByteBuffer(env, descriptor, 18);
+    return (*env)->NewObject(env, cls, constructor, buffer);
 }
 
 
@@ -80,87 +82,11 @@ struct usb_endpoint_descriptor *unwrap_usb_endpoint_descriptor(JNIEnv *env,
     jobject obj)
 {
      jclass cls = (*env)->GetObjectClass(env, obj);
-     jfieldID field = (*env)->GetFieldID(env, cls, "pointer", "J");
-     return (struct usb_endpoint_descriptor *) ((*env)->GetLongField(env,
-         obj, field));
-}
-
-
-/**
- * short bEndpointAddress()
- */
-
-JNIEXPORT jshort JNICALL METHOD_NAME(USB_1Endpoint_1Descriptor, bEndpointAddress)
-(
-    JNIEnv *env, jobject this
-)
-{
-    return (jshort) unwrap_usb_endpoint_descriptor(env, this)->bEndpointAddress;
-}
-
-
-/**
- * short bmAttributes()
- */
-
-JNIEXPORT jshort JNICALL METHOD_NAME(USB_1Endpoint_1Descriptor, bmAttributes)
-(
-    JNIEnv *env, jobject this
-)
-{
-    return (jshort) unwrap_usb_endpoint_descriptor(env, this)->bmAttributes;
-}
-
-
-/**
- * int wMaxPacketSize()
- */
-
-JNIEXPORT jint JNICALL METHOD_NAME(USB_1Endpoint_1Descriptor, wMaxPacketSize)
-(
-    JNIEnv *env, jobject this
-)
-{
-    return (jshort) unwrap_usb_endpoint_descriptor(env, this)->wMaxPacketSize;
-}
-
-
-/**
- * short bInterval()
- */
-
-JNIEXPORT jshort JNICALL METHOD_NAME(USB_1Endpoint_1Descriptor, bInterval)
-(
-    JNIEnv *env, jobject this
-)
-{
-    return (jshort) unwrap_usb_endpoint_descriptor(env, this)->bInterval;
-}
-
-
-/**
- * short bRefresh()
- */
-
-JNIEXPORT jshort JNICALL METHOD_NAME(USB_1Endpoint_1Descriptor, bRefresh)
-(
-    JNIEnv *env, jobject this
-)
-{
-    return (jshort) unwrap_usb_endpoint_descriptor(env, this)->bRefresh;
-}
-
-
-/**
- * short bSynchAddress()
- */
-
-JNIEXPORT jshort JNICALL METHOD_NAME(USB_1Endpoint_1Descriptor, bSynchAddress)
-(
-    JNIEnv *env, jobject this
-)
-{
-    return (jshort) unwrap_usb_endpoint_descriptor(env, this)->bSynchAddress;
+     jfieldID field = (*env)->GetFieldID(env, cls, "data",
+         "Ljava/nio/ByteBuffer;");
+     jobject buffer = (*env)->GetObjectField(env, obj, field);
+     return (struct usb_endpoint_descriptor *)
+         (*env)->GetDirectBufferAddress(env, buffer);
 }
 
 
@@ -188,8 +114,6 @@ JNIEXPORT jbyteArray JNICALL METHOD_NAME(USB_1Endpoint_1Descriptor, extra)
 {
     struct usb_endpoint_descriptor *descriptor =
         unwrap_usb_endpoint_descriptor(env, this);
-    jbyteArray array = (*env)->NewByteArray(env, descriptor->extralen);
-    (*env)->SetByteArrayRegion(env, array, 0, descriptor->extralen,
-        (const jbyte *) descriptor->extra);
-    return array;
+    return (*env)->NewDirectByteBuffer(env, descriptor, descriptor->extralen);
+
 }

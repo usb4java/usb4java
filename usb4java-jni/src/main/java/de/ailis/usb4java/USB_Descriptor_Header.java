@@ -5,6 +5,8 @@
 
 package de.ailis.usb4java;
 
+import java.nio.ByteBuffer;
+
 
 /**
  * All standard descriptors have the two fields  bLength and bDescriptorType
@@ -15,20 +17,21 @@ package de.ailis.usb4java;
 
 public abstract class USB_Descriptor_Header
 {
-    /** The low-level pointer to the C structure. */
-    final long pointer;
+    /** The descriptor data. */
+    protected final ByteBuffer data;
 
 
     /**
      * Constructor.
      *
-     * @param pointer
-     *            The low-level pointer to the C structure.
+     * @param data
+     *            The descriptor data.
      */
 
-    USB_Descriptor_Header(final long pointer)
+    public USB_Descriptor_Header(final ByteBuffer data)
     {
-        this.pointer = pointer;
+        this.data = data;
+        this.data.limit(bLength());
     }
 
 
@@ -38,7 +41,10 @@ public abstract class USB_Descriptor_Header
      * @return The size of the descriptor in bytes (unsigned byte).
      */
 
-    public native short bLength();
+    public final int bLength()
+    {
+        return this.data.get(0) & 0xff;
+    }
 
 
     /**
@@ -47,5 +53,8 @@ public abstract class USB_Descriptor_Header
      * @return The interface descriptor type (unsigned byte).
      */
 
-    public native short bDescriptorType();
+    public final int bDescriptorType()
+    {
+        return this.data.get(1) & 0xff;
+    }
 }

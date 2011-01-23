@@ -91,7 +91,7 @@ public class Dump
         indent(); System.out.format("extralen: 0x%08x\n", descriptor.extralen());
         indent(); System.out.format("extra:");
         for (i = 0; i < descriptor.extralen(); i++)
-            System.out.format(" %02x", descriptor.extra()[i]);
+            System.out.format(" %02x", descriptor.extra().get(i));
         System.out.format("\n");
         level--;
     }
@@ -122,7 +122,7 @@ public class Dump
         indent(); System.out.format("extralen: 0x%08x\n", descriptor.extralen());
         indent(); System.out.format("extra:");
         for (i = 0; i < descriptor.extralen(); i++)
-            System.out.format(" %02x", descriptor.extra()[i]);
+            System.out.format(" %02x", descriptor.extra().get(i));
         System.out.format("\n");
         indent(); System.out.format("Endpoints:\n");
         level++;
@@ -180,7 +180,7 @@ public class Dump
         indent(); System.out.format("extralen: 0x%08x\n", config.extralen());
         indent(); System.out.format("extra:");
         for (i = 0; i < config.extralen(); i++)
-            System.out.format(" %02x", config.extra()[i]);
+            System.out.format(" %02x", config.extra().get(i));
         System.out.format("\n");
         indent(); System.out.format("Interfaces:\n");
         level++;

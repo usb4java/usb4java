@@ -5,6 +5,9 @@
 
 package de.ailis.usb4java;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
 
 /**
  * The USB device descriptor contains global information about a USB device and
@@ -14,18 +17,18 @@ package de.ailis.usb4java;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public class USB_Device_Descriptor extends USB_Descriptor_Header
+public final class USB_Device_Descriptor extends USB_Descriptor_Header
 {
     /**
      * Constructor.
      *
-     * @param pointer
-     *            The low-level pointer to the C structure.
+     * @param data
+     *            The descriptor data.
      */
 
-    USB_Device_Descriptor(final long pointer)
+    public USB_Device_Descriptor(final ByteBuffer data)
     {
-        super(pointer);
+        super(data);
     }
 
 
@@ -37,7 +40,11 @@ public class USB_Device_Descriptor extends USB_Descriptor_Header
      * @return The USB specification release number (unsigned short).
      */
 
-    public native int bcdUSB();
+    public final int bcdUSB()
+    {
+        this.data.order(ByteOrder.LITTLE_ENDIAN).position(2);
+        return this.data.asShortBuffer().get() & 0xffff;
+    }
 
 
     /**
@@ -56,7 +63,10 @@ public class USB_Device_Descriptor extends USB_Descriptor_Header
      * @return The device class code (unsigned byte).
      */
 
-    public native short bDeviceClass();
+    public final int bDeviceClass()
+    {
+        return this.data.get(4) & 0xff;
+    }
 
 
     /**
@@ -74,7 +84,11 @@ public class USB_Device_Descriptor extends USB_Descriptor_Header
      * @return The device subclass code (unsigned byte).
      */
 
-    public native short bDeviceSubClass();
+    public final int bDeviceSubClass()
+    {
+        return this.data.get(5) & 0xff;
+    }
+
 
 
     /**
@@ -95,7 +109,10 @@ public class USB_Device_Descriptor extends USB_Descriptor_Header
      * @return The device protocol code (unsigned byte).
      */
 
-    public native short bDeviceProtocol();
+    public final int bDeviceProtocol()
+    {
+        return this.data.get(6) & 0xff;
+    }
 
 
     /**
@@ -105,7 +122,10 @@ public class USB_Device_Descriptor extends USB_Descriptor_Header
      * @return The maximum packet size for endpoint zero (unsigned byte).
      */
 
-    public native short bMaxPacketSize0();
+    public final int bMaxPacketSize0()
+    {
+        return this.data.get(7) & 0xff;
+    }
 
 
     /**
@@ -114,7 +134,11 @@ public class USB_Device_Descriptor extends USB_Descriptor_Header
      * @return The vendor ID (unsigned short).
      */
 
-    public native int idVendor();
+    public final int idVendor()
+    {
+        this.data.order(ByteOrder.LITTLE_ENDIAN).position(8);
+        return this.data.asShortBuffer().get() & 0xffff;
+    }
 
 
     /**
@@ -123,7 +147,11 @@ public class USB_Device_Descriptor extends USB_Descriptor_Header
      * @return The product ID (unsigned short).
      */
 
-    public native int idProduct();
+    public final int idProduct()
+    {
+        this.data.order(ByteOrder.LITTLE_ENDIAN).position(10);
+        return this.data.asShortBuffer().get() & 0xffff;
+    }
 
 
     /**
@@ -132,7 +160,11 @@ public class USB_Device_Descriptor extends USB_Descriptor_Header
      * @return THe device release number (unsigned short).
      */
 
-    public native int bcdDevice();
+    public final int bcdDevice()
+    {
+        this.data.order(ByteOrder.LITTLE_ENDIAN).position(12);
+        return this.data.asShortBuffer().get() & 0xffff;
+    }
 
 
     /**
@@ -141,7 +173,10 @@ public class USB_Device_Descriptor extends USB_Descriptor_Header
      * @return The index of the manufacturer string descriptor (unsigned byte).
      */
 
-    public native short iManufacturer();
+    public final int iManufacturer()
+    {
+        return this.data.get(14) & 0xff;
+    }
 
 
     /**
@@ -150,7 +185,10 @@ public class USB_Device_Descriptor extends USB_Descriptor_Header
      * @return The index of the product string descriptor (unsigned byte).
      */
 
-    public native short iProduct();
+    public final int iProduct()
+    {
+        return this.data.get(15) & 0xff;
+    }
 
 
     /**
@@ -159,7 +197,10 @@ public class USB_Device_Descriptor extends USB_Descriptor_Header
      * @return The index of the serial number string descriptor (unsigned byte).
      */
 
-    public native short iSerialNumber();
+    public final int iSerialNumber()
+    {
+        return this.data.get(16) & 0xff;
+    }
 
 
     /**
@@ -168,5 +209,8 @@ public class USB_Device_Descriptor extends USB_Descriptor_Header
      * @return The number of configurations (unsigned byte).
      */
 
-    public native short bNumConfigurations();
+    public final int bNumConfigurations()
+    {
+        return this.data.get(17) & 0xff;
+    }
 }

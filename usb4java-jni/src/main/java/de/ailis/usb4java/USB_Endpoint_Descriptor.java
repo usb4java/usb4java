@@ -5,6 +5,9 @@
 
 package de.ailis.usb4java;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
 
 /**
  * This descriptor contains information about an endpoint.
@@ -12,18 +15,18 @@ package de.ailis.usb4java;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public class USB_Endpoint_Descriptor extends USB_Descriptor_Header
+public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
 {
     /**
      * Constructor.
      *
-     * @param pointer
-     *            The low-level pointer to the C structure.
+     * @param data
+     *            The descriptor data.
      */
 
-    USB_Endpoint_Descriptor(final long pointer)
+    public USB_Endpoint_Descriptor(final ByteBuffer data)
     {
-        super(pointer);
+        super(data);
     }
 
 
@@ -38,7 +41,11 @@ public class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      * @return The endpoint address (unsigned byte).
      */
 
-    public native short bEndpointAddress();
+    public final int bEndpointAddress()
+    {
+        return this.data.get(2) & 0xff;
+    }
+
 
     /**
      * Returns the endpoint attributes. This is a bitmask with the following
@@ -56,7 +63,10 @@ public class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      * @return The endpoint attributes bitmask (unsigned byte).
      */
 
-    public native short bmAttributes();
+    public final int bmAttributes()
+    {
+        return this.data.get(3) & 0xff;
+    }
 
 
     /**
@@ -74,7 +84,11 @@ public class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      * @return The maximum packet size of the endpoint (unsigned short).
      */
 
-    public native int wMaxPacketSize();
+    public final int wMaxPacketSize()
+    {
+        this.data.order(ByteOrder.LITTLE_ENDIAN).position(4);
+        return this.data.asShortBuffer().get() & 0xffff;
+    }
 
 
     /**
@@ -84,7 +98,10 @@ public class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      * @return The interval for polling endpoint (unsigned byte).
      */
 
-    public native byte bInterval();
+    public final int bInterval()
+    {
+        return this.data.get(6) & 0xff;
+    }
 
 
     /**
@@ -93,7 +110,10 @@ public class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      * @return The refresh information (unsigned byte).
      */
 
-    public native short bRefresh();
+    public final int bRefresh()
+    {
+        return this.data.get(7) & 0xff;
+    }
 
 
     /**
@@ -102,7 +122,10 @@ public class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      * @return The synch address (unsigned byte).
      */
 
-    public native short bSynchAddress();
+    public final int bSynchAddress()
+    {
+        return this.data.get(8) & 0xff;
+    }
 
 
     /**
@@ -111,7 +134,7 @@ public class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      * @return The extra descriptor data.
      */
 
-    public native byte[] extra();
+    public final native ByteBuffer extra();
 
 
     /**
@@ -120,5 +143,5 @@ public class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      * @return The extra descriptor size.
      */
 
-    public native int extralen();
+    public final native int extralen();
 }

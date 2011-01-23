@@ -16,7 +16,7 @@ import java.nio.CharBuffer;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public class USB_String_Descriptor extends USB_Descriptor_Header2
+public final class USB_String_Descriptor extends USB_Descriptor_Header
 {
     /**
      * Constructor.
@@ -25,7 +25,7 @@ public class USB_String_Descriptor extends USB_Descriptor_Header2
      *            The descriptor data.
      */
 
-    USB_String_Descriptor(final ByteBuffer data)
+    public USB_String_Descriptor(final ByteBuffer data)
     {
         super(data);
     }
@@ -37,7 +37,7 @@ public class USB_String_Descriptor extends USB_Descriptor_Header2
      * @return The string data.
      */
 
-    public char[] wData()
+    public final char[] wData()
     {
         this.data.position(2);
         final CharBuffer chars = this.data.order(ByteOrder.LITTLE_ENDIAN)
@@ -53,7 +53,7 @@ public class USB_String_Descriptor extends USB_Descriptor_Header2
      */
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return new String(wData());
     }

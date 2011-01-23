@@ -5,6 +5,9 @@
 
 package de.ailis.usb4java;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
 
 /**
  * The USB configuration descriptor describes information about a specific USB
@@ -13,18 +16,18 @@ package de.ailis.usb4java;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public class USB_Config_Descriptor extends USB_Descriptor_Header
+public final class USB_Config_Descriptor extends USB_Descriptor_Header
 {
     /**
      * Constructor.
      *
-     * @param pointer
-     *            The low-level pointer to the C structure.
+     * @param data
+     *            The descriptor data
      */
 
-    USB_Config_Descriptor(final long pointer)
+    public USB_Config_Descriptor(final ByteBuffer data)
     {
-        super(pointer);
+        super(data);
     }
 
 
@@ -35,7 +38,11 @@ public class USB_Config_Descriptor extends USB_Descriptor_Header
      * @return The total length of all configuration data (unsigned short).
      */
 
-    public native int wTotalLength();
+    public final int wTotalLength()
+    {
+        this.data.order(ByteOrder.LITTLE_ENDIAN).position(2);
+        return this.data.asShortBuffer().get() & 0xffff;
+    }
 
 
     /**
@@ -44,7 +51,10 @@ public class USB_Config_Descriptor extends USB_Descriptor_Header
      * @return The number of supported interfaces (unsigned byte).
      */
 
-    public native short bNumInterfaces();
+    public final int bNumInterfaces()
+    {
+        return this.data.get(4) & 0xff;
+    }
 
 
     /**
@@ -54,7 +64,10 @@ public class USB_Config_Descriptor extends USB_Descriptor_Header
      * @return The configuration value (unsigned byte).
      */
 
-    public native short bConfigurationValue();
+    public final int bConfigurationValue()
+    {
+        return this.data.get(5) & 0xff;
+    }
 
 
     /**
@@ -64,7 +77,10 @@ public class USB_Config_Descriptor extends USB_Descriptor_Header
      *         (unsigned byte).
      */
 
-    public native short iConfiguration();
+    public final int iConfiguration()
+    {
+        return this.data.get(6) & 0xff;
+    }
 
 
     /**
@@ -83,7 +99,10 @@ public class USB_Config_Descriptor extends USB_Descriptor_Header
      * @return A bitmap with configuration attributes (unsigned byte).
      */
 
-    public native short bmAttributes();
+    public final int bmAttributes()
+    {
+        return this.data.get(7) & 0xff;
+    }
 
 
     /**
@@ -94,7 +113,10 @@ public class USB_Config_Descriptor extends USB_Descriptor_Header
      * @return The maximum power consumption in 2mA units (unsigned byte).
      */
 
-    public native short bMaxPower();
+    public final int bMaxPower()
+    {
+        return this.data.get(8) & 0xff;
+    }
 
 
     /**
@@ -105,7 +127,7 @@ public class USB_Config_Descriptor extends USB_Descriptor_Header
      */
 
     @Deprecated
-    public short MaxPower()
+    public final int MaxPower()
     {
         return bMaxPower();
     }
@@ -117,7 +139,7 @@ public class USB_Config_Descriptor extends USB_Descriptor_Header
      * @return The length of the extra data block in bytes.
      */
 
-    public native int extralen();
+    public final native int extralen();
 
 
     /**
@@ -126,7 +148,7 @@ public class USB_Config_Descriptor extends USB_Descriptor_Header
      * @return The extra data block.
      */
 
-    public native byte[] extra();
+    public final native ByteBuffer extra();
 
 
     /**
@@ -137,5 +159,5 @@ public class USB_Config_Descriptor extends USB_Descriptor_Header
      * @return The interfaces of this USB configuration.
      */
 
-    public native USB_Interface[] iface();
+    public final native USB_Interface[] iface();
 }

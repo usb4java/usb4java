@@ -33,9 +33,11 @@ jobject wrap_usb_config_descriptor(JNIEnv *env,
     jclass cls = (*env)->FindClass(env,
         PACKAGE_DIR"/USB_Config_Descriptor");
     if (cls == NULL) return NULL;
-    jmethodID constructor = (*env)->GetMethodID(env, cls, "<init>", "(J)V");
+    jmethodID constructor = (*env)->GetMethodID(env, cls, "<init>",
+        "(Ljava/nio/ByteBuffer;)V");
     if (constructor == NULL) return NULL;
-    return (*env)->NewObject(env, cls, constructor, (long) descriptor);
+    jobject buffer = (*env)->NewDirectByteBuffer(env, descriptor, 18);
+    return (*env)->NewObject(env, cls, constructor, buffer);
 }
 
 
@@ -54,94 +56,18 @@ struct usb_config_descriptor *unwrap_usb_config_descriptor(JNIEnv *env,
     jobject obj)
 {
      jclass cls = (*env)->GetObjectClass(env, obj);
-     jfieldID field = (*env)->GetFieldID(env, cls, "pointer", "J");
-     return (struct usb_config_descriptor *) ((*env)->GetLongField(env,
-         obj, field));
-}
-
-
-/**
- * int wTotalLength()
- */
- 
-JNIEXPORT jint JNICALL METHOD_NAME(USB_1Config_1Descriptor, wTotalLength)
-(
-    JNIEnv *env, jobject this
-)
-{
-    return unwrap_usb_config_descriptor(env, this)->wTotalLength;
-}
-
-
-/**
- * short bNumInterfaces()
- */
- 
-JNIEXPORT jshort JNICALL METHOD_NAME(USB_1Config_1Descriptor, bNumInterfaces)
-(
-    JNIEnv *env, jobject this
-)
-{
-    return unwrap_usb_config_descriptor(env, this)->bNumInterfaces;
-}
-
-
-/**
- * short bConfigurationValue()
- */
- 
-JNIEXPORT jshort JNICALL METHOD_NAME(USB_1Config_1Descriptor, bConfigurationValue)
-(
-    JNIEnv *env, jobject this
-)
-{
-    return unwrap_usb_config_descriptor(env, this)->bConfigurationValue;
-}
-
-
-/**
- * short iConfiguration()
- */
- 
-JNIEXPORT jshort JNICALL METHOD_NAME(USB_1Config_1Descriptor, iConfiguration)
-(
-    JNIEnv *env, jobject this
-)
-{
-    return unwrap_usb_config_descriptor(env, this)->iConfiguration;
-}
-
-
-/**
- * short bmAttributes()
- */
- 
-JNIEXPORT jshort JNICALL METHOD_NAME(USB_1Config_1Descriptor, bmAttributes)
-(
-    JNIEnv *env, jobject this
-)
-{
-    return unwrap_usb_config_descriptor(env, this)->bmAttributes;
-}
-
-
-/**
- * short bMaxPower()
- */
- 
-JNIEXPORT jshort JNICALL METHOD_NAME(USB_1Config_1Descriptor, bMaxPower)
-(
-    JNIEnv *env, jobject this
-)
-{
-    return unwrap_usb_config_descriptor(env, this)->MaxPower;
+     jfieldID field = (*env)->GetFieldID(env, cls, "data",
+         "Ljava/nio/ByteBuffer;");
+     jobject buffer = (*env)->GetObjectField(env, obj, field);
+     return (struct usb_config_descriptor *)
+         (*env)->GetDirectBufferAddress(env, buffer);
 }
 
 
 /**
  * int extralen()
  */
- 
+
 JNIEXPORT jint JNICALL METHOD_NAME(USB_1Config_1Descriptor, extralen)
 (
     JNIEnv *env, jobject this
@@ -152,19 +78,17 @@ JNIEXPORT jint JNICALL METHOD_NAME(USB_1Config_1Descriptor, extralen)
 
 
 /**
- * byte[] extra()
+ * ByteBuffer extra()
  */
  
-JNIEXPORT jbyteArray JNICALL METHOD_NAME(USB_1Config_1Descriptor, extra)
+JNIEXPORT jobject JNICALL METHOD_NAME(USB_1Config_1Descriptor, extra)
 (
     JNIEnv *env, jobject this
 )
 {
-    struct usb_config_descriptor *descriptor = unwrap_usb_config_descriptor(env, this);
-    jbyteArray array = (*env)->NewByteArray(env, descriptor->extralen);
-    (*env)->SetByteArrayRegion(env, array, 0, descriptor->extralen,
-        (const jbyte *) descriptor->extra);
-    return array;
+    struct usb_config_descriptor *descriptor =
+        unwrap_usb_config_descriptor(env, this);
+    return (*env)->NewDirectByteBuffer(env, descriptor, descriptor->extralen);
 }
 
 
