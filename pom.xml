@@ -6,12 +6,12 @@
   <parent>
     <artifactId>maven-java</artifactId>
     <groupId>de.ailis.maven</groupId>
-    <version>2</version>
+    <version>8</version>
   </parent>
     
   <groupId>de.ailis.usb4java</groupId>
-  <artifactId>usb4java-parent</artifactId>
-  <packaging>pom</packaging>
+  <artifactId>usb4java</artifactId>
+  <packaging>jar</packaging>
   <name>usb4java</name>
   <version>0.1.12-1-SNAPSHOT</version>
   <url>http://www.ailis.de/~k/projects/usb4java</url>
@@ -51,6 +51,22 @@
     <developerConnection>scm:hg:ssh://k@ailis.de/hg/java/usb4java</developerConnection>
   </scm>  
   
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId> 
+        <version>2.2</version>
+        <configuration>  
+          <chmod>false</chmod>
+          <locales>en</locales>
+          <inputEncoding>${project.build.sourceEncoding}</inputEncoding>
+          <outputEncoding>${project.build.sourceEncoding}</outputEncoding>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  
   <repositories>  
     <repository>
       <id>ailis-releases</id>
@@ -75,29 +91,12 @@
     </site>
   </distributionManagement>
   
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>de.ailis.usb4java</groupId>
-        <artifactId>libusb4java</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>de.ailis.usb4java</groupId>
-        <artifactId>usb4java</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>4.8.1</version>
-      </dependency> 
-    </dependencies>
-  </dependencyManagement>
-  
-  <modules>
-    <module>libusb4java</module>
-    <module>usb4java</module>
-  </modules>
-  
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.8.1</version>
+    </dependency> 
+  </dependencies>
+
 </project>
