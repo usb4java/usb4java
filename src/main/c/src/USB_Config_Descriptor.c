@@ -36,7 +36,8 @@ jobject wrap_usb_config_descriptor(JNIEnv *env,
     jmethodID constructor = (*env)->GetMethodID(env, cls, "<init>",
         "(Ljava/nio/ByteBuffer;)V");
     if (constructor == NULL) return NULL;
-    jobject buffer = (*env)->NewDirectByteBuffer(env, descriptor, 18);
+    jobject buffer = (*env)->NewDirectByteBuffer(env, descriptor,
+        sizeof(struct usb_config_descriptor));
     return (*env)->NewObject(env, cls, constructor, buffer);
 }
 
