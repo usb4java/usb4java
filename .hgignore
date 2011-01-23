@@ -29,9 +29,4 @@ ltmain.sh
 *.o
 *.la
 INSTALL
-
-syntax: regexp
-^libusb4java/src/main/c/Makefile$
-^libusb4java/src/main/Makefile$
-^libusb4java/src/Makefile$
-^libusb4java/Makefile$
+Makefile
