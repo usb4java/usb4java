@@ -2,15 +2,15 @@
   <modelVersion>4.0.0</modelVersion>
   
   <parent>
-    <artifactId>usb4java</artifactId>
+    <artifactId>usb4java-parent</artifactId>
     <groupId>de.ailis.usb4java</groupId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>0.1.12-1-SNAPSHOT</version>
   </parent>
     
   <groupId>de.ailis.usb4java</groupId>
-  <artifactId>libusb4java</artifactId>
-  <packaging>pom</packaging>
-  <name>libusb4java</name>
-  <description>The native JNI library of usb4java</description>
+  <artifactId>usb4java</artifactId>
+  <packaging>jar</packaging>
+  <name>usb4java</name>
+  <description>The usb4java library</description>
 
 </project>
