@@ -98,6 +98,105 @@ JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1close)
 
 
 /**
+ * int usb_set_configuration(USB_Handle handle, int configuration)
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1set_1configuration)
+(
+    JNIEnv *env, jclass class, jobject handle, jint configuration
+)
+{
+    return usb_set_configuration(unwrap_usb_dev_handle(env, handle),
+        configuration);
+}
+
+
+/**
+ * int usb_set_altinterface(USB_Dev_Handle handle, int alternate)
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1set_1altinterface)
+(
+    JNIEnv *env, jclass class, jobject handle, jint alternate
+)
+{
+    return usb_set_altinterface(unwrap_usb_dev_handle(env, handle),
+            alternate);
+}
+
+
+/**
+ * int usb_clear_halt(USB_Dev_Handle handle, int ep)
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1clear_1halt)
+(
+    JNIEnv *env, jclass class, jobject handle, jint ep
+)
+{
+    return usb_clear_halt(unwrap_usb_dev_handle(env, handle), ep);
+}
+
+
+/**
+ * int usb_reset(USB_Dev_Handle handle)
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1reset)
+(
+    JNIEnv *env, jclass class, jobject handle
+)
+{
+    return usb_reset(unwrap_usb_dev_handle(env, handle));
+}
+
+
+/**
+ * int usb_claim_interface(USB_Dev_Handle handle, int iface)
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1claim_1interface)
+(
+    JNIEnv *env, jclass class, jobject handle, jint iface
+)
+{
+    return usb_claim_interface(unwrap_usb_dev_handle(env, handle), iface);
+}
+
+
+/**
+ * int usb_release_interface(USB_Dev_Handle handle, int iface)
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1release_1interface)
+(
+    JNIEnv *env, jclass class, jobject handle, jint iface
+)
+{
+    return usb_release_interface(unwrap_usb_dev_handle(env, handle), iface);
+}
+
+
+/**
+ * int usb_control_msg(USB_Device_Handle handle, int requesttype, int request,
+ *     int value, int index, ByteBuffer bytes, int timeout)
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1control_1msg)
+(
+    JNIEnv *env, jclass class, jobject handle, jint requesttype, jint request,
+    jint value, jint index, jobject bytes, int timeout
+)
+{
+    void *buf = (*env)->GetDirectBufferAddress(env, bytes);
+    if (!buf) return -1;
+    jlong buflen = (*env)->GetDirectBufferCapacity(env, bytes);
+    return usb_control_msg(unwrap_usb_dev_handle(env, handle), requesttype,
+        request, value, index, buf, buflen, timeout);
+}
+
+
+/**
  * int usb_get_string(USB_Handle handle, int index, int langid, byte[] buffer,
  *     int buflen)
  */
@@ -135,7 +234,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1get_1string_1simple)
 
 /**
  * int usb_get_descriptor(USB_Dev_Handle handle, int type, int index,
- *    ByteBuffer buffer);
+ *    ByteBuffer buffer)
  */
 
 JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1get_1descriptor)
@@ -149,4 +248,99 @@ JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1get_1descriptor)
     jlong buflen = (*env)->GetDirectBufferCapacity(env, buffer);
     return usb_get_descriptor(unwrap_usb_dev_handle(env, handle),
         type, index, buf, buflen);
+}
+
+
+/**
+ * int usb_get_descriptor_by_endpoint(USB_Dev_Handle handle, int ep, int type,
+ *     int index, ByteBuffer buffer)
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1get_1descriptor_1by_1endpoint)
+(
+    JNIEnv *env, jclass class, jobject handle, int ep, int type, int index,
+    jobject buffer
+)
+{
+    void *buf = (*env)->GetDirectBufferAddress(env, buffer);
+    if (!buf) return -1;
+    jlong buflen = (*env)->GetDirectBufferCapacity(env, buffer);
+    return usb_get_descriptor_by_endpoint(unwrap_usb_dev_handle(env, handle),
+        ep, type, index, buf, buflen);
+}
+
+
+/**
+ * int usb_bulk_write(USB_Dev_Handle handle, int ep, ByteBuffer bytes,
+ *     int timeout)
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1bulk_1write)
+(
+    JNIEnv *env, jclass class, jobject handle, jint ep, jobject bytes,
+    int timeout
+)
+{
+    void *buf = (*env)->GetDirectBufferAddress(env, bytes);
+    if (!buf) return -1;
+    jlong buflen = (*env)->GetDirectBufferCapacity(env, bytes);
+    return usb_bulk_write(unwrap_usb_dev_handle(env, handle),
+        ep, buf, buflen, timeout);
+}
+
+
+/**
+ * int usb_bulk_read(USB_Dev_Handle handle, int ep, ByteBuffer bytes,
+ *     int timeout)
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1bulk_1read)
+(
+    JNIEnv *env, jclass class, jobject handle, jint ep, jobject bytes,
+    int timeout
+)
+{
+    void *buf = (*env)->GetDirectBufferAddress(env, bytes);
+    if (!buf) return -1;
+    jlong buflen = (*env)->GetDirectBufferCapacity(env, bytes);
+    return usb_bulk_read(unwrap_usb_dev_handle(env, handle),
+        ep, buf, buflen, timeout);
+}
+
+
+/**
+ * int usb_interrupt_write(USB_Dev_Handle handle, int ep, ByteBuffer bytes,
+ *     int timeout)
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1interrupt_1write)
+(
+    JNIEnv *env, jclass class, jobject handle, jint ep, jobject bytes,
+    int timeout
+)
+{
+    void *buf = (*env)->GetDirectBufferAddress(env, bytes);
+    if (!buf) return -1;
+    jlong buflen = (*env)->GetDirectBufferCapacity(env, bytes);
+    return usb_interrupt_write(unwrap_usb_dev_handle(env, handle),
+        ep, buf, buflen, timeout);
+}
+
+
+/**
+ * int usb_interrupt_read(USB_Dev_Handle handle, int ep, ByteBuffer bytes,
+ *     int timeout)
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1interrupt_1read)
+(
+    JNIEnv *env, jclass class, jobject handle, jint ep, jobject bytes,
+    int timeout
+)
+{
+    void *buf = (*env)->GetDirectBufferAddress(env, bytes);
+    if (!buf) return -1;
+    jlong buflen = (*env)->GetDirectBufferCapacity(env, bytes);
+    return usb_interrupt_read(unwrap_usb_dev_handle(env, handle),
+        ep, buf, buflen, timeout);
 }

@@ -57,7 +57,8 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      * <li>Bit 3-2: Synchronization type (00=No synchronization,
      * 01=Asynchronous, 10=Adaptive, 11=Synchronous)</li>
      * <li>Bit 1-0: Transfer type
-     * (00=Control,01=Isochronous,10=Bulk,11=Interrupt)</li>
+     * (00=Control,01=Isochronous,10=Bulk,11=Interrupt). See USB_ENDPOINT_TYPE_*
+     * constants.</li>
      * </ul>
      *
      * @return The endpoint attributes bitmask (unsigned byte).
@@ -92,8 +93,8 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
 
 
     /**
-     * Returns the interval for polling endpoint for data transfers in frames
-     * or microframes depending on the device operating speed.
+     * Returns the interval for polling endpoint for data transfers in frames or
+     * microframes depending on the device operating speed.
      *
      * @return The interval for polling endpoint (unsigned byte).
      */
@@ -105,8 +106,8 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
 
 
     /**
-     * Returns the rate at which synchronization feedback is provided.
-     * (For audio devices only)
+     * Returns the rate at which synchronization feedback is provided. (For
+     * audio devices only)
      *
      * @return The synchronization rate (unsigned byte).
      */
@@ -118,8 +119,7 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
 
 
     /**
-     * Returns the address if the synch endpoint.
-     * (For audio devices only)
+     * Returns the address if the synch endpoint. (For audio devices only)
      *
      * @return The address of the synch endpoint (unsigned byte).
      */
