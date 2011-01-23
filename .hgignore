@@ -28,9 +28,10 @@ ltmain.sh
 *.lo
 *.o
 *.la
+INSTALL
 
 syntax: regexp
-^usb4java-lib/src/main/c/Makefile$
-^usb4java-lib/src/main/Makefile$
-^usb4java-lib/src/Makefile$
-^usb4java-lib/Makefile$
+^libusb4java/src/main/c/Makefile$
+^libusb4java/src/main/Makefile$
+^libusb4java/src/Makefile$
+^libusb4java/Makefile$
