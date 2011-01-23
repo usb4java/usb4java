@@ -105,9 +105,10 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
 
 
     /**
-     * Returns the refresh information.
+     * Returns the rate at which synchronization feedback is provided.
+     * (For audio devices only)
      *
-     * @return The refresh information (unsigned byte).
+     * @return The synchronization rate (unsigned byte).
      */
 
     public final int bRefresh()
@@ -117,9 +118,10 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
 
 
     /**
-     * Returns the synch address.
+     * Returns the address if the synch endpoint.
+     * (For audio devices only)
      *
-     * @return The synch address (unsigned byte).
+     * @return The address of the synch endpoint (unsigned byte).
      */
 
     public final int bSynchAddress()
