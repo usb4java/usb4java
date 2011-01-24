@@ -11,6 +11,7 @@
  * @author Klaus Reimer <k@ailis.de>
  */
 
+#include <stdint.h>
 #include <jni.h>
 #include <usb.h>
 #include "usb4java.h"

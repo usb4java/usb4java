@@ -9,7 +9,7 @@
 #include <jni.h>
 #include <usb.h>
 
-extern jobject wrap_usb_config_descriptor(JNIEnv *env, struct usb_config_descriptor *device);
-extern struct usb_config_descriptor *unwrap_usb_config_descriptor(JNIEnv *env, jobject obj);
+extern jobject wrap_usb_config_descriptor(JNIEnv *, struct usb_config_descriptor *);
+extern struct usb_config_descriptor *unwrap_usb_config_descriptor(JNIEnv *, jobject);
 
 #endif

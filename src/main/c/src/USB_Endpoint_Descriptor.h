@@ -6,6 +6,7 @@
 #ifndef USB_ENDPOINT_DESCRIPTOR_H
 #define USB_ENDPOINT_DESCRIPTOR_H
 
+#include <stdint.h>
 #include <jni.h>
 #include <usb.h>
 
