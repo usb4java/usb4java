@@ -5,6 +5,8 @@
 
 package de.ailis.usb4java;
 
+import java.nio.ByteBuffer;
+
 
 /**
  * USB Device.
@@ -14,20 +16,20 @@ package de.ailis.usb4java;
 
 public final class USB_Device
 {
-    /** The low-level pointer to the C structure. */
-    private final long pointer;
+    /** The low-level device structure. */
+    private final ByteBuffer device;
 
 
     /**
      * Constructor.
      *
-     * @param pointer
-     *            The low-level pointer to the C structure.
+     * @param device
+     *            The low-level device structure.
      */
 
-    private USB_Device(final long pointer)
+    private USB_Device(final ByteBuffer device)
     {
-        this.pointer = pointer;
+        this.device = device;
     }
 
 

@@ -118,3 +118,69 @@ JNIEXPORT jbyteArray JNICALL METHOD_NAME(USB_1Endpoint_1Descriptor, extra)
     return (*env)->NewDirectByteBuffer(env, descriptor, descriptor->extralen);
 
 }
+
+
+/**
+ * int bEndpointAddress()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Endpoint_1Descriptor, bEndpointAddress)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_endpoint_descriptor(env, this)->bEndpointAddress;
+}
+
+
+/**
+ * int bInterval()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Endpoint_1Descriptor, bInterval)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_endpoint_descriptor(env, this)->bInterval;
+}
+
+
+/**
+ * int bmAttributes()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Endpoint_1Descriptor, bmAttributes)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_endpoint_descriptor(env, this)->bmAttributes;
+}
+
+
+/**
+ * int bRefresh()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Endpoint_1Descriptor, bRefresh)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_endpoint_descriptor(env, this)->bRefresh;
+}
+
+
+/**
+ * int bSynchAddress()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Endpoint_1Descriptor, bSynchAddress)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_endpoint_descriptor(env, this)->bSynchAddress;
+}
+
+
+/**
+ * int wMaxPacketSize()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Endpoint_1Descriptor, wMaxPacketSize)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_endpoint_descriptor(env, this)->wMaxPacketSize;
+}

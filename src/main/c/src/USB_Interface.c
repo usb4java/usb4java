@@ -22,19 +22,41 @@
  *
  * @param env
  *            The JNI environment.
- * @param device
+ * @param iface
  *            The USB interface.
  * @return The USB interface wrapper object.
  */
 
-static jobject wrap_usb_interface(JNIEnv *env, struct usb_interface *interface)
+jobject wrap_usb_interface(JNIEnv *env, struct usb_interface *iface)
 {
-    if (!interface) return NULL;
+    if (!iface) return NULL;
     jclass cls = (*env)->FindClass(env, PACKAGE_DIR"/USB_Interface");
     if (cls == NULL) return NULL;
-    jmethodID constructor = (*env)->GetMethodID(env, cls, "<init>", "(J)V");
+    jmethodID constructor = (*env)->GetMethodID(env, cls, "<init>",
+        "(Ljava/nio/ByteBuffer;)V");
     if (constructor == NULL) return NULL;
-    return (*env)->NewObject(env, cls, constructor, (long) interface);
+    jobject buffer = (*env)->NewDirectByteBuffer(env, iface, 0);
+    return (*env)->NewObject(env, cls, constructor, buffer);
+}
+
+
+/**
+ * Returns the wrapped USB interface object from the specified wrapper object.
+ *
+ * @param env
+ *            The JNI environment.
+ * @param obj
+ *            The USB interface wrapper object.
+ * @return The USB interface object.
+ */
+
+struct usb_interface *unwrap_usb_interface(JNIEnv *env, jobject obj)
+{
+     jclass cls = (*env)->GetObjectClass(env, obj);
+     jfieldID field = (*env)->GetFieldID(env, cls, "iface",
+         "Ljava/nio/ByteBuffer;");
+     jobject buffer = (*env)->GetObjectField(env, obj, field);
+     return (struct usb_interface *) (*env)->GetDirectBufferAddress(env, buffer);
 }
 
 
@@ -62,24 +84,6 @@ jobjectArray wrap_usb_interfaces(JNIEnv *env, uint8_t num_interfaces,
         (*env)->SetObjectArrayElement(env, array, i,
             wrap_usb_interface(env, &interfaces[i]));
     return array;
-}
-
-
-/**
- * Returns the wrapped USB interface object from the specified wrapper object.
- *
- * @param env
- *            The JNI environment.
- * @param obj
- *            The USB interface wrapper object.
- * @return The USB interface object.
- */
-  
-struct usb_interface *unwrap_usb_interface(JNIEnv *env, jobject obj)
-{
-     jclass cls = (*env)->GetObjectClass(env, obj);
-     jfieldID field = (*env)->GetFieldID(env, cls, "pointer", "J");
-     return (struct usb_interface *) ((*env)->GetLongField(env, obj, field));
 }
 
 

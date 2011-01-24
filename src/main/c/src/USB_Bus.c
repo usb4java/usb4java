@@ -32,9 +32,13 @@ jobject wrap_usb_bus(JNIEnv *env, struct usb_bus *bus)
     if (!bus) return NULL;
     jclass cls = (*env)->FindClass(env, PACKAGE_DIR"/USB_Bus");
     if (cls == NULL) return NULL;
-    jmethodID constructor = (*env)->GetMethodID(env, cls, "<init>", "(J)V");
+    jmethodID constructor = (*env)->GetMethodID(env, cls, "<init>",
+        "(Ljava/nio/ByteBuffer;)V");
     if (constructor == NULL) return NULL;
-    return (*env)->NewObject(env, cls, constructor, (long) bus);
+    jobject buffer = (*env)->NewDirectByteBuffer(env, bus,
+        sizeof(struct usb_bus));
+    return (*env)->NewObject(env, cls, constructor, buffer);
+
 }
 
 
@@ -51,8 +55,10 @@ jobject wrap_usb_bus(JNIEnv *env, struct usb_bus *bus)
 struct usb_bus *unwrap_usb_bus(JNIEnv *env, jobject obj)
 {
      jclass cls = (*env)->GetObjectClass(env, obj);
-     jfieldID field = (*env)->GetFieldID(env, cls, "pointer", "J");
-     return (struct usb_bus *) ((*env)->GetLongField(env, obj, field));
+     jfieldID field = (*env)->GetFieldID(env, cls, "bus",
+         "Ljava/nio/ByteBuffer;");
+     jobject buffer = (*env)->GetObjectField(env, obj, field);
+     return (struct usb_bus *) (*env)->GetDirectBufferAddress(env, buffer);
 }
 
 

@@ -6,7 +6,6 @@
 package de.ailis.usb4java;
 
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
 
 /**
@@ -41,10 +40,7 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      * @return The endpoint address (unsigned byte).
      */
 
-    public int bEndpointAddress()
-    {
-        return this.data.get(2) & 0xff;
-    }
+    public native int bEndpointAddress();
 
 
     /**
@@ -64,10 +60,7 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      * @return The endpoint attributes bitmask (unsigned byte).
      */
 
-    public int bmAttributes()
-    {
-        return this.data.get(3) & 0xff;
-    }
+    public native int bmAttributes();
 
 
     /**
@@ -85,11 +78,7 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      * @return The maximum packet size of the endpoint (unsigned short).
      */
 
-    public int wMaxPacketSize()
-    {
-        this.data.order(ByteOrder.LITTLE_ENDIAN).position(4);
-        return this.data.asShortBuffer().get() & 0xffff;
-    }
+    public native int wMaxPacketSize();
 
 
     /**
@@ -99,10 +88,7 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      * @return The interval for polling endpoint (unsigned byte).
      */
 
-    public int bInterval()
-    {
-        return this.data.get(6) & 0xff;
-    }
+    public native int bInterval();
 
 
     /**
@@ -112,10 +98,7 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      * @return The synchronization rate (unsigned byte).
      */
 
-    public int bRefresh()
-    {
-        return this.data.get(7) & 0xff;
-    }
+    public native int bRefresh();
 
 
     /**
@@ -124,10 +107,7 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      * @return The address of the synch endpoint (unsigned byte).
      */
 
-    public int bSynchAddress()
-    {
-        return this.data.get(8) & 0xff;
-    }
+    public native int bSynchAddress();
 
 
     /**

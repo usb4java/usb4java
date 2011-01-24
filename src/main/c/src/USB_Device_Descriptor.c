@@ -64,3 +64,135 @@ struct usb_device_descriptor *unwrap_usb_device_descriptor(JNIEnv *env,
      return (struct usb_device_descriptor *)
          (*env)->GetDirectBufferAddress(env, buffer);
 }
+
+
+/**
+ * int bcdDevice()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Device_1Descriptor, bcdDevice)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_device_descriptor(env, this)->bcdDevice;
+}
+
+
+/**
+ * int bcdUSB()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Device_1Descriptor, bcdUSB)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_device_descriptor(env, this)->bcdUSB;
+}
+
+
+/**
+ * int bDeviceClass()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Device_1Descriptor, bDeviceClass)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_device_descriptor(env, this)->bDeviceClass;
+}
+
+
+/**
+ * int bDeviceProtocol()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Device_1Descriptor, bDeviceProtocol)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_device_descriptor(env, this)->bDeviceProtocol;
+}
+
+
+/**
+ * int bDeviceSubClass()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Device_1Descriptor, bDeviceSubClass)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_device_descriptor(env, this)->bDeviceSubClass;
+}
+
+
+/**
+ * int bMaxPacketSize0()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Device_1Descriptor, bMaxPacketSize0)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_device_descriptor(env, this)->bMaxPacketSize0;
+}
+
+
+/**
+ * int bNumConfigurations()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Device_1Descriptor, bNumConfigurations)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_device_descriptor(env, this)->bNumConfigurations;
+}
+
+
+/**
+ * int idProduct()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Device_1Descriptor, idProduct)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_device_descriptor(env, this)->idProduct;
+}
+
+
+/**
+ * int idVendor()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Device_1Descriptor, idVendor)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_device_descriptor(env, this)->idVendor;
+}
+
+
+/**
+ * int iManufacturer()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Device_1Descriptor, iManufacturer)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_device_descriptor(env, this)->iManufacturer;
+}
+
+
+/**
+ * int iProduct()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Device_1Descriptor, iProduct)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_device_descriptor(env, this)->iProduct;
+}
+
+
+/**
+ * int iSerialNumber()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Device_1Descriptor, iSerialNumber)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_device_descriptor(env, this)->iSerialNumber;
+}

@@ -107,3 +107,69 @@ JNIEXPORT jobjectArray JNICALL METHOD_NAME(USB_1Config_1Descriptor, iface)
     return wrap_usb_interfaces(env, descriptor->bNumInterfaces,
         descriptor->interface);
 }
+
+
+/**
+ * int bConfigurationValue()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Config_1Descriptor, bConfigurationValue)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_config_descriptor(env, this)->bConfigurationValue;
+}
+
+
+/**
+ * int bmAttributes()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Config_1Descriptor, bmAttributes)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_config_descriptor(env, this)->bmAttributes;
+}
+
+
+/**
+ * int MaxPower()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Config_1Descriptor, MaxPower)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_config_descriptor(env, this)->MaxPower;
+}
+
+
+/**
+ * int bNumInterfaces()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Config_1Descriptor, bNumInterfaces)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_config_descriptor(env, this)->bNumInterfaces;
+}
+
+
+/**
+ * int iConfiguration()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Config_1Descriptor, iConfiguration)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_config_descriptor(env, this)->iConfiguration;
+}
+
+
+/**
+ * int wTotalLength()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Config_1Descriptor, wTotalLength)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_config_descriptor(env, this)->wTotalLength;
+}

@@ -135,3 +135,80 @@ JNIEXPORT jobjectArray JNICALL METHOD_NAME(USB_1Interface_1Descriptor, endpoint)
     return wrap_usb_endpoint_descriptors(env, descriptor->bNumEndpoints,
         descriptor->endpoint);
 }
+
+
+/**
+ * int bInterfaceNumber()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Interface_1Descriptor, bInterfaceNumber)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_interface_descriptor(env, this)->bInterfaceNumber;
+}
+
+
+/**
+ * int bAlternateSetting()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Interface_1Descriptor, bAlternateSetting)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_interface_descriptor(env, this)->bAlternateSetting;
+}
+
+
+/**
+ * int bNumEndpoints()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Interface_1Descriptor, bNumEndpoints)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_interface_descriptor(env, this)->bNumEndpoints;
+}
+
+
+/**
+ * int bInterfaceClass()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Interface_1Descriptor, bInterfaceClass)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_interface_descriptor(env, this)->bInterfaceClass;
+}
+
+
+/**
+ * int bInterfaceSubClass()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Interface_1Descriptor, bInterfaceSubClass)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_interface_descriptor(env, this)->bInterfaceSubClass;
+}
+
+
+/**
+ * int bInterfaceProtocol()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Interface_1Descriptor, bInterfaceProtocol)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_interface_descriptor(env, this)->bInterfaceProtocol;
+}
+
+
+/**
+ * int iInterface()
+ */
+
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Interface_1Descriptor, iInterface)
+  (JNIEnv *env, jobject this)
+{
+	return unwrap_usb_interface_descriptor(env, this)->iInterface;
+}

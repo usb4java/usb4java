@@ -31,7 +31,6 @@ public abstract class USB_Descriptor_Header
     public USB_Descriptor_Header(final ByteBuffer data)
     {
         this.data = data;
-        this.data.limit(bLength());
     }
 
 
@@ -41,10 +40,7 @@ public abstract class USB_Descriptor_Header
      * @return The size of the descriptor in bytes (unsigned byte).
      */
 
-    public final int bLength()
-    {
-        return this.data.get(0) & 0xff;
-    }
+    public final native int bLength();
 
 
     /**
@@ -53,8 +49,5 @@ public abstract class USB_Descriptor_Header
      * @return The interface descriptor type (unsigned byte).
      */
 
-    public final int bDescriptorType()
-    {
-        return this.data.get(1) & 0xff;
-    }
+    public final native int bDescriptorType();
 }

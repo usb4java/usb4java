@@ -176,7 +176,7 @@ public class Dump
         indent(); System.out.format("bConfigurationValue: 0x%02x\n", config.bConfigurationValue());
         indent(); System.out.format("iConfiguration: 0x%02x\n", config.iConfiguration());
         indent(); System.out.format("bmAttributes: 0x%02x\n", config.bmAttributes());
-        indent(); System.out.format("MaxPower: 0x%02x\n", config.bMaxPower());
+        indent(); System.out.format("MaxPower: 0x%02x\n", config.MaxPower());
         indent(); System.out.format("extralen: 0x%08x\n", config.extralen());
         indent(); System.out.format("extra:");
         for (i = 0; i < config.extralen(); i++)

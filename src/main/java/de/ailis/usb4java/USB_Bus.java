@@ -5,29 +5,31 @@
 
 package de.ailis.usb4java;
 
+import java.nio.ByteBuffer;
+
 
 /**
- * The low-level USB Bus.
+ * The USB Bus.
  *
  * @author Klaus Reimer (k@ailis.de)
  */
 
 public final class USB_Bus
 {
-    /** Pointer to low-level C structure. */
-    private final long pointer;
+    /** Low-level bus structure. */
+    private final ByteBuffer bus;
 
 
     /**
      * Constructor.
      *
-     * @param pointer
-     *            The low-level C structure pointer.
+     * @param bus
+     *            The low-level bus structure.
      */
 
-    private USB_Bus(final long pointer)
+    private USB_Bus(final ByteBuffer bus)
     {
-        this.pointer = pointer;
+        this.bus = bus;
     }
 
 

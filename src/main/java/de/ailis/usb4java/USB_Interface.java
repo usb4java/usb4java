@@ -5,6 +5,8 @@
 
 package de.ailis.usb4java;
 
+import java.nio.ByteBuffer;
+
 
 /**
  * USB interface.
@@ -14,20 +16,20 @@ package de.ailis.usb4java;
 
 public final class USB_Interface
 {
-    /** The low-level pointer to the C structure. */
-    private final long pointer;
+    /** The low-level interface structure. */
+    private final ByteBuffer iface;
 
 
     /**
      * Constructor.
      *
-     * @param pointer
-     *            The low-level pointer to the C structure.
+     * @param iface
+     *            The low-level interface structure.
      */
 
-    private USB_Interface(final long pointer)
+    private USB_Interface(final ByteBuffer iface)
     {
-        this.pointer = pointer;
+        this.iface = iface;
     }
 
 
@@ -58,6 +60,6 @@ public final class USB_Interface
     @Override
     public String toString()
     {
-        return String.format("USB Interface 0x%08x", this.pointer);
+        return "USB Interface " + this.iface;
     }
 }

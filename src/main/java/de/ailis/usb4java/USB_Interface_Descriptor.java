@@ -36,10 +36,7 @@ public final class USB_Interface_Descriptor extends USB_Descriptor_Header
      * @return The interface number (unsigned byte).
      */
 
-    public int bInterfaceNumber()
-    {
-        return this.data.get(0) & 0xff;
-    }
+    public native int bInterfaceNumber();
 
 
     /**
@@ -49,10 +46,7 @@ public final class USB_Interface_Descriptor extends USB_Descriptor_Header
      * @return The value used to select this alternate setting (unsigned byte).
      */
 
-    public int bAlternateSetting()
-    {
-        return this.data.get(2) & 0xff;
-    }
+    public native int bAlternateSetting();
 
 
     /**
@@ -61,10 +55,7 @@ public final class USB_Interface_Descriptor extends USB_Descriptor_Header
      * @return The number of endpoints (unsigned byte).
      */
 
-    public int bNumEndpoints()
-    {
-        return this.data.get(3) & 0xff;
-    }
+    public native int bNumEndpoints();
 
 
     /**
@@ -76,10 +67,7 @@ public final class USB_Interface_Descriptor extends USB_Descriptor_Header
      * @return The interface class code (unsigned byte).
      */
 
-    public int bInterfaceClass()
-    {
-        return this.data.get(4) & 0xff;
-    }
+    public native int bInterfaceClass();
 
 
     /**
@@ -91,10 +79,7 @@ public final class USB_Interface_Descriptor extends USB_Descriptor_Header
      * @return The interface sub class code (unsigned byte).
      */
 
-    public int bInterfaceSubClass()
-    {
-        return this.data.get(5) & 0xff;
-    }
+    public native int bInterfaceSubClass();
 
 
     /**
@@ -109,10 +94,7 @@ public final class USB_Interface_Descriptor extends USB_Descriptor_Header
      * @return The protocol code (unsigned byte).
      */
 
-    public int bInterfaceProtocol()
-    {
-        return this.data.get(6) & 0xff;
-    }
+    public native int bInterfaceProtocol();
 
 
     /**
@@ -121,10 +103,7 @@ public final class USB_Interface_Descriptor extends USB_Descriptor_Header
      * @return The string descriptor index (unsigned byte).
      */
 
-    public int iInterface()
-    {
-        return this.data.get(7) & 0xff;
-    }
+    public native int iInterface();
 
 
     /**

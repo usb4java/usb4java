@@ -6,7 +6,6 @@
 package de.ailis.usb4java;
 
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
 
 /**
@@ -38,11 +37,7 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
      * @return The total length of all configuration data (unsigned short).
      */
 
-    public int wTotalLength()
-    {
-        this.data.order(ByteOrder.LITTLE_ENDIAN).position(2);
-        return this.data.asShortBuffer().get() & 0xffff;
-    }
+    public native int wTotalLength();
 
 
     /**
@@ -51,10 +46,7 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
      * @return The number of supported interfaces (unsigned byte).
      */
 
-    public int bNumInterfaces()
-    {
-        return this.data.get(4) & 0xff;
-    }
+    public native int bNumInterfaces();
 
 
     /**
@@ -64,10 +56,7 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
      * @return The configuration value (unsigned byte).
      */
 
-    public int bConfigurationValue()
-    {
-        return this.data.get(5) & 0xff;
-    }
+    public native int bConfigurationValue();
 
 
     /**
@@ -77,10 +66,7 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
      *         (unsigned byte).
      */
 
-    public int iConfiguration()
-    {
-        return this.data.get(6) & 0xff;
-    }
+    public native int iConfiguration();
 
 
     /**
@@ -99,10 +85,7 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
      * @return A bitmap with configuration attributes (unsigned byte).
      */
 
-    public int bmAttributes()
-    {
-        return this.data.get(7) & 0xff;
-    }
+    public native int bmAttributes();
 
 
     /**
@@ -113,24 +96,7 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
      * @return The maximum power consumption in 2mA units (unsigned byte).
      */
 
-    public int bMaxPower()
-    {
-        return this.data.get(8) & 0xff;
-    }
-
-
-    /**
-     * @see USB_Config_Descriptor#bMaxPower
-     *
-     * @return The maximum power consumption in 2mA units (unsigned byte).
-     * @deprecated Use {@link USB_Config_Descriptor#bMaxPower()} instead.
-     */
-
-    @Deprecated
-    public int MaxPower()
-    {
-        return bMaxPower();
-    }
+    public native int MaxPower();
 
 
     /**

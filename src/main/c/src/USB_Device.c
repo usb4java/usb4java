@@ -34,11 +34,34 @@ jobject wrap_usb_device(JNIEnv *env, struct usb_device *device)
     if (!device) return NULL;
     jclass cls = (*env)->FindClass(env, PACKAGE_DIR"/USB_Device");
     if (cls == NULL) return NULL;
-    jmethodID constructor = (*env)->GetMethodID(env, cls, "<init>", "(J)V");
+    jmethodID constructor = (*env)->GetMethodID(env, cls, "<init>",
+        "(Ljava/nio/ByteBuffer;)V");
     if (constructor == NULL) return NULL;
-    return (*env)->NewObject(env, cls, constructor, (long) device);
+    jobject buffer = (*env)->NewDirectByteBuffer(env, device,
+        sizeof(struct usb_device));
+    return (*env)->NewObject(env, cls, constructor, buffer);
+
 }
 
+
+/**
+ * Returns the wrapped USB device object from the specified wrapper object.
+ *
+ * @param env
+ *            The JNI environment.
+ * @param obj
+ *            The USB device wrapper object.
+ * @return The USB device object.
+ */
+
+struct usb_device *unwrap_usb_device(JNIEnv *env, jobject obj)
+{
+     jclass cls = (*env)->GetObjectClass(env, obj);
+     jfieldID field = (*env)->GetFieldID(env, cls, "device",
+         "Ljava/nio/ByteBuffer;");
+     jobject buffer = (*env)->GetObjectField(env, obj, field);
+     return (struct usb_device *) (*env)->GetDirectBufferAddress(env, buffer);
+}
 
 
 /**
@@ -64,24 +87,6 @@ static jobjectArray wrap_usb_devices(JNIEnv *env, uint8_t num_devices,
         (*env)->SetObjectArrayElement(env, array, i,
             wrap_usb_device(env, devices[i]));
     return array;
-}
-
-
-/**
- * Returns the wrapped USB device object from the specified wrapper object.
- *
- * @param env
- *            The JNI environment.
- * @param obj
- *            The USB device wrapper object.
- * @return The USB device object.
- */
-  
-struct usb_device *unwrap_usb_device(JNIEnv *env, jobject obj)
-{
-     jclass cls = (*env)->GetObjectClass(env, obj);
-     jfieldID field = (*env)->GetFieldID(env, cls, "pointer", "J");
-     return (struct usb_device *) ((*env)->GetLongField(env, obj, field));
 }
 
 

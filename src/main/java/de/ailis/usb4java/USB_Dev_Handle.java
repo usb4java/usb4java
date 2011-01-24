@@ -5,6 +5,8 @@
 
 package de.ailis.usb4java;
 
+import java.nio.ByteBuffer;
+
 
 /**
  * USB Device handle.
@@ -14,20 +16,20 @@ package de.ailis.usb4java;
 
 public final class USB_Dev_Handle
 {
-    /** The low-level pointer to the C structure. */
-    private final long pointer;
+    /** The low-level USB device handle structure. */
+    private final ByteBuffer handle;
 
 
     /**
      * Constructor.
      *
-     * @param pointer
-     *            The low-level pointer to the C structure.
+     * @param handle
+     *            The low-level USB device handle structure.
      */
 
-    private USB_Dev_Handle(final long pointer)
+    private USB_Dev_Handle(final ByteBuffer handle)
     {
-        this.pointer = pointer;
+        this.handle = handle;
     }
 
 
@@ -38,6 +40,6 @@ public final class USB_Dev_Handle
     @Override
     public String toString()
     {
-        return String.format("USB_Dev_Handle 0x%08x", this.pointer);
+        return "USB_Dev_Handle " + this.handle;
     }
 }
