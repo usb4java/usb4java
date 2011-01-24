@@ -51,8 +51,6 @@ public final class USB_Interface
     public native int num_altsetting();
 
 
-
-
     /**
      * @see java.lang.Object#toString()
      */
