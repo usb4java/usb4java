@@ -1,108 +1,90 @@
-<project name="libusb4java">
+<project name="libusb4java" default="all">
 
-    <property name="project.artifactId" value="usb4javaun" />
-    <property name="project.version" value="unknown" />
+    <fail unless="project.artifactId">Property 'project.artifactId' not set</fail> 
+    <fail unless="project.version">Property 'project.version' not set</fail>
+    <fail unless="project.build.directory">Property 'project.build.directory' not set</fail>
     
     <property name="libusbwin32.version" value="1.2.2.0" />
     
     <property name="tmpDir" value="${basedir}/tmp" /> 
-    <property name="distDir" value="${basedir}/dist" />
-    <property name="targetDir" value="../../../target" />
     
-    <target name="clean">
+    <target name="prepare">
         <delete dir="${tmpDir}" />
-        <delete dir="${distDir}" />
-        <exec executable="make" failonerror="true">
-            <arg line="clean" />
-        </exec>
-    </target>
-    
-    <target name="configure">
-        <property name="confopts" value="" />
-        <property name="CFLAGS" value="" />
-        <exec executable="./configure" failonerror="true">
-            <arg line="${confopts}" />
-            <arg value="CFLAGS=${CFLAGS}" />
-            <arg value="CPPFLAGS=${CFLAGS}" />
-            <arg value="prefix=/" />
-        </exec>
-    </target>
-
-    <target name="install">
-        <exec executable="make" failonerror="true">
-            <arg value="install" />
-            <arg value="DESTDIR=${tmpDir}" />
-        </exec>
-    </target>
-    
-    <target name="package">
-        <jar destfile="${targetDir}/${project.artifactId}-${project.version}-${os}-${arch}.jar"
-             basedir="${distDir}" />        
-    </target>
-
-    <target name="preprocess">
-        <antcall target="clean" />
-        <mkdir dir="${distDir}" />        
         <mkdir dir="${tmpDir}" />        
     </target>
     
     <target name="build">
-        <antcall target="configure" />
-        <antcall target="install" />
-    </target>
-    
-    <target name="postprocess">
-        <antcall target="package" />
-        <delete dir="${distDir}" />
+        <exec executable="./configure" failonerror="true">
+            <arg line="${options}" />
+            <arg value="CFLAGS=${CFLAGS}" />
+            <arg value="CPPFLAGS=${CFLAGS}" />
+        </exec>
+        <exec executable="make" failonerror="true">
+            <arg value="clean" />
+            <arg value="install" />
+            <arg value="DESTDIR=${tmpDir}" />
+        </exec>
+        <mkdir dir="${project.build.directory}/${os}-${arch}"/>
+        <copy file="${tmpDir}/${lib}"
+              todir="${project.build.directory}/${os}-${arch}" />
         <delete dir="${tmpDir}" />
     </target>
 
-    <target name="linux-x86" description="Build library for linux-x86">       
-        <property name="os" value="linux" />
-        <property name="arch" value="x86" />
-        <property name="CFLAGS" value="-m32" />
-        <antcall target="preprocess" />
-        <antcall target="build" />        
-        <copy file="${tmpDir}/lib/libusb4java.so" todir="${distDir}" />
-        <antcall target="postprocess" />
+    <target name="linux-x86" if="build.linux.x86">
+        <antcall target="prepare" />
+        <antcall target="build">
+            <param name="options">--prefix=/</param>
+            <param name="CFLAGS">-m32</param>
+            <param name="os">linux</param>
+            <param name="arch">x86</param>
+            <param name="lib">lib/libusb4java.so</param>               
+        </antcall>
     </target>
    
-    <target name="linux-x86_64" description="Build library for linux-x86_64">
-        <property name="os" value="linux" />
-        <property name="arch" value="x86" />
-        <property name="CFLAGS" value="-m64" />
-        <antcall target="preprocess" />
-        <antcall target="build" />        
-        <copy file="${tmpDir}/lib/libusb4java.so" todir="${distDir}" />
-        <antcall target="postprocess" />
+    <target name="linux-x86_64" if="build.linux.x86_64">
+        <antcall target="prepare" />
+        <antcall target="build">
+            <param name="options">--prefix=/</param>
+            <param name="CFLAGS">-m64</param>
+            <param name="os">linux</param>
+            <param name="arch">x86_64</param>
+            <param name="lib">lib/libusb4java.so</param>               
+        </antcall>
     </target>
     
-    <target name="linux-windows-x86" description="Cross-compile library on linux for windows-x86">
-        <property name="os" value="windows" />
-        <property name="arch" value="x86" />
-        <property name="confopts" value="--host=i586-mingw32msvc" />
-        <property name="CFLAGS" value="-I${tmpDir}/libusb-win32-bin-${libusbwin32.version}/include -L${tmpDir}/libusb-win32-bin-${libusbwin32.version}/lib/gcc -L${tmpDir}/libusb-win32-bin-${libusbwin32.version}/bin/x86" />
-        <antcall target="preprocess" />
+    <target name="linux-windows-x86" if="build.linux.windows.x86">
+        <antcall target="prepare" />
         <get src="http://downloads.sourceforge.net/project/libusb-win32/libusb-win32-releases/${libusbwin32.version}/libusb-win32-bin-${libusbwin32.version}.zip"
              dest="${tmpDir}/libusb-win32.zip" />
         <unzip src="${tmpDir}/libusb-win32.zip" dest="${tmpDir}" />
-        <antcall target="build" />        
-        <copy file="${tmpDir}/bin/libusb4java-0.dll" tofile="${distDir}/libusb4java.dll" />
-        <antcall target="postprocess" />
+        <antcall target="build">
+            <param name="options">--prefix=/ --host=i586-mingw32msvc</param>
+            <param name="CFLAGS">-I${tmpDir}/libusb-win32-bin-${libusbwin32.version}/include -L${tmpDir}/libusb-win32-bin-${libusbwin32.version}/lib/gcc -L${tmpDir}/libusb-win32-bin-${libusbwin32.version}/bin/x86</param>
+            <param name="os">windows</param>
+            <param name="arch">x86</param>
+            <param name="lib">bin/libusb4java-0.dll</param>               
+        </antcall>
     </target>
     
-    <target name="linux-windows-x86_64" description="Cross-compile library on linux for windows-x86_64">
-        <property name="os" value="windows" />
-        <property name="arch" value="x86_64" />
-        <property name="confopts" value="--host=amd64-mingw32msvc" />
-        <property name="CFLAGS" value="-I${tmpDir}/libusb-win32-bin-${libusbwin32.version}/include -L${tmpDir}/libusb-win32-bin-${libusbwin32.version}/lib/gcc -L${tmpDir}/libusb-win32-bin-${libusbwin32.version}/bin/amd64" />
-        <antcall target="preprocess" />
+    <target name="linux-windows-x86_64" if="build.linux.windows.x86_64">
+        <antcall target="prepare" />
         <get src="http://downloads.sourceforge.net/project/libusb-win32/libusb-win32-releases/${libusbwin32.version}/libusb-win32-bin-${libusbwin32.version}.zip"
              dest="${tmpDir}/libusb-win32.zip" />
         <unzip src="${tmpDir}/libusb-win32.zip" dest="${tmpDir}" />
-        <antcall target="build" />        
-        <copy file="${tmpDir}/bin/libusb4java-0.dll" tofile="${distDir}/libusb4java.dll" />
-        <antcall target="postprocess" />
+        <antcall target="build">
+            <param name="options">--prefix=/ --host=amd64-mingw32msvc</param>
+            <param name="CFLAGS">-I${tmpDir}/libusb-win32-bin-${libusbwin32.version}/include -L${tmpDir}/libusb-win32-bin-${libusbwin32.version}/lib/gcc -L${tmpDir}/libusb-win32-bin-${libusbwin32.version}/bin/amd64</param>
+            <param name="os">windows</param>
+            <param name="arch">x86_64</param>
+            <param name="lib">bin/libusb4java-0.dll</param>               
+        </antcall>
+    </target>
+    
+    <target name="all" description="Builds library for all enabled platforms"
+            depends="linux-x86,
+                     linux-x86_64,
+                     linux-windows-x86,
+                     linux-windows-x86_64">
     </target>
     
 </project>
