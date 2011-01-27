@@ -1,6 +1,7 @@
 <project name="libusb4java">
 
-    <property name="version" value="0.1.12-1" />
+    <property name="project.artifactId" value="usb4javaun" />
+    <property name="project.version" value="unknown" />
     
     <property name="libusbwin32.version" value="1.2.2.0" />
     
@@ -17,6 +18,8 @@
     </target>
     
     <target name="configure">
+        <property name="confopts" value="" />
+        <property name="CFLAGS" value="" />
         <exec executable="./configure" failonerror="true">
             <arg line="${confopts}" />
             <arg value="CFLAGS=${CFLAGS}" />
@@ -33,7 +36,7 @@
     </target>
     
     <target name="package">
-        <jar destfile="${targetDir}/usb4java-${version}-${os}-${arch}.jar"
+        <jar destfile="${targetDir}/${project.artifactId}-${project.version}-${os}-${arch}.jar"
              basedir="${distDir}" />        
     </target>
 
@@ -78,7 +81,7 @@
         <property name="os" value="windows" />
         <property name="arch" value="x86" />
         <property name="confopts" value="--host=i586-mingw32msvc" />
-        <property name="CPPFLAGS" value="-I${tmpDir}/libusb-win32-bin-${libusbwin32.version}/include -L${tmpDir}/libusb-win32-bin-${libusbwin32.version}/lib/gcc -L${tmpDir}/libusb-win32-bin-${libusbwin32.version}/bin/x86" />
+        <property name="CFLAGS" value="-I${tmpDir}/libusb-win32-bin-${libusbwin32.version}/include -L${tmpDir}/libusb-win32-bin-${libusbwin32.version}/lib/gcc -L${tmpDir}/libusb-win32-bin-${libusbwin32.version}/bin/x86" />
         <antcall target="preprocess" />
         <get src="http://downloads.sourceforge.net/project/libusb-win32/libusb-win32-releases/${libusbwin32.version}/libusb-win32-bin-${libusbwin32.version}.zip"
              dest="${tmpDir}/libusb-win32.zip" />

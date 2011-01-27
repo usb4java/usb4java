@@ -64,6 +64,35 @@
           <outputEncoding>${project.build.sourceEncoding}</outputEncoding>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.6</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>                
+              <goal>run</goal>
+            </goals>
+            <configuration>
+             
+              <target name="linux-x86" if="build-linux-x86">
+                <ant dir="${basedir}/src/main/c" target="linux-x86" />
+              </target>
+              <target name="linux-windows-x86" if="build-linux-windows-x86">
+                <ant dir="${basedir}/src/main/c" target="linux-windows-x86" />
+              </target>
+              <target name="linux-windows-x86_64" if="build-linux-windows-x86_64">
+                <ant dir="${basedir}/src/main/c" target="linux-windows-x86_64" />
+              </target>
+              <target name="linux-x86_64" if="doit">
+                <ant dir="${basedir}/src/main/c" target="linux-x86_64" />
+              </target>
+              
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
   
@@ -111,5 +140,15 @@
       <version>4.8.2</version>
     </dependency> 
   </dependencies>
+  
+  <profiles>
+    <profile>
+      <id>linux-x86_64</id>
+      <properties>
+        <doit>1</doit>
+      </properties>
+    </profile>
+  
+  </profiles>
 
 </project>

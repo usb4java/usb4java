@@ -38,7 +38,7 @@ Build Instructions
   libusb:
   
 ---
-  sudo apt-get install ia32-libs-dev
+  sudo apt-get install ia32-libs-dev libc6-dev-i386
 ---
 
   To compile the library for 32 bit run the following commands:
