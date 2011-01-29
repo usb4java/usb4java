@@ -1,0 +1,51 @@
+ -----------------------------------------------------------------------------
+ Download
+ -----------------------------------------------------------------------------
+
+Download
+
+* Binaries
+
+  First of all you need the platform independent Java library for usb4java: 
+
+  * {{{${releasesUrl}/usb4java-${project.version}.jar}usb4java-${project.version}.jar}}
+  
+  []
+  
+  Additionally you need the JNI library for the platform on which you want
+  to use usb4java. The JARs for Windows and Mac OS X also contain the libusb
+  shared library. On Linux machines this library is provided by the linux
+  distribution (Usually a package called libusb, make sure it is version 0.x
+  and not the newer 1.x).
+
+  * {{{${releasesUrl}/usb4java-${project.version}-linux-x86.jar}usb4java-${project.version}-linux-x86.jar}}
+
+  * {{{${releasesUrl}/usb4java-${project.version}-linux-x86_64.jar}usb4java-${project.version}-linux-x86_64.jar}}
+
+  * {{{${releasesUrl}/usb4java-${project.version}-windows-x86_64.jar}usb4java-${project.version}-windows-x86_64.jar}}
+
+  * {{{${releasesUrl}/usb4java-${project.version}-windows-x86_64.jar}usb4java-${project.version}-windows-x86_64.jar}}
+
+  * {{{${releasesUrl}/usb4java-${project.version}-macosx-universal.jar}usb4java-${project.version}-macosx-universal.jar}}
+  
+  []
+  
+  If you prefer using bleeding edge snapshots then you can download
+  them from the {{{$snapshotsUrl/}snapshot repository}}.
+
+
+* Sources
+
+  You can also compile usb4java manually. Simply download one of the following
+  archives and run <<mvn package>>. The source archive contains the pre-compiled
+  shared libraries for Linux, Windows and Mac OS X but also the C source code
+  of the JNI library if you want to compile it yourself or want to use usb4java
+  on a different platform. 
+  
+  * {{{http://www.ailis.de/nexus/content/repositories/releases/de/ailis/usb4java/${project.version}/usb4java-${project.version}-src.tar.bz2}usb4java-${project.version}-src.tar.bz2}}
+
+  * {{{http://www.ailis.de/nexus/content/repositories/releases/de/ailis/usb4java/${project.version}/usb4java-${project.version}-src.zip}usb4java-${project.version}-src.zip}}
+  
+  []
+ 
+  Sources are also available in the {{{./source-repository.html}source repository}}.

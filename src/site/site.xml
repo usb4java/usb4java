@@ -8,6 +8,10 @@
   </bannerLeft>
 
   <body>
+    <links>
+      <item name="libusb" href="http://www.libusb.org/" />
+      <item name="libusb-win32" href="http://sourceforge.net/apps/trac/libusb-win32/wiki" />
+    </links>
   
     <head>
       <link href="favicon.ico" rel="SHORTCUT ICON" />
@@ -16,7 +20,6 @@
     <menu name="usb4java">
       <item name="About" href="./index.html" />
       <item name="Download" href="./download.html" />
-      <item name="Build" href="./build.html" />
       <item name="Manual" href="./manual.html" />
     </menu>
     
