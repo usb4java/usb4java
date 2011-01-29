@@ -40,11 +40,11 @@ public final class USB
     /** HID class. */
     public static final int USB_CLASS_HID = 3;
 
-    /** Printer class. */
-    public static final int USB_CLASS_PRINTER = 7;
-
     /** PTP class. */
     public static final int USB_CLASS_PTP = 6;
+
+    /** Printer class. */
+    public static final int USB_CLASS_PRINTER = 7;
 
     /** Mass storage class. */
     public static final int USB_CLASS_MASS_STORAGE = 8;

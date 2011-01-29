@@ -5,7 +5,10 @@
 
 package de.ailis.usb4java;
 
+import static de.ailis.usb4java.USB.usb_get_string_simple;
+
 import java.nio.ByteBuffer;
+
 
 
 /**
@@ -171,4 +174,63 @@ public final class USB_Device_Descriptor extends USB_Descriptor_Header
      */
 
     public native int bNumConfigurations();
+
+
+    /**
+     * @see java.lang.Object#toString()
+     */
+
+    @Override
+    public String toString()
+    {
+        return toString(null);
+    }
+
+
+    /**
+     * Returns a dump of this descriptor.
+     *
+     * @param handle
+     *            The USB device handle for resolving string descriptors. If
+     *            null then no strings are resolved.
+     * @return The descriptor dump.
+     */
+
+    public String toString(final USB_Dev_Handle handle)
+    {
+        final int iManufacturer = iManufacturer();
+        String sManufacturer = handle == null || iManufacturer == 0 ? "" :
+            usb_get_string_simple(handle, iManufacturer);
+        if (sManufacturer == null) sManufacturer = "";
+        final int iProduct = iProduct();
+        String sProduct = handle == null || iProduct == 0 ? "" :
+            usb_get_string_simple(handle, iProduct);
+        if (sProduct == null) sProduct = "";
+        final int iSerialNumber = iSerialNumber();
+        String sSerialNumber = handle == null || iSerialNumber == 0 ? "" :
+            usb_get_string_simple(handle, iSerialNumber);
+        if (sSerialNumber == null) sSerialNumber = "";
+        return String.format("Device Descriptor:%n" +
+            "  bLength               %5d%n" +
+            "  bDescriptorType       %5d%n" +
+            "  bcdUSB                %5s%n" +
+            "  bDeviceClass          %5d %s%n" +
+            "  bDeviceSubClass       %5d%n" +
+            "  bDeviceProtocol       %5d%n" +
+            "  bMaxPacketSize0       %5d%n" +
+            "  idVendor             %#06x%n" +
+            "  idProduct            %#06x%n" +
+            "  bcdDevice             %5s%n" +
+            "  iManufacturer         %5d %s%n" +
+            "  iProduct              %5d %s%n" +
+            "  iSerialNumber         %5d %s%n" +
+            "  bNumConfigurations    %5d%n",
+            bLength(), bDescriptorType(), USBUtils.decodeBCD(bcdUSB()),
+            bDeviceClass(), USBUtils.getUSBClassName(bDeviceClass()),
+            bDeviceSubClass(), bDeviceProtocol(),
+            bMaxPacketSize0(), idVendor(), idProduct(),
+            USBUtils.decodeBCD(bcdDevice()), iManufacturer, sManufacturer,
+            iProduct, sProduct, iSerialNumber, sSerialNumber,
+            bNumConfigurations());
+    }
 }

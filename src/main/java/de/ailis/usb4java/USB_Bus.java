@@ -61,9 +61,7 @@ public final class USB_Bus
 
 
     /**
-     * Returns the location. The original datatype for this information is
-     * an unsigned 32 bit integer. To avoid problems with values larger than
-     * 0x7fffffff the wrapper returns a long integer instead.
+     * Returns the location.
      *
      * @return The location (32 bit unsigned integer).
      */
@@ -86,7 +84,8 @@ public final class USB_Bus
     /**
      * Returns the USB root device.
      *
-     * @return The USB root device or null if none.
+     * @return The USB root device or null if none or if it could not be
+     *         determined because of insufficient permissions.
      */
 
     public native USB_Device root_dev();
@@ -99,6 +98,21 @@ public final class USB_Bus
     @Override
     public String toString()
     {
-        return dirname();
+        final USB_Device root_dev = root_dev();
+        final String rootDev = root_dev == null ? "None or unknown" : root_dev
+                .filename();
+        final StringBuilder builder = new StringBuilder();
+        builder.append(String.format("Bus:%n" +
+            "  dirname         %15s%n" +
+            "  location        %15d%n" +
+            "  root_dev        %15s%n",
+            dirname(), location(), rootDev));
+        USB_Device device = devices();
+        while (device != null)
+        {
+            builder.append(device.toString().replaceAll("(?m)^", "  "));
+            device = device.next();
+        }
+        return builder.toString();
     }
 }

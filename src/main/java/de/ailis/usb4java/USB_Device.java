@@ -5,6 +5,9 @@
 
 package de.ailis.usb4java;
 
+import static de.ailis.usb4java.USB.usb_close;
+import static de.ailis.usb4java.USB.usb_open;
+
 import java.nio.ByteBuffer;
 
 
@@ -70,9 +73,9 @@ public final class USB_Device
 
 
     /**
-     * Returns the device number. The original data type for this
-     * information is an unsigned byte. This wrapper returns a short int
-     * instead to avoid problems with values larger then 127.
+     * Returns the device number. The original data type for this information is
+     * an unsigned byte. This wrapper returns a short int instead to avoid
+     * problems with values larger then 127.
      *
      * @return The device number (unsigned byte).
      */
@@ -82,8 +85,8 @@ public final class USB_Device
 
     /**
      * Returns the number of child devices. The original data type for this
-     * information is an unsigned byte. This wrapper returns a short int
-     * instead to avoid problems with values larger then 127.
+     * information is an unsigned byte. This wrapper returns a short int instead
+     * to avoid problems with values larger then 127.
      *
      * @return The number of child devices (unsigned byte).
      */
@@ -125,6 +128,28 @@ public final class USB_Device
     @Override
     public String toString()
     {
-        return filename();
+        final StringBuilder builder = new StringBuilder();
+        builder.append(String.format("Device:%n" +
+            "  filename                %5s%n" +
+            "  bus                     %5s%n" +
+            "  num_children            %5d%n" +
+            "  devnum                  %5d%n",
+            filename(), bus().dirname(), num_children(), devnum()));
+        final USB_Dev_Handle handle = usb_open(this);
+        try
+        {
+            builder.append(descriptor().toString(handle).replaceAll("(?m)^",
+                "  "));
+            for (final USB_Config_Descriptor descriptor : config())
+            {
+                builder.append(descriptor.toString(handle).replaceAll("(?m)^",
+                    "  "));
+            }
+            return builder.toString();
+        }
+        finally
+        {
+            if (handle != null) usb_close(handle);
+        }
     }
 }

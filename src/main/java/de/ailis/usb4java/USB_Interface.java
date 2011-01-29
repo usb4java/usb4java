@@ -58,6 +58,26 @@ public final class USB_Interface
     @Override
     public String toString()
     {
-        return "USB Interface " + this.iface;
+        return toString(null);
+    }
+
+
+    /**
+     * Returns a dump of this descriptor.
+     *
+     * @param handle
+     *            The USB device handle for resolving string descriptors. If
+     *            null then no strings are resolved.
+     * @return The descriptor dump.
+     */
+
+    public String toString(final USB_Dev_Handle handle)
+    {
+        final StringBuilder builder = new StringBuilder();
+        for (final USB_Interface_Descriptor descriptor : altsetting())
+        {
+            builder.append(descriptor.toString(handle));
+        }
+        return builder.toString();
     }
 }

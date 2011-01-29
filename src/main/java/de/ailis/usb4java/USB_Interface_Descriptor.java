@@ -5,6 +5,8 @@
 
 package de.ailis.usb4java;
 
+import static de.ailis.usb4java.USB.usb_get_string_simple;
+
 import java.nio.ByteBuffer;
 
 
@@ -131,4 +133,58 @@ public final class USB_Interface_Descriptor extends USB_Descriptor_Header
      */
 
     public native int extralen();
+
+
+    /**
+     * @see java.lang.Object#toString()
+     */
+
+    @Override
+    public String toString()
+    {
+        return toString(null);
+    }
+
+
+    /**
+     * Returns a dump of this descriptor.
+     *
+     * @param handle
+     *            The USB device handle for resolving string descriptors. If
+     *            null then no strings are resolved.
+     * @return The descriptor dump.
+     */
+
+    public String toString(final USB_Dev_Handle handle)
+    {
+        final StringBuilder builder = new StringBuilder();
+        final int iInterface = iInterface();
+        String sInterface = iInterface == 0 || handle == null ? ""
+            : usb_get_string_simple(handle, iInterface);
+        if (sInterface == null) sInterface = "";
+        builder.append(String.format("Interface Descriptor:%n" +
+            "  bLength             %5d%n" +
+            "  bDescriptorType     %5d%n" +
+            "  bInterfaceNumber    %5d%n" +
+            "  bAlternateSetting   %5d%n" +
+            "  bNumEndpoints       %5d%n" +
+            "  bInterfaceClass     %5d %s%n" +
+            "  bInterfaceSubClass  %5d%n" +
+            "  bInterfaceProtocol  %5d%n" +
+            "  iInterface          %5d %s%n" +
+            "  extralen       %10d%n" +
+            "  extra:%n" +
+            "%s",
+            bLength(), bDescriptorType(), bInterfaceNumber(),
+            bAlternateSetting(), bNumEndpoints(), bInterfaceClass(),
+            USBUtils.getUSBClassName(bInterfaceClass()), bInterfaceSubClass(),
+            bInterfaceProtocol(), iInterface(), sInterface, extralen(),
+            USBUtils.toHexDump(extra(), 16).replaceAll("(?m)^", "    ")));
+        if (extralen() != 0) return builder.toString();
+        for (final USB_Endpoint_Descriptor edesc : endpoint())
+        {
+            builder.append(edesc.toString().replaceAll("(?m)^", "  "));
+        }
+        return builder.toString();
+    }
 }

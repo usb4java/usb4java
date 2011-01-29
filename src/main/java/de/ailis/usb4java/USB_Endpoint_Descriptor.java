@@ -30,7 +30,7 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
 
 
     /**
-     * Returns the endpoint address. THe address is encoded as follos:
+     * Returns the endpoint address. The address is encoded as follows:
      * <ul>
      * <li>Bit 7: The direction (ignored by control endpoints), 0=OUT, 1=IN</li>
      * <li>Bit 6-4: Reserved</li>
@@ -126,4 +126,27 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      */
 
     public native int extralen();
+
+
+    /**
+     * @see java.lang.Object#toString()
+     */
+
+    @Override
+    public String toString()
+    {
+        return String.format("Endpoint Descriptor:%n" +
+            "  bLength           %5d%n" +
+            "  bDecsriptorType   %5d%n" +
+            "  bEndpointAddress   0x%02x%n" +
+            "  bmAttributes       0x%02x%n" +
+            "  wMaxPacketSize    %5d%n" +
+            "  bInterval         %5d%n" +
+            "  extralen     %10d%n" +
+            "  extra:%n" +
+            "%s",
+            bLength(), bDescriptorType(), bEndpointAddress(), bmAttributes(),
+            wMaxPacketSize(), bInterval(), extralen(),
+            USBUtils.toHexDump(extra(), 16).replaceAll("(?m)^", "    "));
+    }
 }

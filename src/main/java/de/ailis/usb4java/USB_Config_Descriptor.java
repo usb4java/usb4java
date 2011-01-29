@@ -60,9 +60,9 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
 
 
     /**
-     * Returns the index of the string descriptor describing this configuation.
+     * Returns the index of the string descriptor describing this configuration.
      *
-     * @return The index of the string descriptor describing this configuation
+     * @return The index of the string descriptor describing this configuration
      *         (unsigned byte).
      */
 
@@ -72,7 +72,7 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
     /**
      * Returns a bitmap with configuration attributes.
      * <ul>
-     * <li>Bit 7: Reserved.</li>
+     * <li>Bit 7: Reserved. (USB 1: Bus-powered)</li>
      * <li>Bit 6: Self-powered.</li>
      * <li>Bit 5: Remote wakeup.</li>
      * <li>Bit 4: Reserved.</li>
@@ -90,8 +90,8 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
 
     /**
      * Returns the maximum power consumption of the device when this
-     * configuration is active and the device is fully operational. The power
-     * is expressed in 2 maA units (50 means 100mA for example).
+     * configuration is active and the device is fully operational. The power is
+     * expressed in 2 maA units (50 means 100mA for example).
      *
      * @return The maximum power consumption in 2mA units (unsigned byte).
      */
@@ -118,12 +118,60 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
 
 
     /**
-     * Returns the interfaces of this USB configuration. The original method
-     * is named "interface" but this can't be used in Java because it is a
-     * reserved word.
+     * Returns the interfaces of this USB configuration. The original method is
+     * named "interface" but this can't be used in Java because it is a reserved
+     * word.
      *
      * @return The interfaces of this USB configuration.
      */
 
     public native USB_Interface[] iface();
+
+
+    /**
+     * @see java.lang.Object#toString()
+     */
+
+    @Override
+    public String toString()
+    {
+        return toString(null);
+    }
+
+
+    /**
+     * Returns a dump of this descriptor.
+     *
+     * @param handle
+     *            The USB device handle for resolving string descriptors. If
+     *            null then no strings are resolved.
+     * @return The descriptor dump.
+     */
+
+    public String toString(final USB_Dev_Handle handle)
+    {
+        final StringBuilder builder = new StringBuilder();
+        builder.append(String.format("Configuration Descriptor:%n" +
+            "  bLength               %5d%n" +
+            "  bDescriptorType       %5d%n" +
+            "  wTotalLength          %5d%n" +
+            "  bNumInterfaces        %5d%n" +
+            "  bConfigurationValue   %5d%n" +
+            "  iConfiguration        %5d%n" +
+            "  bmAttributes           %#04x%n" +
+            "  MaxPower              %5d mA%n" +
+            "  extralen         %10d%n" +
+            "  extra:%n" +
+            "%s",
+            bLength(), bDescriptorType(), wTotalLength(), bNumInterfaces(),
+            bConfigurationValue(), iConfiguration(), bmAttributes(),
+            MaxPower() * 2, extralen(), USBUtils.toHexDump(extra(), 16)
+                    .replaceAll("(?m)^", "    ")));
+        for (final USB_Interface descriptor : iface())
+        {
+            builder.append(descriptor.toString(handle)
+                    .replaceAll("(?m)^", "  "));
+        }
+        return builder.toString();
+    }
 }
