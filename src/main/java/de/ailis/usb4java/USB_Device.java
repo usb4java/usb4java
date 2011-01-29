@@ -131,7 +131,7 @@ public final class USB_Device
         final StringBuilder builder = new StringBuilder();
         builder.append(String.format("Device:%n" +
             "  filename %20s%n" +
-            "  bus      %25s%n" +
+            "  bus %25s%n" +
             "  num_children            %5d%n" +
             "  devnum                  %5d%n",
             filename(), bus().dirname(), num_children(), devnum()));
