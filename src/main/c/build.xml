@@ -1,12 +1,8 @@
-<project name="libusb4java" default="all">
+<project name="libusb4java" default="help">
 
-    <fail unless="project.artifactId">Property 'project.artifactId' not set</fail> 
-    <fail unless="project.version">Property 'project.version' not set</fail>
-    <fail unless="project.build.directory">Property 'project.build.directory' not set</fail>
-    
+    <property name="project.basedir" value="${basedir}/../../.." />
+    <property name="tmpDir" value="${basedir}/tmp" />
     <property name="libusbwin32.version" value="1.2.2.0" />
-    
-    <property name="tmpDir" value="${basedir}/tmp" /> 
     
     <target name="prepare">
         <delete dir="${tmpDir}" />
@@ -21,70 +17,79 @@
         </exec>
         <exec executable="make" failonerror="true">
             <arg value="clean" />
-            <arg value="install" />
+            <arg value="install-strip" />
             <arg value="DESTDIR=${tmpDir}" />
         </exec>
-        <mkdir dir="${project.build.directory}/${os}-${arch}"/>
-        <copy file="${tmpDir}/${lib}"
-              todir="${project.build.directory}/${os}-${arch}" />
+        <mkdir dir="${project.basedir}/src/main/assembly/${os}-${arch}" />
+        <copy file="${tmpDir}/${fromlib}"
+              tofile="${project.basedir}/src/main/assembly/${os}-${arch}/${tolib}" />
         <delete dir="${tmpDir}" />
     </target>
 
-    <target name="linux-x86" if="build.linux.x86">
+    <target name="linux-x86">
         <antcall target="prepare" />
         <antcall target="build">
             <param name="options">--prefix=/</param>
             <param name="CFLAGS">-m32</param>
             <param name="os">linux</param>
             <param name="arch">x86</param>
-            <param name="lib">lib/libusb4java.so</param>               
+            <param name="fromlib">lib/libusb4java.so</param>
+            <param name="tolib">libusb4java.so</param>
         </antcall>
     </target>
    
-    <target name="linux-x86_64" if="build.linux.x86_64">
+    <target name="linux-x86_64">
         <antcall target="prepare" />
         <antcall target="build">
             <param name="options">--prefix=/</param>
             <param name="CFLAGS">-m64</param>
             <param name="os">linux</param>
             <param name="arch">x86_64</param>
-            <param name="lib">lib/libusb4java.so</param>               
+            <param name="fromlib">lib/libusb4java.so</param>
+            <param name="tolib">libusb4java.so</param>
         </antcall>
     </target>
     
-    <target name="linux-windows-x86" if="build.linux.windows.x86">
+    <target name="linux-windows-x86">
         <antcall target="prepare" />
         <get src="http://downloads.sourceforge.net/project/libusb-win32/libusb-win32-releases/${libusbwin32.version}/libusb-win32-bin-${libusbwin32.version}.zip"
              dest="${tmpDir}/libusb-win32.zip" />
         <unzip src="${tmpDir}/libusb-win32.zip" dest="${tmpDir}" />
+        <copy file="${tmpDir}/libusb-win32-bin-${libusbwin32.version}/bin/x86/libusb0_x86.dll"
+              tofile="${project.basedir}/src/main/assembly/windows-x86/libusb0.dll" />
         <antcall target="build">
-            <param name="options">--prefix=/ --host=i586-mingw32msvc</param>
-            <param name="CFLAGS">-I${tmpDir}/libusb-win32-bin-${libusbwin32.version}/include -L${tmpDir}/libusb-win32-bin-${libusbwin32.version}/lib/gcc -L${tmpDir}/libusb-win32-bin-${libusbwin32.version}/bin/x86</param>
+            <param name="options">--prefix=/ --host=i586-mingw32msvc --with-libusb-includes=${tmpDir}/libusb-win32-bin-${libusbwin32.version}/include              --with-libusb-libs=${tmpDir}/libusb-win32-bin-${libusbwin32.version}/lib/gcc,${tmpDir}/libusb-win32-bin-${libusbwin32.version}/bin/x86</param>
+            <param name="CFLAGS"> </param>
             <param name="os">windows</param>
             <param name="arch">x86</param>
-            <param name="lib">bin/libusb4java-0.dll</param>               
+            <param name="fromlib">bin/libusb4java-0.dll</param>
+            <param name="tolib">libusb4java.dll</param>
         </antcall>
     </target>
     
-    <target name="linux-windows-x86_64" if="build.linux.windows.x86_64">
+    <target name="linux-windows-x86_64">
         <antcall target="prepare" />
         <get src="http://downloads.sourceforge.net/project/libusb-win32/libusb-win32-releases/${libusbwin32.version}/libusb-win32-bin-${libusbwin32.version}.zip"
              dest="${tmpDir}/libusb-win32.zip" />
         <unzip src="${tmpDir}/libusb-win32.zip" dest="${tmpDir}" />
+        <copy file="${tmpDir}/libusb-win32-bin-${libusbwin32.version}/bin/amd64/libusb0.dll"
+              tofile="${project.basedir}/src/main/assembly/windows-x86_64/libusb0.dll" />
         <antcall target="build">
-            <param name="options">--prefix=/ --host=amd64-mingw32msvc</param>
-            <param name="CFLAGS">-I${tmpDir}/libusb-win32-bin-${libusbwin32.version}/include -L${tmpDir}/libusb-win32-bin-${libusbwin32.version}/lib/gcc -L${tmpDir}/libusb-win32-bin-${libusbwin32.version}/bin/amd64</param>
+            <param name="options">--prefix=/ --host=amd64-mingw32msvc --with-libusb-includes=${tmpDir}/libusb-win32-bin-${libusbwin32.version}/include              --with-libusb-libs=${tmpDir}/libusb-win32-bin-${libusbwin32.version}/lib/gcc,${tmpDir}/libusb-win32-bin-${libusbwin32.version}/bin/amd64</param>
+            <param name="CFLAGS"> </param>
             <param name="os">windows</param>
             <param name="arch">x86_64</param>
-            <param name="lib">bin/libusb4java-0.dll</param>               
+            <param name="fromlib">bin/libusb4java-0.dll</param>
+            <param name="tolib">libusb4java.dll</param>
         </antcall>
     </target>
     
-    <target name="all" description="Builds library for all enabled platforms"
-            depends="linux-x86,
-                     linux-x86_64,
-                     linux-windows-x86,
-                     linux-windows-x86_64">
+    <target name="help" description="Display usage help">
+      <echo>Targets:</echo>
+      <echo>  linux-x86             Compile for linux x86.</echo>
+      <echo>  linux-x86_64          Compile for linux x86_64.</echo>
+      <echo>  linux-windows-x86     Cross-compile on linux for windows x86.</echo>
+      <echo>  linux-windows-x86_64  Cross-compile on linux for windows x86_64.</echo>
     </target>
     
 </project>

@@ -3,6 +3,8 @@ AC_DEFUN([AC_CHECK_LIBUSB],[
     libusb,
     [  --with-libusb=DIR       Set path to libusb prefix],
     [
+      extra_includes=$(echo $withval | sed s/','/'\/include -I'/g)
+      extra_libs=$(echo $withval | sed s/','/'\/lib -L'/g)
       CPPFLAGS="-I$withval/include $CPPFLAGS"
       LDFLAGS="-L$withval/lib $LDFLAGS"
     ]
@@ -11,7 +13,8 @@ AC_DEFUN([AC_CHECK_LIBUSB],[
     libusb-libs,
     [  --with-libusb-libs=DIR  Set path to libusb library files],
     [
-      LDFLAGS="-L$withval $LDFLAGS"
+      extra_libs=$(echo $withval | sed s/','/' -L'/g)
+      LDFLAGS="-L$extra_libs $LDFLAGS"
     ]
   )
   AC_ARG_WITH(
@@ -19,7 +22,8 @@ AC_DEFUN([AC_CHECK_LIBUSB],[
     [  --with-libusb-includes=DIR
                           Set path to libusb include files],
     [
-      CPPFLAGS="-I$withval $CPPFLAGS"
+      extra_includes=$(echo $withval | sed s/','/' -I'/g)
+      CPPFLAGS="-I$extra_includes $CPPFLAGS"
     ]
   )
   AC_CHECK_HEADERS(usb.h,,echo "ERROR: usb.h not found."; exit 1;)
