@@ -1,0 +1,24 @@
+<assembly>
+  <id>src</id>
+  <formats>
+    <format>zip</format>
+    <format>tar.bz2</format>
+  </formats>
+  <fileSets>
+    <fileSet>
+      <includes>
+        <include>README.txt</include>
+        <include>LICENSE.txt</include>
+        <include>pom.xml</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>src</directory>
+      <excludes>
+        <exclude>**/log?????.txt</exclude>
+        <exclude>**/dump/out/*</exclude>
+        <exclude>**/dump/lib/*.class</exclude>
+      </excludes>
+    </fileSet>
+  </fileSets>
+</assembly>
