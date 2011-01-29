@@ -130,8 +130,8 @@ public final class USB_Device
     {
         final StringBuilder builder = new StringBuilder();
         builder.append(String.format("Device:%n" +
-            "  filename                %5s%n" +
-            "  bus                     %5s%n" +
+            "  filename %20s%n" +
+            "  bus      %25s%n" +
             "  num_children            %5d%n" +
             "  devnum                  %5d%n",
             filename(), bus().dirname(), num_children(), devnum()));
@@ -142,6 +142,7 @@ public final class USB_Device
                 "  "));
             for (final USB_Config_Descriptor descriptor : config())
             {
+                if (descriptor == null) continue;
                 builder.append(descriptor.toString(handle).replaceAll("(?m)^",
                     "  "));
             }

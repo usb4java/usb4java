@@ -615,7 +615,7 @@ public final class USB
         final ByteBuffer buffer = ByteBuffer
                 .allocateDirect(MAX_DESCRIPTOR_SIZE);
         final int len = usb_get_descriptor(handle, USB_DT_STRING, 0, buffer);
-        if (len < 0) return null;
+        if (len < 2) return null;
         final short[] languages = new short[(len - 2) / 2];
         if (languages.length == 0) return languages;
         buffer.position(2);

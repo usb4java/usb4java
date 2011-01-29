@@ -12,7 +12,7 @@
         <include>*</include>
       </includes>
       <fileMode>644</fileMode>
-      <lineEnding>unix</lineEnding>
+      <lineEnding>keep</lineEnding>
     </fileSet>
   </fileSets>
 </assembly>

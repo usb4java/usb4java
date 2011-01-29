@@ -103,9 +103,9 @@ public final class USB_Bus
                 .filename();
         final StringBuilder builder = new StringBuilder();
         builder.append(String.format("Bus:%n" +
-            "  dirname         %15s%n" +
+            "  dirname %23s%n" +
             "  location        %15d%n" +
-            "  root_dev        %15s%n",
+            "  root_dev %22s%n",
             dirname(), location(), rootDev));
         USB_Device device = devices();
         while (device != null)

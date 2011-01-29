@@ -24,7 +24,8 @@ public class Dump
 {
     /**
      * Dumps the device tree. Please note that the displayed tree can only
-     * display devices to which the user has write access.
+     * display devices to which the user has write access. On some platforms
+     * the tree can't be dumped at all.
      */
 
     private static void dumpDeviceTree()
@@ -36,10 +37,11 @@ public class Dump
         while (bus != null)
         {
             final USB_Device root = bus.root_dev();
-            if (root == null) continue;
-
-            System.out.format("Bus %s%n", bus.dirname());
-            dumpSubDeviceTree(bus.root_dev(), " ");
+            if (root != null)
+            {
+                System.out.format("Bus %s%n", bus.dirname());
+                dumpSubDeviceTree(bus.root_dev(), " ");
+            }
             bus = bus.next();
         }
     }
