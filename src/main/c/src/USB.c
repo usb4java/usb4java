@@ -344,3 +344,16 @@ JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1interrupt_1read)
     return usb_interrupt_read(unwrap_usb_dev_handle(env, handle),
         ep, buf, buflen, timeout);
 }
+
+
+/**
+ * string usb_strerror()
+ */
+
+JNIEXPORT jstring JNICALL METHOD_NAME(USB, usb_1strerror)
+(
+    JNIEnv *env, jclass class
+)
+{
+    return (*env)->NewStringUTF(env, usb_strerror());
+}

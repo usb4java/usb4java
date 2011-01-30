@@ -755,4 +755,13 @@ public final class USB
 
     public static native int usb_interrupt_read(final USB_Dev_Handle handle,
         final int ep, final ByteBuffer bytes, final int timeout);
+
+
+    /**
+     * Returns the last error message.
+     *
+     * @return The last error message.
+     */
+
+    public static native String usb_strerror();
 }
