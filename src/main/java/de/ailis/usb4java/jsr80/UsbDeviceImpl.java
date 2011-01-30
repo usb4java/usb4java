@@ -175,7 +175,7 @@ public class UsbDeviceImpl implements UsbDevice
 
     @Override
     public String getManufacturerString() throws UsbException,
-        UnsupportedEncodingException, UsbDisconnectedException
+        UnsupportedEncodingException
     {
         final byte index = this.descriptor.iManufacturer();
         if (index == 0) return null;
@@ -188,7 +188,8 @@ public class UsbDeviceImpl implements UsbDevice
      */
 
     @Override
-    public String getSerialNumberString() throws UsbException
+    public String getSerialNumberString() throws UsbException,
+        UnsupportedEncodingException
     {
         final byte index = this.descriptor.iSerialNumber();
         if (index == 0) return null;
@@ -201,7 +202,8 @@ public class UsbDeviceImpl implements UsbDevice
      */
 
     @Override
-    public String getProductString() throws UsbException
+    public String getProductString() throws UsbException,
+        UnsupportedEncodingException
     {
         final byte index = this.descriptor.iProduct();
         if (index == 0) return null;
@@ -340,9 +342,10 @@ public class UsbDeviceImpl implements UsbDevice
      */
 
     @Override
-    public String getString(final byte index) throws UsbException
+    public String getString(final byte index) throws UsbException,
+        UnsupportedEncodingException
     {
-        return getUsbStringDescriptor(index).toString();
+        return getUsbStringDescriptor(index).getString();
     }
 
 

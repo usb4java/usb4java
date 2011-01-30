@@ -5,6 +5,8 @@
 
 package de.ailis.usb4java.jsr80;
 
+import static de.ailis.usb4java.USB.usb_init;
+
 import javax.usb.UsbException;
 import javax.usb.UsbHub;
 import javax.usb.UsbServices;
@@ -31,16 +33,33 @@ public final class UsbServicesImpl implements UsbServices
     /** The USB services listeners. */
     private final UsbServicesListenerList listeners = new UsbServicesListenerList();
 
+    /** The virtual USB root hub. */
+    private final VirtualRootHub rootHub;
+
+    /** The USB device scanner. */
+    private final UsbDeviceScanner deviceScanner;
+
+
+    /**
+     * Constructor.
+     */
+
+    public UsbServicesImpl()
+    {
+        usb_init();
+        this.rootHub = new VirtualRootHub();
+        this.deviceScanner = new UsbDeviceScanner(this.rootHub);
+    }
+
 
     /**
      * @see UsbServices#getRootUsbHub()
      */
 
     @Override
-    public final UsbHub getRootUsbHub() throws UsbException, SecurityException
+    public UsbHub getRootUsbHub() throws UsbException, SecurityException
     {
-        // TODO Implement me
-        throw new UnsupportedOperationException();
+        return this.rootHub;
     }
 
 
@@ -49,7 +68,7 @@ public final class UsbServicesImpl implements UsbServices
      */
 
     @Override
-    public final void addUsbServicesListener(final UsbServicesListener listener)
+    public void addUsbServicesListener(final UsbServicesListener listener)
     {
         this.listeners.add(listener);
     }
@@ -60,7 +79,7 @@ public final class UsbServicesImpl implements UsbServices
      */
 
     @Override
-    public final void removeUsbServicesListener(final UsbServicesListener listener)
+    public void removeUsbServicesListener(final UsbServicesListener listener)
     {
         this.listeners.remove(listener);
     }
@@ -71,7 +90,7 @@ public final class UsbServicesImpl implements UsbServices
      */
 
     @Override
-    public final String getApiVersion()
+    public String getApiVersion()
     {
         return API_VERSION;
     }
@@ -82,7 +101,7 @@ public final class UsbServicesImpl implements UsbServices
      */
 
     @Override
-    public final String getImpVersion()
+    public String getImpVersion()
     {
         return IMP_VERSION;
     }
@@ -93,7 +112,7 @@ public final class UsbServicesImpl implements UsbServices
      */
 
     @Override
-    public final String getImpDescription()
+    public String getImpDescription()
     {
         return IMP_DESCRIPTION;
     }
