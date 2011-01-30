@@ -42,7 +42,7 @@ public final class USB_String_Descriptor extends USB_Descriptor_Header
         this.data.position(2);
         final CharBuffer chars = this.data.order(ByteOrder.LITTLE_ENDIAN)
                 .asCharBuffer();
-        final char[] output = new char[chars.remaining()];
+        final char[] output = new char[(bLength() - 2) / 2];
         chars.get(output);
         return output;
     }
