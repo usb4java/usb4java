@@ -136,13 +136,14 @@ public final class USB_Interface_Descriptor extends USB_Descriptor_Header
 
 
     /**
-     * @see java.lang.Object#toString()
+     * Returns a dump of this descriptor.
+     *
+     * @return The descriptor dump.
      */
 
-    @Override
-    public String toString()
+    public String dump()
     {
-        return toString(null);
+        return dump(null);
     }
 
 
@@ -155,7 +156,7 @@ public final class USB_Interface_Descriptor extends USB_Descriptor_Header
      * @return The descriptor dump.
      */
 
-    public String toString(final USB_Dev_Handle handle)
+    public String dump(final USB_Dev_Handle handle)
     {
         final StringBuilder builder = new StringBuilder();
         final int iInterface = iInterface();
@@ -183,7 +184,7 @@ public final class USB_Interface_Descriptor extends USB_Descriptor_Header
         if (extralen() != 0) return builder.toString();
         for (final USB_Endpoint_Descriptor edesc : endpoint())
         {
-            builder.append(edesc.toString().replaceAll("(?m)^", "  "));
+            builder.append(edesc.dump().replaceAll("(?m)^", "  "));
         }
         return builder.toString();
     }

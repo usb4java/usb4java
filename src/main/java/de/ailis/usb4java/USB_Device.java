@@ -122,11 +122,12 @@ public final class USB_Device
 
 
     /**
-     * @see java.lang.Object#toString()
+     * Dumps all device information to a string and returns it.
+     *
+     * @return The dumped device information.
      */
 
-    @Override
-    public String toString()
+    public String dump()
     {
         final StringBuilder builder = new StringBuilder();
         builder.append(String.format("Device:%n" +
@@ -138,12 +139,12 @@ public final class USB_Device
         final USB_Dev_Handle handle = usb_open(this);
         try
         {
-            builder.append(descriptor().toString(handle).replaceAll("(?m)^",
+            builder.append(descriptor().dump(handle).replaceAll("(?m)^",
                 "  "));
             for (final USB_Config_Descriptor descriptor : config())
             {
                 if (descriptor == null) continue;
-                builder.append(descriptor.toString(handle).replaceAll("(?m)^",
+                builder.append(descriptor.dump(handle).replaceAll("(?m)^",
                     "  "));
             }
             return builder.toString();
@@ -152,5 +153,16 @@ public final class USB_Device
         {
             if (handle != null) usb_close(handle);
         }
+    }
+
+
+    /**
+     * @see java.lang.Object#toString()
+     */
+
+    @Override
+    public String toString()
+    {
+        return bus().dirname() + "/" +  filename();
     }
 }

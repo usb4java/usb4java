@@ -10,7 +10,6 @@ import static de.ailis.usb4java.USB.usb_get_string_simple;
 import java.nio.ByteBuffer;
 
 
-
 /**
  * The USB device descriptor contains global information about a USB device and
  * all its configurations. A USB device can only have a single device
@@ -177,13 +176,14 @@ public final class USB_Device_Descriptor extends USB_Descriptor_Header
 
 
     /**
-     * @see java.lang.Object#toString()
+     * Returns a dump of this descriptor.
+     *
+     * @return The descriptor dump.
      */
 
-    @Override
-    public String toString()
+    public String dump()
     {
-        return toString(null);
+        return dump(null);
     }
 
 
@@ -196,7 +196,7 @@ public final class USB_Device_Descriptor extends USB_Descriptor_Header
      * @return The descriptor dump.
      */
 
-    public String toString(final USB_Dev_Handle handle)
+    public String dump(final USB_Dev_Handle handle)
     {
         final int iManufacturer = iManufacturer();
         String sManufacturer = handle == null || iManufacturer == 0 ? "" :

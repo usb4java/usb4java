@@ -52,13 +52,14 @@ public final class USB_Interface
 
 
     /**
-     * @see java.lang.Object#toString()
+     * Returns a dump of this interface.
+     *
+     * @return The interface dump.
      */
 
-    @Override
-    public String toString()
+    public String dump()
     {
-        return toString(null);
+        return dump(null);
     }
 
 
@@ -71,12 +72,12 @@ public final class USB_Interface
      * @return The descriptor dump.
      */
 
-    public String toString(final USB_Dev_Handle handle)
+    public String dump(final USB_Dev_Handle handle)
     {
         final StringBuilder builder = new StringBuilder();
         for (final USB_Interface_Descriptor descriptor : altsetting())
         {
-            builder.append(descriptor.toString(handle));
+            builder.append(descriptor.dump(handle));
         }
         return builder.toString();
     }

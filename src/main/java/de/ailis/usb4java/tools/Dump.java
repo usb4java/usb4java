@@ -80,7 +80,7 @@ public class Dump
         USB_Bus bus = usb_get_busses();
         while (bus != null)
         {
-            System.out.print(bus.toString());
+            System.out.print(bus.dump());
             bus = bus.next();
         }
     }

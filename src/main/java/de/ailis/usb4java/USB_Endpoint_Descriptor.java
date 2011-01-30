@@ -129,11 +129,12 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
 
 
     /**
-     * @see java.lang.Object#toString()
+     * Returns a dump of this descriptor.
+     *
+     * @return The descriptor dump.
      */
 
-    @Override
-    public String toString()
+    public String dump()
     {
         return String.format("Endpoint Descriptor:%n" +
             "  bLength           %5d%n" +

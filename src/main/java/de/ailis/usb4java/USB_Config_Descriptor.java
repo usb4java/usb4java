@@ -129,13 +129,14 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
 
 
     /**
-     * @see java.lang.Object#toString()
+     * Returns a dump of this descriptor.
+     *
+     * @return The descriptor dump.
      */
 
-    @Override
-    public String toString()
+    public String dump()
     {
-        return toString(null);
+        return dump(null);
     }
 
 
@@ -148,7 +149,7 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
      * @return The descriptor dump.
      */
 
-    public String toString(final USB_Dev_Handle handle)
+    public String dump(final USB_Dev_Handle handle)
     {
         final StringBuilder builder = new StringBuilder();
         builder.append(String.format("Configuration Descriptor:%n" +
@@ -169,7 +170,7 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
                     .replaceAll("(?m)^", "    ")));
         for (final USB_Interface descriptor : iface())
         {
-            builder.append(descriptor.toString(handle)
+            builder.append(descriptor.dump(handle)
                     .replaceAll("(?m)^", "  "));
         }
         return builder.toString();

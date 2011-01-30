@@ -92,11 +92,12 @@ public final class USB_Bus
 
 
     /**
-     * @see java.lang.Object#toString()
+     * Returns a dump of this descriptor.
+     *
+     * @return The descriptor dump.
      */
 
-    @Override
-    public String toString()
+    public String dump()
     {
         final USB_Device root_dev = root_dev();
         final String rootDev = root_dev == null ? "None or unknown" : root_dev
@@ -110,9 +111,20 @@ public final class USB_Bus
         USB_Device device = devices();
         while (device != null)
         {
-            builder.append(device.toString().replaceAll("(?m)^", "  "));
+            builder.append(device.dump().replaceAll("(?m)^", "  "));
             device = device.next();
         }
         return builder.toString();
+    }
+
+
+    /**
+     * @see java.lang.Object#toString()
+     */
+
+    @Override
+    public String toString()
+    {
+        return dirname();
     }
 }
