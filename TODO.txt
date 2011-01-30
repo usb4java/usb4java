@@ -1,0 +1,20 @@
+JSR-80 implementation checklist:
+
+  [ ] UsbConfiguration
+  [x] UsbConfigurationDescriptor  
+  [x] UsbDescriptor
+  [ ] UsbDevice
+  [x] UsbDeviceDescriptor 
+  [x] UsbDeviceListener 
+  [ ] UsbEndpoint
+  [x] UsbEndpointDescriptor 
+  [ ] UsbHub
+  [ ] UsbInterface
+  [x] UsbInterfaceDescriptor
+  [ ] UsbPipe
+  [X] UsbPipeListener
+  [ ] UsbPort
+  [ ] UsbServices
+  [X] UsbServicesListener
+  [x] UsbStringDescritor
+  

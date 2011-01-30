@@ -1,0 +1,165 @@
+/*
+ * Copyright (C) 2011 Klaus Reimer <k@ailis.de>
+ * See LICENSE.txt for licensing information.
+ */
+
+package de.ailis.usb4java.jsr80;
+
+import javax.usb.UsbDeviceDescriptor;
+
+import de.ailis.usb4java.USB_Device_Descriptor;
+
+
+/**
+ * usb4java implementation of JSR-80 UsbDeviceDescriptor.
+ *
+ * @author Klaus Reimer (k@ailis.de)
+ */
+
+public final class UsbDeviceDescriptorImpl extends
+        UsbDescriptorImpl<USB_Device_Descriptor> implements UsbDeviceDescriptor
+{
+    /**
+     * Constructor.
+     *
+     * @param descriptor
+     *            The low-level USB device descriptor.
+     */
+
+    public UsbDeviceDescriptorImpl(final USB_Device_Descriptor descriptor)
+    {
+        super(descriptor);
+    }
+
+
+    /**
+     * @see javax.usb.UsbDeviceDescriptor#bcdUSB()
+     */
+
+    @Override
+    public final short bcdUSB()
+    {
+        return (short) (this.descriptor.bcdUSB() & 0xffff);
+    }
+
+
+    /**
+     * @see javax.usb.UsbDeviceDescriptor#bDeviceClass()
+     */
+
+    @Override
+    public final byte bDeviceClass()
+    {
+        return (byte) (this.descriptor.bDeviceClass() & 0xff);
+    }
+
+
+    /**
+     * @see javax.usb.UsbDeviceDescriptor#bDeviceSubClass()
+     */
+
+    @Override
+    public final byte bDeviceSubClass()
+    {
+        return (byte) (this.descriptor.bDeviceSubClass() & 0xff);
+    }
+
+
+    /**
+     * @see javax.usb.UsbDeviceDescriptor#bDeviceProtocol()
+     */
+
+    @Override
+    public final byte bDeviceProtocol()
+    {
+        return (byte) (this.descriptor.bDeviceProtocol() & 0xff);
+    }
+
+
+    /**
+     * @see javax.usb.UsbDeviceDescriptor#bMaxPacketSize0()
+     */
+
+    @Override
+    public final byte bMaxPacketSize0()
+    {
+        return (byte) (this.descriptor.bMaxPacketSize0() & 0xff);
+    }
+
+
+    /**
+     * @see javax.usb.UsbDeviceDescriptor#idVendor()
+     */
+
+    @Override
+    public final short idVendor()
+    {
+        return (short) (this.descriptor.idVendor() & 0xffff);
+    }
+
+
+    /**
+     * @see javax.usb.UsbDeviceDescriptor#idProduct()
+     */
+
+    @Override
+    public final short idProduct()
+    {
+        return (short) (this.descriptor.idProduct() & 0xffff);
+    }
+
+
+    /**
+     * @see javax.usb.UsbDeviceDescriptor#bcdDevice()
+     */
+
+    @Override
+    public final short bcdDevice()
+    {
+        return (short) (this.descriptor.bcdDevice() & 0xffff);
+    }
+
+
+    /**
+     * @see javax.usb.UsbDeviceDescriptor#iManufacturer()
+     */
+
+    @Override
+    public final byte iManufacturer()
+    {
+        return (byte) (this.descriptor.iManufacturer() & 0xff);
+    }
+
+
+    /**
+     * @see javax.usb.UsbDeviceDescriptor#iProduct()
+     */
+
+    @Override
+    public final byte iProduct()
+    {
+        return (byte) (this.descriptor.iProduct() & 0xff);
+    }
+
+
+    /**
+     * @see javax.usb.UsbDeviceDescriptor#iSerialNumber()
+     */
+
+    @Override
+    public final byte iSerialNumber()
+    {
+        return (byte) (this.descriptor.iSerialNumber() & 0xff);
+    }
+
+
+    /**
+     * @see javax.usb.UsbDeviceDescriptor#bNumConfigurations()
+     */
+
+    @Override
+    public final byte bNumConfigurations()
+    {
+        return (byte) (this.descriptor.bNumConfigurations() & 0xff);
+    }
+}

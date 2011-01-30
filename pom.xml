@@ -139,6 +139,11 @@
       <artifactId>junit</artifactId>
       <version>4.8.2</version>
     </dependency> 
+    <dependency>
+      <groupId>javax.usb</groupId>
+      <artifactId>usb</artifactId>
+      <version>1.0.2</version>
+    </dependency> 
   </dependencies>
 
 </project>
