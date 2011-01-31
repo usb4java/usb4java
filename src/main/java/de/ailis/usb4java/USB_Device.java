@@ -163,6 +163,37 @@ public final class USB_Device
     @Override
     public String toString()
     {
-        return bus().dirname() + "/" +  filename();
+        return bus().dirname() + "/" + filename();
+    }
+
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (obj == null) return false;
+        if (obj == this) return true;
+        if (obj.getClass() != getClass()) return false;
+        final USB_Device other = (USB_Device) obj;
+        return bus().equals(other.bus()) && filename().equals(other.filename())
+            && descriptor().equals(other.descriptor());
+    }
+
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+
+    @Override
+    public int hashCode()
+    {
+        int result = 17;
+        result = 37 * result + bus().hashCode();
+        result = 37 * result + filename().hashCode();
+        result = 37 * result + descriptor().hashCode();
+        return result;
     }
 }

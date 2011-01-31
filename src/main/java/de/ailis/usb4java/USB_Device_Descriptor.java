@@ -233,4 +233,56 @@ public final class USB_Device_Descriptor extends USB_Descriptor_Header
             iProduct, sProduct, iSerialNumber, sSerialNumber,
             bNumConfigurations());
     }
+
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+
+    @Override
+    public boolean equals(final Object o)
+    {
+        if (o == null) return false;
+        if (o == this) return true;
+        if (o.getClass() != getClass()) return false;
+        final USB_Device_Descriptor other = (USB_Device_Descriptor) o;
+        return super.equals(o) && idProduct() == other.idProduct()
+            && idVendor() == other.idVendor()
+            && bcdDevice() == other.bcdDevice() && bcdUSB() == other.bcdUSB()
+            && bDescriptorType() == other.bDescriptorType()
+            && bDeviceClass() == other.bDeviceClass()
+            && bDeviceProtocol() == other.bDeviceProtocol()
+            && bDeviceSubClass() == other.bDeviceSubClass()
+            && bLength() == other.bLength()
+            && bMaxPacketSize0() == other.bMaxPacketSize0()
+            && bNumConfigurations() == other.bNumConfigurations()
+            && iManufacturer() == other.iManufacturer()
+            && iProduct() == other.iProduct()
+            && iSerialNumber() == other.iSerialNumber();
+    }
+
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+
+    @Override
+    public int hashCode()
+    {
+        int result = 17;
+        result = 37 * result + super.hashCode();
+        result = 37 * result + idProduct();
+        result = 37 * result + idVendor();
+        result = 37 * result + bcdDevice();
+        result = 37 * result + bcdUSB();
+        result = 37 * result + bDeviceClass();
+        result = 37 * result + bDeviceProtocol();
+        result = 37 * result + bDeviceSubClass();
+        result = 37 * result + bMaxPacketSize0();
+        result = 37 * result + bNumConfigurations();
+        result = 37 * result + iManufacturer();
+        result = 37 * result + iProduct();
+        result = 37 * result + iSerialNumber();
+        return result;
+    }
 }

@@ -7,9 +7,11 @@ package de.ailis.usb4java.jsr80;
 
 import static de.ailis.usb4java.USB.usb_init;
 
+import javax.usb.UsbDevice;
 import javax.usb.UsbException;
 import javax.usb.UsbHub;
 import javax.usb.UsbServices;
+import javax.usb.event.UsbServicesEvent;
 import javax.usb.event.UsbServicesListener;
 
 
@@ -28,7 +30,7 @@ public final class UsbServicesImpl implements UsbServices
     private static final String IMP_VERSION = "0.1.12-1";
 
     /** The API version. */
-    private static final String API_VERSION = "1.0.2";
+    private static final String API_VERSION = "1.0.1";
 
     /** The USB services listeners. */
     private final UsbServicesListenerList listeners = new UsbServicesListenerList();
@@ -48,7 +50,8 @@ public final class UsbServicesImpl implements UsbServices
     {
         usb_init();
         this.rootHub = new VirtualRootHub();
-        this.deviceScanner = new UsbDeviceScanner(this.rootHub);
+        this.deviceScanner = new UsbDeviceScanner(this, this.rootHub);
+        this.deviceScanner.start();
     }
 
 
@@ -59,6 +62,7 @@ public final class UsbServicesImpl implements UsbServices
     @Override
     public UsbHub getRootUsbHub() throws UsbException, SecurityException
     {
+        this.deviceScanner.firstScan();
         return this.rootHub;
     }
 
@@ -115,5 +119,29 @@ public final class UsbServicesImpl implements UsbServices
     public String getImpDescription()
     {
         return IMP_DESCRIPTION;
+    }
+
+
+    /**
+     * Informs listeners about a new attached device.
+     *
+     * @param device The new attached device.
+     */
+
+    void usbDeviceAttached(final UsbDevice device)
+    {
+        this.listeners.usbDeviceAttached(new UsbServicesEvent(this, device));
+    }
+
+
+    /**
+     * Informs listeners about a detached device.
+     *
+     * @param device The detached device.
+     */
+
+    void usbDeviceDetached(final UsbDevice device)
+    {
+        this.listeners.usbDeviceDetached(new UsbServicesEvent(this, device));
     }
 }

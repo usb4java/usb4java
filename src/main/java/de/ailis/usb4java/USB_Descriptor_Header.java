@@ -9,8 +9,8 @@ import java.nio.ByteBuffer;
 
 
 /**
- * All standard descriptors have the two fields  bLength and bDescriptorType
- * in common. So this base class implements them.
+ * All standard descriptors have the two fields bLength and bDescriptorType in
+ * common. So this base class implements them.
  *
  * @author Klaus Reimer (k@ailis.de)
  */
@@ -50,4 +50,34 @@ public abstract class USB_Descriptor_Header
      */
 
     public final native int bDescriptorType();
+
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+
+    @Override
+    public boolean equals(final Object o)
+    {
+        if (o == null) return false;
+        if (o == this) return true;
+        if (o.getClass() != getClass()) return false;
+        final USB_Device_Descriptor other = (USB_Device_Descriptor) o;
+        return bDescriptorType() == other.bDescriptorType() &&
+            bLength() == other.bLength();
+    }
+
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+
+    @Override
+    public int hashCode()
+    {
+        int result = 17;
+        result = 37 * result + bDescriptorType();
+        result = 37 * result + bLength();
+        return result;
+    }
 }

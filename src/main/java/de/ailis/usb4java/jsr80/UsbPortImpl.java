@@ -103,6 +103,7 @@ public final class UsbPortImpl implements UsbPort
             throw new IllegalStateException(
                 "Port already has a connected device");
         this.device = device;
+        ((UsbDeviceImpl) device).setParentUsbPort(this);
     }
 
 
@@ -114,6 +115,8 @@ public final class UsbPortImpl implements UsbPort
     {
         if (this.device == null)
             throw new IllegalStateException("Port has no connected device");
+        final UsbDeviceImpl device = (UsbDeviceImpl) this.device;
         this.device = null;
+        device.setParentUsbPort(null);
     }
 }

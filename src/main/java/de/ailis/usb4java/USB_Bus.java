@@ -127,4 +127,35 @@ public final class USB_Bus
     {
         return dirname();
     }
+
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (obj == null) return false;
+        if (obj == this) return true;
+        if (obj.getClass() != getClass()) return false;
+        final USB_Bus other = (USB_Bus) obj;
+        return dirname().equals(other.dirname())
+            && location() == other.location();
+    }
+
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+
+    @Override
+    public int hashCode()
+    {
+        int result = 17;
+        result = 37 * result + dirname().hashCode();
+        final long location = location();
+        result = 37 * result + (int) (location ^ (location >>> 32));
+        return result;
+    }
 }

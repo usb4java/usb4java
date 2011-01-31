@@ -26,8 +26,10 @@ import javax.usb.UsbDevice;
 import javax.usb.UsbDeviceDescriptor;
 import javax.usb.UsbDisconnectedException;
 import javax.usb.UsbException;
+import javax.usb.UsbHostManager;
 import javax.usb.UsbPort;
 import javax.usb.UsbStringDescriptor;
+import javax.usb.event.UsbDeviceEvent;
 import javax.usb.event.UsbDeviceListener;
 import javax.usb.util.DefaultUsbControlIrp;
 
@@ -63,6 +65,9 @@ public class UsbDeviceImpl implements UsbDevice
 
     /** The number of the currently active configuration. */
     private final byte activeConfigurationNumber = 0;
+
+    /** The port this device is connected to. */
+    private UsbPort port;
 
 
     /**
@@ -153,8 +158,57 @@ public class UsbDeviceImpl implements UsbDevice
     @Override
     public UsbPort getParentUsbPort() throws UsbDisconnectedException
     {
-        // TODO
-        throw new UnsupportedOperationException();
+        if (this.port == null) throw new UsbDisconnectedException();
+        return this.port;
+    }
+
+
+    /**
+     * Sets the parent USB port. If port is unset then a usbDeviceDetached event
+     * is send.
+     *
+     * @param port
+     *            The port to set. Null to unset.
+     */
+
+    void setParentUsbPort(final UsbPort port)
+    {
+        if (this.port == null && port == null)
+            throw new IllegalStateException("Device already detached");
+        if (this.port != null && port != null)
+            throw new IllegalStateException("Device already attached");
+
+        // Disconnect client devices
+        if (port == null && isUsbHub())
+        {
+            final UsbPorts hub = (UsbPorts) this;
+            for (final UsbDevice device: hub.getAttachedUsbDevices())
+                hub.disconnectUsbDevice(device);
+        }
+
+        this.port = port;
+
+        final UsbServicesImpl services;
+        try
+        {
+            services = (UsbServicesImpl) UsbHostManager.getUsbServices();
+        }
+        catch (final UsbException e)
+        {
+            // Can't happen. When we got here then USB services are already
+            // loaded
+            throw new RuntimeException(e.toString(), e);
+        }
+
+        if (port == null)
+        {
+            this.listeners.usbDeviceDetached(new UsbDeviceEvent(this));
+            services.usbDeviceDetached(this);
+        }
+        else
+        {
+            services.usbDeviceAttached(this);
+        }
     }
 
 
@@ -367,9 +421,11 @@ public class UsbDeviceImpl implements UsbDevice
             final int len = usb_get_descriptor(handle, USB_DT_STRING, 0, buffer);
             if (len < 0)
                 throw new UsbException(
-                    "Unable to get string descriptor languages: " + len);
+                    "Unable to get string descriptor languages: "
+                        + usb_strerror());
             if (len < 2)
-                throw new UsbException("Illegal descriptor length: " + len);
+                throw new UsbException("Illegal descriptor length: "
+                    + usb_strerror());
             final short[] languages = new short[(len - 2) / 2];
             if (languages.length == 0) return languages;
             buffer.position(2);
@@ -418,8 +474,10 @@ public class UsbDeviceImpl implements UsbDevice
     public void syncSubmit(@SuppressWarnings("rawtypes") final List list)
         throws UsbException, IllegalArgumentException, UsbDisconnectedException
     {
-        // TODO
-        throw new UnsupportedOperationException();
+        for (final Object item: list)
+        {
+            syncSubmit((UsbControlIrp) item);
+        }
     }
 
 
@@ -431,8 +489,10 @@ public class UsbDeviceImpl implements UsbDevice
     public void asyncSubmit(@SuppressWarnings("rawtypes") final List list)
         throws UsbException, IllegalArgumentException, UsbDisconnectedException
     {
-        // TODO
-        throw new UnsupportedOperationException();
+        for (final Object item: list)
+        {
+            asyncSubmit((UsbControlIrp) item);
+        }
     }
 
 
@@ -467,5 +527,31 @@ public class UsbDeviceImpl implements UsbDevice
     public void removeUsbDeviceListener(final UsbDeviceListener listener)
     {
         this.listeners.remove(listener);
+    }
+
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (obj == null) return false;
+        if (obj == this) return true;
+        if (obj.getClass() != getClass()) return false;
+        final UsbDeviceImpl other = (UsbDeviceImpl) obj;
+        return this.device.equals(other.device);
+    }
+
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+
+    @Override
+    public int hashCode()
+    {
+        return this.device.hashCode();
     }
 }

@@ -150,4 +150,46 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
             wMaxPacketSize(), bInterval(), extralen(),
             USBUtils.toHexDump(extra(), 16).replaceAll("(?m)^", "    "));
     }
+
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+
+    @Override
+    public boolean equals(final Object o)
+    {
+        if (o == null) return false;
+        if (o == this) return true;
+        if (o.getClass() != getClass()) return false;
+        final USB_Endpoint_Descriptor other = (USB_Endpoint_Descriptor) o;
+        return super.equals(o)
+            && bEndpointAddress() == other.bEndpointAddress()
+            && bmAttributes() == other.bmAttributes()
+            && bInterval() == other.bInterval()
+            && bSynchAddress() == other.bSynchAddress()
+            && wMaxPacketSize() == other.wMaxPacketSize()
+            && extralen() == other.extralen()
+            && extra().equals(other.extra());
+    }
+
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+
+    @Override
+    public int hashCode()
+    {
+        int result = 17;
+        result = 37 * result + super.hashCode();
+        result = 37 * result + bEndpointAddress();
+        result = 37 * result + bInterval();
+        result = 37 * result + bRefresh();
+        result = 37 * result + bSynchAddress();
+        result = 37 * result + wMaxPacketSize();
+        result = 37 * result + extralen();
+        result = 37 * result + extra().hashCode();
+        return result;
+    }
 }

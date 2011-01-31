@@ -8,6 +8,7 @@ package de.ailis.usb4java;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.CharBuffer;
+import java.util.Arrays;
 
 
 /**
@@ -56,5 +57,35 @@ public final class USB_String_Descriptor extends USB_Descriptor_Header
     public String toString()
     {
         return new String(wData());
+    }
+
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+
+    @Override
+    public boolean equals(final Object o)
+    {
+        if (o == null) return false;
+        if (o == this) return true;
+        if (o.getClass() != getClass()) return false;
+        final USB_String_Descriptor other = (USB_String_Descriptor) o;
+        return super.equals(o)
+            && Arrays.equals(wData(), other.wData());
+    }
+
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+
+    @Override
+    public int hashCode()
+    {
+        int result = 17;
+        result = 37 * result + super.hashCode();
+        result = 37 * result + Arrays.hashCode(wData());
+        return result;
     }
 }

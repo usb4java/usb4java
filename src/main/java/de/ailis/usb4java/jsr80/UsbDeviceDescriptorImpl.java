@@ -162,4 +162,30 @@ public final class UsbDeviceDescriptorImpl extends
     {
         return (byte) (this.descriptor.bNumConfigurations() & 0xff);
     }
+
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+
+    @Override
+    public boolean equals(final Object o)
+    {
+        if (o == null) return false;
+        if (this == o) return true;
+        if (o.getClass() != getClass()) return false;
+        final UsbDeviceDescriptorImpl other = (UsbDeviceDescriptorImpl) o;
+        return this.descriptor.equals(other.descriptor);
+    }
+
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+
+    @Override
+    public int hashCode()
+    {
+        return this.descriptor.hashCode();
+    }
 }

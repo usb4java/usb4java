@@ -50,6 +50,6 @@ public final class UsbServicesListenerList extends
     public final void usbDeviceDetached(final UsbServicesEvent event)
     {
         for (final UsbServicesListener listener : toArray())
-            listener.usbDeviceAttached(event);
+            listener.usbDeviceDetached(event);
     }
 }
