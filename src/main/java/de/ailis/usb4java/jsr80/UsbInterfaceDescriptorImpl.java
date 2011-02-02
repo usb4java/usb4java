@@ -38,7 +38,7 @@ public final class UsbInterfaceDescriptorImpl extends
      */
 
     @Override
-    public final byte bInterfaceNumber()
+    public byte bInterfaceNumber()
     {
         return (byte) (this.descriptor.bInterfaceNumber() & 0xff);
     }
@@ -49,7 +49,7 @@ public final class UsbInterfaceDescriptorImpl extends
      */
 
     @Override
-    public final byte bAlternateSetting()
+    public byte bAlternateSetting()
     {
         return (byte) (this.descriptor.bAlternateSetting() & 0xff);
     }
@@ -60,7 +60,7 @@ public final class UsbInterfaceDescriptorImpl extends
      */
 
     @Override
-    public final byte bNumEndpoints()
+    public byte bNumEndpoints()
     {
         return (byte) (this.descriptor.bNumEndpoints() & 0xff);
     }
@@ -71,7 +71,7 @@ public final class UsbInterfaceDescriptorImpl extends
      */
 
     @Override
-    public final byte bInterfaceClass()
+    public byte bInterfaceClass()
     {
         return (byte) (this.descriptor.bInterfaceClass() & 0xff);
     }
@@ -82,7 +82,7 @@ public final class UsbInterfaceDescriptorImpl extends
      */
 
     @Override
-    public final byte bInterfaceSubClass()
+    public byte bInterfaceSubClass()
     {
         return (byte) (this.descriptor.bInterfaceSubClass() & 0xff);
     }
@@ -93,7 +93,7 @@ public final class UsbInterfaceDescriptorImpl extends
      */
 
     @Override
-    public final byte bInterfaceProtocol()
+    public byte bInterfaceProtocol()
     {
         return (byte) (this.descriptor.bInterfaceProtocol() & 0xff);
     }
@@ -104,7 +104,7 @@ public final class UsbInterfaceDescriptorImpl extends
      */
 
     @Override
-    public final byte iInterface()
+    public byte iInterface()
     {
         return (byte) (this.descriptor.iInterface() & 0xff);
     }

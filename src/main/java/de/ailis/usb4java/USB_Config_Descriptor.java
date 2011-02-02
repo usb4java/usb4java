@@ -17,6 +17,10 @@ import java.nio.ByteBuffer;
 
 public final class USB_Config_Descriptor extends USB_Descriptor_Header
 {
+    /** The number of hex dump columns for dumping extra descriptor. */
+    private static final int HEX_DUMP_COLS = 16;
+
+
     /**
      * Constructor.
      *
@@ -152,21 +156,23 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
     public String dump(final USB_Dev_Handle handle)
     {
         final StringBuilder builder = new StringBuilder();
-        builder.append(String.format("Configuration Descriptor:%n" +
-            "  bLength               %5d%n" +
-            "  bDescriptorType       %5d%n" +
-            "  wTotalLength          %5d%n" +
-            "  bNumInterfaces        %5d%n" +
-            "  bConfigurationValue   %5d%n" +
-            "  iConfiguration        %5d%n" +
-            "  bmAttributes           %#04x%n" +
-            "  MaxPower              %5d mA%n" +
-            "  extralen         %10d%n" +
-            "  extra:%n" +
-            "%s",
-            bLength(), bDescriptorType(), wTotalLength(), bNumInterfaces(),
-            bConfigurationValue(), iConfiguration(), bmAttributes(),
-            MaxPower() * 2, extralen(), USBUtils.toHexDump(extra(), 16)
+        builder
+            .append(String.format("Configuration Descriptor:%n"
+                + "  bLength               %5d%n"
+                + "  bDescriptorType       %5d%n"
+                + "  wTotalLength          %5d%n"
+                + "  bNumInterfaces        %5d%n"
+                + "  bConfigurationValue   %5d%n"
+                + "  iConfiguration        %5d%n"
+                + "  bmAttributes           %#04x%n"
+                + "  MaxPower              %5d mA%n"
+                + "  extralen         %10d%n"
+                + "  extra:%n"
+                + "%s",
+                bLength(), bDescriptorType(), wTotalLength(), bNumInterfaces(),
+                bConfigurationValue(), iConfiguration(), bmAttributes(),
+                MaxPower() * 2, extralen(), USBUtils
+                    .toHexDump(extra(), HEX_DUMP_COLS)
                     .replaceAll("(?m)^", "    ")));
         for (final USB_Interface descriptor : iface())
         {
@@ -188,7 +194,8 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
         if (o == this) return true;
         if (o.getClass() != getClass()) return false;
         final USB_Config_Descriptor other = (USB_Config_Descriptor) o;
-        return super.equals(o)
+        return bDescriptorType() == other.bDescriptorType()
+            && bLength() == other.bLength()
             && bConfigurationValue() == other.bConfigurationValue()
             && bmAttributes() == other.bmAttributes()
             && bNumInterfaces() == other.bNumInterfaces()
@@ -206,7 +213,8 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
     public int hashCode()
     {
         int result = 17;
-        result = 37 * result + super.hashCode();
+        result = 37 * result + bDescriptorType();
+        result = 37 * result + bLength();
         result = 37 * result + bConfigurationValue();
         result = 37 * result + bmAttributes();
         result = 37 * result + bNumInterfaces();

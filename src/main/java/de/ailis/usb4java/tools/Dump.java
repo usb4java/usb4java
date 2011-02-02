@@ -20,8 +20,18 @@ import de.ailis.usb4java.USB_Device_Descriptor;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public class Dump
+public final class Dump
 {
+    /**
+     * Private constructor to prevent instantiation.
+     */
+
+    private Dump()
+    {
+        // Empty
+    }
+
+
     /**
      * Dumps the device tree. Please note that the displayed tree can only
      * display devices to which the user has write access. On some platforms

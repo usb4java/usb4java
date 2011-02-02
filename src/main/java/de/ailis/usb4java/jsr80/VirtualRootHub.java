@@ -5,7 +5,6 @@
 
 package de.ailis.usb4java.jsr80;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +13,6 @@ import javax.usb.UsbConst;
 import javax.usb.UsbControlIrp;
 import javax.usb.UsbDevice;
 import javax.usb.UsbDeviceDescriptor;
-import javax.usb.UsbDisconnectedException;
 import javax.usb.UsbException;
 import javax.usb.UsbHub;
 import javax.usb.UsbPort;
@@ -45,7 +43,8 @@ final class VirtualRootHub implements UsbHub, UsbPorts
             new ArrayList<UsbConfiguration>(1);
 
     /** The device descriptor. */
-    private final UsbDeviceDescriptor descriptor = new VirtualUsbDeviceDescriptor();
+    private final UsbDeviceDescriptor descriptor =
+        new VirtualUsbDeviceDescriptor();
 
     /** The device listeners. */
     private final UsbDeviceListenerList listeners = new UsbDeviceListenerList();
@@ -69,7 +68,7 @@ final class VirtualRootHub implements UsbHub, UsbPorts
      */
 
     @Override
-    public UsbPort getParentUsbPort() throws UsbDisconnectedException
+    public UsbPort getParentUsbPort()
     {
         return null;
     }
@@ -91,8 +90,7 @@ final class VirtualRootHub implements UsbHub, UsbPorts
      */
 
     @Override
-    public String getManufacturerString() throws UsbException,
-        UnsupportedEncodingException, UsbDisconnectedException
+    public String getManufacturerString()
     {
         return MANUFACTURER;
     }
@@ -103,8 +101,7 @@ final class VirtualRootHub implements UsbHub, UsbPorts
      */
 
     @Override
-    public String getSerialNumberString() throws UsbException,
-        UnsupportedEncodingException, UsbDisconnectedException
+    public String getSerialNumberString()
     {
         return SERIAL_NUMBER;
     }
@@ -115,8 +112,7 @@ final class VirtualRootHub implements UsbHub, UsbPorts
      */
 
     @Override
-    public String getProductString() throws UsbException,
-        UnsupportedEncodingException, UsbDisconnectedException
+    public String getProductString() throws UsbException
     {
         return PRODUCT;
     }
@@ -217,7 +213,7 @@ final class VirtualRootHub implements UsbHub, UsbPorts
 
     @Override
     public UsbStringDescriptor getUsbStringDescriptor(final byte index)
-        throws UsbException, UsbDisconnectedException
+        throws UsbException
     {
         throw new UsbException(
             "Can't get USB string descriptor from virtual device");
@@ -229,8 +225,7 @@ final class VirtualRootHub implements UsbHub, UsbPorts
      */
 
     @Override
-    public String getString(final byte index) throws UsbException,
-        UnsupportedEncodingException, UsbDisconnectedException
+    public String getString(final byte index) throws UsbException
     {
         throw new UsbException("Can't get string from virtual device");
     }
@@ -241,8 +236,7 @@ final class VirtualRootHub implements UsbHub, UsbPorts
      */
 
     @Override
-    public void syncSubmit(final UsbControlIrp irp) throws UsbException,
-        IllegalArgumentException, UsbDisconnectedException
+    public void syncSubmit(final UsbControlIrp irp) throws UsbException
     {
         throw new UsbException("Can't syncSubmit on virtual device");
     }
@@ -253,8 +247,7 @@ final class VirtualRootHub implements UsbHub, UsbPorts
      */
 
     @Override
-    public void asyncSubmit(final UsbControlIrp irp) throws UsbException,
-        IllegalArgumentException, UsbDisconnectedException
+    public void asyncSubmit(final UsbControlIrp irp) throws UsbException
     {
         throw new UsbException("Can't asyncSubmit on virtual device");
     }
@@ -266,7 +259,7 @@ final class VirtualRootHub implements UsbHub, UsbPorts
 
     @Override
     public void syncSubmit(@SuppressWarnings("rawtypes") final List list)
-        throws UsbException, IllegalArgumentException, UsbDisconnectedException
+        throws UsbException
     {
         throw new UsbException("Can't syncSubmit on virtual device");
     }
@@ -278,8 +271,7 @@ final class VirtualRootHub implements UsbHub, UsbPorts
 
     @Override
     public void asyncSubmit(@SuppressWarnings("rawtypes") final List list)
-        throws UsbException,
-        IllegalArgumentException, UsbDisconnectedException
+        throws UsbException
     {
         throw new UsbException("Can't asyncSubmit on virtual device");
     }
@@ -294,7 +286,8 @@ final class VirtualRootHub implements UsbHub, UsbPorts
         final byte bRequest,
         final short wValue, final short wIndex)
     {
-        return new DefaultUsbControlIrp(bmRequestType, bRequest, wValue, wIndex);
+        return new DefaultUsbControlIrp(bmRequestType, bRequest, wValue,
+            wIndex);
     }
 
 

@@ -28,6 +28,9 @@ import de.ailis.usb4java.USB_Device;
 
 class UsbDeviceScanner
 {
+    /** The scan interval in milliseconds. */
+    private static final int DEFAULT_SCAN_INTERVAL = 500;
+
     /** The virtual USB root hub. */
     private final VirtualRootHub rootHub;
 
@@ -169,11 +172,11 @@ class UsbDeviceScanner
                 {
                     try
                     {
-                        Thread.sleep(500);
+                        Thread.sleep(DEFAULT_SCAN_INTERVAL);
                     }
                     catch (final InterruptedException e)
                     {
-                        // Ignored
+                        Thread.currentThread().interrupt();
                     }
                     scan();
                 }

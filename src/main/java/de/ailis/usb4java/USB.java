@@ -150,16 +150,16 @@ public final class USB
     // === Request types =====================================================
 
     /** Standard request type. */
-    public static final int USB_TYPE_STANDARD = 0x00 << 5;
+    public static final int USB_TYPE_STANDARD = 0;
 
     /** Class request type. */
-    public static final int USB_TYPE_CLASS = 0x01 << 5;
+    public static final int USB_TYPE_CLASS = 32;
 
     /** Vendor request type. */
-    public static final int USB_TYPE_VENDOR = 0x02 << 5;
+    public static final int USB_TYPE_VENDOR = 64;
 
     /** Reserved request type. */
-    public static final int USB_TYPE_RESERVED = 0x03 << 5;
+    public static final int USB_TYPE_RESERVED = 96;
 
 
     // === Request recipients ================================================

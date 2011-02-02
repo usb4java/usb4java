@@ -25,7 +25,7 @@ public final class UsbDeviceListenerList extends
      */
 
     @Override
-    public final UsbDeviceListener[] toArray()
+    public UsbDeviceListener[] toArray()
     {
         return this.listeners.toArray(new UsbDeviceListener[this.listeners
                 .size()]);
@@ -37,7 +37,7 @@ public final class UsbDeviceListenerList extends
      */
 
     @Override
-    public final void usbDeviceDetached(final UsbDeviceEvent event)
+    public void usbDeviceDetached(final UsbDeviceEvent event)
     {
         for (final UsbDeviceListener listener : toArray())
             listener.usbDeviceDetached(event);
@@ -49,7 +49,7 @@ public final class UsbDeviceListenerList extends
      */
 
     @Override
-    public final void errorEventOccurred(final UsbDeviceErrorEvent event)
+    public void errorEventOccurred(final UsbDeviceErrorEvent event)
     {
         for (final UsbDeviceListener listener : toArray())
             listener.errorEventOccurred(event);
@@ -61,7 +61,7 @@ public final class UsbDeviceListenerList extends
      */
 
     @Override
-    public final void dataEventOccurred(final UsbDeviceDataEvent event)
+    public void dataEventOccurred(final UsbDeviceDataEvent event)
     {
         for (final UsbDeviceListener listener : toArray())
             listener.dataEventOccurred(event);

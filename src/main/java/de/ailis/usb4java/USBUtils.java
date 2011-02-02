@@ -86,7 +86,7 @@ public final class USBUtils
 
     public static String decodeBCD(final int bcd)
     {
-        return String.format("%x.%02x", bcd >> 8, bcd & 0xff);
+        return String.format("%x.%02x", bcd >> Byte.SIZE, bcd & 0xff);
     }
 
 

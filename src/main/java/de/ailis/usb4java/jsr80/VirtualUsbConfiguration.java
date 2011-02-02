@@ -5,15 +5,12 @@
 
 package de.ailis.usb4java.jsr80;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.usb.UsbConfiguration;
 import javax.usb.UsbConfigurationDescriptor;
 import javax.usb.UsbDevice;
-import javax.usb.UsbDisconnectedException;
-import javax.usb.UsbException;
 import javax.usb.UsbInterface;
 
 
@@ -26,13 +23,15 @@ import javax.usb.UsbInterface;
 final class VirtualUsbConfiguration implements UsbConfiguration
 {
     /** The virtual interfaces. */
-    private final List<UsbInterface> interfaces = new ArrayList<UsbInterface>();
+    private final List<UsbInterface> interfaces =
+        new ArrayList<UsbInterface>();
 
     /** The device this configuration belongs to. */
     private final UsbDevice device;
 
     /** The USB configuration descriptor. */
-    private final UsbConfigurationDescriptor descriptor = new VirtualUsbConfigurationDescriptor();
+    private final UsbConfigurationDescriptor descriptor =
+        new VirtualUsbConfigurationDescriptor();
 
 
     /**
@@ -120,8 +119,7 @@ final class VirtualUsbConfiguration implements UsbConfiguration
      */
 
     @Override
-    public String getConfigurationString() throws UsbException,
-        UnsupportedEncodingException, UsbDisconnectedException
+    public String getConfigurationString()
     {
         return null;
     }

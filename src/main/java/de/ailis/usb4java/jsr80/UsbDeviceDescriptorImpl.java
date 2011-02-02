@@ -37,7 +37,7 @@ public final class UsbDeviceDescriptorImpl extends
      */
 
     @Override
-    public final short bcdUSB()
+    public short bcdUSB()
     {
         return (short) (this.descriptor.bcdUSB() & 0xffff);
     }
@@ -48,7 +48,7 @@ public final class UsbDeviceDescriptorImpl extends
      */
 
     @Override
-    public final byte bDeviceClass()
+    public byte bDeviceClass()
     {
         return (byte) (this.descriptor.bDeviceClass() & 0xff);
     }
@@ -59,7 +59,7 @@ public final class UsbDeviceDescriptorImpl extends
      */
 
     @Override
-    public final byte bDeviceSubClass()
+    public byte bDeviceSubClass()
     {
         return (byte) (this.descriptor.bDeviceSubClass() & 0xff);
     }
@@ -70,7 +70,7 @@ public final class UsbDeviceDescriptorImpl extends
      */
 
     @Override
-    public final byte bDeviceProtocol()
+    public byte bDeviceProtocol()
     {
         return (byte) (this.descriptor.bDeviceProtocol() & 0xff);
     }
@@ -81,7 +81,7 @@ public final class UsbDeviceDescriptorImpl extends
      */
 
     @Override
-    public final byte bMaxPacketSize0()
+    public byte bMaxPacketSize0()
     {
         return (byte) (this.descriptor.bMaxPacketSize0() & 0xff);
     }
@@ -92,7 +92,7 @@ public final class UsbDeviceDescriptorImpl extends
      */
 
     @Override
-    public final short idVendor()
+    public short idVendor()
     {
         return (short) (this.descriptor.idVendor() & 0xffff);
     }
@@ -103,7 +103,7 @@ public final class UsbDeviceDescriptorImpl extends
      */
 
     @Override
-    public final short idProduct()
+    public short idProduct()
     {
         return (short) (this.descriptor.idProduct() & 0xffff);
     }
@@ -114,7 +114,7 @@ public final class UsbDeviceDescriptorImpl extends
      */
 
     @Override
-    public final short bcdDevice()
+    public short bcdDevice()
     {
         return (short) (this.descriptor.bcdDevice() & 0xffff);
     }
@@ -125,7 +125,7 @@ public final class UsbDeviceDescriptorImpl extends
      */
 
     @Override
-    public final byte iManufacturer()
+    public byte iManufacturer()
     {
         return (byte) (this.descriptor.iManufacturer() & 0xff);
     }
@@ -136,7 +136,7 @@ public final class UsbDeviceDescriptorImpl extends
      */
 
     @Override
-    public final byte iProduct()
+    public byte iProduct()
     {
         return (byte) (this.descriptor.iProduct() & 0xff);
     }
@@ -147,7 +147,7 @@ public final class UsbDeviceDescriptorImpl extends
      */
 
     @Override
-    public final byte iSerialNumber()
+    public byte iSerialNumber()
     {
         return (byte) (this.descriptor.iSerialNumber() & 0xff);
     }
@@ -158,7 +158,7 @@ public final class UsbDeviceDescriptorImpl extends
      */
 
     @Override
-    public final byte bNumConfigurations()
+    public byte bNumConfigurations()
     {
         return (byte) (this.descriptor.bNumConfigurations() & 0xff);
     }

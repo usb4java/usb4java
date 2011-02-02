@@ -6,7 +6,6 @@
 package de.ailis.usb4java.jsr80;
 
 import javax.usb.UsbConst;
-import javax.usb.UsbDescriptor;
 import javax.usb.UsbInterfaceDescriptor;
 
 
@@ -19,7 +18,7 @@ import javax.usb.UsbInterfaceDescriptor;
 final class VirtualUsbInterfaceDescriptor implements UsbInterfaceDescriptor
 {
     /**
-     * @see UsbDescriptor#bLength()
+     * @see javax.usb.UsbDescriptor#bLength()
      */
 
     @Override
@@ -30,7 +29,7 @@ final class VirtualUsbInterfaceDescriptor implements UsbInterfaceDescriptor
 
 
     /**
-     * @see UsbDescriptor#bDescriptorType()
+     * @see javax.usb.UsbDescriptor#bDescriptorType()
      */
 
     @Override

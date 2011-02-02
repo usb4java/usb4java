@@ -20,7 +20,8 @@ import de.ailis.usb4java.USB_Device;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public final class UsbHubImpl extends UsbDeviceImpl implements UsbHub, UsbPorts
+public final class UsbHubImpl extends AbstractDevice implements UsbHub,
+    UsbPorts
 {
     /** The hub ports. */
     private final UsbPortsImpl ports = new UsbPortsImpl(this);
@@ -123,12 +124,38 @@ public final class UsbHubImpl extends UsbDeviceImpl implements UsbHub, UsbPorts
 
 
     /**
-     * @see de.ailis.usb4java.jsr80.UsbDeviceImpl#isUsbHub()
+     * @see UsbDevice#isUsbHub()
      */
 
     @Override
     public boolean isUsbHub()
     {
         return true;
+    }
+
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (obj == null) return false;
+        if (obj == this) return true;
+        if (obj.getClass() != getClass()) return false;
+        final UsbHubImpl other = (UsbHubImpl) obj;
+        return this.device.equals(other.device);
+    }
+
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+
+    @Override
+    public int hashCode()
+    {
+        return this.device.hashCode();
     }
 }

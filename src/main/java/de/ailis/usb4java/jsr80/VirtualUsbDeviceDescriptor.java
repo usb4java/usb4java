@@ -6,7 +6,6 @@
 package de.ailis.usb4java.jsr80;
 
 import javax.usb.UsbConst;
-import javax.usb.UsbDescriptor;
 import javax.usb.UsbDeviceDescriptor;
 
 
@@ -18,8 +17,24 @@ import javax.usb.UsbDeviceDescriptor;
 
 final class VirtualUsbDeviceDescriptor implements UsbDeviceDescriptor
 {
+    /** The USB specification release number of the virtual usb device. */
+    private static final int BCD_USB = 0x101;
+
+    /** The maximum packet size of this virtual device. */
+    private static final byte MAX_PACKET_SIZE_0 = 8;
+
+    /** The manufacturer string descriptor index. */
+    private static final byte MANUFACTURER_INDEX = 1;
+
+    /** The product string descriptor index. */
+    private static final byte PRODUCT_INDEX = 2;
+
+    /** The serial number string descriptor index. */
+    private static final byte SERIAL_NUMBER_INDEX = 3;
+
+
     /**
-     * @see UsbDescriptor#bLength()
+     * @see javax.usb.UsbDescriptor#bLength()
      */
 
     @Override
@@ -30,7 +45,7 @@ final class VirtualUsbDeviceDescriptor implements UsbDeviceDescriptor
 
 
     /**
-     * @see UsbDescriptor#bDescriptorType()
+     * @see javax.usb.UsbDescriptor#bDescriptorType()
      */
 
     @Override
@@ -47,7 +62,7 @@ final class VirtualUsbDeviceDescriptor implements UsbDeviceDescriptor
     @Override
     public short bcdUSB()
     {
-        return 0x101;
+        return BCD_USB;
     }
 
 
@@ -91,7 +106,7 @@ final class VirtualUsbDeviceDescriptor implements UsbDeviceDescriptor
     @Override
     public byte bMaxPacketSize0()
     {
-        return 8;
+        return MAX_PACKET_SIZE_0;
     }
 
 
@@ -135,7 +150,7 @@ final class VirtualUsbDeviceDescriptor implements UsbDeviceDescriptor
     @Override
     public byte iManufacturer()
     {
-        return 1;
+        return MANUFACTURER_INDEX;
     }
 
 
@@ -146,7 +161,7 @@ final class VirtualUsbDeviceDescriptor implements UsbDeviceDescriptor
     @Override
     public byte iProduct()
     {
-        return 2;
+        return PRODUCT_INDEX;
     }
 
 
@@ -157,7 +172,7 @@ final class VirtualUsbDeviceDescriptor implements UsbDeviceDescriptor
     @Override
     public byte iSerialNumber()
     {
-        return 3;
+        return SERIAL_NUMBER_INDEX;
     }
 
 

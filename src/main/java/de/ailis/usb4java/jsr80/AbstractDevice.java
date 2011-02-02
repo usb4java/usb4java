@@ -46,10 +46,10 @@ import de.ailis.usb4java.USB_String_Descriptor;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public class UsbDeviceImpl implements UsbDevice
+abstract class AbstractDevice implements UsbDevice
 {
     /** The low-level USB device. */
-    private final USB_Device device;
+    protected final USB_Device device;
 
     /** The device descriptor. */
     private final UsbDeviceDescriptorImpl descriptor;
@@ -77,14 +77,14 @@ public class UsbDeviceImpl implements UsbDevice
      *            The low-level USB device.
      */
 
-    public UsbDeviceImpl(final USB_Device device)
+    public AbstractDevice(final USB_Device device)
     {
         this.device = device;
         this.descriptor = new UsbDeviceDescriptorImpl(device.descriptor());
 
         final USB_Config_Descriptor[] configs = device.config();
-        final List<UsbConfiguration> configurations = new ArrayList<UsbConfiguration>(
-            configs.length);
+        final List<UsbConfiguration> configurations =
+            new ArrayList<UsbConfiguration>(configs.length);
         for (final USB_Config_Descriptor config : configs)
             configurations.add(new UsbConfigurationImpl(this, config));
         this.configurations = Collections.unmodifiableList(configurations);
@@ -100,7 +100,7 @@ public class UsbDeviceImpl implements UsbDevice
      *             When USB device could not be opened.
      */
 
-    USB_Dev_Handle open() throws UsbException
+    final USB_Dev_Handle open() throws UsbException
     {
         if (this.handle == null)
         {
@@ -130,7 +130,7 @@ public class UsbDeviceImpl implements UsbDevice
      *             When device could not be closed.
      */
 
-    void close() throws UsbException
+    final void close() throws UsbException
     {
         if (this.handle != null)
         {
@@ -156,7 +156,7 @@ public class UsbDeviceImpl implements UsbDevice
      */
 
     @Override
-    public UsbPort getParentUsbPort() throws UsbDisconnectedException
+    public final UsbPort getParentUsbPort()
     {
         if (this.port == null) throw new UsbDisconnectedException();
         return this.port;
@@ -171,7 +171,7 @@ public class UsbDeviceImpl implements UsbDevice
      *            The port to set. Null to unset.
      */
 
-    void setParentUsbPort(final UsbPort port)
+    final void setParentUsbPort(final UsbPort port)
     {
         if (this.port == null && port == null)
             throw new IllegalStateException("Device already detached");
@@ -182,7 +182,7 @@ public class UsbDeviceImpl implements UsbDevice
         if (port == null && isUsbHub())
         {
             final UsbPorts hub = (UsbPorts) this;
-            for (final UsbDevice device: hub.getAttachedUsbDevices())
+            for (final UsbDevice device : hub.getAttachedUsbDevices())
                 hub.disconnectUsbDevice(device);
         }
 
@@ -213,22 +213,11 @@ public class UsbDeviceImpl implements UsbDevice
 
 
     /**
-     * @see UsbDevice#isUsbHub()
-     */
-
-    @Override
-    public boolean isUsbHub()
-    {
-        return false;
-    }
-
-
-    /**
      * @see UsbDevice#getManufacturerString()
      */
 
     @Override
-    public String getManufacturerString() throws UsbException,
+    public final String getManufacturerString() throws UsbException,
         UnsupportedEncodingException
     {
         final byte index = this.descriptor.iManufacturer();
@@ -242,7 +231,7 @@ public class UsbDeviceImpl implements UsbDevice
      */
 
     @Override
-    public String getSerialNumberString() throws UsbException,
+    public final String getSerialNumberString() throws UsbException,
         UnsupportedEncodingException
     {
         final byte index = this.descriptor.iSerialNumber();
@@ -256,7 +245,7 @@ public class UsbDeviceImpl implements UsbDevice
      */
 
     @Override
-    public String getProductString() throws UsbException,
+    public final String getProductString() throws UsbException,
         UnsupportedEncodingException
     {
         final byte index = this.descriptor.iProduct();
@@ -270,7 +259,7 @@ public class UsbDeviceImpl implements UsbDevice
      */
 
     @Override
-    public Object getSpeed()
+    public final Object getSpeed()
     {
         return UsbConst.DEVICE_SPEED_UNKNOWN;
     }
@@ -281,7 +270,7 @@ public class UsbDeviceImpl implements UsbDevice
      */
 
     @Override
-    public List<UsbConfiguration> getUsbConfigurations()
+    public final List<UsbConfiguration> getUsbConfigurations()
     {
         return this.configurations;
     }
@@ -292,7 +281,7 @@ public class UsbDeviceImpl implements UsbDevice
      */
 
     @Override
-    public UsbConfiguration getUsbConfiguration(final byte number)
+    public final UsbConfiguration getUsbConfiguration(final byte number)
     {
         for (final UsbConfiguration configuration : this.configurations)
         {
@@ -311,7 +300,7 @@ public class UsbDeviceImpl implements UsbDevice
      */
 
     @Override
-    public boolean containsUsbConfiguration(final byte number)
+    public final boolean containsUsbConfiguration(final byte number)
     {
         return getUsbConfiguration(number) != null;
     }
@@ -322,7 +311,7 @@ public class UsbDeviceImpl implements UsbDevice
      */
 
     @Override
-    public byte getActiveUsbConfigurationNumber()
+    public final byte getActiveUsbConfigurationNumber()
     {
         return this.activeConfigurationNumber;
     }
@@ -344,7 +333,7 @@ public class UsbDeviceImpl implements UsbDevice
      */
 
     @Override
-    public boolean isConfigured()
+    public final boolean isConfigured()
     {
         return this.activeConfigurationNumber != 0;
     }
@@ -355,7 +344,7 @@ public class UsbDeviceImpl implements UsbDevice
      */
 
     @Override
-    public UsbDeviceDescriptor getUsbDeviceDescriptor()
+    public final UsbDeviceDescriptor getUsbDeviceDescriptor()
     {
         return this.descriptor;
     }
@@ -366,8 +355,8 @@ public class UsbDeviceImpl implements UsbDevice
      */
 
     @Override
-    public UsbStringDescriptor getUsbStringDescriptor(final byte index)
-        throws UsbException, UsbDisconnectedException
+    public final UsbStringDescriptor getUsbStringDescriptor(final byte index)
+        throws UsbException
     {
         USBLock.acquire();
         try
@@ -396,7 +385,7 @@ public class UsbDeviceImpl implements UsbDevice
      */
 
     @Override
-    public String getString(final byte index) throws UsbException,
+    public final String getString(final byte index) throws UsbException,
         UnsupportedEncodingException
     {
         return getUsbStringDescriptor(index).getString();
@@ -418,7 +407,8 @@ public class UsbDeviceImpl implements UsbDevice
         {
             final USB_Dev_Handle handle = open();
             final ByteBuffer buffer = ByteBuffer.allocateDirect(256);
-            final int len = usb_get_descriptor(handle, USB_DT_STRING, 0, buffer);
+            final int len = usb_get_descriptor(handle, USB_DT_STRING, 0,
+                buffer);
             if (len < 0)
                 throw new UsbException(
                     "Unable to get string descriptor languages: "
@@ -445,8 +435,7 @@ public class UsbDeviceImpl implements UsbDevice
      */
 
     @Override
-    public void syncSubmit(final UsbControlIrp irp) throws UsbException,
-        IllegalArgumentException, UsbDisconnectedException
+    public final void syncSubmit(final UsbControlIrp irp) throws UsbException
     {
         // TODO
         throw new UnsupportedOperationException();
@@ -458,8 +447,7 @@ public class UsbDeviceImpl implements UsbDevice
      */
 
     @Override
-    public void asyncSubmit(final UsbControlIrp irp) throws UsbException,
-        IllegalArgumentException, UsbDisconnectedException
+    public final void asyncSubmit(final UsbControlIrp irp) throws UsbException
     {
         // TODO
         throw new UnsupportedOperationException();
@@ -471,10 +459,10 @@ public class UsbDeviceImpl implements UsbDevice
      */
 
     @Override
-    public void syncSubmit(@SuppressWarnings("rawtypes") final List list)
-        throws UsbException, IllegalArgumentException, UsbDisconnectedException
+    public final void syncSubmit(@SuppressWarnings("rawtypes") final List list)
+        throws UsbException
     {
-        for (final Object item: list)
+        for (final Object item : list)
         {
             syncSubmit((UsbControlIrp) item);
         }
@@ -486,10 +474,10 @@ public class UsbDeviceImpl implements UsbDevice
      */
 
     @Override
-    public void asyncSubmit(@SuppressWarnings("rawtypes") final List list)
-        throws UsbException, IllegalArgumentException, UsbDisconnectedException
+    public final void asyncSubmit(@SuppressWarnings("rawtypes") final List list)
+        throws UsbException
     {
-        for (final Object item: list)
+        for (final Object item : list)
         {
             asyncSubmit((UsbControlIrp) item);
         }
@@ -501,10 +489,11 @@ public class UsbDeviceImpl implements UsbDevice
      */
 
     @Override
-    public UsbControlIrp createUsbControlIrp(final byte bmRequestType,
+    public final UsbControlIrp createUsbControlIrp(final byte bmRequestType,
         final byte bRequest, final short wValue, final short wIndex)
     {
-        return new DefaultUsbControlIrp(bmRequestType, bRequest, wValue, wIndex);
+        return new DefaultUsbControlIrp(bmRequestType, bRequest, wValue,
+            wIndex);
     }
 
 
@@ -513,7 +502,7 @@ public class UsbDeviceImpl implements UsbDevice
      */
 
     @Override
-    public void addUsbDeviceListener(final UsbDeviceListener listener)
+    public final void addUsbDeviceListener(final UsbDeviceListener listener)
     {
         this.listeners.add(listener);
     }
@@ -524,34 +513,8 @@ public class UsbDeviceImpl implements UsbDevice
      */
 
     @Override
-    public void removeUsbDeviceListener(final UsbDeviceListener listener)
+    public final void removeUsbDeviceListener(final UsbDeviceListener listener)
     {
         this.listeners.remove(listener);
-    }
-
-
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-
-    @Override
-    public boolean equals(final Object obj)
-    {
-        if (obj == null) return false;
-        if (obj == this) return true;
-        if (obj.getClass() != getClass()) return false;
-        final UsbDeviceImpl other = (UsbDeviceImpl) obj;
-        return this.device.equals(other.device);
-    }
-
-
-    /**
-     * @see java.lang.Object#hashCode()
-     */
-
-    @Override
-    public int hashCode()
-    {
-        return this.device.hashCode();
     }
 }

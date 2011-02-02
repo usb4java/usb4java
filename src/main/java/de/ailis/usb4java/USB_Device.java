@@ -130,11 +130,11 @@ public final class USB_Device
     public String dump()
     {
         final StringBuilder builder = new StringBuilder();
-        builder.append(String.format("Device:%n" +
-            "  filename %20s%n" +
-            "  bus %25s%n" +
-            "  num_children            %5d%n" +
-            "  devnum                  %5d%n",
+        builder.append(String.format("Device:%n"
+            + "  filename %20s%n"
+            + "  bus %25s%n"
+            + "  num_children            %5d%n"
+            + "  devnum                  %5d%n",
             filename(), bus().dirname(), num_children(), devnum()));
         final USB_Dev_Handle handle = usb_open(this);
         try

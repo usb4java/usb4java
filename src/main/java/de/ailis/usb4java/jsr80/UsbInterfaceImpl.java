@@ -5,18 +5,13 @@
 
 package de.ailis.usb4java.jsr80;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-import javax.usb.UsbClaimException;
 import javax.usb.UsbConfiguration;
-import javax.usb.UsbDisconnectedException;
 import javax.usb.UsbEndpoint;
-import javax.usb.UsbException;
 import javax.usb.UsbInterface;
 import javax.usb.UsbInterfaceDescriptor;
 import javax.usb.UsbInterfacePolicy;
-import javax.usb.UsbNotActiveException;
 
 import de.ailis.usb4java.USB_Interface;
 
@@ -58,8 +53,7 @@ public final class UsbInterfaceImpl implements UsbInterface
      */
 
     @Override
-    public final void claim() throws UsbClaimException, UsbException,
-        UsbNotActiveException, UsbDisconnectedException
+    public void claim()
     {
         // TODO
         throw new UnsupportedOperationException();
@@ -72,8 +66,6 @@ public final class UsbInterfaceImpl implements UsbInterface
 
     @Override
     public void claim(final UsbInterfacePolicy policy)
-        throws UsbClaimException,
-        UsbException, UsbNotActiveException, UsbDisconnectedException
     {
         // TODO
         throw new UnsupportedOperationException();
@@ -85,8 +77,7 @@ public final class UsbInterfaceImpl implements UsbInterface
      */
 
     @Override
-    public void release() throws UsbClaimException, UsbException,
-        UsbNotActiveException, UsbDisconnectedException
+    public void release()
     {
         // TODO
         throw new UnsupportedOperationException();
@@ -133,7 +124,7 @@ public final class UsbInterfaceImpl implements UsbInterface
      */
 
     @Override
-    public byte getActiveSettingNumber() throws UsbNotActiveException
+    public byte getActiveSettingNumber()
     {
         // TODO
         throw new UnsupportedOperationException();
@@ -145,7 +136,7 @@ public final class UsbInterfaceImpl implements UsbInterface
      */
 
     @Override
-    public UsbInterface getActiveSetting() throws UsbNotActiveException
+    public UsbInterface getActiveSetting()
     {
         // TODO
         throw new UnsupportedOperationException();
@@ -251,8 +242,7 @@ public final class UsbInterfaceImpl implements UsbInterface
      */
 
     @Override
-    public String getInterfaceString() throws UsbException,
-        UnsupportedEncodingException, UsbDisconnectedException
+    public String getInterfaceString()
     {
         // TODO
         throw new UnsupportedOperationException();

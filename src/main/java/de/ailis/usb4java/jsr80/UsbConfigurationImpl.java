@@ -5,13 +5,11 @@
 
 package de.ailis.usb4java.jsr80;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import javax.usb.UsbConfiguration;
 import javax.usb.UsbConfigurationDescriptor;
 import javax.usb.UsbDevice;
-import javax.usb.UsbDisconnectedException;
 import javax.usb.UsbException;
 import javax.usb.UsbInterface;
 
@@ -24,7 +22,7 @@ import de.ailis.usb4java.USB_Config_Descriptor;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public class UsbConfigurationImpl implements UsbConfiguration
+public final class UsbConfigurationImpl implements UsbConfiguration
 {
     /** The low-level USB configuration descriptor. */
     private final USB_Config_Descriptor lowLevelDescriptor;
@@ -50,7 +48,8 @@ public class UsbConfigurationImpl implements UsbConfiguration
     {
         this.device = device;
         this.lowLevelDescriptor = lowLevelDescriptor;
-        this.descriptor = new UsbConfigurationDescriptorImpl(lowLevelDescriptor);
+        this.descriptor = new UsbConfigurationDescriptorImpl(
+            lowLevelDescriptor);
     }
 
 
@@ -128,8 +127,7 @@ public class UsbConfigurationImpl implements UsbConfiguration
      */
 
     @Override
-    public String getConfigurationString() throws UsbException,
-        UnsupportedEncodingException, UsbDisconnectedException
+    public String getConfigurationString() throws UsbException
     {
         // TODO
         throw new UnsupportedOperationException();

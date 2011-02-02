@@ -27,7 +27,8 @@ public final class UsbConfigurationDescriptorImpl extends
      *            The low-level USB configuration descriptor.
      */
 
-    public UsbConfigurationDescriptorImpl(final USB_Config_Descriptor descriptor)
+    public UsbConfigurationDescriptorImpl(final USB_Config_Descriptor
+        descriptor)
     {
         super(descriptor);
     }
@@ -38,7 +39,7 @@ public final class UsbConfigurationDescriptorImpl extends
      */
 
     @Override
-    public final short wTotalLength()
+    public short wTotalLength()
     {
         return (short) (this.descriptor.wTotalLength() & 0xffff);
     }
@@ -49,7 +50,7 @@ public final class UsbConfigurationDescriptorImpl extends
      */
 
     @Override
-    public final byte bNumInterfaces()
+    public byte bNumInterfaces()
     {
         return (byte) (this.descriptor.bNumInterfaces() & 0xff);
     }
@@ -60,7 +61,7 @@ public final class UsbConfigurationDescriptorImpl extends
      */
 
     @Override
-    public final byte bConfigurationValue()
+    public byte bConfigurationValue()
     {
         return (byte) (this.descriptor.bConfigurationValue() & 0xff);
     }
@@ -71,7 +72,7 @@ public final class UsbConfigurationDescriptorImpl extends
      */
 
     @Override
-    public final byte iConfiguration()
+    public byte iConfiguration()
     {
         return (byte) (this.descriptor.iConfiguration() & 0xff);
     }
@@ -82,7 +83,7 @@ public final class UsbConfigurationDescriptorImpl extends
      */
 
     @Override
-    public final byte bmAttributes()
+    public byte bmAttributes()
     {
         return (byte) (this.descriptor.bmAttributes() & 0xff);
     }
@@ -93,7 +94,7 @@ public final class UsbConfigurationDescriptorImpl extends
      */
 
     @Override
-    public final byte bMaxPower()
+    public byte bMaxPower()
     {
         return (byte) (this.descriptor.MaxPower() & 0xff);
     }
@@ -109,7 +110,8 @@ public final class UsbConfigurationDescriptorImpl extends
         if (o == null) return false;
         if (this == o) return true;
         if (o.getClass() != getClass()) return false;
-        final UsbConfigurationDescriptorImpl other = (UsbConfigurationDescriptorImpl) o;
+        final UsbConfigurationDescriptorImpl other =
+            (UsbConfigurationDescriptorImpl) o;
         return this.descriptor.equals(other.descriptor);
     }
 

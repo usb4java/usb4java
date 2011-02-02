@@ -16,6 +16,10 @@ import java.nio.ByteBuffer;
 
 public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
 {
+    /** The number of hex dump columns for dumping extra descriptor. */
+    private static final int HEX_DUMP_COLS = 16;
+
+
     /**
      * Constructor.
      *
@@ -136,19 +140,20 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
 
     public String dump()
     {
-        return String.format("Endpoint Descriptor:%n" +
-            "  bLength           %5d%n" +
-            "  bDecsriptorType   %5d%n" +
-            "  bEndpointAddress   0x%02x%n" +
-            "  bmAttributes       0x%02x%n" +
-            "  wMaxPacketSize    %5d%n" +
-            "  bInterval         %5d%n" +
-            "  extralen     %10d%n" +
-            "  extra:%n" +
-            "%s",
+        return String.format("Endpoint Descriptor:%n"
+            + "  bLength           %5d%n"
+            + "  bDecsriptorType   %5d%n"
+            + "  bEndpointAddress   0x%02x%n"
+            + "  bmAttributes       0x%02x%n"
+            + "  wMaxPacketSize    %5d%n"
+            + "  bInterval         %5d%n"
+            + "  extralen     %10d%n"
+            + "  extra:%n"
+            + "%s",
             bLength(), bDescriptorType(), bEndpointAddress(), bmAttributes(),
             wMaxPacketSize(), bInterval(), extralen(),
-            USBUtils.toHexDump(extra(), 16).replaceAll("(?m)^", "    "));
+            USBUtils.toHexDump(extra(), HEX_DUMP_COLS)
+                .replaceAll("(?m)^", "    "));
     }
 
 
@@ -163,7 +168,8 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
         if (o == this) return true;
         if (o.getClass() != getClass()) return false;
         final USB_Endpoint_Descriptor other = (USB_Endpoint_Descriptor) o;
-        return super.equals(o)
+        return bDescriptorType() == other.bDescriptorType()
+            && bLength() == other.bLength()
             && bEndpointAddress() == other.bEndpointAddress()
             && bmAttributes() == other.bmAttributes()
             && bInterval() == other.bInterval()
@@ -182,7 +188,8 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
     public int hashCode()
     {
         int result = 17;
-        result = 37 * result + super.hashCode();
+        result = 37 * result + bDescriptorType();
+        result = 37 * result + bLength();
         result = 37 * result + bEndpointAddress();
         result = 37 * result + bInterval();
         result = 37 * result + bRefresh();

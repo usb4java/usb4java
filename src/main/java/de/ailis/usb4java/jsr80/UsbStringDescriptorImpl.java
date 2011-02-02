@@ -37,7 +37,7 @@ public final class UsbStringDescriptorImpl extends
      */
 
     @Override
-    public final byte[] bString()
+    public byte[] bString()
     {
         return this.descriptor.toString().getBytes();
     }
@@ -48,7 +48,7 @@ public final class UsbStringDescriptorImpl extends
      */
 
     @Override
-    public final String getString()
+    public String getString()
     {
         return this.descriptor.toString();
     }

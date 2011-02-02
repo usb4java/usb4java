@@ -19,6 +19,10 @@ import java.nio.ByteBuffer;
 
 public final class USB_Interface_Descriptor extends USB_Descriptor_Header
 {
+    /** The number of hex dump columns for dumping extra descriptor. */
+    private static final int HEX_DUMP_COLS = 16;
+
+
     /**
      * Constructor.
      *
@@ -163,24 +167,25 @@ public final class USB_Interface_Descriptor extends USB_Descriptor_Header
         String sInterface = iInterface == 0 || handle == null ? ""
             : usb_get_string_simple(handle, iInterface);
         if (sInterface == null) sInterface = "";
-        builder.append(String.format("Interface Descriptor:%n" +
-            "  bLength             %5d%n" +
-            "  bDescriptorType     %5d%n" +
-            "  bInterfaceNumber    %5d%n" +
-            "  bAlternateSetting   %5d%n" +
-            "  bNumEndpoints       %5d%n" +
-            "  bInterfaceClass     %5d %s%n" +
-            "  bInterfaceSubClass  %5d%n" +
-            "  bInterfaceProtocol  %5d%n" +
-            "  iInterface          %5d %s%n" +
-            "  extralen       %10d%n" +
-            "  extra:%n" +
-            "%s",
+        builder.append(String.format("Interface Descriptor:%n"
+            + "  bLength             %5d%n"
+            + "  bDescriptorType     %5d%n"
+            + "  bInterfaceNumber    %5d%n"
+            + "  bAlternateSetting   %5d%n"
+            + "  bNumEndpoints       %5d%n"
+            + "  bInterfaceClass     %5d %s%n"
+            + "  bInterfaceSubClass  %5d%n"
+            + "  bInterfaceProtocol  %5d%n"
+            + "  iInterface          %5d %s%n"
+            + "  extralen       %10d%n"
+            + "  extra:%n"
+            + "%s",
             bLength(), bDescriptorType(), bInterfaceNumber(),
             bAlternateSetting(), bNumEndpoints(), bInterfaceClass(),
             USBUtils.getUSBClassName(bInterfaceClass()), bInterfaceSubClass(),
             bInterfaceProtocol(), iInterface(), sInterface, extralen(),
-            USBUtils.toHexDump(extra(), 16).replaceAll("(?m)^", "    ")));
+            USBUtils.toHexDump(extra(), HEX_DUMP_COLS)
+                .replaceAll("(?m)^", "    ")));
         if (extralen() != 0) return builder.toString();
         for (final USB_Endpoint_Descriptor edesc : endpoint())
         {
@@ -201,7 +206,8 @@ public final class USB_Interface_Descriptor extends USB_Descriptor_Header
         if (o == this) return true;
         if (o.getClass() != getClass()) return false;
         final USB_Interface_Descriptor other = (USB_Interface_Descriptor) o;
-        return super.equals(o)
+        return bDescriptorType() == other.bDescriptorType()
+            && bLength() == other.bLength()
             && bAlternateSetting() == other.bAlternateSetting()
             && bInterfaceClass() == other.bInterfaceClass()
             && bInterfaceNumber() == other.bInterfaceNumber()
@@ -222,7 +228,8 @@ public final class USB_Interface_Descriptor extends USB_Descriptor_Header
     public int hashCode()
     {
         int result = 17;
-        result = 37 * result + super.hashCode();
+        result = 37 * result + bDescriptorType();
+        result = 37 * result + bLength();
         result = 37 * result + bAlternateSetting();
         result = 37 * result + bInterfaceClass();
         result = 37 * result + bInterfaceProtocol();

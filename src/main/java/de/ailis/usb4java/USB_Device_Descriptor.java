@@ -199,32 +199,32 @@ public final class USB_Device_Descriptor extends USB_Descriptor_Header
     public String dump(final USB_Dev_Handle handle)
     {
         final int iManufacturer = iManufacturer();
-        String sManufacturer = handle == null || iManufacturer == 0 ? "" :
-            usb_get_string_simple(handle, iManufacturer);
+        String sManufacturer = handle == null || iManufacturer == 0
+            ? "" : usb_get_string_simple(handle, iManufacturer);
         if (sManufacturer == null) sManufacturer = "";
         final int iProduct = iProduct();
-        String sProduct = handle == null || iProduct == 0 ? "" :
-            usb_get_string_simple(handle, iProduct);
+        String sProduct = handle == null || iProduct == 0
+            ? "" : usb_get_string_simple(handle, iProduct);
         if (sProduct == null) sProduct = "";
         final int iSerialNumber = iSerialNumber();
-        String sSerialNumber = handle == null || iSerialNumber == 0 ? "" :
-            usb_get_string_simple(handle, iSerialNumber);
+        String sSerialNumber = handle == null || iSerialNumber == 0
+            ? "" : usb_get_string_simple(handle, iSerialNumber);
         if (sSerialNumber == null) sSerialNumber = "";
-        return String.format("Device Descriptor:%n" +
-            "  bLength               %5d%n" +
-            "  bDescriptorType       %5d%n" +
-            "  bcdUSB                %5s%n" +
-            "  bDeviceClass          %5d %s%n" +
-            "  bDeviceSubClass       %5d%n" +
-            "  bDeviceProtocol       %5d%n" +
-            "  bMaxPacketSize0       %5d%n" +
-            "  idVendor             %#06x%n" +
-            "  idProduct            %#06x%n" +
-            "  bcdDevice             %5s%n" +
-            "  iManufacturer         %5d %s%n" +
-            "  iProduct              %5d %s%n" +
-            "  iSerialNumber         %5d %s%n" +
-            "  bNumConfigurations    %5d%n",
+        return String.format("Device Descriptor:%n"
+            + "  bLength               %5d%n"
+            + "  bDescriptorType       %5d%n"
+            + "  bcdUSB                %5s%n"
+            + "  bDeviceClass          %5d %s%n"
+            + "  bDeviceSubClass       %5d%n"
+            + "  bDeviceProtocol       %5d%n"
+            + "  bMaxPacketSize0       %5d%n"
+            + "  idVendor             %#06x%n"
+            + "  idProduct            %#06x%n"
+            + "  bcdDevice             %5s%n"
+            + "  iManufacturer         %5d %s%n"
+            + "  iProduct              %5d %s%n"
+            + "  iSerialNumber         %5d %s%n"
+            + "  bNumConfigurations    %5d%n",
             bLength(), bDescriptorType(), USBUtils.decodeBCD(bcdUSB()),
             bDeviceClass(), USBUtils.getUSBClassName(bDeviceClass()),
             bDeviceSubClass(), bDeviceProtocol(),
@@ -246,9 +246,12 @@ public final class USB_Device_Descriptor extends USB_Descriptor_Header
         if (o == this) return true;
         if (o.getClass() != getClass()) return false;
         final USB_Device_Descriptor other = (USB_Device_Descriptor) o;
-        return super.equals(o) && idProduct() == other.idProduct()
+        return bDescriptorType() == other.bDescriptorType()
+            && bLength() == other.bLength()
+            && idProduct() == other.idProduct()
             && idVendor() == other.idVendor()
-            && bcdDevice() == other.bcdDevice() && bcdUSB() == other.bcdUSB()
+            && bcdDevice() == other.bcdDevice()
+            && bcdUSB() == other.bcdUSB()
             && bDescriptorType() == other.bDescriptorType()
             && bDeviceClass() == other.bDeviceClass()
             && bDeviceProtocol() == other.bDeviceProtocol()
@@ -270,7 +273,8 @@ public final class USB_Device_Descriptor extends USB_Descriptor_Header
     public int hashCode()
     {
         int result = 17;
-        result = 37 * result + super.hashCode();
+        result = 37 * result + bDescriptorType();
+        result = 37 * result + bLength();
         result = 37 * result + idProduct();
         result = 37 * result + idVendor();
         result = 37 * result + bcdDevice();

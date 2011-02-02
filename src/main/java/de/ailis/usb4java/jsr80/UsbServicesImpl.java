@@ -16,7 +16,7 @@ import javax.usb.event.UsbServicesListener;
 
 
 /**
- * usb4java implementation of JSR-80 UsbServices
+ * usb4java implementation of JSR-80 UsbServices.
  *
  * @author Klaus Reimer (k@ailis.de)
  */
@@ -24,7 +24,8 @@ import javax.usb.event.UsbServicesListener;
 public final class UsbServicesImpl implements UsbServices
 {
     /** The implementation description. */
-    private static final String IMP_DESCRIPTION = "usb4java JSR-80 implementation";
+    private static final String IMP_DESCRIPTION =
+        "usb4java JSR-80 implementation";
 
     /** The implementation version. */
     private static final String IMP_VERSION = "0.1.12-1";
@@ -33,7 +34,8 @@ public final class UsbServicesImpl implements UsbServices
     private static final String API_VERSION = "1.0.1";
 
     /** The USB services listeners. */
-    private final UsbServicesListenerList listeners = new UsbServicesListenerList();
+    private final UsbServicesListenerList listeners =
+        new UsbServicesListenerList();
 
     /** The virtual USB root hub. */
     private final VirtualRootHub rootHub;
@@ -60,7 +62,7 @@ public final class UsbServicesImpl implements UsbServices
      */
 
     @Override
-    public UsbHub getRootUsbHub() throws UsbException, SecurityException
+    public UsbHub getRootUsbHub() throws UsbException
     {
         this.deviceScanner.firstScan();
         return this.rootHub;
@@ -125,7 +127,8 @@ public final class UsbServicesImpl implements UsbServices
     /**
      * Informs listeners about a new attached device.
      *
-     * @param device The new attached device.
+     * @param device
+     *            The new attached device.
      */
 
     void usbDeviceAttached(final UsbDevice device)
@@ -137,7 +140,8 @@ public final class UsbServicesImpl implements UsbServices
     /**
      * Informs listeners about a detached device.
      *
-     * @param device The detached device.
+     * @param device
+     *            The detached device.
      */
 
     void usbDeviceDetached(final UsbDevice device)

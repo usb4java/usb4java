@@ -5,19 +5,15 @@
 
 package de.ailis.usb4java.jsr80;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.usb.UsbClaimException;
 import javax.usb.UsbConfiguration;
-import javax.usb.UsbDisconnectedException;
 import javax.usb.UsbEndpoint;
 import javax.usb.UsbException;
 import javax.usb.UsbInterface;
 import javax.usb.UsbInterfaceDescriptor;
 import javax.usb.UsbInterfacePolicy;
-import javax.usb.UsbNotActiveException;
 
 
 /**
@@ -38,11 +34,12 @@ final class VirtualUsbInterface implements UsbInterface
     private final UsbConfiguration configuration;
 
     /** The interface descriptor. */
-    private final UsbInterfaceDescriptor descriptor = new VirtualUsbInterfaceDescriptor();
+    private final UsbInterfaceDescriptor descriptor =
+        new VirtualUsbInterfaceDescriptor();
 
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param configuration
      *            The USB configuration.
@@ -58,8 +55,7 @@ final class VirtualUsbInterface implements UsbInterface
      */
 
     @Override
-    public void claim() throws UsbClaimException, UsbException,
-        UsbNotActiveException, UsbDisconnectedException
+    public void claim() throws UsbException
     {
         throw new UsbException("Virtual interfaces can't be claimed");
     }
@@ -70,9 +66,7 @@ final class VirtualUsbInterface implements UsbInterface
      */
 
     @Override
-    public void claim(final UsbInterfacePolicy policy)
-        throws UsbClaimException,
-        UsbException, UsbNotActiveException, UsbDisconnectedException
+    public void claim(final UsbInterfacePolicy policy) throws UsbException
     {
         throw new UsbException("Virtual interfaces can't be claimed");
     }
@@ -83,8 +77,7 @@ final class VirtualUsbInterface implements UsbInterface
      */
 
     @Override
-    public void release() throws UsbClaimException, UsbException,
-        UsbNotActiveException, UsbDisconnectedException
+    public void release() throws UsbException
     {
         throw new UsbException("Virtual interfaces can't be released");
     }
@@ -128,7 +121,7 @@ final class VirtualUsbInterface implements UsbInterface
      */
 
     @Override
-    public byte getActiveSettingNumber() throws UsbNotActiveException
+    public byte getActiveSettingNumber()
     {
         return 0;
     }
@@ -139,7 +132,7 @@ final class VirtualUsbInterface implements UsbInterface
      */
 
     @Override
-    public UsbInterface getActiveSetting() throws UsbNotActiveException
+    public UsbInterface getActiveSetting()
     {
         return this;
     }
@@ -238,8 +231,7 @@ final class VirtualUsbInterface implements UsbInterface
      */
 
     @Override
-    public String getInterfaceString() throws UsbException,
-        UnsupportedEncodingException, UsbDisconnectedException
+    public String getInterfaceString()
     {
         return null;
     }

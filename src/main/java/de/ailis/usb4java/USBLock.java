@@ -17,7 +17,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public final class USBLock
 {
     /** Synchronization mutex. */
-    private static final ReentrantLock lock = new ReentrantLock();
+    private static final ReentrantLock LOCK = new ReentrantLock();
 
 
     /**
@@ -39,7 +39,7 @@ public final class USBLock
 
     public static void acquire()
     {
-        lock.lock();
+        LOCK.lock();
     }
 
 
@@ -50,6 +50,6 @@ public final class USBLock
 
     public static void release()
     {
-        lock.unlock();
+        LOCK.unlock();
     }
 }

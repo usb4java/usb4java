@@ -99,15 +99,15 @@ public final class USB_Bus
 
     public String dump()
     {
-        final USB_Device root_dev = root_dev();
-        final String rootDev = root_dev == null ? "None or unknown" : root_dev
+        final USB_Device rootDev = root_dev();
+        final String rootDevName = rootDev == null ? "None or unknown" : rootDev
                 .filename();
         final StringBuilder builder = new StringBuilder();
-        builder.append(String.format("Bus:%n" +
-            "  dirname %23s%n" +
-            "  location        %15d%n" +
-            "  root_dev %22s%n",
-            dirname(), location(), rootDev));
+        builder.append(String.format("Bus:%n"
+            + "  dirname %23s%n"
+            + "  location        %15d%n"
+            + "  root_dev %22s%n",
+            dirname(), location(), rootDevName));
         USB_Device device = devices();
         while (device != null)
         {
@@ -155,7 +155,7 @@ public final class USB_Bus
         int result = 17;
         result = 37 * result + dirname().hashCode();
         final long location = location();
-        result = 37 * result + (int) (location ^ (location >>> 32));
+        result = 37 * result + (int) (location ^ (location >>> Integer.SIZE));
         return result;
     }
 }

@@ -7,7 +7,6 @@ package de.ailis.usb4java.jsr80;
 
 import javax.usb.UsbConfigurationDescriptor;
 import javax.usb.UsbConst;
-import javax.usb.UsbDescriptor;
 
 
 /**
@@ -19,8 +18,12 @@ import javax.usb.UsbDescriptor;
 final class VirtualUsbConfigurationDescriptor implements
         UsbConfigurationDescriptor
 {
+    /** The configuration attributes. */
+    private static final byte ATTRIBUTES = (byte) 0x80;
+
+
     /**
-     * @see UsbDescriptor#bLength()
+     * @see javax.usb.UsbDescriptor#bLength()
      */
 
     @Override
@@ -31,7 +34,7 @@ final class VirtualUsbConfigurationDescriptor implements
 
 
     /**
-     * @see UsbDescriptor#bDescriptorType()
+     * @see javax.usb.UsbDescriptor#bDescriptorType()
      */
 
     @Override
@@ -48,7 +51,8 @@ final class VirtualUsbConfigurationDescriptor implements
     @Override
     public short wTotalLength()
     {
-        return UsbConst.DESCRIPTOR_MIN_LENGTH_CONFIGURATION + UsbConst.DESCRIPTOR_MIN_LENGTH_INTERFACE;
+        return UsbConst.DESCRIPTOR_MIN_LENGTH_CONFIGURATION
+            + UsbConst.DESCRIPTOR_MIN_LENGTH_INTERFACE;
     }
 
 
@@ -92,7 +96,7 @@ final class VirtualUsbConfigurationDescriptor implements
     @Override
     public byte bmAttributes()
     {
-        return (byte) 0x80;
+        return ATTRIBUTES;
     }
 
 

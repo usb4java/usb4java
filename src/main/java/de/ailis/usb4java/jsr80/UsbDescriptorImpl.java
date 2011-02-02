@@ -58,30 +58,4 @@ public abstract class UsbDescriptorImpl<T extends USB_Descriptor_Header>
     {
         return (byte) (this.descriptor.bDescriptorType() & 0xff);
     }
-
-
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-
-    @Override
-    public boolean equals(final Object o)
-    {
-        if (o == null) return false;
-        if (this == o) return true;
-        if (o.getClass() != getClass()) return false;
-        final UsbDescriptorImpl<?> other = (UsbDescriptorImpl<?>) o;
-        return this.descriptor.equals(other.descriptor);
-    }
-
-
-    /**
-     * @see java.lang.Object#hashCode()
-     */
-
-    @Override
-    public int hashCode()
-    {
-        return this.descriptor.hashCode();
-    }
 }

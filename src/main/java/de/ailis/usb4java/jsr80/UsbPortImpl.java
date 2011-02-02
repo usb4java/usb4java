@@ -49,7 +49,7 @@ public final class UsbPortImpl implements UsbPort
      */
 
     @Override
-    public final byte getPortNumber()
+    public byte getPortNumber()
     {
         return this.portNumber;
     }
@@ -60,7 +60,7 @@ public final class UsbPortImpl implements UsbPort
      */
 
     @Override
-    public final UsbHub getUsbHub()
+    public UsbHub getUsbHub()
     {
         return this.hub;
     }
@@ -71,7 +71,7 @@ public final class UsbPortImpl implements UsbPort
      */
 
     @Override
-    public final UsbDevice getUsbDevice()
+    public UsbDevice getUsbDevice()
     {
         return this.device;
     }
@@ -82,7 +82,7 @@ public final class UsbPortImpl implements UsbPort
      */
 
     @Override
-    public final boolean isUsbDeviceAttached()
+    public boolean isUsbDeviceAttached()
     {
         return this.device != null;
     }
@@ -95,7 +95,7 @@ public final class UsbPortImpl implements UsbPort
      *            The device to connect.
      */
 
-    final void connectUsbDevice(final UsbDevice device)
+    void connectUsbDevice(final UsbDevice device)
     {
         if (device == null)
             throw new IllegalArgumentException("device must not be null");
@@ -103,7 +103,7 @@ public final class UsbPortImpl implements UsbPort
             throw new IllegalStateException(
                 "Port already has a connected device");
         this.device = device;
-        ((UsbDeviceImpl) device).setParentUsbPort(this);
+        ((AbstractDevice) device).setParentUsbPort(this);
     }
 
 
@@ -111,11 +111,11 @@ public final class UsbPortImpl implements UsbPort
      * Disconnects the currently connected device.
      */
 
-    final void disconnectUsbDevice()
+    void disconnectUsbDevice()
     {
         if (this.device == null)
             throw new IllegalStateException("Port has no connected device");
-        final UsbDeviceImpl device = (UsbDeviceImpl) this.device;
+        final AbstractDevice device = (AbstractDevice) this.device;
         this.device = null;
         device.setParentUsbPort(null);
     }

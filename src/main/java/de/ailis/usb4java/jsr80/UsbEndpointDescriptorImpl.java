@@ -38,7 +38,7 @@ public final class UsbEndpointDescriptorImpl extends
      */
 
     @Override
-    public final byte bEndpointAddress()
+    public byte bEndpointAddress()
     {
         return (byte) (this.descriptor.bEndpointAddress() & 0xff);
     }
@@ -49,7 +49,7 @@ public final class UsbEndpointDescriptorImpl extends
      */
 
     @Override
-    public final byte bmAttributes()
+    public byte bmAttributes()
     {
         return (byte) (this.descriptor.bmAttributes() & 0xff);
     }
@@ -60,7 +60,7 @@ public final class UsbEndpointDescriptorImpl extends
      */
 
     @Override
-    public final short wMaxPacketSize()
+    public short wMaxPacketSize()
     {
         return (short) (this.descriptor.wMaxPacketSize() & 0xffff);
     }
@@ -71,7 +71,7 @@ public final class UsbEndpointDescriptorImpl extends
      */
 
     @Override
-    public final byte bInterval()
+    public byte bInterval()
     {
         return (byte) (this.descriptor.bInterval() & 0xff);
     }

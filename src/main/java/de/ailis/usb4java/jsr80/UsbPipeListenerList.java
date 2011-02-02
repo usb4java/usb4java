@@ -24,7 +24,7 @@ public final class UsbPipeListenerList extends
      */
 
     @Override
-    public final UsbPipeListener[] toArray()
+    public UsbPipeListener[] toArray()
     {
         return this.listeners.toArray(new UsbPipeListener[this.listeners
                 .size()]);
@@ -36,7 +36,7 @@ public final class UsbPipeListenerList extends
      */
 
     @Override
-    public final void errorEventOccurred(final UsbPipeErrorEvent event)
+    public void errorEventOccurred(final UsbPipeErrorEvent event)
     {
         for (final UsbPipeListener listener : toArray())
             listener.errorEventOccurred(event);
@@ -48,7 +48,7 @@ public final class UsbPipeListenerList extends
      */
 
     @Override
-    public final void dataEventOccurred(final UsbPipeDataEvent event)
+    public void dataEventOccurred(final UsbPipeDataEvent event)
     {
         for (final UsbPipeListener listener : toArray())
             listener.dataEventOccurred(event);
