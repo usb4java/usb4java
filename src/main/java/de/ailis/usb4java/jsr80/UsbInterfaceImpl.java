@@ -5,15 +5,22 @@
 
 package de.ailis.usb4java.jsr80;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import javax.usb.UsbClaimException;
 import javax.usb.UsbConfiguration;
 import javax.usb.UsbEndpoint;
+import javax.usb.UsbException;
 import javax.usb.UsbInterface;
 import javax.usb.UsbInterfaceDescriptor;
 import javax.usb.UsbInterfacePolicy;
+import javax.usb.UsbNotActiveException;
 
-import de.ailis.usb4java.USB_Interface;
+import de.ailis.usb4java.USBLock;
+import de.ailis.usb4java.USB_Interface_Descriptor;
 
 
 /**
@@ -25,10 +32,10 @@ import de.ailis.usb4java.USB_Interface;
 public final class UsbInterfaceImpl implements UsbInterface
 {
     /** The USB configuration. */
-    private final UsbConfiguration configuration;
+    private final UsbConfigurationImpl configuration;
 
-    /** The low-level USB interface. */
-    private final USB_Interface iface;
+    /** The interface descriptor. */
+    private final UsbInterfaceDescriptor descriptor;
 
 
     /**
@@ -36,15 +43,39 @@ public final class UsbInterfaceImpl implements UsbInterface
      *
      * @param configuration
      *            The USB configuration.
-     * @param iface
-     *            The low-level USB-interface.
+     * @param lowLevelDescriptor
+     *            The low-level USB interface descriptor.
      */
 
-    public UsbInterfaceImpl(final UsbConfiguration configuration,
-        final USB_Interface iface)
+    public UsbInterfaceImpl(final UsbConfigurationImpl configuration,
+        final USB_Interface_Descriptor lowLevelDescriptor)
     {
         this.configuration = configuration;
-        this.iface = iface;
+        this.descriptor = new UsbInterfaceDescriptorImpl(lowLevelDescriptor);
+    }
+
+
+    /**
+     * Checks if the configuration is active. If not then an
+     * UsbNotActiveException is thrown.
+     */
+
+    private void checkConfigurationActive()
+    {
+        if (!this.configuration.isActive())
+            throw new UsbNotActiveException("Configuration is not active");
+    }
+
+
+    /**
+     * Checks if setting is active. Throws an UsbNotActiveException if not.
+     */
+
+    private void checkSettingActive()
+    {
+        checkConfigurationActive();
+        if (!isActive())
+            throw new UsbNotActiveException("Setting is not active");
     }
 
 
@@ -53,22 +84,36 @@ public final class UsbInterfaceImpl implements UsbInterface
      */
 
     @Override
-    public void claim()
+    public void claim() throws UsbException
     {
-        // TODO
-        throw new UnsupportedOperationException();
+        claim(null);
     }
 
 
     /**
      * @see UsbInterface#claim(UsbInterfacePolicy)
+     *
+     *      TODO Policy is ignored
      */
 
     @Override
     public void claim(final UsbInterfacePolicy policy)
+        throws UsbClaimException, UsbException
     {
-        // TODO
-        throw new UnsupportedOperationException();
+        final AbstractDevice device = (AbstractDevice) this.configuration
+                .getUsbDevice();
+        USBLock.acquire();
+        try
+        {
+            device.setActiveUsbConfigurationNumber(this.configuration
+                    .getUsbConfigurationDescriptor().bConfigurationValue());
+            device.claimInterface(this.descriptor.bInterfaceNumber());
+            this.configuration.setUsbInterface(this.descriptor.bInterfaceNumber(), this);
+        }
+        finally
+        {
+            USBLock.release();
+        }
     }
 
 
@@ -77,10 +122,10 @@ public final class UsbInterfaceImpl implements UsbInterface
      */
 
     @Override
-    public void release()
+    public void release() throws UsbClaimException, UsbException
     {
-        // TODO
-        throw new UnsupportedOperationException();
+        ((AbstractDevice) this.configuration.getUsbDevice())
+                .releaseInterface(this.descriptor.bInterfaceNumber());
     }
 
 
@@ -91,8 +136,8 @@ public final class UsbInterfaceImpl implements UsbInterface
     @Override
     public boolean isClaimed()
     {
-        // TODO
-        throw new UnsupportedOperationException();
+        return ((AbstractDevice) this.configuration.getUsbDevice())
+                .isInterfaceClaimed(this.descriptor.bInterfaceNumber());
     }
 
 
@@ -103,8 +148,8 @@ public final class UsbInterfaceImpl implements UsbInterface
     @Override
     public boolean isActive()
     {
-        // TODO
-        throw new UnsupportedOperationException();
+        return this.configuration.getUsbInterface(this.descriptor
+                .bInterfaceNumber()) == this;
     }
 
 
@@ -115,7 +160,8 @@ public final class UsbInterfaceImpl implements UsbInterface
     @Override
     public int getNumSettings()
     {
-        return this.iface.num_altsetting();
+        return ((this.configuration)
+                .getNumSettings(this.descriptor.bInterfaceNumber()));
     }
 
 
@@ -126,8 +172,11 @@ public final class UsbInterfaceImpl implements UsbInterface
     @Override
     public byte getActiveSettingNumber()
     {
-        // TODO
-        throw new UnsupportedOperationException();
+        checkConfigurationActive();
+        checkSettingActive();
+        return this.configuration
+                .getUsbInterface(this.descriptor.bInterfaceNumber())
+                .getUsbInterfaceDescriptor().bAlternateSetting();
     }
 
 
@@ -138,8 +187,10 @@ public final class UsbInterfaceImpl implements UsbInterface
     @Override
     public UsbInterface getActiveSetting()
     {
-        // TODO
-        throw new UnsupportedOperationException();
+        checkConfigurationActive();
+        checkSettingActive();
+        return this.configuration.getUsbInterface(this.descriptor
+                .bInterfaceNumber());
     }
 
 
@@ -150,8 +201,8 @@ public final class UsbInterfaceImpl implements UsbInterface
     @Override
     public UsbInterface getSetting(final byte number)
     {
-        // TODO
-        throw new UnsupportedOperationException();
+        return (this.configuration).getSettings(
+            this.descriptor.bInterfaceNumber()).get(number);
     }
 
 
@@ -162,7 +213,8 @@ public final class UsbInterfaceImpl implements UsbInterface
     @Override
     public boolean containsSetting(final byte number)
     {
-        return number >= 0 && number < this.iface.num_altsetting();
+        return (this.configuration).getSettings(
+            this.descriptor.bInterfaceNumber()).containsKey(number);
     }
 
 
@@ -173,8 +225,9 @@ public final class UsbInterfaceImpl implements UsbInterface
     @Override
     public List<UsbInterface> getSettings()
     {
-        // TODO
-        throw new UnsupportedOperationException();
+        return Collections.unmodifiableList(new ArrayList<UsbInterface>(
+            (this.configuration).getSettings(
+                this.descriptor.bInterfaceNumber()).values()));
     }
 
 
@@ -232,8 +285,7 @@ public final class UsbInterfaceImpl implements UsbInterface
     @Override
     public UsbInterfaceDescriptor getUsbInterfaceDescriptor()
     {
-        // TODO
-        throw new UnsupportedOperationException();
+        return this.descriptor;
     }
 
 
@@ -242,9 +294,11 @@ public final class UsbInterfaceImpl implements UsbInterface
      */
 
     @Override
-    public String getInterfaceString()
+    public String getInterfaceString() throws UsbException,
+        UnsupportedEncodingException
     {
-        // TODO
-        throw new UnsupportedOperationException();
+        final byte iInterface = this.descriptor.iInterface();
+        if (iInterface == 0) return null;
+        return this.configuration.getUsbDevice().getString(iInterface);
     }
 }

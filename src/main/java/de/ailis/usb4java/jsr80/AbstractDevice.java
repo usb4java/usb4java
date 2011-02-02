@@ -6,10 +6,14 @@
 package de.ailis.usb4java.jsr80;
 
 import static de.ailis.usb4java.USB.USB_DT_STRING;
+import static de.ailis.usb4java.USB.usb_claim_interface;
 import static de.ailis.usb4java.USB.usb_close;
+import static de.ailis.usb4java.USB.usb_control_msg;
 import static de.ailis.usb4java.USB.usb_get_descriptor;
 import static de.ailis.usb4java.USB.usb_get_string;
 import static de.ailis.usb4java.USB.usb_open;
+import static de.ailis.usb4java.USB.usb_release_interface;
+import static de.ailis.usb4java.USB.usb_set_configuration;
 import static de.ailis.usb4java.USB.usb_strerror;
 
 import java.io.UnsupportedEncodingException;
@@ -19,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.usb.UsbClaimException;
 import javax.usb.UsbConfiguration;
 import javax.usb.UsbConst;
 import javax.usb.UsbControlIrp;
@@ -64,7 +69,10 @@ abstract class AbstractDevice implements UsbDevice
     private USB_Dev_Handle handle;
 
     /** The number of the currently active configuration. */
-    private final byte activeConfigurationNumber = 0;
+    private byte activeConfigurationNumber = 0;
+
+    /** The number of the currently claimed interface. */
+    private Byte claimedInterfaceNumber = null;
 
     /** The port this device is connected to. */
     private UsbPort port;
@@ -84,9 +92,21 @@ abstract class AbstractDevice implements UsbDevice
 
         final USB_Config_Descriptor[] configs = device.config();
         final List<UsbConfiguration> configurations =
-            new ArrayList<UsbConfiguration>(configs.length);
+                new ArrayList<UsbConfiguration>(configs.length);
         for (final USB_Config_Descriptor config : configs)
-            configurations.add(new UsbConfigurationImpl(this, config));
+        {
+            final UsbConfiguration configuration = new UsbConfigurationImpl(
+                this, config);
+            configurations.add(configuration);
+
+            // TODO No idea how to find out the active configuration via
+            // libusb. So for now we use the first configuration.
+            if (this.activeConfigurationNumber == 0)
+            {
+                this.activeConfigurationNumber = (byte) config
+                        .bConfigurationValue();
+            }
+        }
         this.configurations = Collections.unmodifiableList(configurations);
     }
 
@@ -318,6 +338,117 @@ abstract class AbstractDevice implements UsbDevice
 
 
     /**
+     * Sets the active USB configuration.
+     *
+     * @param number
+     *            The number of the USB configuration to activate.
+     * @throws UsbException
+     *             When configuration could not be activated.
+     */
+
+    final void setActiveUsbConfigurationNumber(final byte number)
+        throws UsbException
+    {
+        if (number != this.activeConfigurationNumber)
+        {
+            if (this.claimedInterfaceNumber != null)
+                throw new UsbException("Can't change configuration while an "
+                    + "interface is still claimed");
+
+            USBLock.acquire();
+            try
+            {
+                final int result = usb_set_configuration(open(), number & 0xff);
+                if (result < 0) throw new UsbException(usb_strerror());
+                this.activeConfigurationNumber = number;
+            }
+            finally
+            {
+                USBLock.release();
+            }
+        }
+    }
+
+
+    /**
+     * Claims the specified interface.
+     *
+     * @param number
+     *            The number of the interface to claim.
+     * @throws UsbException
+     *             When interface could not be claimed.
+     * @throws UsbClaimException
+     *             When an interface is already claimed.
+     */
+
+    final void claimInterface(final byte number) throws UsbClaimException,
+        UsbException
+    {
+        if (this.claimedInterfaceNumber != null)
+            throw new UsbClaimException("A interface is already claimed");
+
+        USBLock.acquire();
+        try
+        {
+            final int result = usb_claim_interface(open(), number & 0xff);
+            if (result < 0) throw new UsbException(usb_strerror());
+            this.claimedInterfaceNumber = number;
+        }
+        finally
+        {
+            USBLock.release();
+        }
+    }
+
+
+    /**
+     * Releases a claimed interface.
+     *
+     * @param number
+     *            The number of the interface to release.
+     * @throws UsbClaimException
+     *             When the interface is not claimed.
+     * @throws UsbException
+     *             When interface could not be claimed.
+     */
+
+    final void releaseInterface(final byte number) throws UsbClaimException,
+        UsbException
+    {
+        if (this.claimedInterfaceNumber == null)
+            throw new UsbClaimException("No interface is claimed");
+        if (!Byte.valueOf(number).equals(this.claimedInterfaceNumber))
+            throw new UsbClaimException("Interface not claimed");
+
+        USBLock.acquire();
+        try
+        {
+            final int result = usb_release_interface(open(), number & 0xff);
+            if (result < 0) throw new UsbException(usb_strerror());
+            this.claimedInterfaceNumber = null;
+        }
+        finally
+        {
+            USBLock.release();
+        }
+    }
+
+
+    /**
+     * Checks if the specified interface is claimed.
+     *
+     * @param number
+     *            The number of the interface to check.
+     * @return True if interface is claimed, false if not.
+     */
+
+    final boolean isInterfaceClaimed(final byte number)
+    {
+        return Byte.valueOf(number).equals(this.claimedInterfaceNumber);
+    }
+
+
+    /**
      * @see UsbDevice#getActiveUsbConfiguration()
      */
 
@@ -437,8 +568,23 @@ abstract class AbstractDevice implements UsbDevice
     @Override
     public final void syncSubmit(final UsbControlIrp irp) throws UsbException
     {
-        // TODO
-        throw new UnsupportedOperationException();
+        USBLock.acquire();
+        try
+        {
+            final ByteBuffer buffer = ByteBuffer
+                    .allocateDirect(irp.getLength());
+            final USB_Dev_Handle handle = open();
+            final int len = usb_control_msg(handle, irp.bmRequestType(),
+                irp.bRequest(),
+                irp.wValue(), irp.wIndex(), buffer, 250);
+            if (len < 0) throw new UsbException(usb_strerror());
+            buffer.rewind();
+            buffer.get(irp.getData(), 0, len);
+        }
+        finally
+        {
+            USBLock.release();
+        }
     }
 
 
