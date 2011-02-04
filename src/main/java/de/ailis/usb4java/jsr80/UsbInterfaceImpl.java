@@ -8,11 +8,14 @@ package de.ailis.usb4java.jsr80;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.usb.UsbClaimException;
 import javax.usb.UsbConfiguration;
 import javax.usb.UsbEndpoint;
+import javax.usb.UsbEndpointDescriptor;
 import javax.usb.UsbException;
 import javax.usb.UsbInterface;
 import javax.usb.UsbInterfaceDescriptor;
@@ -20,6 +23,7 @@ import javax.usb.UsbInterfacePolicy;
 import javax.usb.UsbNotActiveException;
 
 import de.ailis.usb4java.USBLock;
+import de.ailis.usb4java.USB_Endpoint_Descriptor;
 import de.ailis.usb4java.USB_Interface_Descriptor;
 
 
@@ -37,6 +41,13 @@ public final class UsbInterfaceImpl implements UsbInterface
     /** The interface descriptor. */
     private final UsbInterfaceDescriptor descriptor;
 
+    /** The endpoint address to endpoints mapping. */
+    private final Map<Byte, UsbEndpoint> endpointMap =
+        new HashMap<Byte, UsbEndpoint>();
+
+    /** The endpoints. */
+    private final List<UsbEndpoint> endpoints;
+
 
     /**
      * Constructor.
@@ -45,15 +56,30 @@ public final class UsbInterfaceImpl implements UsbInterface
      *            The USB configuration.
      * @param lowLevelDescriptor
      *            The low-level USB interface descriptor.
+     * @param device
+     *            The USB device.
      */
 
     public UsbInterfaceImpl(final UsbConfigurationImpl configuration,
-        final USB_Interface_Descriptor lowLevelDescriptor)
+        final USB_Interface_Descriptor lowLevelDescriptor,
+        final AbstractDevice device)
     {
         this.configuration = configuration;
         this.descriptor = new UsbInterfaceDescriptorImpl(lowLevelDescriptor);
-    }
 
+        final List<UsbEndpoint> endpoints = new ArrayList<UsbEndpoint>();
+        for (final USB_Endpoint_Descriptor desc : lowLevelDescriptor
+            .endpoint())
+        {
+            final UsbEndpointDescriptor descriptor =
+                new UsbEndpointDescriptorImpl(desc);
+            final UsbEndpoint endpoint =
+                new UsbEndpointImpl(this, descriptor, device);
+            this.endpointMap.put(descriptor.bEndpointAddress(), endpoint);
+            endpoints.add(endpoint);
+        }
+        this.endpoints = Collections.unmodifiableList(endpoints);
+    }
 
     /**
      * Checks if the configuration is active. If not then an
@@ -108,7 +134,8 @@ public final class UsbInterfaceImpl implements UsbInterface
             device.setActiveUsbConfigurationNumber(this.configuration
                     .getUsbConfigurationDescriptor().bConfigurationValue());
             device.claimInterface(this.descriptor.bInterfaceNumber());
-            this.configuration.setUsbInterface(this.descriptor.bInterfaceNumber(), this);
+            this.configuration.setUsbInterface(
+                this.descriptor.bInterfaceNumber(), this);
         }
         finally
         {
@@ -148,6 +175,9 @@ public final class UsbInterfaceImpl implements UsbInterface
     @Override
     public boolean isActive()
     {
+        System.out.println(this.configuration.getUsbInterface(this.descriptor
+            .bInterfaceNumber()));
+        System.out.println(this);
         return this.configuration.getUsbInterface(this.descriptor
                 .bInterfaceNumber()) == this;
     }
@@ -238,8 +268,7 @@ public final class UsbInterfaceImpl implements UsbInterface
     @Override
     public List<UsbEndpoint> getUsbEndpoints()
     {
-        // TODO
-        throw new UnsupportedOperationException();
+        return this.endpoints;
     }
 
 
@@ -250,8 +279,7 @@ public final class UsbInterfaceImpl implements UsbInterface
     @Override
     public UsbEndpoint getUsbEndpoint(final byte address)
     {
-        // TODO
-        throw new UnsupportedOperationException();
+        return this.endpointMap.get(address);
     }
 
 
@@ -262,8 +290,7 @@ public final class UsbInterfaceImpl implements UsbInterface
     @Override
     public boolean containsUsbEndpoint(final byte address)
     {
-        // TODO
-        throw new UnsupportedOperationException();
+        return this.endpointMap.containsKey(address);
     }
 
 

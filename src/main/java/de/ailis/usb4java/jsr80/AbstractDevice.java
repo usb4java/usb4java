@@ -568,11 +568,21 @@ abstract class AbstractDevice implements UsbDevice
     @Override
     public final void syncSubmit(final UsbControlIrp irp) throws UsbException
     {
+        if( (irp.bRequest() == UsbConst.REQUEST_SET_CONFIGURATION) && (irp.bmRequestType() ==0) )
+        {
+            final int result2 = usb_set_configuration(open(), irp.wValue());
+            if (result2 < 0) throw new UsbException(usb_strerror());
+            return;
+        }
+
+
         USBLock.acquire();
         try
         {
             final ByteBuffer buffer = ByteBuffer
                     .allocateDirect(irp.getLength());
+            buffer.put(irp.getData(), 0, irp.getLength());
+            buffer.rewind();
             final USB_Dev_Handle handle = open();
             final int len = usb_control_msg(handle, irp.bmRequestType(),
                 irp.bRequest(),
@@ -580,11 +590,13 @@ abstract class AbstractDevice implements UsbDevice
             if (len < 0) throw new UsbException(usb_strerror());
             buffer.rewind();
             buffer.get(irp.getData(), 0, len);
+            irp.setActualLength(len);
         }
         finally
         {
             USBLock.release();
         }
+        irp.complete();
     }
 
 

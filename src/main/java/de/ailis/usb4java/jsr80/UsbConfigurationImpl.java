@@ -84,7 +84,7 @@ public final class UsbConfigurationImpl implements UsbConfiguration
                     this.interfaces.put(ifaceNumber, settings);
                 }
                 final UsbInterface usbInterface = new UsbInterfaceImpl(this,
-                    desc);
+                    desc, device);
 
                 // If we have no active setting for current interface number
                 // yet or the alternate setting number is 0 (which marks the
@@ -92,7 +92,10 @@ public final class UsbConfigurationImpl implements UsbConfiguration
                 // the active setting.
                 if (!this.activeSettings.containsKey(ifaceNumber) ||
                         desc.bAlternateSetting() == 0)
+                {
                     this.activeSettings.put(ifaceNumber, usbInterface);
+                    System.out.println("Active: " + usbInterface);
+                }
 
                 // Add the interface to the settings list
                 settings.put(settingNumber, usbInterface);
@@ -160,7 +163,7 @@ public final class UsbConfigurationImpl implements UsbConfiguration
     @Override
     public UsbInterface getUsbInterface(final byte number)
     {
-        return this.activeSettings.get(number);
+        return this.activeSettings.get((int) number);
     }
 
 
