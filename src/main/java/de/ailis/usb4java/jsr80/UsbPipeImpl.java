@@ -45,7 +45,7 @@ final class UsbPipeImpl implements UsbPipe
     private boolean opened;
 
     /** The request queue. */
-    private final IrpQueue queue ;
+    private final IrpQueue queue;
 
 
     /**

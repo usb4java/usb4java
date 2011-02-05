@@ -22,7 +22,7 @@ import de.ailis.usb4java.USB_Dev_Handle;
 
 
 /**
- * A queue for USB control I/O request packets.
+ * A queue for USB I/O request packets.
  *
  * @author Klaus Reimer (k@ailis.de)
  */

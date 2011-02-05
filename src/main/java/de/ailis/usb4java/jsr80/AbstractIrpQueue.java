@@ -137,9 +137,11 @@ abstract class AbstractIrpQueue<T extends UsbIrp>
 
 
     /**
-     * Called after IRP has finished. This can be implemented to send events for example.
+     * Called after IRP has finished. This can be implemented to send events for
+     * example.
      *
-     * @param irp The IRP which has been finished.
+     * @param irp
+     *            The IRP which has been finished.
      */
 
     protected abstract void finishIrp(final UsbIrp irp);
