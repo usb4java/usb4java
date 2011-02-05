@@ -137,7 +137,7 @@ final class UsbConfigurationImpl implements UsbConfiguration
 
     Map<Integer, UsbInterface> getSettings(final byte number)
     {
-        return this.interfaces.get(number);
+        return this.interfaces.get(number & 0xff);
     }
 
 
@@ -151,7 +151,7 @@ final class UsbConfigurationImpl implements UsbConfiguration
 
     int getNumSettings(final byte number)
     {
-        return this.interfaces.get(number).size();
+        return this.interfaces.get(number & 0xff).size();
     }
 
 
@@ -207,7 +207,7 @@ final class UsbConfigurationImpl implements UsbConfiguration
     @Override
     public boolean containsUsbInterface(final byte number)
     {
-        return this.activeSettings.containsKey(number);
+        return this.activeSettings.containsKey(number & 0xff);
     }
 
 

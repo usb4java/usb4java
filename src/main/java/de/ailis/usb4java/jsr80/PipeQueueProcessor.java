@@ -64,9 +64,9 @@ final class PipeQueueProcessor extends Thread
 
     public void shutdown()
     {
-        this.stop = true;
         synchronized (this)
         {
+            this.stop = true;
             notifyAll();
         }
     }
@@ -79,18 +79,18 @@ final class PipeQueueProcessor extends Thread
     public void shutdownAndWait()
     {
         shutdown();
-        while (isRunning())
+        synchronized (this)
         {
-            try
+            while (isRunning())
             {
-                synchronized (this)
+                try
                 {
                     wait();
                 }
-            }
-            catch (final InterruptedException e)
-            {
-                Thread.currentThread().interrupt();
+                catch (final InterruptedException e)
+                {
+                    Thread.currentThread().interrupt();
+                }
             }
         }
     }
@@ -314,33 +314,30 @@ final class PipeQueueProcessor extends Thread
     @Override
     public void run()
     {
-        this.running = true;
-        final UsbIrpQueue queue = this.pipe.getQueue();
-        while (!this.stop)
+        synchronized (this)
         {
-            UsbIrp irp = queue.get();
-            while (!this.stop && irp != null)
+            this.running = true;
+            final UsbIrpQueue queue = this.pipe.getQueue();
+            while (!this.stop)
             {
-                this.processing = true;
-                processIrp(irp);
-                irp = queue.get();
-            }
-            this.processing = false;
-            try
-            {
-                synchronized (this)
+                UsbIrp irp = queue.get();
+                while (!this.stop && irp != null)
+                {
+                    this.processing = true;
+                    processIrp(irp);
+                    irp = queue.get();
+                }
+                this.processing = false;
+                try
                 {
                     wait();
                 }
+                catch (final InterruptedException e)
+                {
+                    Thread.currentThread().interrupt();
+                }
             }
-            catch (final InterruptedException e)
-            {
-                Thread.currentThread().interrupt();
-            }
-        }
-        this.running = false;
-        synchronized (this)
-        {
+            this.running = false;
             notifyAll();
         }
     }
