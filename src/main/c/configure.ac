@@ -1,7 +1,9 @@
-AC_INIT(configure.ac)
-AM_INIT_AUTOMAKE(libusb4java, 0.1.12-1)
-AM_CONFIG_HEADER(config.h)
+AC_PREREQ([2.65])
+AC_INIT([libusb4java], [0.1.0], [k@ailis.de])
+AM_INIT_AUTOMAKE(foreign -Wall -Werror)
 AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_SRCDIR([src/usb4java.h])
 
 CPPFLAGS="\
   -I/System/Library/Frameworks/JavaVM.framework/Headers \

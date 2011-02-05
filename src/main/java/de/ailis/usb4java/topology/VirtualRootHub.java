@@ -39,7 +39,7 @@ public final class VirtualRootHub implements UsbHub,
     private static final String PRODUCT = "Virtual Root Hub";
 
     /** The serial number. */
-    private static final String SERIAL_NUMBER = "0.1.12-1";
+    private static final String SERIAL_NUMBER = "0.1.0";
 
     /** The configurations. */
     private final List<UsbConfiguration> configurations =
