@@ -8,8 +8,7 @@ What is usb4java?
   based on the native {{{http://www.libusb.org/}libusb 0.1}} shared library
   and reflects this API as complete as possible. Java NIO buffers are used
   for data exchange between libusb and Java. The high-level part implements
-  the {{{http://www.java-usb.org/}javax.usb standard (JSR-80)}} but this part
-  is not well tested at the moment.
+  the {{{http://www.javax-usb.org/}javax.usb standard (JSR-80)}}.
   
   Supported platforms are Linux (Intel 32/64 bit), Mac OS X (Intel 32/64 bit,
   PowerPC 32 bit) and Windows (Intel 32/64 bit). But other platforms may work
@@ -25,7 +24,7 @@ What is usb4java?
 
 News
 
-  * 2011/01/29 - Version 0.1.12-1 has been released.
+  * 2011/02/05 - Version 0.1.0 has been released.
 
   []
 

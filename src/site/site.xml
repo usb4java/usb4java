@@ -9,6 +9,7 @@
 
   <body>
     <links>
+      <item name="javax.usb" href="http://www.javax-usb.org/" />
       <item name="libusb" href="http://www.libusb.org/" />
       <item name="libusb-win32" href="http://sourceforge.net/apps/trac/libusb-win32/wiki" />
     </links>
