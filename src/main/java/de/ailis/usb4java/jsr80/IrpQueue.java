@@ -114,6 +114,18 @@ final class IrpQueue extends AbstractIrpQueue<UsbIrp>
 
 
     /**
+     * Returns the USB endpoint descriptor.
+     *
+     * @return The USB endpoint descriptor.
+     */
+
+    private UsbEndpointDescriptor getEndpointDescriptor()
+    {
+        return this.pipe.getUsbEndpoint().getUsbEndpointDescriptor();
+    }
+
+
+    /**
      * Reads bytes from a bulk endpoint into the specified data array.
      *
      * @param data
@@ -126,29 +138,16 @@ final class IrpQueue extends AbstractIrpQueue<UsbIrp>
     private int bulkRead(final byte[] data) throws UsbException
     {
         final UsbEndpointDescriptor descriptor = getEndpointDescriptor();
-        final int size =
-                Math.min(data.length, descriptor.wMaxPacketSize() & 0xffff);
-        final int ep = descriptor.bEndpointAddress();
+        final int size = Math.min(data.length, descriptor.wMaxPacketSize()
+            & 0xffff);
         final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
-        final int result = usb_bulk_read(this.device.open(), ep, buffer, 5000);
-        if (result < 0)
-            throw new LibUsbException("Unable to read from interrupt endpoint",
-                result);
+        final int result = usb_bulk_read(this.device.open(),
+            descriptor.bEndpointAddress(), buffer, 5000);
+        if (result < 0) throw new LibUsbException(
+            "Unable to read from interrupt endpoint", result);
         buffer.rewind();
         buffer.get(data, 0, result);
         return result;
-    }
-
-
-    /**
-     * Returns the USB endpoint descriptor.
-     *
-     * @return The USB endpoint descriptor.
-     */
-
-    private UsbEndpointDescriptor getEndpointDescriptor()
-    {
-        return this.pipe.getUsbEndpoint().getUsbEndpointDescriptor();
     }
 
 
@@ -167,7 +166,6 @@ final class IrpQueue extends AbstractIrpQueue<UsbIrp>
         final UsbEndpointDescriptor descriptor = getEndpointDescriptor();
         final int total = data.length;
         final int size = Math.min(total, descriptor.wMaxPacketSize() & 0xffff);
-        final int ep = descriptor.bEndpointAddress();
         final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
         final USB_Dev_Handle handle = this.device.open();
         int written = 0;
@@ -175,16 +173,15 @@ final class IrpQueue extends AbstractIrpQueue<UsbIrp>
         {
             buffer.put(data, written, Math.min(total - written, size));
             buffer.rewind();
-            final int result = usb_bulk_write(handle, ep, buffer, 5000);
-            if (result < 0)
-                throw new LibUsbException(
-                    "Unable to write to bulk endpoint", result);
+            final int result = usb_bulk_write(handle,
+                descriptor.bEndpointAddress(), buffer, 5000);
+            if (result < 0) throw new LibUsbException(
+                "Unable to write to bulk endpoint", result);
             written += result;
             buffer.rewind();
         }
         return written;
     }
-
 
     /**
      * Reads bytes from an interrupt endpoint into the specified data array.
@@ -199,15 +196,13 @@ final class IrpQueue extends AbstractIrpQueue<UsbIrp>
     private int interruptRead(final byte[] data) throws UsbException
     {
         final UsbEndpointDescriptor descriptor = getEndpointDescriptor();
-        final int size =
-                Math.min(data.length, descriptor.wMaxPacketSize() & 0xffff);
-        final int ep = descriptor.bEndpointAddress();
+        final int size = Math.min(data.length, descriptor.wMaxPacketSize()
+            & 0xffff);
         final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
-        final int result =
-                usb_interrupt_read(this.device.open(), ep, buffer, 5000);
-        if (result < 0)
-            throw new LibUsbException("Unable to read from interrupt endpoint",
-                result);
+        final int result = usb_interrupt_read(this.device.open(),
+            descriptor.bEndpointAddress(), buffer, 5000);
+        if (result < 0) throw new LibUsbException(
+            "Unable to read from interrupt endpoint", result);
         buffer.rewind();
         buffer.get(data, 0, result);
         return result;
@@ -229,18 +224,16 @@ final class IrpQueue extends AbstractIrpQueue<UsbIrp>
         final UsbEndpointDescriptor descriptor = getEndpointDescriptor();
         final int total = data.length;
         final int size = Math.min(total, descriptor.wMaxPacketSize() & 0xffff);
-        final int ep = descriptor.bEndpointAddress();
         final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
-        final USB_Dev_Handle handle = this.device.open();
         int written = 0;
         while (written < total)
         {
             buffer.put(data, written, Math.min(total - written, size));
             buffer.rewind();
-            final int result = usb_interrupt_write(handle, ep, buffer, 5000);
-            if (result < 0)
-                throw new LibUsbException(
-                    "Unable to write to interrupt endpoint", result);
+            final int result = usb_interrupt_write(this.device.open(),
+                descriptor.bEndpointAddress(), buffer, 5000);
+            if (result < 0) throw new LibUsbException(
+                "Unable to write to interrupt endpoint", result);
             written += result;
             buffer.rewind();
         }
