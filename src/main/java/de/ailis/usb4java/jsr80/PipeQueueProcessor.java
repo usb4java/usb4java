@@ -65,7 +65,10 @@ final class PipeQueueProcessor extends Thread
     public void shutdown()
     {
         this.stop = true;
-        notify();
+        synchronized (this)
+        {
+            notifyAll();
+        }
     }
 
 
@@ -80,7 +83,10 @@ final class PipeQueueProcessor extends Thread
         {
             try
             {
-                wait();
+                synchronized (this)
+                {
+                    wait();
+                }
             }
             catch (final InterruptedException e)
             {
@@ -302,7 +308,10 @@ final class PipeQueueProcessor extends Thread
             this.processing = false;
             try
             {
-                wait();
+                synchronized (this)
+                {
+                    wait();
+                }
             }
             catch (final InterruptedException e)
             {
@@ -310,7 +319,10 @@ final class PipeQueueProcessor extends Thread
             }
         }
         this.running = false;
-        notify();
+        synchronized (this)
+        {
+            notifyAll();
+        }
     }
 
 

@@ -34,7 +34,7 @@ public class LibUsbException extends UsbException
 
     public LibUsbException(final int errorCode)
     {
-        super(String.format("USB error %i: %s", errorCode, usb_strerror()));
+        super(String.format("USB error %d: %s", errorCode, usb_strerror()));
         this.errorCode = errorCode;
     }
 

@@ -279,7 +279,11 @@ public final class UsbPipeImpl implements UsbPipe
         checkOpen();
 
         this.queue.add(irp);
-        this.queueProcessor.notify();
+        synchronized (this.queueProcessor)
+        {
+            this.queueProcessor.notifyAll();
+        }
+
     }
 
 
