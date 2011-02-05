@@ -72,7 +72,7 @@ JNIEXPORT jobject JNICALL METHOD_NAME(USB, usb_1get_1busses)
 
 
 /**
- * USB_Handle usb_open(USB_Device)
+ * USB_Dev_Handle usb_open(USB_Device)
  */
 
 JNIEXPORT jobject JNICALL METHOD_NAME(USB, usb_1open)
@@ -85,7 +85,7 @@ JNIEXPORT jobject JNICALL METHOD_NAME(USB, usb_1open)
 
 
 /**
- * int usb_close(USB_Handle)
+ * int usb_close(USB_Dev_Handle)
  */
 
 JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1close)
@@ -98,7 +98,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1close)
 
 
 /**
- * int usb_set_configuration(USB_Handle handle, int configuration)
+ * int usb_set_configuration(USB_Dev_Handle handle, int configuration)
  */
 
 JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1set_1configuration)
@@ -197,7 +197,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1control_1msg)
 
 
 /**
- * int usb_get_string(USB_Handle handle, int index, int langid, byte[] buffer,
+ * int usb_get_string(USB_Dev_Handle handle, int index, int langid, byte[] buffer,
  *     int buflen)
  */
 
@@ -216,7 +216,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1get_1string)
 
 
 /**
- * int usb_get_simple_string(USB_Handle handle, int index, ByteBuffer buffer)
+ * int usb_get_simple_string(USB_Dev_Handle handle, int index, ByteBuffer buffer)
  */
 
 JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1get_1string_1simple)
@@ -356,4 +356,73 @@ JNIEXPORT jstring JNICALL METHOD_NAME(USB, usb_1strerror)
 )
 {
     return (*env)->NewStringUTF(env, usb_strerror());
+}
+
+
+/**
+ * int usb_detach_kernel_driver_np(USB_Dev_Handle handle, int iface)
+ */
+
+#ifdef LIBUSB_HAS_DETACH_KERNEL_DRIVER_NP
+JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1detach_1kernel_1driver_1np)
+(
+    JNIEnv *env, jclass class, jobject handle, jint iface
+)
+{
+    return usb_detach_kernel_driver_np(unwrap_usb_dev_handle(env, handle), iface);
+}
+#endif
+
+
+/**
+ * int usb_get_driver_np(USB_Dev_Handle handle, int iface, ByteBuffer buffer)
+ */
+
+#ifdef LIBUSB_HAS_GET_DRIVER_NP
+JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1get_1driver_1np)
+(
+    JNIEnv *env, jclass class, jobject handle, jint iface, jobject buffer
+)
+{
+    void *buf = (*env)->GetDirectBufferAddress(env, buffer);
+    if (!buf) return -1;
+    jlong buflen = (*env)->GetDirectBufferCapacity(env, buffer);
+    return usb_get_driver_np(unwrap_usb_dev_handle(env, handle),
+         iface, buf, buflen);
+}
+#endif
+
+
+/**
+ * boolean libusb_has_detach_kernel_driver_np()
+ */
+
+JNIEXPORT jboolean JNICALL METHOD_NAME(USB,
+    libusb_1has_1detach_1kernel_1driver_1np)
+(
+    JNIEnv *env, jclass class
+)
+{
+    #ifdef LIBUSB_HAS_DETACH_KERNEL_DRIVER_NP
+    return 1;
+    #else
+    return 0;
+    #endif
+}
+
+
+/**
+ * boolean libusb_has_get_driver_np()
+ */
+
+JNIEXPORT jboolean JNICALL METHOD_NAME(USB, libusb_1has_1get_1driver_1np)
+(
+    JNIEnv *env, jclass class
+)
+{
+    #ifdef LIBUSB_HAS_GET_DRIVER_NP
+    return 1;
+    #else
+    return 0;
+    #endif
 }

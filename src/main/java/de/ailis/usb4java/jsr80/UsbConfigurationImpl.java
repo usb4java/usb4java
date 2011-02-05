@@ -94,7 +94,6 @@ public final class UsbConfigurationImpl implements UsbConfiguration
                         desc.bAlternateSetting() == 0)
                 {
                     this.activeSettings.put(ifaceNumber, usbInterface);
-                    System.out.println("Active: " + usbInterface);
                 }
 
                 // Add the interface to the settings list

@@ -5,6 +5,9 @@
 
 package de.ailis.usb4java.jsr80;
 
+import static de.ailis.usb4java.USB.libusb_has_detach_kernel_driver_np;
+import static de.ailis.usb4java.USB.usb_detach_kernel_driver_np;
+
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,10 +46,13 @@ public final class UsbInterfaceImpl implements UsbInterface
 
     /** The endpoint address to endpoints mapping. */
     private final Map<Byte, UsbEndpoint> endpointMap =
-        new HashMap<Byte, UsbEndpoint>();
+            new HashMap<Byte, UsbEndpoint>();
 
     /** The endpoints. */
     private final List<UsbEndpoint> endpoints;
+
+    /** The USB device. */
+    private final AbstractDevice device;
 
 
     /**
@@ -66,15 +72,16 @@ public final class UsbInterfaceImpl implements UsbInterface
     {
         this.configuration = configuration;
         this.descriptor = new UsbInterfaceDescriptorImpl(lowLevelDescriptor);
+        this.device = device;
 
         final List<UsbEndpoint> endpoints = new ArrayList<UsbEndpoint>();
         for (final USB_Endpoint_Descriptor desc : lowLevelDescriptor
-            .endpoint())
+                .endpoint())
         {
             final UsbEndpointDescriptor descriptor =
-                new UsbEndpointDescriptorImpl(desc);
+                    new UsbEndpointDescriptorImpl(desc);
             final UsbEndpoint endpoint =
-                new UsbEndpointImpl(this, descriptor, device);
+                    new UsbEndpointImpl(this, descriptor, device);
             this.endpointMap.put(descriptor.bEndpointAddress(), endpoint);
             endpoints.add(endpoint);
         }
@@ -131,6 +138,15 @@ public final class UsbInterfaceImpl implements UsbInterface
         USBLock.acquire();
         try
         {
+            // Detach existing driver from the device if requested and
+            // libusb supports it.
+            if (policy != null && policy.forceClaim(this)
+                && libusb_has_detach_kernel_driver_np())
+            {
+                usb_detach_kernel_driver_np(this.device.open(),
+                    this.descriptor.bInterfaceNumber());
+            }
+
             device.setActiveUsbConfigurationNumber(this.configuration
                     .getUsbConfigurationDescriptor().bConfigurationValue());
             device.claimInterface(this.descriptor.bInterfaceNumber());
@@ -175,9 +191,6 @@ public final class UsbInterfaceImpl implements UsbInterface
     @Override
     public boolean isActive()
     {
-        System.out.println(this.configuration.getUsbInterface(this.descriptor
-            .bInterfaceNumber()));
-        System.out.println(this);
         return this.configuration.getUsbInterface(this.descriptor
                 .bInterfaceNumber()) == this;
     }

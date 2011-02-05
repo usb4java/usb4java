@@ -764,4 +764,98 @@ public final class USB
      */
 
     public static native String usb_strerror();
+
+
+    /**
+     * Get driver name bound to interface.
+     *
+     * This function will obtain the name of the driver bound to the interface
+     * specified by the parameter interface and place it into the specified
+     * buffer. Returns 0 on success or < 0 on error.
+     *
+     * Implemented on Linux only. On other platforms an UnsatisfiedLinkError
+     * exception will be thrown.
+     *
+     * @param handle
+     *            The USB device handle.
+     * @param iface
+     *            The interface number.
+     * @param buffer
+     *            The buffer to place the name in.
+     * @return 0 on success or < 0 on error.
+     */
+
+    public static native int usb_get_driver_np(USB_Dev_Handle handle,
+        int iface, ByteBuffer buffer);
+
+
+    /**
+     * Get driver name bound to interface.
+     *
+     * This function will obtain the name of the driver bound to the interface
+     * specified by the parameter interface.
+     *
+     * Implemented on Linux only. On other platforms an UnsatisfiedLinkError
+     * exception will be thrown.
+     *
+     * @param handle
+     *            The USB device handle.
+     * @param iface
+     *            The interface number.
+     * @return The driver name or null on error.
+     */
+
+    public static String usb_get_driver_np(final USB_Dev_Handle handle,
+        final int iface)
+    {
+        final ByteBuffer buffer = ByteBuffer.allocateDirect(MAX_STRING_SIZE);
+        final int result = usb_get_driver_np(handle, iface, buffer);
+        if (result < 0) return null;
+        buffer.rewind();
+        int size = 0;
+        while (buffer.get() != 0) size++;
+        buffer.rewind();
+        final byte[] bytes = new byte[size];
+        buffer.get(bytes, 0, size);
+        return new String(bytes);
+    }
+
+
+    /**
+     * Detach kernel driver from interface.
+     *
+     * This function will detach a kernel driver from the interface specified by
+     * parameter interface. Applications using libusb can then try claiming the
+     * interface. Returns 0 on success or < 0 on error.
+     *
+     * Implemented on Linux only. On other platforms an UnsatisfiedLinkError
+     * exception will be thrown.
+     *
+     * @param handle
+     *            The device handle.
+     * @param iface
+     *            The interface number.
+     * @return 0 on success or < 0 on error.
+     */
+
+    public static native int usb_detach_kernel_driver_np(USB_Dev_Handle handle,
+        int iface);
+
+
+    /**
+     * Checks if libusb supports the usb_get_driver_np function.
+     *
+     * @return True if support is present, false if not.
+     */
+
+    public static native boolean libusb_has_get_driver_np();
+
+
+    /**
+     * Checks if libusb supports the usb_detach_kernel_driver_np function.
+     *
+     * @return True if support is present, false if not.
+     */
+
+    public static native boolean libusb_has_detach_kernel_driver_np();
 }
