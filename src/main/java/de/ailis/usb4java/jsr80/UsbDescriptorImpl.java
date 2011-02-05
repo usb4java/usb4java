@@ -18,7 +18,7 @@ import de.ailis.usb4java.USB_Descriptor_Header;
  *            The descriptor type.
  */
 
-public abstract class UsbDescriptorImpl<T extends USB_Descriptor_Header>
+abstract class UsbDescriptorImpl<T extends USB_Descriptor_Header>
         implements UsbDescriptor
 {
     /** The low level USB descriptor header. */

@@ -14,7 +14,7 @@ import de.ailis.usb4java.USB_Device;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public final class UsbDeviceImpl extends AbstractDevice
+final class UsbDeviceImpl extends AbstractDevice
 {
     /**
      * Constructor.

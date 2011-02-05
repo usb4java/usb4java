@@ -6,7 +6,6 @@
 package de.ailis.usb4java.jsr80;
 
 import static de.ailis.usb4java.USB.usb_set_altinterface;
-import static de.ailis.usb4java.USB.usb_strerror;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -33,7 +32,7 @@ import de.ailis.usb4java.USB_Interface_Descriptor;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public final class UsbConfigurationImpl implements UsbConfiguration
+final class UsbConfigurationImpl implements UsbConfiguration
 {
     /** The JSR 80 USB configuration descriptor. */
     private final UsbConfigurationDescriptor descriptor;
@@ -187,7 +186,9 @@ public final class UsbConfigurationImpl implements UsbConfiguration
             {
                 final int result = usb_set_altinterface(this.device.open(),
                     iface.getUsbInterfaceDescriptor().bAlternateSetting());
-                if (result < 0) throw new UsbException(usb_strerror());
+                if (result < 0)
+                    throw new LibUsbException(
+                        "Unable to set alternate interface", result);
                 this.activeSettings.put(number & 0xff, iface);
             }
             finally

@@ -16,7 +16,7 @@ import de.ailis.usb4java.USB_Device_Descriptor;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public final class UsbDeviceDescriptorImpl extends
+final class UsbDeviceDescriptorImpl extends
         UsbDescriptorImpl<USB_Device_Descriptor> implements UsbDeviceDescriptor
 {
     /**

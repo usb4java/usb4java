@@ -28,7 +28,7 @@ import javax.usb.util.DefaultUsbIrp;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public final class UsbPipeImpl implements UsbPipe
+final class UsbPipeImpl implements UsbPipe
 {
     /** The endpoint this pipe belongs to. */
     private final UsbEndpointImpl endpoint;

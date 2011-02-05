@@ -33,7 +33,7 @@ import de.ailis.usb4java.USB_Interface_Descriptor;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public final class UsbInterfaceImpl implements UsbInterface
+final class UsbInterfaceImpl implements UsbInterface
 {
     /** The USB configuration. */
     private final UsbConfigurationImpl configuration;

@@ -16,7 +16,6 @@ import static de.ailis.usb4java.USB.usb_get_string;
 import static de.ailis.usb4java.USB.usb_open;
 import static de.ailis.usb4java.USB.usb_release_interface;
 import static de.ailis.usb4java.USB.usb_set_configuration;
-import static de.ailis.usb4java.USB.usb_strerror;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
@@ -132,8 +131,8 @@ abstract class AbstractDevice implements UsbDevice
                 this.handle = usb_open(this.device);
                 if (this.handle == null)
                 {
-                    throw new UsbException("Can't open device "
-                        + this.device + ": " + usb_strerror());
+                    throw new LibUsbException("Can't open device "
+                        + this.device);
                 }
             }
             finally
@@ -159,11 +158,10 @@ abstract class AbstractDevice implements UsbDevice
             USBLock.acquire();
             try
             {
-                if (usb_close(this.handle) < 0)
-                {
-                    throw new UsbException("Can't close device "
-                        + this.device + ": " + usb_strerror());
-                }
+                final int result = usb_close(this.handle);
+                if (result < 0)
+                    throw new LibUsbException("Can't close device "
+                        + this.device, result);
             }
             finally
             {
@@ -361,7 +359,9 @@ abstract class AbstractDevice implements UsbDevice
             try
             {
                 final int result = usb_set_configuration(open(), number & 0xff);
-                if (result < 0) throw new UsbException(usb_strerror());
+                if (result < 0)
+                    throw new LibUsbException("Unable to set configuration",
+                        result);
                 this.activeConfigurationNumber = number;
             }
             finally
@@ -403,7 +403,9 @@ abstract class AbstractDevice implements UsbDevice
             }
 
             final int result = usb_claim_interface(open(), number & 0xff);
-            if (result < 0) throw new UsbException(usb_strerror());
+            if (result < 0)
+                throw new LibUsbException("Unable to claim interface",
+                    result);
             this.claimedInterfaceNumber = number;
         }
         finally
@@ -436,7 +438,8 @@ abstract class AbstractDevice implements UsbDevice
         try
         {
             final int result = usb_release_interface(open(), number & 0xff);
-            if (result < 0) throw new UsbException(usb_strerror());
+            if (result < 0)
+                throw new LibUsbException("Unable to release interface", result);
             this.claimedInterfaceNumber = null;
         }
         finally
@@ -510,9 +513,8 @@ abstract class AbstractDevice implements UsbDevice
             final ByteBuffer buffer = ByteBuffer.allocateDirect(256);
             final int len = usb_get_string(handle, index, langid, buffer);
             if (len < 0)
-                throw new UsbException("Unable to get string descriptor "
-                    + index
-                    + " from device " + this.device + ": " + len);
+                throw new LibUsbException("Unable to get string descriptor "
+                    + index + " from device " + this.device, len);
             return new UsbStringDescriptorImpl(
                 new USB_String_Descriptor(buffer));
         }
@@ -553,12 +555,11 @@ abstract class AbstractDevice implements UsbDevice
             final int len = usb_get_descriptor(handle, USB_DT_STRING, 0,
                 buffer);
             if (len < 0)
-                throw new UsbException(
-                    "Unable to get string descriptor languages: "
-                        + usb_strerror());
+                throw new LibUsbException(
+                    "Unable to get string descriptor languages", len);
             if (len < 2)
-                throw new UsbException("Illegal descriptor length: "
-                    + usb_strerror());
+                throw new UsbException("Received illegal descriptor length: "
+                    + len);
             final short[] languages = new short[(len - 2) / 2];
             if (languages.length == 0) return languages;
             buffer.position(2);
@@ -580,15 +581,6 @@ abstract class AbstractDevice implements UsbDevice
     @Override
     public final void syncSubmit(final UsbControlIrp irp) throws UsbException
     {
-        if ((irp.bRequest() == UsbConst.REQUEST_SET_CONFIGURATION)
-            && (irp.bmRequestType() == 0))
-        {
-            final int result2 = usb_set_configuration(open(), irp.wValue());
-            if (result2 < 0) throw new UsbException(usb_strerror());
-            return;
-        }
-
-
         USBLock.acquire();
         try
         {
@@ -600,7 +592,9 @@ abstract class AbstractDevice implements UsbDevice
             final int len = usb_control_msg(handle, irp.bmRequestType(),
                 irp.bRequest(),
                 irp.wValue(), irp.wIndex(), buffer, 250);
-            if (len < 0) throw new UsbException(usb_strerror());
+            if (len < 0)
+                throw new LibUsbException("Unable to submit control message",
+                    len);
             buffer.rewind();
             buffer.get(irp.getData(), 0, len);
             irp.setActualLength(len);

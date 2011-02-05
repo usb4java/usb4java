@@ -16,7 +16,7 @@ import javax.usb.UsbPort;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public final class UsbPortImpl implements UsbPort
+final class UsbPortImpl implements UsbPort
 {
     /** The USB hub this port belongs to. */
     private final UsbHub hub;

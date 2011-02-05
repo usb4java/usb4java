@@ -193,11 +193,14 @@ final class PipeQueueProcessor extends Thread
         final int ep = descriptor.bEndpointAddress();
         final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
         final int result = usb_bulk_read(getDevice().open(), ep, buffer, 5000);
-        if (result < 0) throw new LibUsbException(result);
+        if (result < 0)
+            throw new LibUsbException("Unable to read from interrupt endpoint",
+                result);
         buffer.rewind();
         buffer.get(data, 0, result);
         return result;
     }
+
 
     /**
      * Writes the specified bytes to a bulk endpoint.
@@ -223,7 +226,9 @@ final class PipeQueueProcessor extends Thread
             buffer.put(data, written, Math.min(total - written, size));
             buffer.rewind();
             final int result = usb_bulk_write(handle, ep, buffer, 5000);
-            if (result < 0) throw new LibUsbException(result);
+            if (result < 0)
+                throw new LibUsbException(
+                    "Unable to write to interrupt endpoint", result);
             written += result;
             buffer.rewind();
         }
@@ -250,7 +255,9 @@ final class PipeQueueProcessor extends Thread
         final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
         final int result =
                 usb_interrupt_read(getDevice().open(), ep, buffer, 5000);
-        if (result < 0) throw new LibUsbException(result);
+        if (result < 0)
+            throw new LibUsbException("Unable to read from interrupt endpoint",
+                result);
         buffer.rewind();
         buffer.get(data, 0, result);
         return result;
@@ -281,7 +288,9 @@ final class PipeQueueProcessor extends Thread
             buffer.put(data, written, Math.min(total - written, size));
             buffer.rewind();
             final int result = usb_interrupt_write(handle, ep, buffer, 5000);
-            if (result < 0) throw new LibUsbException(result);
+            if (result < 0)
+                throw new LibUsbException(
+                    "Unable to write to interrupt endpoint", result);
             written += result;
             buffer.rewind();
         }

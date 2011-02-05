@@ -1,20 +1,7 @@
-JSR-80 implementation checklist:
+JSR-80:
 
-  [ ] UsbConfiguration
-  [x] UsbConfigurationDescriptor  
-  [x] UsbDescriptor
-  [ ] UsbDevice
-  [x] UsbDeviceDescriptor 
-  [x] UsbDeviceListener 
-  [ ] UsbEndpoint
-  [x] UsbEndpointDescriptor 
-  [ ] UsbHub
-  [ ] UsbInterface
-  [x] UsbInterfaceDescriptor
-  [ ] UsbPipe
-  [X] UsbPipeListener
-  [ ] UsbPort
-  [ ] UsbServices
-  [X] UsbServicesListener
-  [x] UsbStringDescritor
+* Do extensive tests with USB pipes. interrupt data transfer seems to work
+  (MouseDriver demo is working) but never used bulk transfer and it's unclear
+  if the queue implementation is working correctly under stress.
+
   

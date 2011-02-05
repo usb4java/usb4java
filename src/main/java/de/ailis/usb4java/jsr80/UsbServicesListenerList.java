@@ -15,7 +15,7 @@ import javax.usb.event.UsbServicesListener;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public final class UsbServicesListenerList extends
+final class UsbServicesListenerList extends
         EventListenerList<UsbServicesListener> implements UsbServicesListener
 {
     /**

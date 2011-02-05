@@ -18,7 +18,7 @@ import javax.usb.UsbPipe;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public final class UsbEndpointImpl implements UsbEndpoint
+final class UsbEndpointImpl implements UsbEndpoint
 {
     /** The USB interface this endpoint belongs to. */
     private final UsbInterfaceImpl iface;

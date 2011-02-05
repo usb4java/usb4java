@@ -16,7 +16,7 @@ import de.ailis.usb4java.USB_Config_Descriptor;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public final class UsbConfigurationDescriptorImpl extends
+final class UsbConfigurationDescriptorImpl extends
         UsbDescriptorImpl<USB_Config_Descriptor> implements
         UsbConfigurationDescriptor
 {

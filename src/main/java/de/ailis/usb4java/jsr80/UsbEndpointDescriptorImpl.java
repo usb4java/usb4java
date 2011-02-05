@@ -16,7 +16,7 @@ import de.ailis.usb4java.USB_Endpoint_Descriptor;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public final class UsbEndpointDescriptorImpl extends
+final class UsbEndpointDescriptorImpl extends
         UsbDescriptorImpl<USB_Endpoint_Descriptor> implements
         UsbEndpointDescriptor
 {

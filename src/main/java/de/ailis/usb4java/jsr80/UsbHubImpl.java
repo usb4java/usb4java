@@ -20,8 +20,7 @@ import de.ailis.usb4java.USB_Device;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public final class UsbHubImpl extends AbstractDevice implements UsbHub,
-    UsbPorts
+final class UsbHubImpl extends AbstractDevice implements UsbHub, UsbPorts
 {
     /** The hub ports. */
     private final UsbPortsImpl ports = new UsbPortsImpl(this);

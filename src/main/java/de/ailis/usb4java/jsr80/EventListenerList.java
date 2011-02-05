@@ -19,7 +19,7 @@ import java.util.List;
  *            The event listener type.
  */
 
-public abstract class EventListenerList<T extends EventListener>
+abstract class EventListenerList<T extends EventListener>
 {
     /** The list with registered listeners. */
     protected final List<T> listeners = Collections
