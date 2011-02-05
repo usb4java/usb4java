@@ -181,6 +181,7 @@ final class PipeQueueProcessor extends Thread
             irp.setUsbException(e);
         }
         irp.complete();
+        this.pipe.sendEvent(irp);
     }
 
 

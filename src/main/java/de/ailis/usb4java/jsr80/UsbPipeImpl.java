@@ -17,6 +17,8 @@ import javax.usb.UsbNotActiveException;
 import javax.usb.UsbNotClaimedException;
 import javax.usb.UsbNotOpenException;
 import javax.usb.UsbPipe;
+import javax.usb.event.UsbPipeDataEvent;
+import javax.usb.event.UsbPipeErrorEvent;
 import javax.usb.event.UsbPipeListener;
 import javax.usb.util.DefaultUsbControlIrp;
 import javax.usb.util.DefaultUsbIrp;
@@ -381,6 +383,26 @@ final class UsbPipeImpl implements UsbPipe
     public void removeUsbPipeListener(final UsbPipeListener listener)
     {
         this.listeners.remove(listener);
+    }
+
+
+    /**
+     * Sends event to all event listeners.
+     *
+     * @param irp
+     *            Then request package
+     */
+
+    void sendEvent(final UsbIrp irp)
+    {
+        if (irp.isUsbException())
+        {
+            this.listeners.errorEventOccurred(new UsbPipeErrorEvent(this, irp));
+        }
+        else
+        {
+            this.listeners.dataEventOccurred(new UsbPipeDataEvent(this, irp));
+        }
     }
 
 
