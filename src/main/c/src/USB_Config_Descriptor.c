@@ -135,7 +135,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(USB_1Config_1Descriptor, bmAttributes)
  * int MaxPower()
  */
 
-JNIEXPORT jint JNICALL METHOD_NAME(USB_1Config_1Descriptor, MaxPower)
+JNIEXPORT jint JNICALL METHOD_NAME(USB_1Config_1Descriptor, bMaxPower)
   (JNIEnv *env, jobject this)
 {
 	return unwrap_usb_config_descriptor(env, this)->MaxPower;

@@ -4,9 +4,9 @@
  */
 
 /**
- * This is the root package of usb4java.
+ * This package contains the classes that represent the USB device topology.
  *
  * @author Klaus Reimer (k@ailis.de)
  */
 
-package de.ailis.usb4java;
+package de.ailis.usb4java.topology;

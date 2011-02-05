@@ -5,13 +5,13 @@
 
 package de.ailis.usb4java.tools;
 
-import static de.ailis.usb4java.USB.usb_find_busses;
-import static de.ailis.usb4java.USB.usb_find_devices;
-import static de.ailis.usb4java.USB.usb_get_busses;
-import static de.ailis.usb4java.USB.usb_init;
-import de.ailis.usb4java.USB_Bus;
-import de.ailis.usb4java.USB_Device;
-import de.ailis.usb4java.USB_Device_Descriptor;
+import static de.ailis.usb4java.jni.USB.usb_find_busses;
+import static de.ailis.usb4java.jni.USB.usb_find_devices;
+import static de.ailis.usb4java.jni.USB.usb_get_busses;
+import static de.ailis.usb4java.jni.USB.usb_init;
+import de.ailis.usb4java.jni.USB_Bus;
+import de.ailis.usb4java.jni.USB_Device;
+import de.ailis.usb4java.jni.USB_Device_Descriptor;
 
 
 /**

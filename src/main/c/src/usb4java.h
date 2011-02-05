@@ -6,7 +6,7 @@
 #ifndef USB4JAVA_H
 #define USB4JAVA_H
 
-#define PACKAGE_DIR "de/ailis/usb4java"
-#define METHOD_NAME(class, method) Java_de_ailis_usb4java_##class##_##method
+#define PACKAGE_DIR "de/ailis/usb4java/jni"
+#define METHOD_NAME(class, method) Java_de_ailis_usb4java_jni_##class##_##method
 
 #endif

@@ -4,9 +4,9 @@
  */
 
 /**
- * This is the root package of usb4java.
+ * This package contains the JNI wrapper classes.
  *
  * @author Klaus Reimer (k@ailis.de)
  */
 
-package de.ailis.usb4java;
+package de.ailis.usb4java.jni;

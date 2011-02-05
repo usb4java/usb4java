@@ -4,7 +4,7 @@
  */
 
 /**
- * usb4java tools.
+ * This package contains demo command-line tools.
  *
  * @author Klaus Reimer (k@ailis.de)
  */
