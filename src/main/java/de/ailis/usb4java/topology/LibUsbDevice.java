@@ -126,7 +126,7 @@ public abstract class LibUsbDevice implements UsbDevice
      *             When device is disconnected.
      */
 
-    void checkConnected() throws UsbDisconnectedException
+    final void checkConnected() throws UsbDisconnectedException
     {
         if (this.port == null) throw new UsbDisconnectedException();
     }
@@ -490,7 +490,7 @@ public abstract class LibUsbDevice implements UsbDevice
      */
 
     @Override
-    public LibUsbConfiguration getActiveUsbConfiguration()
+    public final LibUsbConfiguration getActiveUsbConfiguration()
     {
         return getUsbConfiguration(this.activeConfigurationNumber);
     }

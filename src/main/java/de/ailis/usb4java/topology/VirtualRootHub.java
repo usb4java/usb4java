@@ -11,7 +11,6 @@ import java.util.List;
 import javax.usb.UsbConfiguration;
 import javax.usb.UsbConst;
 import javax.usb.UsbControlIrp;
-import javax.usb.UsbDevice;
 import javax.usb.UsbDeviceDescriptor;
 import javax.usb.UsbException;
 import javax.usb.UsbHub;
@@ -30,7 +29,8 @@ import de.ailis.usb4java.support.UsbDeviceListenerList;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public final class VirtualRootHub implements UsbHub, UsbPorts<LibUsbPort, LibUsbDevice>
+public final class VirtualRootHub implements UsbHub,
+    UsbPorts<LibUsbPort, LibUsbDevice>
 {
     /** The manufacturer string. */
     private static final String MANUFACTURER = "de.ailis.usb4java";
@@ -81,7 +81,7 @@ public final class VirtualRootHub implements UsbHub, UsbPorts<LibUsbPort, LibUsb
 
 
     /**
-     * @see UsbDevice#getParentUsbPort()
+     * @see UsbHub#getParentUsbPort()
      */
 
     @Override
@@ -92,7 +92,7 @@ public final class VirtualRootHub implements UsbHub, UsbPorts<LibUsbPort, LibUsb
 
 
     /**
-     * @see UsbDevice#isUsbHub()
+     * @see UsbHub#isUsbHub()
      */
 
     @Override
@@ -103,7 +103,7 @@ public final class VirtualRootHub implements UsbHub, UsbPorts<LibUsbPort, LibUsb
 
 
     /**
-     * @see UsbDevice#getManufacturerString()
+     * @see UsbHub#getManufacturerString()
      */
 
     @Override
@@ -114,7 +114,7 @@ public final class VirtualRootHub implements UsbHub, UsbPorts<LibUsbPort, LibUsb
 
 
     /**
-     * @see UsbDevice#getSerialNumberString()
+     * @see UsbHub#getSerialNumberString()
      */
 
     @Override
@@ -125,7 +125,7 @@ public final class VirtualRootHub implements UsbHub, UsbPorts<LibUsbPort, LibUsb
 
 
     /**
-     * @see UsbDevice#getProductString()
+     * @see UsbHub#getProductString()
      */
 
     @Override
@@ -136,7 +136,7 @@ public final class VirtualRootHub implements UsbHub, UsbPorts<LibUsbPort, LibUsb
 
 
     /**
-     * @see UsbDevice#getSpeed()
+     * @see UsbHub#getSpeed()
      */
 
     @Override
@@ -147,7 +147,7 @@ public final class VirtualRootHub implements UsbHub, UsbPorts<LibUsbPort, LibUsb
 
 
     /**
-     * @see UsbDevice#getUsbConfigurations()
+     * @see UsbHub#getUsbConfigurations()
      */
 
     @Override
@@ -158,7 +158,7 @@ public final class VirtualRootHub implements UsbHub, UsbPorts<LibUsbPort, LibUsb
 
 
     /**
-     * @see UsbDevice#getUsbConfiguration(byte)
+     * @see UsbHub#getUsbConfiguration(byte)
      */
 
     @Override
@@ -170,7 +170,7 @@ public final class VirtualRootHub implements UsbHub, UsbPorts<LibUsbPort, LibUsb
 
 
     /**
-     * @see UsbDevice#containsUsbConfiguration(byte)
+     * @see UsbHub#containsUsbConfiguration(byte)
      */
 
     @Override
@@ -181,7 +181,7 @@ public final class VirtualRootHub implements UsbHub, UsbPorts<LibUsbPort, LibUsb
 
 
     /**
-     * @see UsbDevice#getActiveUsbConfigurationNumber()
+     * @see UsbHub#getActiveUsbConfigurationNumber()
      */
 
     @Override
@@ -192,7 +192,7 @@ public final class VirtualRootHub implements UsbHub, UsbPorts<LibUsbPort, LibUsb
 
 
     /**
-     * @see UsbDevice#getActiveUsbConfiguration()
+     * @see UsbHub#getActiveUsbConfiguration()
      */
 
     @Override
@@ -203,7 +203,7 @@ public final class VirtualRootHub implements UsbHub, UsbPorts<LibUsbPort, LibUsb
 
 
     /**
-     * @see UsbDevice#isConfigured()
+     * @see UsbHub#isConfigured()
      */
 
     @Override
@@ -214,7 +214,7 @@ public final class VirtualRootHub implements UsbHub, UsbPorts<LibUsbPort, LibUsb
 
 
     /**
-     * @see UsbDevice#getUsbDeviceDescriptor()
+     * @see UsbHub#getUsbDeviceDescriptor()
      */
 
     @Override
@@ -225,7 +225,7 @@ public final class VirtualRootHub implements UsbHub, UsbPorts<LibUsbPort, LibUsb
 
 
     /**
-     * @see UsbDevice#getUsbStringDescriptor(byte)
+     * @see UsbHub#getUsbStringDescriptor(byte)
      */
 
     @Override
@@ -238,7 +238,7 @@ public final class VirtualRootHub implements UsbHub, UsbPorts<LibUsbPort, LibUsb
 
 
     /**
-     * @see UsbDevice#getString(byte)
+     * @see UsbHub#getString(byte)
      */
 
     @Override
@@ -249,7 +249,7 @@ public final class VirtualRootHub implements UsbHub, UsbPorts<LibUsbPort, LibUsb
 
 
     /**
-     * @see UsbDevice#syncSubmit(javax.usb.UsbControlIrp)
+     * @see UsbHub#syncSubmit(javax.usb.UsbControlIrp)
      */
 
     @Override
@@ -260,7 +260,7 @@ public final class VirtualRootHub implements UsbHub, UsbPorts<LibUsbPort, LibUsb
 
 
     /**
-     * @see UsbDevice#asyncSubmit(javax.usb.UsbControlIrp)
+     * @see UsbHub#asyncSubmit(javax.usb.UsbControlIrp)
      */
 
     @Override
@@ -271,7 +271,7 @@ public final class VirtualRootHub implements UsbHub, UsbPorts<LibUsbPort, LibUsb
 
 
     /**
-     * @see UsbDevice#syncSubmit(java.util.List)
+     * @see UsbHub#syncSubmit(java.util.List)
      */
 
     @Override
@@ -283,7 +283,7 @@ public final class VirtualRootHub implements UsbHub, UsbPorts<LibUsbPort, LibUsb
 
 
     /**
-     * @see UsbDevice#asyncSubmit(java.util.List)
+     * @see UsbHub#asyncSubmit(java.util.List)
      */
 
     @Override
@@ -295,7 +295,7 @@ public final class VirtualRootHub implements UsbHub, UsbPorts<LibUsbPort, LibUsb
 
 
     /**
-     * @see UsbDevice#createUsbControlIrp(byte, byte, short, short)
+     * @see UsbHub#createUsbControlIrp(byte, byte, short, short)
      */
 
     @Override
@@ -309,7 +309,7 @@ public final class VirtualRootHub implements UsbHub, UsbPorts<LibUsbPort, LibUsb
 
 
     /**
-     * @see UsbDevice#addUsbDeviceListener(javax.usb.event.UsbDeviceListener)
+     * @see UsbHub#addUsbDeviceListener(javax.usb.event.UsbDeviceListener)
      */
 
     @Override
@@ -320,7 +320,7 @@ public final class VirtualRootHub implements UsbHub, UsbPorts<LibUsbPort, LibUsb
 
 
     /**
-     * @see UsbDevice#removeUsbDeviceListener(javax.usb.event.UsbDeviceListener)
+     * @see UsbHub#removeUsbDeviceListener(javax.usb.event.UsbDeviceListener)
      */
 
     @Override
@@ -386,7 +386,7 @@ public final class VirtualRootHub implements UsbHub, UsbPorts<LibUsbPort, LibUsb
 
 
     /**
-     * @see UsbPorts#connectUsbDevice(UsbDevice)
+     * @see UsbPorts#connectUsbDevice(javax.usb.UsbDevice)
      */
 
     @Override
@@ -397,7 +397,7 @@ public final class VirtualRootHub implements UsbHub, UsbPorts<LibUsbPort, LibUsb
 
 
     /**
-     * @see UsbPorts#disconnectUsbDevice(UsbDevice)
+     * @see UsbPorts#disconnectUsbDevice(javax.usb.UsbDevice)
      */
 
     @Override

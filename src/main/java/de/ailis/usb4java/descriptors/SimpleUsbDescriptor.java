@@ -50,7 +50,7 @@ public abstract class SimpleUsbDescriptor implements UsbDescriptor,
      */
 
     @Override
-    public byte bLength()
+    public final byte bLength()
     {
         return this.bLength;
     }
@@ -61,7 +61,7 @@ public abstract class SimpleUsbDescriptor implements UsbDescriptor,
      */
 
     @Override
-    public byte bDescriptorType()
+    public final byte bDescriptorType()
     {
         return this.bDescriptorType;
     }

@@ -112,7 +112,7 @@ public final class LibUsbConfiguration implements UsbConfiguration
      *             When device has been disconnected.
      */
 
-    private void checkConnected()
+    private void checkConnected() throws UsbDisconnectedException
     {
         this.device.checkConnected();
     }
