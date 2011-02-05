@@ -45,10 +45,7 @@ final class UsbPipeImpl implements UsbPipe
     private boolean opened;
 
     /** The request queue. */
-    private final UsbIrpQueue queue = new UsbIrpQueue();
-
-    /** The thread which processes the queue. null if none. */
-    private PipeQueueProcessor queueProcessor;
+    private final IrpQueue queue ;
 
 
     /**
@@ -65,6 +62,7 @@ final class UsbPipeImpl implements UsbPipe
     {
         this.endpoint = endpoint;
         this.device = device;
+        this.queue = new IrpQueue(device, this);
     }
 
 
@@ -147,10 +145,6 @@ final class UsbPipeImpl implements UsbPipe
         checkClaimed();
         checkDisconnected();
         if (this.opened) throw new UsbException("Pipe is already open");
-
-        this.queueProcessor = new PipeQueueProcessor(this);
-        this.queueProcessor.start();
-
         this.opened = true;
     }
 
@@ -167,13 +161,8 @@ final class UsbPipeImpl implements UsbPipe
         checkClaimed();
         checkDisconnected();
         if (!this.opened) throw new UsbException("Pipe is already closed");
-        if (this.queueProcessor.isProcessing() || !this.queue.isEmpty())
-            throw new UsbException("Pipe is still in use");
-
-        this.queue.clear();
-        this.queueProcessor.shutdownAndWait();
-        this.queueProcessor = null;
-
+        if (this.queue.isBusy())
+            throw new UsbException("Pipe is still busy");
         this.opened = false;
     }
 
@@ -279,13 +268,7 @@ final class UsbPipeImpl implements UsbPipe
         checkActive();
         checkDisconnected();
         checkOpen();
-
         this.queue.add(irp);
-        synchronized (this.queueProcessor)
-        {
-            this.queueProcessor.notifyAll();
-        }
-
     }
 
 
@@ -334,8 +317,7 @@ final class UsbPipeImpl implements UsbPipe
         checkActive();
         checkDisconnected();
         checkOpen();
-        this.queue.clear();
-        this.queueProcessor.shutdownAndWait();
+        this.queue.abort();
     }
 
 
@@ -403,17 +385,5 @@ final class UsbPipeImpl implements UsbPipe
         {
             this.listeners.dataEventOccurred(new UsbPipeDataEvent(this, irp));
         }
-    }
-
-
-    /**
-     * Returns the request packet queue.
-     *
-     * @return The request packet queue. Never null.
-     */
-
-    UsbIrpQueue getQueue()
-    {
-        return this.queue;
     }
 }

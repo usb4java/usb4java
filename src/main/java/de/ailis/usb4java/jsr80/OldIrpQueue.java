@@ -15,12 +15,14 @@ import javax.usb.UsbIrp;
  * USB I/O request packet queue.
  *
  * @author Klaus Reimer (k@ailis.de)
+ * @param <T>
+ *            The IRP type
  */
 
-final class UsbIrpQueue
+final class OldIrpQueue<T extends UsbIrp>
 {
     /** The queued packets. */
-    private final Deque<UsbIrp> irps = new LinkedList<UsbIrp>();
+    private final Deque<T> irps = new LinkedList<T>();
 
 
     /**
@@ -30,7 +32,7 @@ final class UsbIrpQueue
      *            The packet to add to the queue.
      */
 
-    public void add(final UsbIrp irp)
+    public void add(final T irp)
     {
         synchronized (this.irps)
         {
@@ -45,7 +47,7 @@ final class UsbIrpQueue
      * @return The next packet to process or null if queue is empty.
      */
 
-    public UsbIrp get()
+    public T get()
     {
         synchronized (this.irps)
         {

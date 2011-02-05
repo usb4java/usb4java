@@ -22,166 +22,94 @@ import de.ailis.usb4java.USB_Dev_Handle;
 
 
 /**
- * This thread is responsible for processing the request packet queue of a pipe.
- * The thread is created and started when a pipe is opened and is stopped when
- * the pipe is closed.
+ * A queue for USB control I/O request packets.
  *
  * @author Klaus Reimer (k@ailis.de)
  */
 
-final class PipeQueueProcessor extends Thread
+final class IrpQueue extends AbstractIrpQueue<UsbIrp>
 {
-    /** The pipe. */
+    /** The USB pipe. */
     private final UsbPipeImpl pipe;
-
-    /** If thread should stop. */
-    private boolean stop;
-
-    /** If thread is running or not. */
-    private boolean running;
-
-    /** If packets are currently processed. */
-    private boolean processing;
 
 
     /**
      * Constructor.
      *
+     * @param device
+     *            The USB device.
      * @param pipe
-     *            The pipe.
+     *            The USB pipe
      */
 
-    public PipeQueueProcessor(final UsbPipeImpl pipe)
+    public IrpQueue(final AbstractDevice device, final UsbPipeImpl pipe)
     {
+        super(device);
         this.pipe = pipe;
-        setDaemon(true);
     }
 
 
     /**
-     * Stops the thread.
+     * @see AbstractIrpQueue#finishIrp(UsbIrp)
      */
 
-    public void shutdown()
+    @Override
+    protected void finishIrp(final UsbIrp irp)
     {
-        synchronized (this)
-        {
-            this.stop = true;
-            notifyAll();
-        }
+        this.pipe.sendEvent(irp);
     }
 
 
     /**
-     * Stops the thread and waits until it has really stopped.
+     * @see AbstractIrpQueue#processIrp(javax.usb.UsbIrp)
      */
 
-    public void shutdownAndWait()
-    {
-        shutdown();
-        synchronized (this)
-        {
-            while (isRunning())
-            {
-                try
-                {
-                    wait();
-                }
-                catch (final InterruptedException e)
-                {
-                    Thread.currentThread().interrupt();
-                }
-            }
-        }
-    }
-
-
-    /**
-     * Returns the USB endpoint descriptor.
-     *
-     * @return The USB endpoint descriptor.
-     */
-
-    private UsbEndpointDescriptor getEndpointDescriptor()
-    {
-        return this.pipe.getUsbEndpoint().getUsbEndpointDescriptor();
-    }
-
-
-    /**
-     * Returns the USB device.
-     *
-     * @return The USB device.
-     */
-
-    private AbstractDevice getDevice()
-    {
-        return this.pipe.getDevice();
-    }
-
-
-    /**
-     * Processes the specified request packet.
-     *
-     * @param irp
-     *            The request packet to process.
-     */
-
-    private void processIrp(final UsbIrp irp)
+    @Override
+    protected void processIrp(final UsbIrp irp) throws UsbException
     {
         final UsbEndpoint endpoint = this.pipe.getUsbEndpoint();
         final byte type = endpoint.getType();
         final byte direction = endpoint.getDirection();
-        try
+        switch (type)
         {
-            switch (type)
-            {
-                case UsbConst.ENDPOINT_TYPE_BULK:
-                    switch (direction)
-                    {
-                        case UsbConst.ENDPOINT_DIRECTION_OUT:
-                            irp.setActualLength(bulkWrite(irp.getData()));
-                            break;
+            case UsbConst.ENDPOINT_TYPE_BULK:
+                switch (direction)
+                {
+                    case UsbConst.ENDPOINT_DIRECTION_OUT:
+                        irp.setActualLength(bulkWrite(irp.getData()));
+                        break;
 
-                        case UsbConst.ENDPOINT_DIRECTION_IN:
-                            irp.setActualLength(bulkRead(irp.getData()));
-                            break;
+                    case UsbConst.ENDPOINT_DIRECTION_IN:
+                        irp.setActualLength(bulkRead(irp.getData()));
+                        break;
 
-                        default:
-                            throw new UsbException("Invalid direction: "
+                    default:
+                        throw new UsbException("Invalid direction: "
                                 + direction);
-                    }
-                    break;
+                }
+                break;
 
-                case UsbConst.ENDPOINT_TYPE_INTERRUPT:
-                    switch (direction)
-                    {
-                        case UsbConst.ENDPOINT_DIRECTION_OUT:
-                            irp.setActualLength(interruptWrite(irp.getData()));
-                            break;
+            case UsbConst.ENDPOINT_TYPE_INTERRUPT:
+                switch (direction)
+                {
+                    case UsbConst.ENDPOINT_DIRECTION_OUT:
+                        irp.setActualLength(interruptWrite(irp.getData()));
+                        break;
 
-                        case UsbConst.ENDPOINT_DIRECTION_IN:
-                            irp.setActualLength(interruptRead(irp.getData()));
-                            break;
+                    case UsbConst.ENDPOINT_DIRECTION_IN:
+                        irp.setActualLength(interruptRead(irp.getData()));
+                        break;
 
-                        default:
-                            throw new UsbException("Invalid direction: "
+                    default:
+                        throw new UsbException("Invalid direction: "
                                 + direction);
-                    }
-                    break;
+                }
+                break;
 
-                default:
-                    throw new UsbException("Unsupported endpoint type: "
+            default:
+                throw new UsbException("Unsupported endpoint type: "
                         + type);
-            }
-
         }
-        catch (final UsbException e)
-        {
-            irp.setUsbException(e);
-        }
-        irp.complete();
-        this.pipe.sendEvent(irp);
     }
 
 
@@ -202,13 +130,25 @@ final class PipeQueueProcessor extends Thread
                 Math.min(data.length, descriptor.wMaxPacketSize() & 0xffff);
         final int ep = descriptor.bEndpointAddress();
         final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
-        final int result = usb_bulk_read(getDevice().open(), ep, buffer, 5000);
+        final int result = usb_bulk_read(this.device.open(), ep, buffer, 5000);
         if (result < 0)
             throw new LibUsbException("Unable to read from interrupt endpoint",
                 result);
         buffer.rewind();
         buffer.get(data, 0, result);
         return result;
+    }
+
+
+    /**
+     * Returns the USB endpoint descriptor.
+     *
+     * @return The USB endpoint descriptor.
+     */
+
+    private UsbEndpointDescriptor getEndpointDescriptor()
+    {
+        return this.pipe.getUsbEndpoint().getUsbEndpointDescriptor();
     }
 
 
@@ -229,7 +169,7 @@ final class PipeQueueProcessor extends Thread
         final int size = Math.min(total, descriptor.wMaxPacketSize() & 0xffff);
         final int ep = descriptor.bEndpointAddress();
         final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
-        final USB_Dev_Handle handle = getDevice().open();
+        final USB_Dev_Handle handle = this.device.open();
         int written = 0;
         while (written < total)
         {
@@ -264,7 +204,7 @@ final class PipeQueueProcessor extends Thread
         final int ep = descriptor.bEndpointAddress();
         final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
         final int result =
-                usb_interrupt_read(getDevice().open(), ep, buffer, 5000);
+                usb_interrupt_read(this.device.open(), ep, buffer, 5000);
         if (result < 0)
             throw new LibUsbException("Unable to read from interrupt endpoint",
                 result);
@@ -291,7 +231,7 @@ final class PipeQueueProcessor extends Thread
         final int size = Math.min(total, descriptor.wMaxPacketSize() & 0xffff);
         final int ep = descriptor.bEndpointAddress();
         final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
-        final USB_Dev_Handle handle = getDevice().open();
+        final USB_Dev_Handle handle = this.device.open();
         int written = 0;
         while (written < total)
         {
@@ -305,65 +245,5 @@ final class PipeQueueProcessor extends Thread
             buffer.rewind();
         }
         return written;
-    }
-
-
-    /**
-     * @see java.lang.Runnable#run()
-     */
-
-    @Override
-    public void run()
-    {
-        synchronized (this)
-        {
-            this.running = true;
-            final UsbIrpQueue queue = this.pipe.getQueue();
-            while (!this.stop)
-            {
-                UsbIrp irp = queue.get();
-                while (!this.stop && irp != null)
-                {
-                    this.processing = true;
-                    processIrp(irp);
-                    irp = queue.get();
-                }
-                this.processing = false;
-                try
-                {
-                    wait();
-                }
-                catch (final InterruptedException e)
-                {
-                    Thread.currentThread().interrupt();
-                }
-            }
-            this.running = false;
-            notifyAll();
-        }
-    }
-
-
-    /**
-     * Checks if this thread is running.
-     *
-     * @return True if thread is running, false if not.
-     */
-
-    public boolean isRunning()
-    {
-        return this.running;
-    }
-
-
-    /**
-     * Checks if packets are currently processed.
-     *
-     * @return If packets are processed.
-     */
-
-    public boolean isProcessing()
-    {
-        return this.processing;
     }
 }

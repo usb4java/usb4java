@@ -9,7 +9,6 @@ import static de.ailis.usb4java.USB.USB_DT_STRING;
 import static de.ailis.usb4java.USB.libusb_has_detach_kernel_driver_np;
 import static de.ailis.usb4java.USB.usb_claim_interface;
 import static de.ailis.usb4java.USB.usb_close;
-import static de.ailis.usb4java.USB.usb_control_msg;
 import static de.ailis.usb4java.USB.usb_detach_kernel_driver_np;
 import static de.ailis.usb4java.USB.usb_get_descriptor;
 import static de.ailis.usb4java.USB.usb_get_string;
@@ -78,6 +77,9 @@ abstract class AbstractDevice implements UsbDevice
     /** The port this device is connected to. */
     private UsbPort port;
 
+    /** The IRP queue. */
+    private final ControlIrpQueue queue = new ControlIrpQueue(this);
+
 
     /**
      * Constructor.
@@ -109,6 +111,19 @@ abstract class AbstractDevice implements UsbDevice
             }
         }
         this.configurations = Collections.unmodifiableList(configurations);
+    }
+
+
+    /**
+     * Checks if device is disconnected.
+     *
+     * @throws UsbDisconnectedException
+     *             When device is disconnected.
+     */
+
+    private void checkDisconnected() throws UsbDisconnectedException
+    {
+        // TODO Implement disconnection check
     }
 
 
@@ -578,31 +593,15 @@ abstract class AbstractDevice implements UsbDevice
      */
 
     @Override
-    public final void syncSubmit(final UsbControlIrp irp) throws UsbException
+    public final void syncSubmit(final UsbControlIrp irp) throws UsbException,
+        IllegalArgumentException, UsbDisconnectedException
     {
-        USBLock.acquire();
-        try
-        {
-            final ByteBuffer buffer = ByteBuffer
-                    .allocateDirect(irp.getLength());
-            buffer.put(irp.getData(), 0, irp.getLength());
-            buffer.rewind();
-            final USB_Dev_Handle handle = open();
-            final int len = usb_control_msg(handle, irp.bmRequestType(),
-                irp.bRequest(),
-                irp.wValue(), irp.wIndex(), buffer, 250);
-            if (len < 0)
-                throw new LibUsbException("Unable to submit control message",
-                    len);
-            buffer.rewind();
-            buffer.get(irp.getData(), 0, len);
-            irp.setActualLength(len);
-        }
-        finally
-        {
-            USBLock.release();
-        }
-        irp.complete();
+        if (irp == null)
+            throw new IllegalArgumentException("irp must not be null");
+        checkDisconnected();
+        this.queue.add(irp);
+        irp.waitUntilComplete();
+        if (irp.isUsbException()) throw irp.getUsbException();
     }
 
 
@@ -611,10 +610,13 @@ abstract class AbstractDevice implements UsbDevice
      */
 
     @Override
-    public final void asyncSubmit(final UsbControlIrp irp) throws UsbException
+    public final void asyncSubmit(final UsbControlIrp irp) throws UsbException,
+        IllegalArgumentException, UsbDisconnectedException
     {
-        // TODO
-        throw new UnsupportedOperationException();
+        if (irp == null)
+            throw new IllegalArgumentException("irp must not be null");
+        checkDisconnected();
+        this.queue.add(irp);
     }
 
 
@@ -624,10 +626,16 @@ abstract class AbstractDevice implements UsbDevice
 
     @Override
     public final void syncSubmit(@SuppressWarnings("rawtypes") final List list)
-        throws UsbException
+        throws UsbException, IllegalArgumentException, UsbDisconnectedException
     {
+        if (list == null)
+            throw new IllegalArgumentException("list must not be null");
+        checkDisconnected();
         for (final Object item : list)
         {
+            if (!(item instanceof UsbControlIrp))
+                throw new IllegalArgumentException(
+                    "List contains non-UsbControlIrp objects");
             syncSubmit((UsbControlIrp) item);
         }
     }
@@ -640,10 +648,17 @@ abstract class AbstractDevice implements UsbDevice
     @Override
     public final void
         asyncSubmit(@SuppressWarnings("rawtypes") final List list)
-            throws UsbException
+            throws UsbException, IllegalArgumentException,
+            UsbDisconnectedException
     {
+        if (list == null)
+            throw new IllegalArgumentException("list must not be null");
+        checkDisconnected();
         for (final Object item : list)
         {
+            if (!(item instanceof UsbControlIrp))
+                throw new IllegalArgumentException(
+                    "List contains non-UsbControlIrp objects");
             asyncSubmit((UsbControlIrp) item);
         }
     }
