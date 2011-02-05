@@ -79,7 +79,8 @@ final class UsbEndpointImpl implements UsbEndpoint
     @Override
     public byte getDirection()
     {
-        return (byte) (this.descriptor.bEndpointAddress() & UsbConst.ENDPOINT_DIRECTION_MASK);
+        final byte address = this.descriptor.bEndpointAddress();
+        return (byte) (address & UsbConst.ENDPOINT_DIRECTION_MASK);
     }
 
 
@@ -90,7 +91,8 @@ final class UsbEndpointImpl implements UsbEndpoint
     @Override
     public byte getType()
     {
-        return (byte) (this.descriptor.bmAttributes() & UsbConst.ENDPOINT_TYPE_MASK);
+        final byte attribs = this.descriptor.bmAttributes();
+        return (byte) (attribs & UsbConst.ENDPOINT_TYPE_MASK);
     }
 
 

@@ -146,6 +146,10 @@ final class PipeQueueProcessor extends Thread
                         case UsbConst.ENDPOINT_DIRECTION_IN:
                             irp.setActualLength(bulkRead(irp.getData()));
                             break;
+
+                        default:
+                            throw new UsbException("Invalid direction: "
+                                + direction);
                     }
                     break;
 
@@ -159,11 +163,16 @@ final class PipeQueueProcessor extends Thread
                         case UsbConst.ENDPOINT_DIRECTION_IN:
                             irp.setActualLength(interruptRead(irp.getData()));
                             break;
+
+                        default:
+                            throw new UsbException("Invalid direction: "
+                                + direction);
                     }
                     break;
 
                 default:
-                    throw new UsbException("Unsupported endpoint type: " + type);
+                    throw new UsbException("Unsupported endpoint type: "
+                        + type);
             }
 
         }
@@ -228,7 +237,7 @@ final class PipeQueueProcessor extends Thread
             final int result = usb_bulk_write(handle, ep, buffer, 5000);
             if (result < 0)
                 throw new LibUsbException(
-                    "Unable to write to interrupt endpoint", result);
+                    "Unable to write to bulk endpoint", result);
             written += result;
             buffer.rewind();
         }

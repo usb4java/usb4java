@@ -14,6 +14,7 @@ import java.util.Map;
 
 import javax.usb.UsbClaimException;
 import javax.usb.UsbConfiguration;
+import javax.usb.UsbDisconnectedException;
 import javax.usb.UsbEndpoint;
 import javax.usb.UsbEndpointDescriptor;
 import javax.usb.UsbException;
@@ -121,8 +122,8 @@ final class UsbInterfaceImpl implements UsbInterface
      */
 
     @Override
-    public void claim(final UsbInterfacePolicy policy)
-        throws UsbClaimException, UsbException
+    public void claim(final UsbInterfacePolicy policy) throws UsbException,
+        UsbClaimException, UsbNotActiveException, UsbDisconnectedException
     {
         final AbstractDevice device = (AbstractDevice) this.configuration
                 .getUsbDevice();
@@ -148,7 +149,8 @@ final class UsbInterfaceImpl implements UsbInterface
      */
 
     @Override
-    public void release() throws UsbClaimException, UsbException
+    public void release() throws UsbClaimException, UsbException,
+        UsbNotActiveException, UsbDisconnectedException
     {
         ((AbstractDevice) this.configuration.getUsbDevice())
                 .releaseInterface(this.descriptor.bInterfaceNumber());

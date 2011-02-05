@@ -386,8 +386,7 @@ abstract class AbstractDevice implements UsbDevice
      */
 
     final void claimInterface(final byte number, final boolean force)
-        throws UsbClaimException,
-        UsbException
+        throws UsbException, UsbClaimException
     {
         if (this.claimedInterfaceNumber != null)
             throw new UsbClaimException("A interface is already claimed");
@@ -426,8 +425,8 @@ abstract class AbstractDevice implements UsbDevice
      *             When interface could not be claimed.
      */
 
-    final void releaseInterface(final byte number) throws UsbClaimException,
-        UsbException
+    final void releaseInterface(final byte number) throws UsbException,
+        UsbClaimException
     {
         if (this.claimedInterfaceNumber == null)
             throw new UsbClaimException("No interface is claimed");
@@ -438,8 +437,8 @@ abstract class AbstractDevice implements UsbDevice
         try
         {
             final int result = usb_release_interface(open(), number & 0xff);
-            if (result < 0)
-                throw new LibUsbException("Unable to release interface", result);
+            if (result < 0) throw new LibUsbException(
+                "Unable to release interface", result);
             this.claimedInterfaceNumber = null;
         }
         finally
@@ -639,8 +638,9 @@ abstract class AbstractDevice implements UsbDevice
      */
 
     @Override
-    public final void asyncSubmit(@SuppressWarnings("rawtypes") final List list)
-        throws UsbException
+    public final void
+        asyncSubmit(@SuppressWarnings("rawtypes") final List list)
+            throws UsbException
     {
         for (final Object item : list)
         {

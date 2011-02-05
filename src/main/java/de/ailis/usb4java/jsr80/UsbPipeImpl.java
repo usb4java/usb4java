@@ -134,7 +134,7 @@ final class UsbPipeImpl implements UsbPipe
 
 
     /**
-     * @see javax.usb.UsbPipe#open()
+     * @see UsbPipe#open()
      */
 
     @Override
@@ -154,7 +154,7 @@ final class UsbPipeImpl implements UsbPipe
 
 
     /**
-     * @see javax.usb.UsbPipe#close()
+     * @see UsbPipe#close()
      */
 
     @Override
@@ -177,7 +177,7 @@ final class UsbPipeImpl implements UsbPipe
 
 
     /**
-     * @see javax.usb.UsbPipe#isActive()
+     * @see UsbPipe#isActive()
      */
 
     @Override
@@ -190,7 +190,7 @@ final class UsbPipeImpl implements UsbPipe
 
 
     /**
-     * @see javax.usb.UsbPipe#isOpen()
+     * @see UsbPipe#isOpen()
      */
 
     @Override
@@ -201,7 +201,7 @@ final class UsbPipeImpl implements UsbPipe
 
 
     /**
-     * @see javax.usb.UsbPipe#getUsbEndpoint()
+     * @see UsbPipe#getUsbEndpoint()
      */
 
     @Override
@@ -212,7 +212,7 @@ final class UsbPipeImpl implements UsbPipe
 
 
     /**
-     * @see javax.usb.UsbPipe#syncSubmit(byte[])
+     * @see UsbPipe#syncSubmit(byte[])
      */
 
     @Override
@@ -228,7 +228,7 @@ final class UsbPipeImpl implements UsbPipe
 
 
     /**
-     * @see javax.usb.UsbPipe#asyncSubmit(byte[])
+     * @see UsbPipe#asyncSubmit(byte[])
      */
 
     @Override
@@ -247,7 +247,7 @@ final class UsbPipeImpl implements UsbPipe
 
 
     /**
-     * @see javax.usb.UsbPipe#syncSubmit(javax.usb.UsbIrp)
+     * @see UsbPipe#syncSubmit(javax.usb.UsbIrp)
      */
 
     @Override
@@ -264,7 +264,7 @@ final class UsbPipeImpl implements UsbPipe
 
 
     /**
-     * @see javax.usb.UsbPipe#asyncSubmit(javax.usb.UsbIrp)
+     * @see UsbPipe#asyncSubmit(javax.usb.UsbIrp)
      */
 
     @Override
@@ -288,7 +288,7 @@ final class UsbPipeImpl implements UsbPipe
 
 
     /**
-     * @see javax.usb.UsbPipe#syncSubmit(java.util.List)
+     * @see UsbPipe#syncSubmit(java.util.List)
      */
 
     @Override
@@ -296,7 +296,7 @@ final class UsbPipeImpl implements UsbPipe
         throws UsbException, UsbNotActiveException, UsbNotOpenException,
         IllegalArgumentException, UsbDisconnectedException
     {
-        for (final Object item: list)
+        for (final Object item : list)
         {
             final UsbIrp irp = (UsbIrp) item;
             syncSubmit(irp);
@@ -305,7 +305,7 @@ final class UsbPipeImpl implements UsbPipe
 
 
     /**
-     * @see javax.usb.UsbPipe#asyncSubmit(java.util.List)
+     * @see UsbPipe#asyncSubmit(java.util.List)
      */
 
     @Override
@@ -313,7 +313,7 @@ final class UsbPipeImpl implements UsbPipe
         throws UsbException, UsbNotActiveException, UsbNotOpenException,
         IllegalArgumentException, UsbDisconnectedException
     {
-        for (final Object item: list)
+        for (final Object item : list)
         {
             final UsbIrp irp = (UsbIrp) item;
             asyncSubmit(irp);
@@ -322,7 +322,7 @@ final class UsbPipeImpl implements UsbPipe
 
 
     /**
-     * @see javax.usb.UsbPipe#abortAllSubmissions()
+     * @see UsbPipe#abortAllSubmissions()
      */
 
     @Override
@@ -338,7 +338,7 @@ final class UsbPipeImpl implements UsbPipe
 
 
     /**
-     * @see javax.usb.UsbPipe#createUsbIrp()
+     * @see UsbPipe#createUsbIrp()
      */
 
     @Override
@@ -349,7 +349,7 @@ final class UsbPipeImpl implements UsbPipe
 
 
     /**
-     * @see javax.usb.UsbPipe#createUsbControlIrp(byte, byte, short, short)
+     * @see UsbPipe#createUsbControlIrp(byte, byte, short, short)
      */
 
     @Override
@@ -357,12 +357,13 @@ final class UsbPipeImpl implements UsbPipe
         final byte bRequest,
         final short wValue, final short wIndex)
     {
-        return new DefaultUsbControlIrp(bmRequestType, bRequest, wValue, wIndex);
+        return new DefaultUsbControlIrp(bmRequestType, bRequest, wValue,
+            wIndex);
     }
 
 
     /**
-     * @see javax.usb.UsbPipe#addUsbPipeListener(javax.usb.event.UsbPipeListener)
+     * @see UsbPipe#addUsbPipeListener(UsbPipeListener)
      */
 
     @Override
@@ -373,7 +374,7 @@ final class UsbPipeImpl implements UsbPipe
 
 
     /**
-     * @see javax.usb.UsbPipe#removeUsbPipeListener(javax.usb.event.UsbPipeListener)
+     * @see UsbPipe#removeUsbPipeListener(UsbPipeListener)
      */
 
     @Override

@@ -182,7 +182,10 @@
           <property name="ignoreNumbers" value="-1, 0, 1, 2, 17, 37, 255, 65535" />          
         </module>
         <module name="MissingSwitchDefault"/>
-        <module name="RedundantThrows"/>
+        <module name="RedundantThrows">
+          <property name="allowUnchecked" value="true" />
+          <property name="allowSubclasses" value="true" />
+        </module>
         <module name="SimplifyBooleanExpression"/>
         <module name="SimplifyBooleanReturn"/>
 

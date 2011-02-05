@@ -45,10 +45,11 @@ final class UsbConfigurationImpl implements UsbConfiguration
      * altsettings which maps setting numbers to actual interfaces.
      */
     private final Map<Integer, Map<Integer, UsbInterface>> interfaces =
-            new HashMap<Integer, Map<Integer, UsbInterface>>();
+        new HashMap<Integer, Map<Integer, UsbInterface>>();
 
     /** This map contains the active USB interfaces. */
-    private final Map<Integer, UsbInterface> activeSettings = new HashMap<Integer, UsbInterface>();
+    private final Map<Integer, UsbInterface> activeSettings =
+        new HashMap<Integer, UsbInterface>();
 
 
     /**
@@ -89,8 +90,8 @@ final class UsbConfigurationImpl implements UsbConfiguration
                 // yet or the alternate setting number is 0 (which marks the
                 // default alternate setting) then set current interface as
                 // the active setting.
-                if (!this.activeSettings.containsKey(ifaceNumber) ||
-                        desc.bAlternateSetting() == 0)
+                if (!this.activeSettings.containsKey(ifaceNumber)
+                    || desc.bAlternateSetting() == 0)
                 {
                     this.activeSettings.put(ifaceNumber, usbInterface);
                 }

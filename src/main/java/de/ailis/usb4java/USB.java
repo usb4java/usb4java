@@ -785,8 +785,8 @@ public final class USB
      * @return 0 on success or < 0 on error.
      */
 
-    public static native int usb_get_driver_np(USB_Dev_Handle handle,
-        int iface, ByteBuffer buffer);
+    public static native int usb_get_driver_np(final USB_Dev_Handle handle,
+        final int iface, final ByteBuffer buffer);
 
 
     /**
@@ -813,7 +813,8 @@ public final class USB
         if (result < 0) return null;
         buffer.rewind();
         int size = 0;
-        while (buffer.get() != 0) size++;
+        while (buffer.get() != 0)
+            size++;
         buffer.rewind();
         final byte[] bytes = new byte[size];
         buffer.get(bytes, 0, size);
@@ -838,8 +839,8 @@ public final class USB
      * @return 0 on success or < 0 on error.
      */
 
-    public static native int usb_detach_kernel_driver_np(USB_Dev_Handle handle,
-        int iface);
+    public static native int usb_detach_kernel_driver_np(
+        final USB_Dev_Handle handle, final int iface);
 
 
     /**
