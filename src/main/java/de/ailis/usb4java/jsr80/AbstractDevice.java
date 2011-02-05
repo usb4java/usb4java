@@ -6,9 +6,11 @@
 package de.ailis.usb4java.jsr80;
 
 import static de.ailis.usb4java.USB.USB_DT_STRING;
+import static de.ailis.usb4java.USB.libusb_has_detach_kernel_driver_np;
 import static de.ailis.usb4java.USB.usb_claim_interface;
 import static de.ailis.usb4java.USB.usb_close;
 import static de.ailis.usb4java.USB.usb_control_msg;
+import static de.ailis.usb4java.USB.usb_detach_kernel_driver_np;
 import static de.ailis.usb4java.USB.usb_get_descriptor;
 import static de.ailis.usb4java.USB.usb_get_string;
 import static de.ailis.usb4java.USB.usb_open;
@@ -375,13 +377,16 @@ abstract class AbstractDevice implements UsbDevice
      *
      * @param number
      *            The number of the interface to claim.
+     * @param force
+     *            If claim should be forces if possible.
      * @throws UsbException
      *             When interface could not be claimed.
      * @throws UsbClaimException
      *             When an interface is already claimed.
      */
 
-    final void claimInterface(final byte number) throws UsbClaimException,
+    final void claimInterface(final byte number, final boolean force)
+        throws UsbClaimException,
         UsbException
     {
         if (this.claimedInterfaceNumber != null)
@@ -390,6 +395,13 @@ abstract class AbstractDevice implements UsbDevice
         USBLock.acquire();
         try
         {
+            // Detach existing driver from the device if requested and
+            // libusb supports it.
+            if (force && libusb_has_detach_kernel_driver_np())
+            {
+                usb_detach_kernel_driver_np(open(), number);
+            }
+
             final int result = usb_claim_interface(open(), number & 0xff);
             if (result < 0) throw new UsbException(usb_strerror());
             this.claimedInterfaceNumber = number;
@@ -568,7 +580,8 @@ abstract class AbstractDevice implements UsbDevice
     @Override
     public final void syncSubmit(final UsbControlIrp irp) throws UsbException
     {
-        if( (irp.bRequest() == UsbConst.REQUEST_SET_CONFIGURATION) && (irp.bmRequestType() ==0) )
+        if ((irp.bRequest() == UsbConst.REQUEST_SET_CONFIGURATION)
+            && (irp.bmRequestType() == 0))
         {
             final int result2 = usb_set_configuration(open(), irp.wValue());
             if (result2 < 0) throw new UsbException(usb_strerror());

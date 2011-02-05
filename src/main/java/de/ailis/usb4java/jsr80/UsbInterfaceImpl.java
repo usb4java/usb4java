@@ -5,9 +5,6 @@
 
 package de.ailis.usb4java.jsr80;
 
-import static de.ailis.usb4java.USB.libusb_has_detach_kernel_driver_np;
-import static de.ailis.usb4java.USB.usb_detach_kernel_driver_np;
-
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,9 +48,6 @@ public final class UsbInterfaceImpl implements UsbInterface
     /** The endpoints. */
     private final List<UsbEndpoint> endpoints;
 
-    /** The USB device. */
-    private final AbstractDevice device;
-
 
     /**
      * Constructor.
@@ -72,7 +66,6 @@ public final class UsbInterfaceImpl implements UsbInterface
     {
         this.configuration = configuration;
         this.descriptor = new UsbInterfaceDescriptorImpl(lowLevelDescriptor);
-        this.device = device;
 
         final List<UsbEndpoint> endpoints = new ArrayList<UsbEndpoint>();
         for (final USB_Endpoint_Descriptor desc : lowLevelDescriptor
@@ -125,8 +118,6 @@ public final class UsbInterfaceImpl implements UsbInterface
 
     /**
      * @see UsbInterface#claim(UsbInterfacePolicy)
-     *
-     *      TODO Policy is ignored
      */
 
     @Override
@@ -138,18 +129,10 @@ public final class UsbInterfaceImpl implements UsbInterface
         USBLock.acquire();
         try
         {
-            // Detach existing driver from the device if requested and
-            // libusb supports it.
-            if (policy != null && policy.forceClaim(this)
-                && libusb_has_detach_kernel_driver_np())
-            {
-                usb_detach_kernel_driver_np(this.device.open(),
-                    this.descriptor.bInterfaceNumber());
-            }
-
             device.setActiveUsbConfigurationNumber(this.configuration
                     .getUsbConfigurationDescriptor().bConfigurationValue());
-            device.claimInterface(this.descriptor.bInterfaceNumber());
+            device.claimInterface(this.descriptor.bInterfaceNumber(),
+                policy != null && policy.forceClaim(this));
             this.configuration.setUsbInterface(
                 this.descriptor.bInterfaceNumber(), this);
         }
