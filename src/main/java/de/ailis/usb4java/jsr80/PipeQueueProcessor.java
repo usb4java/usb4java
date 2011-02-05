@@ -161,9 +161,11 @@ final class PipeQueueProcessor extends Thread
                             break;
                     }
                     break;
+
+                default:
+                    throw new UsbException("Unsupported endpoint type: " + type);
             }
 
-            throw new UsbException("Unsupported endpoint type: " + type);
         }
         catch (final UsbException e)
         {
@@ -187,7 +189,7 @@ final class PipeQueueProcessor extends Thread
     {
         final UsbEndpointDescriptor descriptor = getEndpointDescriptor();
         final int size =
-            Math.min(data.length, descriptor.wMaxPacketSize() & 0xffff);
+                Math.min(data.length, descriptor.wMaxPacketSize() & 0xffff);
         final int ep = descriptor.bEndpointAddress();
         final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
         final int result = usb_bulk_read(getDevice().open(), ep, buffer, 5000);
@@ -243,11 +245,11 @@ final class PipeQueueProcessor extends Thread
     {
         final UsbEndpointDescriptor descriptor = getEndpointDescriptor();
         final int size =
-            Math.min(data.length, descriptor.wMaxPacketSize() & 0xffff);
+                Math.min(data.length, descriptor.wMaxPacketSize() & 0xffff);
         final int ep = descriptor.bEndpointAddress();
         final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
         final int result =
-            usb_interrupt_read(getDevice().open(), ep, buffer, 5000);
+                usb_interrupt_read(getDevice().open(), ep, buffer, 5000);
         if (result < 0) throw new LibUsbException(result);
         buffer.rewind();
         buffer.get(data, 0, result);
