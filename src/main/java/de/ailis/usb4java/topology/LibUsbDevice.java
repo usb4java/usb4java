@@ -706,4 +706,15 @@ public abstract class LibUsbDevice implements UsbDevice
     {
         this.listeners.remove(listener);
     }
+
+
+    /**
+     * @see java.lang.Object#toString()
+     */
+
+    @Override
+    public String toString()
+    {
+        return this.device.toString();
+    }
 }

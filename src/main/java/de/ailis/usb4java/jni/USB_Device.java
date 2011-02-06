@@ -163,7 +163,9 @@ public final class USB_Device
     @Override
     public String toString()
     {
-        return bus().dirname() + "/" + filename();
+        return String.format("USB device %s/%s (%04x:%04x)",
+            bus().dirname(), filename(), descriptor().idVendor(),
+            descriptor().idProduct());
     }
 
 
