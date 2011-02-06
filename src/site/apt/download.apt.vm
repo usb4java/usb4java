@@ -42,9 +42,9 @@ Download
   of the JNI library if you want to compile it yourself or want to use usb4java
   on a different platform. 
   
-  * {{{http://www.ailis.de/nexus/content/repositories/releases/de/ailis/usb4java/${project.version}/usb4java-${project.version}-src.tar.bz2}usb4java-${project.version}-src.tar.bz2}}
+  * {{{http://www.ailis.de/nexus/content/repositories/releases/de/ailis/usb4java/usb4java/${project.version}/usb4java-${project.version}-src.tar.bz2}usb4java-${project.version}-src.tar.bz2}}
 
-  * {{{http://www.ailis.de/nexus/content/repositories/releases/de/ailis/usb4java/${project.version}/usb4java-${project.version}-src.zip}usb4java-${project.version}-src.zip}}
+  * {{{http://www.ailis.de/nexus/content/repositories/releases/de/ailis/usb4java/usb4java/${project.version}/usb4java-${project.version}-src.zip}usb4java-${project.version}-src.zip}}
   
   []
  
