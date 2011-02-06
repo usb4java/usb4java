@@ -22,7 +22,7 @@ Download
 
   * {{{${releasesUrl}/usb4java-${project.version}-linux-x86_64.jar}usb4java-${project.version}-linux-x86_64.jar}}
 
-  * {{{${releasesUrl}/usb4java-${project.version}-windows-x86_64.jar}usb4java-${project.version}-windows-x86_64.jar}}
+  * {{{${releasesUrl}/usb4java-${project.version}-windows-x86.jar}usb4java-${project.version}-windows-x86.jar}}
 
   * {{{${releasesUrl}/usb4java-${project.version}-windows-x86_64.jar}usb4java-${project.version}-windows-x86_64.jar}}
 
