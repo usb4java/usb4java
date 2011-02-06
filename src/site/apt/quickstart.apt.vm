@@ -1,5 +1,5 @@
  -----------------------------------------------------------------------------
- Manual
+ Quick start
  -----------------------------------------------------------------------------
  
 Installation
@@ -125,7 +125,9 @@ javax.usb.services = de.ailis.usb4java.Services
   USB devices are managed in a tree. The root of this tree is a virtual
   USB hub to which all physical root hubs are connected. More hubs can be
   connected to these root hubs and any hub can have a number of connected
-  USB devices. The following source shows how to iterate over all devices: 
+  USB devices.
+  
+  The following source shows how to iterate over all devices: 
 
 +-----------------------------------------------------------------------------+
 public class Dump
@@ -153,22 +155,48 @@ public class Dump
 }
 +-----------------------------------------------------------------------------+
 
-  You may notice some annoyances here. First of all the <javax.usb> API doesn't
-  use generics so type casting is needed when some method returns a List.
-  The second annoyance is that all descriptors of <javax.usb> use signed
-  types where the USB specification defines unsigned types. So an unsigned
-  8 bit value is of type <byte> (which is signed 8 bit) and an unsigned 16
-  bit value is of type <short> (signed 16 bit). This means that in some
-  situations like the formatted output in the example above the values must
-  be converted to unsigned values by performing operations like <<& 0xff>>
-  for 8-bit values and <<& 0xffff>> for 16 bit values.
+  Often you need to search for a specific device before working with it. Here
+  is an example how to scan the device tree for the first device with a
+  specific vendor and product id. It can be easily expanded to check for
+  specific device classes or whatever:
   
-  By the way: If you execute this program and no USB device is found at all
-  (except the virtual root hub) then this simply means that you have no
-  permissions to use any USB device   on your machine. On Linux for example
-  write permissions are needed on the device files. So you have to fix the
-  permissions of the USB device file or execute your program as root.
++-----------------------------------------------------------------------------+
+public UsbDevice findDevice(UsbHub hub, short vendorId, short productId)
+{
+    for (UsbDevice device : (List<UsbDevice>) hub.getAttachedUsbDevices())
+    {
+        UsbDeviceDescriptor desc = device.getUsbDeviceDescriptor();
+        if (desc.idVendor() == vendorId && desc.idProduct() == productId) return device;
+        if (device.isUsbHub())
+        {
+            device = findDevice((UsbHub) device, vendorId, productId);
+            if (device != null) return device;
+        }
+    }
+    return null;
+}
++-----------------------------------------------------------------------------+
+  
 
+* Communicate via the Default Control Pipe 
+
+  This example reads the current configuration number from a device:
+  
++-----------------------------------------------------------------------------+
+UsbControlIrp irp = device.createUsbControlIrp(
+    (byte) (UsbConst.REQUESTTYPE_DIRECTION_IN
+          | UsbConst.REQUESTTYPE_TYPE_STANDARD
+          | UsbConst.REQUESTTYPE_RECIPIENT_DEVICE),
+    UsbConst.REQUEST_GET_CONFIGURATION,
+    (short) 0,
+    (short) 0
+    );
+irp.setData(new byte[1]);
+device.syncSubmit(irp);
+System.out.println(irp.getData()[0]);
++-----------------------------------------------------------------------------+
+  
+ 
 * More information about the high-level API
 
   * {{{./apidocs/index.html}API documentation of usb4java}}

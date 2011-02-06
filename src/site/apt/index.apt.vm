@@ -19,7 +19,14 @@ What is usb4java?
   {{{http://sourceforge.net/apps/trac/libusb-win32/wiki}libusb-win32}} project
   is used and you need to create and install a driver for the USB device you
   want to use with usb4java (Instructions can be found on the libusb-win32
-  website).    
+  website).
+  
+  <<Warning! usb4java is a brand-new project and is not well tested.
+  The low-level API will most likely work as expected because it simply
+  wraps a stable native API but the javax.usb based high-level API is
+  a complicated piece of software and may contain many bugs. But
+  to squish them I need testers so please give it a try and give me feedback
+  or send me patches: {{{mailto:k@ailis.de}k@ailis.de}}>>     
   
 
 News
@@ -45,7 +52,7 @@ License
 Getting started
 
   {{{./download.html}Download}} the latest usb4java and then 
-  read the {{{./manual.html}manual}} for some basic instructions how to use it.
+  read the {{{./quickstart.html}quick start guide}} and the {{{./faq.html}FAQ}}.
 
 
 Report problems

@@ -21,7 +21,8 @@
     <menu name="usb4java">
       <item name="About" href="./index.html" />
       <item name="Download" href="./download.html" />
-      <item name="Manual" href="./manual.html" />
+      <item name="Quick start" href="./quickstart.html" />
+      <item name="FAQ" href="./faq.html" />
     </menu>
     
     <menu ref="reports" />
