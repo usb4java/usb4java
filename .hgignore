@@ -16,6 +16,7 @@ config.h
 config.h.in
 config.h.in~
 config.guess
+config.log
 aclocal.m4
 .cproject
 .deps
