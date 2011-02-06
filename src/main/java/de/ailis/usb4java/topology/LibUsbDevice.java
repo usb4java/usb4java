@@ -713,7 +713,7 @@ public abstract class LibUsbDevice implements UsbDevice
      */
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return this.device.toString();
     }
