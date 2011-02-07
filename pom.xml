@@ -54,6 +54,7 @@
   <properties>
     <releasesUrl>http://www.ailis.de/nexus/content/repositories/releases/de/ailis/${project.artifactId}/${project.artifactId}/${project.version}</releasesUrl>
     <snapshotsUrl>http://www.ailis.de/nexus/content/repositories/snapshots/de/ailis/${project.artifactId}/${project.artifactId}</snapshotsUrl>
+    <powermock.version>1.4.7</powermock.version>
   </properties>
   
   <build>
@@ -138,7 +139,20 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.8.2</version>
+      <scope>test</scope>
     </dependency> 
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-module-junit4</artifactId>
+      <version>${powermock.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-api-mockito</artifactId>
+      <version>${powermock.version}</version>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>javax.usb</groupId>
       <artifactId>usb</artifactId>
