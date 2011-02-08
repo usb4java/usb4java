@@ -136,5 +136,19 @@ JNIEXPORT jobject JNICALL METHOD_NAME(USB_1Bus, root_1dev)
     JNIEnv *env, jobject this
 )
 {
-    return wrap_usb_device(env, unwrap_usb_bus(env, this)->root_dev);
+	/* Get the USB bus. */
+	struct usb_bus *bus = unwrap_usb_bus(env, this);
+
+	/* Get the root device of the bus and return NULL if not found. */
+
+	struct usb_device *root_dev = bus->root_dev;
+	if (!root_dev) return NULL;
+
+	/* If we found a root device then don't trust it. At least on Linux
+	   without root priviliges it is possible that a broken root device is
+	   reported. So we check here if the reported root device is also
+	   in the children list. If not, then ignore this broken root device. */
+	struct usb_device *device = bus->devices;
+	while (device && device != root_dev) device = device->next;
+    return wrap_usb_device(env, device);
 }
