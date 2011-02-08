@@ -230,16 +230,17 @@ public final class USB_Interface_Descriptor extends USB_Descriptor_Header
     public int hashCode()
     {
         int result = 17;
-        result = 37 * result + bDescriptorType();
         result = 37 * result + bLength();
+        result = 37 * result + bDescriptorType();
+        result = 37 * result + bInterfaceNumber();
         result = 37 * result + bAlternateSetting();
-        result = 37 * result + bInterfaceClass();
-        result = 37 * result + bInterfaceProtocol();
-        result = 37 * result + bInterfaceSubClass();
         result = 37 * result + bNumEndpoints();
+        result = 37 * result + bInterfaceClass();
+        result = 37 * result + bInterfaceSubClass();
+        result = 37 * result + bInterfaceProtocol();
         result = 37 * result + iInterface();
-        result = 37 * result + extralen();
         result = 37 * result + extra().hashCode();
+        result = 37 * result + extralen();
         return result;
     }
 }

@@ -275,20 +275,20 @@ public final class USB_Device_Descriptor extends USB_Descriptor_Header
     public int hashCode()
     {
         int result = 17;
-        result = 37 * result + bDescriptorType();
         result = 37 * result + bLength();
-        result = 37 * result + idProduct();
-        result = 37 * result + idVendor();
-        result = 37 * result + bcdDevice();
+        result = 37 * result + bDescriptorType();
         result = 37 * result + bcdUSB();
         result = 37 * result + bDeviceClass();
-        result = 37 * result + bDeviceProtocol();
         result = 37 * result + bDeviceSubClass();
+        result = 37 * result + bDeviceProtocol();
         result = 37 * result + bMaxPacketSize0();
-        result = 37 * result + bNumConfigurations();
+        result = 37 * result + idVendor();
+        result = 37 * result + idProduct();
+        result = 37 * result + bcdDevice();
         result = 37 * result + iManufacturer();
         result = 37 * result + iProduct();
         result = 37 * result + iSerialNumber();
+        result = 37 * result + bNumConfigurations();
         return result;
     }
 }

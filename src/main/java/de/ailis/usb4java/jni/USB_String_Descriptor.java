@@ -85,8 +85,8 @@ public final class USB_String_Descriptor extends USB_Descriptor_Header
     public int hashCode()
     {
         int result = 17;
-        result = 37 * result + bDescriptorType();
         result = 37 * result + bLength();
+        result = 37 * result + bDescriptorType();
         result = 37 * result + Arrays.hashCode(wData());
         return result;
     }

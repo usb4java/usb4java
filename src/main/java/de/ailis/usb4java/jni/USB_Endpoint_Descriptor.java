@@ -190,15 +190,16 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
     public int hashCode()
     {
         int result = 17;
-        result = 37 * result + bDescriptorType();
         result = 37 * result + bLength();
+        result = 37 * result + bDescriptorType();
         result = 37 * result + bEndpointAddress();
+        result = 37 * result + bmAttributes();
+        result = 37 * result + wMaxPacketSize();
         result = 37 * result + bInterval();
         result = 37 * result + bRefresh();
         result = 37 * result + bSynchAddress();
-        result = 37 * result + wMaxPacketSize();
-        result = 37 * result + extralen();
         result = 37 * result + extra().hashCode();
+        result = 37 * result + extralen();
         return result;
     }
 }

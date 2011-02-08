@@ -215,16 +215,16 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
     public int hashCode()
     {
         int result = 17;
-        result = 37 * result + bDescriptorType();
         result = 37 * result + bLength();
-        result = 37 * result + bConfigurationValue();
-        result = 37 * result + bmAttributes();
-        result = 37 * result + bNumInterfaces();
-        result = 37 * result + iConfiguration();
-        result = 37 * result + bMaxPower();
+        result = 37 * result + bDescriptorType();
         result = 37 * result + wTotalLength();
-        result = 37 * result + extralen();
+        result = 37 * result + bNumInterfaces();
+        result = 37 * result + bConfigurationValue();
+        result = 37 * result + iConfiguration();
+        result = 37 * result + bmAttributes();
+        result = 37 * result + bMaxPower();
         result = 37 * result + extra().hashCode();
+        result = 37 * result + extralen();
         return result;
     }
 }
