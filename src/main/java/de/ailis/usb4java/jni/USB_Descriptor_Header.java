@@ -30,6 +30,8 @@ public abstract class USB_Descriptor_Header
 
     public USB_Descriptor_Header(final ByteBuffer data)
     {
+        if (data == null)
+            throw new IllegalArgumentException("data must not be null");
         this.data = data;
     }
 
