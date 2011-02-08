@@ -6,12 +6,36 @@ Frequently asked questions
 
   If you have a question which is not answered here please drop me a mail
   at {{{mailto:k@ailis.de}k@ailis.de}}.
+  
+* usb4java lists no USB devices on Linux. Why?
 
-* Why are there no frequently asked questions here?
+  On Linux you need write permissions on the device file of the USB device
+  you want to communicate with. Check if the devices are accessible when
+  running your program as root. If this works then it is recommended to
+  configure <udev> to give your user write permissions when the device
+  is attached. You can do this by creating a file like
+  </lib/udev/rules.d/99-userusbdevices.rules> with content like this:
 
-  Because no one asked one so far. <usb4java> is pretty new and if you are
-  reading this you may be the first person who is interested in it. Please give
-  it a try and give me feedback.
+----
+  SUBSYSTEM=="usb",SYSFS{idVendor}=="89ab",SYSFS{idProduct}=="4567",MODE="0660",GROUP="plugdev"
+----
 
+  This means that whenever a USB device with vendor id <0x89ab> and product id
+  <0x4567> is attached then the group <plugdev> is permitted to
+  write to the device. So make sure your user is in that group (or use a
+  different group).
+  
+  If your device uses a shared vendor/product id then you might want to
+  filter for the manufacturer and product name. This can be done by checking
+  the SYSFS properties <idVendor> and <{idProduct}>.
+  
+  To activate this new configuration you have to restart your udev daemon
+  (<<</etc/init.d/udev restart>>>) and then re-attach the USB device.
 
+* usb4java lists no USB devices on Windows. Why?
 
+  On Windows you need to create a driver to bind your USB device to libusb.
+  Don't worry, this isn't that complicated but still too complicated to
+  explain here. The
+  {{{http://sourceforge.net/apps/trac/libusb-win32/wiki}libusb-win32 project}}
+  explains how to do it.
