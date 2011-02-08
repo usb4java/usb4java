@@ -62,7 +62,7 @@ public abstract class LibUsbDevice implements UsbDevice
     protected final USB_Device device;
 
     /** The device descriptor. */
-    private final LibUsbDeviceDescriptor descriptor;
+    private final UsbDeviceDescriptor descriptor;
 
     /** The USB configurations. */
     private final List<LibUsbConfiguration> configurations;
