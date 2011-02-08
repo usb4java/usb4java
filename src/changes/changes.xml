@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<document xmlns="http://maven.apache.org/changes/1.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 
+                             http://maven.apache.org/plugins/maven-changes-plugin/xsd/changes-1.0.0.xsd">
+  <properties>
+    <title>Changelog</title>
+    <author email="k@ailis.de">Klaus Reimer</author>
+  </properties>
+  <body>
+    <release version="0.1.1" date="2011-02-08" description="Hotfix">
+      <action dev="k" type="fix" date="2011-02-08">
+        libusb reports broken bus root devices when detaching USB devices
+        and when user has no root permissions on linux. Fixed it by
+        only trusting root devices which are also in the device list of a bus. 
+      </action>
+    </release>
+  </body>
+</document>
