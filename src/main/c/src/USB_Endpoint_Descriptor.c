@@ -63,8 +63,11 @@ jobjectArray wrap_usb_endpoint_descriptors(JNIEnv *env, uint8_t num_descriptors,
         num_descriptors, (*env)->FindClass(env,
         PACKAGE_DIR"/USB_Endpoint_Descriptor"), NULL);
     for (i = 0; i < num_descriptors; i++)
-        (*env)->SetObjectArrayElement(env, array, i,
-            wrap_usb_endpoint_descriptor(env, &descriptors[i]));
+    {
+    	struct usb_endpoint_descriptor *descriptor = &descriptors[0];
+		(*env)->SetObjectArrayElement(env, array, i,
+			wrap_usb_endpoint_descriptor(env, descriptor));
+    }
     return array;
 }
 

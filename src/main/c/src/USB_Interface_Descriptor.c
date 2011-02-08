@@ -39,7 +39,7 @@ jobject wrap_usb_interface_descriptor(JNIEnv *env,
         "(Ljava/nio/ByteBuffer;)V");
     if (constructor == NULL) return NULL;
     jobject buffer = (*env)->NewDirectByteBuffer(env, descriptor,
-        sizeof(struct usb_endpoint_descriptor));
+        sizeof(struct usb_interface_descriptor));
     return (*env)->NewObject(env, cls, constructor, buffer);
 }
 
@@ -65,8 +65,11 @@ jobjectArray wrap_usb_interface_descriptors(JNIEnv *env, uint8_t num_descriptors
         num_descriptors, (*env)->FindClass(env,
         PACKAGE_DIR"/USB_Interface_Descriptor"), NULL);
     for (i = 0; i < num_descriptors; i++)
-        (*env)->SetObjectArrayElement(env, array, i,
-            wrap_usb_interface_descriptor(env, &descriptors[i]));
+    {
+    	struct usb_interface_descriptor *descriptor = &descriptors[i];
+		(*env)->SetObjectArrayElement(env, array, i,
+			wrap_usb_interface_descriptor(env, descriptor));
+    }
     return array;
 }
 
