@@ -14,7 +14,10 @@ javax.usb.services = de.ailis.usb4java.Services
 +----+ 
 
   <usb4java> can be configured by adding more properties to this file as
-  described in the following sections.
+  described in the following sections. All these properties only affect
+  the high-level <javax.usb> API of <usb4java>. The low-level API just wraps
+  the native <libusb> library so no configuration is available (or needed) for
+  it.
 
 
 * Hierarchy scanning
@@ -24,7 +27,7 @@ javax.usb.services = de.ailis.usb4java.Services
   hubs are connected to this virtual hub and all child hubs and devices are
   connected to these root hubs. Unfortunately <libusb> has problems on
   platforms like Mac OS X to read the real USB device hierarchy from the operating
-  system. So to allow <usb4java> to be used on Mac OS X this hierachy scan
+  system. So to allow <usb4java> to be used on Mac OS X this hierarchy scan
   can be disabled (and is disabled by default when running on Mac OS X). The
   result is that all USB devices are directly connected to the virtual root
   USB hub. At least this allows finding and communicating with the devices but
@@ -58,7 +61,7 @@ de.ailis.usb4java.products = 01aa
   <usb4java> has to read all the descriptors of all connected devices on
   startup and everytime a USB device has been attached or detached.
   So filtering for vendor ID and/or product ID will hide all
-  uninteresting devices from <usb4java>. When using this feature then it is
+  uninteresting devices from the <usb4java>. When using this feature then it is
   recommended to disable hierarchy scan, too, because then hubs can be totally
   ignored. With enabled hierarchy scan <usb4java> has to traverse all hubs to
   find interesting devices.
