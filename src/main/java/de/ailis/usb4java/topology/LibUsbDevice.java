@@ -103,6 +103,7 @@ public abstract class LibUsbDevice implements UsbDevice
                 new ArrayList<LibUsbConfiguration>(configs.length);
         for (final USB_Config_Descriptor config : configs)
         {
+            if (config == null) continue;
             final LibUsbConfiguration configuration = new LibUsbConfiguration(
                 this, config);
             configurations.add(configuration);

@@ -12,10 +12,13 @@ import static de.ailis.usb4java.jni.USB.usb_get_busses;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import de.ailis.usb4java.Services;
 import de.ailis.usb4java.jni.USB_Bus;
 import de.ailis.usb4java.jni.USB_Device;
+import de.ailis.usb4java.jni.USB_Device_Descriptor;
+import de.ailis.usb4java.support.Config;
 import de.ailis.usb4java.support.UsbLock;
 
 
@@ -36,6 +39,9 @@ public final class UsbDeviceScanner
     /** If scanner already scanned for devices. */
     private boolean scanned = false;
 
+    /** If configuration */
+    private final Config config;
+
 
     /**
      * Constructor.
@@ -44,12 +50,15 @@ public final class UsbDeviceScanner
      *            The USB services.
      * @param rootHub
      *            The virtual USB root hub.
+     * @param config
+     *            The configuration
      */
 
     public UsbDeviceScanner(final Services services,
-        final VirtualRootHub rootHub)
+        final VirtualRootHub rootHub, final Config config)
     {
         this.rootHub = rootHub;
+        this.config = config;
     }
 
 
@@ -70,8 +79,20 @@ public final class UsbDeviceScanner
             final List<USB_Device> devices = new ArrayList<USB_Device>();
             while (bus != null)
             {
-                final USB_Device device = bus.root_dev();
-                if (device != null) devices.add(device);
+                USB_Device device = bus.root_dev();
+                if (this.config.getScanHierarchy())
+                {
+                    if (device != null) devices.add(device);
+                }
+                else
+                {
+                    device = bus.devices();
+                    while (device != null)
+                    {
+                        devices.add(device);
+                        device = device.next();
+                    }
+                }
                 bus = bus.next();
             }
             updateHub(this.rootHub, devices.toArray(new USB_Device[devices
@@ -122,16 +143,33 @@ public final class UsbDeviceScanner
         final List<LibUsbDevice> oldDevices = ports.getAttachedUsbDevices();
         final List<LibUsbDevice> newDevices = new ArrayList<LibUsbDevice>(
             devices.length);
+        final Set<Integer> vendors = this.config.getVendors();
+        final Set<Integer> products = this.config.getProducts();
         for (final USB_Device dev : devices)
         {
             if (dev == null) continue;
+            final USB_Device_Descriptor descriptor = dev.descriptor();
+
+            if (!this.config.getScanHierarchy()
+                || descriptor.bDeviceClass() != USB_CLASS_HUB)
+            {
+                // Filter for vendors if needed
+                if (vendors != null && !vendors.contains(descriptor.idVendor()))
+                    continue;
+
+                // Filter for products if needed
+                if (products != null
+                    && !products.contains(descriptor.idProduct()))
+                    continue;
+            }
+
             final LibUsbDevice device = createUsbDevice(dev);
             newDevices.add(device);
 
             // Update existing devices
             if (oldDevices.contains(device))
             {
-                if (device.isUsbHub())
+                if (this.config.getScanHierarchy() && device.isUsbHub())
                 {
                     final LibUsbHub hub = (LibUsbHub) oldDevices.get(oldDevices
                         .indexOf(device));
@@ -143,7 +181,7 @@ public final class UsbDeviceScanner
             else
             {
                 ports.connectUsbDevice(device);
-                if (device.isUsbHub())
+                if (this.config.getScanHierarchy() && device.isUsbHub())
                     updateHub((LibUsbHub) device, dev.children());
             }
         }
