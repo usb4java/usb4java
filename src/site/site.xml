@@ -23,6 +23,7 @@
       <item name="Download" href="./download.html" />
       <item name="Quick start" href="./quickstart.html" />
       <item name="FAQ" href="./faq.html" />
+      <item name="Configuration" href="./configuration.html" />
     </menu>
     
     <menu ref="reports" />

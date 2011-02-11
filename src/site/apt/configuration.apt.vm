@@ -1,0 +1,67 @@
+ -----------------------------------------------------------------------------
+ Configuration
+ -----------------------------------------------------------------------------
+ 
+Configuration
+
+  To tell the USB Host Manager of <javax.usb> to use the <usb4java>
+  implementation you have to put the following property into the
+  <javax.usb.properties> file which must be located in the root of
+  your classpath:
+  
++----+
+javax.usb.services = de.ailis.usb4java.Services
++----+ 
+
+  <usb4java> can be configured by adding more properties to this file as
+  described in the following sections.
+
+
+* Hierarchy scanning
+
+  Normally USB devices in <javax.usb> are maintained in a tree. The root of
+  the tree is a virtual USB hub provided by <usb4java>. All physical root
+  hubs are connected to this virtual hub and all child hubs and devices are
+  connected to these root hubs. Unfortunately <libusb> has problems on
+  platforms like Mac OS X to read the real USB device hierarchy from the operating
+  system. So to allow <usb4java> to be used on Mac OS X this hierachy scan
+  can be disabled (and is disabled by default when running on Mac OS X). The
+  result is that all USB devices are directly connected to the virtual root
+  USB hub. At least this allows finding and communicating with the devices but
+  you can't check which devices are connected to which hub in this case.
+  
+  To disable hierarchy scanning add this to the <javax.usb.properties> file:
+  
++----+
+de.ailis.usb4java.scanHierarchy = false
++----+
+
+  When you want to enable it on Mac OS X for some reason then set it to
+  <<<true>>>.
+
+
+* Device filtering
+
+  To improve USB device scan performance you can configure device filters
+  with these two properties:
+
++----+  
+de.ailis.usb4java.vendors = 12ab cd56
+de.ailis.usb4java.products = 01aa
++----+
+
+  With a configuration like this <usb4java> ignores all devices which does
+  not have vendor ID <<<12ab>>> or <<<cd56>>> and not product ID <<<01aa>>>.
+  
+  The purpose of this device filtering is performance. When your machine
+  has many USB devices connected then it may slow down your application when
+  <usb4java> has to read all the descriptors of all connected devices on
+  startup and everytime a USB device has been attached or detached.
+  So filtering for vendor ID and/or product ID will hide all
+  uninteresting devices from <usb4java>. When using this feature then it is
+  recommended to disable hierarchy scan, too, because then hubs can be totally
+  ignored. With enabled hierarchy scan <usb4java> has to traverse all hubs to
+  find interesting devices.
+  
+  
+     

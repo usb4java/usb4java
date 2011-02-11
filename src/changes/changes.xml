@@ -8,6 +8,12 @@
     <author email="k@ailis.de">Klaus Reimer</author>
   </properties>
   <body>
+    <release version="0.2.0" date="2011-02-11" description="Minor update">
+      <action dev="k" type="add" date="2011-02-11">
+        Implemented configuration to control the scan mode and to improve
+        scan performance by filtering for specific vendor and product ids.
+      </action>
+    </release>
     <release version="0.1.1" date="2011-02-08" description="Hotfix">
       <action dev="k" type="fix" date="2011-02-08">
         libusb reports broken bus root devices when detaching USB devices
