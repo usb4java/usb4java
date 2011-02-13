@@ -17,19 +17,19 @@ import java.util.Set;
  * @author Klaus Reimer (k@ailis.de)
  */
 
-public class Config
+public final class Config
 {
     /** Base key name for properties. */
-    private final static String KEY_BASE = "de.ailis.usb4java.";
+    private static final String KEY_BASE = "de.ailis.usb4java.";
 
     /** Key name for scanHierarchy property. */
-    private final static String SCAN_HIERARCHY_KEY = KEY_BASE + "scanHierarchy";
+    private static final String SCAN_HIERARCHY_KEY = KEY_BASE + "scanHierarchy";
 
     /** Key name for vendors filter property. */
-    private final static String VENDORS_KEY = KEY_BASE + "vendors";
+    private static final String VENDORS_KEY = KEY_BASE + "vendors";
 
     /** Key name for product filter property. */
-    private final static String PRODUCTS_KEY = KEY_BASE + "products";
+    private static final String PRODUCTS_KEY = KEY_BASE + "products";
 
     /** If device hierarchy should be scanned. */
     private boolean scanHierarchy;
