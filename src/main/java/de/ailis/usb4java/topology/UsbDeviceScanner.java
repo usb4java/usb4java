@@ -39,7 +39,7 @@ public final class UsbDeviceScanner
     /** If scanner already scanned for devices. */
     private boolean scanned = false;
 
-    /** If configuration */
+    /** The configuration. */
     private final Config config;
 
 
