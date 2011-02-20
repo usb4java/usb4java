@@ -185,12 +185,17 @@ JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1release_1interface)
 JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1control_1msg)
 (
     JNIEnv *env, jclass class, jobject handle, jint requesttype, jint request,
-    jint value, jint index, jobject bytes, int timeout
+    jint value, jint index, jobject bytes, jint timeout
 )
 {
-    void *buf = (*env)->GetDirectBufferAddress(env, bytes);
-    if (!buf) return -1;
-    jlong buflen = (*env)->GetDirectBufferCapacity(env, bytes);
+	jlong buflen = (*env)->GetDirectBufferCapacity(env, bytes);
+	void *buf;
+	if (buflen)
+	{
+		buf = (*env)->GetDirectBufferAddress(env, bytes);
+		if (!buf) return -1;
+	}
+	else buf = NULL;
     return usb_control_msg(unwrap_usb_dev_handle(env, handle), requesttype,
         request, value, index, buf, buflen, timeout);
 }
@@ -239,7 +244,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1get_1string_1simple)
 
 JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1get_1descriptor)
 (
-    JNIEnv *env, jclass class, jobject handle, int type, int index,
+    JNIEnv *env, jclass class, jobject handle, jint type, jint index,
     jobject buffer
 )
 {
@@ -258,7 +263,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1get_1descriptor)
 
 JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1get_1descriptor_1by_1endpoint)
 (
-    JNIEnv *env, jclass class, jobject handle, int ep, int type, int index,
+    JNIEnv *env, jclass class, jobject handle, jint ep, jint type, jint index,
     jobject buffer
 )
 {
@@ -278,7 +283,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1get_1descriptor_1by_1endpoint)
 JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1bulk_1write)
 (
     JNIEnv *env, jclass class, jobject handle, jint ep, jobject bytes,
-    int timeout
+    jint timeout
 )
 {
     void *buf = (*env)->GetDirectBufferAddress(env, bytes);
@@ -297,7 +302,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1bulk_1write)
 JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1bulk_1read)
 (
     JNIEnv *env, jclass class, jobject handle, jint ep, jobject bytes,
-    int timeout
+    jint timeout
 )
 {
     void *buf = (*env)->GetDirectBufferAddress(env, bytes);
@@ -316,7 +321,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1bulk_1read)
 JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1interrupt_1write)
 (
     JNIEnv *env, jclass class, jobject handle, jint ep, jobject bytes,
-    int timeout
+    jint timeout
 )
 {
     void *buf = (*env)->GetDirectBufferAddress(env, bytes);
@@ -335,7 +340,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1interrupt_1write)
 JNIEXPORT jint JNICALL METHOD_NAME(USB, usb_1interrupt_1read)
 (
     JNIEnv *env, jclass class, jobject handle, jint ep, jobject bytes,
-    int timeout
+    jint timeout
 )
 {
     void *buf = (*env)->GetDirectBufferAddress(env, bytes);
