@@ -1,5 +1,5 @@
 AC_PREREQ([2.65])
-AC_INIT([libusb4java], [0.1.0], [k@ailis.de])
+AC_INIT([libusb4java], [0.3.0], [k@ailis.de])
 AM_INIT_AUTOMAKE(foreign -Wall -Werror)
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
