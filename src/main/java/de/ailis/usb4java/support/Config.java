@@ -31,6 +31,9 @@ public final class Config
     /** Key name for product filter property. */
     private static final String PRODUCTS_KEY = KEY_BASE + "products";
 
+    /** Key name for USB communication timeout. */
+    private static final String TIMEOUT_KEY = KEY_BASE + "timeout";
+
     /** If device hierarchy should be scanned. */
     private boolean scanHierarchy;
 
@@ -39,6 +42,9 @@ public final class Config
 
     /** The product filter list or null if not filtering. */
     private Set<Integer> products;
+
+    /** The timeout for USB communication in milliseconds. */
+    private int timeout = 2500;
 
 
     /**
@@ -86,6 +92,12 @@ public final class Config
             }
             this.products = Collections.unmodifiableSet(products);
         }
+
+        // Read the USB communication timeout
+        if (properties.containsKey(TIMEOUT_KEY))
+        {
+            this.timeout = Integer.valueOf(properties.getProperty(TIMEOUT_KEY));
+        }
     }
 
 
@@ -124,5 +136,17 @@ public final class Config
     public Set<Integer> getProducts()
     {
         return this.products;
+    }
+
+
+    /**
+     * Returns the USB communication timeout in milliseconds.
+     *
+     * @return The USB communication timeout in milliseconds.
+     */
+
+    public int getTimeout()
+    {
+        return this.timeout;
     }
 }

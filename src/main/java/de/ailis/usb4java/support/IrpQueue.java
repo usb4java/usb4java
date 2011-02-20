@@ -66,7 +66,7 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
     /**
      * @see AbstractIrpQueue#processIrp(javax.usb.UsbIrp)
      *
-     * TODO Implement control IRP support.
+     *      TODO Implement control IRP support.
      */
 
     @Override
@@ -147,7 +147,7 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
             & 0xffff);
         final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
         final int result = usb_bulk_read(this.device.open(),
-            descriptor.bEndpointAddress(), buffer, 5000);
+            descriptor.bEndpointAddress(), buffer, getConfig().getTimeout());
         if (result < 0) throw new LibUsbException(
             "Unable to read from interrupt endpoint", result);
         buffer.rewind();
@@ -179,7 +179,8 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
             buffer.put(data, written, Math.min(total - written, size));
             buffer.rewind();
             final int result = usb_bulk_write(handle,
-                descriptor.bEndpointAddress(), buffer, 5000);
+                descriptor.bEndpointAddress(), buffer,
+                getConfig().getTimeout());
             if (result < 0) throw new LibUsbException(
                 "Unable to write to bulk endpoint", result);
             written += result;
@@ -205,7 +206,7 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
             & 0xffff);
         final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
         final int result = usb_interrupt_read(this.device.open(),
-            descriptor.bEndpointAddress(), buffer, 5000);
+            descriptor.bEndpointAddress(), buffer, getConfig().getTimeout());
         if (result < 0) throw new LibUsbException(
             "Unable to read from interrupt endpoint", result);
         buffer.rewind();
@@ -236,7 +237,8 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
             buffer.put(data, written, Math.min(total - written, size));
             buffer.rewind();
             final int result = usb_interrupt_write(this.device.open(),
-                descriptor.bEndpointAddress(), buffer, 5000);
+                descriptor.bEndpointAddress(), buffer,
+                getConfig().getTimeout());
             if (result < 0) throw new LibUsbException(
                 "Unable to write to interrupt endpoint", result);
             written += result;

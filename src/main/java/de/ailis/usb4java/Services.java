@@ -162,4 +162,16 @@ public final class Services implements UsbServices
     {
         this.listeners.usbDeviceDetached(new UsbServicesEvent(this, device));
     }
+
+
+    /**
+     * Returns the configuration.
+     *
+     * @return The configuration.
+     */
+
+    public Config getConfig()
+    {
+        return this.config;
+    }
 }

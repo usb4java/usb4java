@@ -19,6 +19,17 @@ javax.usb.services = de.ailis.usb4java.Services
   the native <libusb> library so no configuration is available (or needed) for
   it.
 
+  
+* Communication timeout
+
+  The default USB communication timeout of <usb4java> is 2500 milliseconds.
+  To change this to 250 milliseconds for example add this to the properties
+  file: 
+  
++----+
+de.ailis.usb4java.timeout = 250
++----+
+
 
 * Hierarchy scanning
 

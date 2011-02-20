@@ -9,8 +9,10 @@ import java.util.Deque;
 import java.util.LinkedList;
 
 import javax.usb.UsbException;
+import javax.usb.UsbHostManager;
 import javax.usb.UsbIrp;
 
+import de.ailis.usb4java.Services;
 import de.ailis.usb4java.topology.LibUsbDevice;
 
 
@@ -186,6 +188,27 @@ public abstract class AbstractIrpQueue<T extends UsbIrp>
         synchronized (this.irps)
         {
             return this.irps.isEmpty() || this.processor != null;
+        }
+    }
+
+
+    /**
+     * Returns the configuration.
+     *
+     * @return The configuration.
+     */
+
+    protected Config getConfig()
+    {
+        try
+        {
+            return ((Services) UsbHostManager.getUsbServices()).getConfig();
+        }
+        catch (final UsbException e)
+        {
+            // Can't happen because we can't get to this point when USB
+            // services are not available.
+            throw new RuntimeException(e.toString(), e);
         }
     }
 }

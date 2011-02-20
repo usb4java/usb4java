@@ -53,7 +53,8 @@ public final class ControlIrpQueue extends AbstractIrpQueue<UsbControlIrp>
         final USB_Dev_Handle handle = this.device.open();
         final int len =
             usb_control_msg(handle, irp.bmRequestType(),
-                irp.bRequest(), irp.wValue(), irp.wIndex(), buffer, 250);
+                irp.bRequest(), irp.wValue(), irp.wIndex(), buffer,
+                getConfig().getTimeout());
         if (len < 0)
             throw new LibUsbException(
                 "Unable to submit control message", len);
