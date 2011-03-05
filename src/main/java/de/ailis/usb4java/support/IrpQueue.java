@@ -65,8 +65,6 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
 
     /**
      * @see AbstractIrpQueue#processIrp(javax.usb.UsbIrp)
-     *
-     *      TODO Implement control IRP support.
      */
 
     @Override
@@ -81,11 +79,13 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
                 switch (direction)
                 {
                     case UsbConst.ENDPOINT_DIRECTION_OUT:
-                        irp.setActualLength(bulkWrite(irp.getData()));
+                        irp.setActualLength(bulkWrite(irp.getData(),
+                            irp.getOffset(), irp.getLength()));
                         break;
 
                     case UsbConst.ENDPOINT_DIRECTION_IN:
-                        irp.setActualLength(bulkRead(irp.getData()));
+                        irp.setActualLength(bulkRead(irp.getData(),
+                            irp.getOffset(), irp.getLength()));
                         break;
 
                     default:
@@ -98,11 +98,13 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
                 switch (direction)
                 {
                     case UsbConst.ENDPOINT_DIRECTION_OUT:
-                        irp.setActualLength(interruptWrite(irp.getData()));
+                        irp.setActualLength(interruptWrite(irp.getData(),
+                            irp.getOffset(), irp.getLength()));
                         break;
 
                     case UsbConst.ENDPOINT_DIRECTION_IN:
-                        irp.setActualLength(interruptRead(irp.getData()));
+                        irp.setActualLength(interruptRead(irp.getData(),
+                            irp.getOffset(), irp.getLength()));
                         break;
 
                     default:
@@ -135,15 +137,20 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
      *
      * @param data
      *            The data array to write the read bytes to.
+     * @param offset
+     *            The offset in the data array to write the read bytes to.
+     * @param len
+     *            The number of bytes to read.
      * @throws UsbException
      *             When transfer fails.
      * @return The number of read bytes.
      */
 
-    private int bulkRead(final byte[] data) throws UsbException
+    private int bulkRead(final byte[] data, final int offset, final int len)
+        throws UsbException
     {
         final UsbEndpointDescriptor descriptor = getEndpointDescriptor();
-        final int size = Math.min(data.length, descriptor.wMaxPacketSize()
+        final int size = Math.min(len, descriptor.wMaxPacketSize()
             & 0xffff);
         final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
         final int result = usb_bulk_read(this.device.open(),
@@ -151,7 +158,7 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
         if (result < 0) throw new LibUsbException(
             "Unable to read from interrupt endpoint", result);
         buffer.rewind();
-        buffer.get(data, 0, result);
+        buffer.get(data, offset, result);
         return result;
     }
 
@@ -161,22 +168,27 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
      *
      * @param data
      *            The data array with the bytes to write.
+     * @param offset
+     *            The offset in the data array to write.
+     * @param len
+     *            The number of bytes to write.
      * @throws UsbException
      *             When transfer fails.
      * @return The number of written bytes.
      */
 
-    private int bulkWrite(final byte[] data) throws UsbException
+    private int bulkWrite(final byte[] data, final int offset, final int len)
+        throws UsbException
     {
         final UsbEndpointDescriptor descriptor = getEndpointDescriptor();
-        final int total = data.length;
+        final int total = len;
         final int size = Math.min(total, descriptor.wMaxPacketSize() & 0xffff);
         final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
         final USB_Dev_Handle handle = this.device.open();
         int written = 0;
         while (written < total)
         {
-            buffer.put(data, written, Math.min(total - written, size));
+            buffer.put(data, offset + written, Math.min(total - written, size));
             buffer.rewind();
             final int result = usb_bulk_write(handle,
                 descriptor.bEndpointAddress(), buffer,
@@ -194,15 +206,21 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
      *
      * @param data
      *            The data array to write the read bytes to.
+     * @param offset
+     *            The offset in the data array to write the read bytes to.
+     * @param len
+     *            The number of bytes to read.
      * @throws UsbException
      *             When transfer fails.
      * @return The number of read bytes.
      */
 
-    private int interruptRead(final byte[] data) throws UsbException
+    private int
+        interruptRead(final byte[] data, final int offset, final int len)
+            throws UsbException
     {
         final UsbEndpointDescriptor descriptor = getEndpointDescriptor();
-        final int size = Math.min(data.length, descriptor.wMaxPacketSize()
+        final int size = Math.min(len, descriptor.wMaxPacketSize()
             & 0xffff);
         final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
         final int result = usb_interrupt_read(this.device.open(),
@@ -210,7 +228,7 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
         if (result < 0) throw new LibUsbException(
             "Unable to read from interrupt endpoint", result);
         buffer.rewind();
-        buffer.get(data, 0, result);
+        buffer.get(data, offset, result);
         return result;
     }
 
@@ -220,21 +238,27 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
      *
      * @param data
      *            The data array with the bytes to write.
+     * @param offset
+     *            The offset in the data array to write.
+     * @param len
+     *            The number of bytes to write.
      * @throws UsbException
      *             When transfer fails.
      * @return The number of written bytes.
      */
 
-    private int interruptWrite(final byte[] data) throws UsbException
+    private int interruptWrite(final byte[] data, final int offset,
+        final int len)
+        throws UsbException
     {
         final UsbEndpointDescriptor descriptor = getEndpointDescriptor();
-        final int total = data.length;
+        final int total = len;
         final int size = Math.min(total, descriptor.wMaxPacketSize() & 0xffff);
         final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
         int written = 0;
         while (written < total)
         {
-            buffer.put(data, written, Math.min(total - written, size));
+            buffer.put(data, offset + written, Math.min(total - written, size));
             buffer.rewind();
             final int result = usb_interrupt_write(this.device.open(),
                 descriptor.bEndpointAddress(), buffer,

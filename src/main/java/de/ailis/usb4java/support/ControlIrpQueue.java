@@ -48,7 +48,7 @@ public final class ControlIrpQueue extends AbstractIrpQueue<UsbControlIrp>
     {
         final ByteBuffer buffer =
             ByteBuffer.allocateDirect(irp.getLength());
-        buffer.put(irp.getData(), 0, irp.getLength());
+        buffer.put(irp.getData(), irp.getOffset(), irp.getLength());
         buffer.rewind();
         final USB_Dev_Handle handle = this.device.open();
         final int len =
@@ -59,7 +59,7 @@ public final class ControlIrpQueue extends AbstractIrpQueue<UsbControlIrp>
             throw new LibUsbException(
                 "Unable to submit control message", len);
         buffer.rewind();
-        buffer.get(irp.getData(), 0, len);
+        buffer.get(irp.getData(), irp.getOffset(), len);
         irp.setActualLength(len);
     }
 
