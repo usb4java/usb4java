@@ -5,7 +5,7 @@
   <parent>
     <artifactId>maven-java</artifactId>
     <groupId>de.ailis.maven</groupId>
-    <version>9</version>
+    <version>10</version>
   </parent>
     
   <groupId>de.ailis.usb4java</groupId>
