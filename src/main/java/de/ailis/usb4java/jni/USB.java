@@ -212,17 +212,30 @@ public final class USB
     /** Endpoint interrupt type. */
     public static final int USB_ENDPOINT_TYPE_INTERRUPT = 3;
 
+    /** Possible library names we try to load. */
+    private static String[] libNames = new String[] { "usb4java", "usb4java32",
+        "libusb4java", "libusb4java32" };
 
     static
     {
-        try
+        Throwable lastException = null;
+        for (final String libName : libNames)
         {
-            System.loadLibrary("libusb4java");
+            try
+            {
+                System.loadLibrary(libName);
+                lastException = null;
+                break;
+            }
+            catch (final Throwable e)
+            {
+                lastException = e;
+            }
         }
-        catch (final UnsatisfiedLinkError e)
-        {
-            System.loadLibrary("usb4java");
-        }
+        if (lastException != null)
+            throw new RuntimeException(
+                "Unable to load JNI library of usb4java: "
+                    + lastException, lastException);
     }
 
 
