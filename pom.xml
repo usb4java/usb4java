@@ -47,7 +47,7 @@
    
   <scm>
     <connection>scm:git:git://github.com/kayahr/${artifactId}.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/kayahr/${artifactId}.git</developerConnection>
+    <developerConnection>scm:git:ssh://git@github.com/kayahr/${artifactId}.git2</developerConnection>
     <url>http://github.com/kayahr/${artifactId}</url>
   </scm>
 
