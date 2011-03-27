@@ -46,10 +46,15 @@
   </developers>
    
   <scm>
-    <url>http://www.ailis.de/~k/hg/java/usb4java</url>
-    <connection>scm:hg:http://www.ailis.de/~k/hg/java/usb4java</connection>
-    <developerConnection>scm:hg:ssh://k@ailis.de/hg/java/usb4java</developerConnection>
-  </scm>  
+    <connection>scm:git:ssh://git@github.com/kayahr/${artifactId}.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/kayahr/${artifactId}.git</developerConnection>
+    <url>http://github.com/kayahr/${artifactId}</url>
+  </scm>
+
+  <issueManagement>
+    <system>Github</system>
+    <url>https://github.com/kayahr/${artifactId}/issues</url>
+  </issueManagement> 
   
   <properties>
     <releasesUrl>http://www.ailis.de/nexus/content/repositories/releases/de/ailis/${project.artifactId}/${project.artifactId}/${project.version}</releasesUrl>
