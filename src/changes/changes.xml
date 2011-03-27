@@ -8,6 +8,12 @@
     <author email="k@ailis.de">Klaus Reimer</author>
   </properties>
   <body>
+    <release version="0.3.2" date="2011-03-27" description="Minor update">
+      <action dev="k" type="add" date="2011-03-27">
+        Now trying to load the JNI library with the following library names:
+        usb4java, usb4java32, libusb4java, libusb4java32.
+      </action>
+    </release>
     <release version="0.3.1" date="2011-03-05" description="Hotfix">
       <action dev="k" type="fix" date="2011-03-05">
         Fixed missing support for custom buffer offsets and lengths.
