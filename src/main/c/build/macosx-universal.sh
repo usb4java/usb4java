@@ -64,6 +64,6 @@ cp -faL $LIBS/libusb.dylib $DISTDIR/
 rm -rf $TMPDIR
 
 # Remove paths from libraries
-install_name_tool -id libusb.dylib $DISTDIR/libusb.dylib
-install_name_tool -id libusb4java.dylib $DISTDIR/libusb4java.dylib
-install_name_tool -change /usr/lib/libusb-0.1.4.dylib libusb.dylib $DISTDIR/libusb4java.dylib
+install_name_tool -id @executable_path/libusb.dylib $DISTDIR/libusb.dylib
+install_name_tool -id @executable_path/libusb4java.dylib $DISTDIR/libusb4java.dylib
+install_name_tool -change /usr/lib/libusb-0.1.4.dylib @executable_path/libusb.dylib $DISTDIR/libusb4java.dylib
