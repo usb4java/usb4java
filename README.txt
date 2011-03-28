@@ -31,7 +31,7 @@ To compile the wrapper library you need a correctly set JAVA_HOME environment
 variable and you must have the libusb development files installed.
 On Debian systems this can be done with "apt-get install libusb-dev".
 
-The compile and install the wrapper library you simply do this:
+To compile and install the wrapper library you simply do this:
 
   $ ./configure
   $ make
