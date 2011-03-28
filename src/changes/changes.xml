@@ -8,6 +8,12 @@
     <author email="k@ailis.de">Klaus Reimer</author>
   </properties>
   <body>
+    <release version="0.3.3" date="2011-03-28" description="Minor update">
+      <action dev="k" type="fix" date="2011-03-28">
+        Fixed library paths in dylibs so they can be placed in 
+        *.app/Contents/MacOS.
+      </action>
+    </release>
     <release version="0.3.2" date="2011-03-27" description="Minor update">
       <action dev="k" type="add" date="2011-03-27">
         Now trying to load the JNI library with the following library names:
