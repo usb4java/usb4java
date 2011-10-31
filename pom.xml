@@ -160,7 +160,7 @@
   <distributionManagement>
     <site>
       <id>project-website</id>
-      <url>file://${basedir}/../${project.artifactId}-site/</url>
+      <url>file://${project.basedir}/../${project.artifactId}-site/</url>
     </site>
     <repository>
       <id>ailis-releases</id>
