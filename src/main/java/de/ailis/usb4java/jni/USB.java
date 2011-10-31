@@ -5,8 +5,13 @@
 
 package de.ailis.usb4java.jni;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 
 
 /**
@@ -19,6 +24,9 @@ import java.nio.ByteOrder;
 
 public final class USB
 {
+    /** The logger. */
+    private static final Logger LOG = Logger.getLogger("USB");
+
     /** The maximum size of a descriptor. */
     private static final int MAX_DESCRIPTOR_SIZE = 256;
 
@@ -218,24 +226,31 @@ public final class USB
 
     static
     {
-        Throwable lastException = null;
+        final List<Throwable> errors = new ArrayList<Throwable>();
         for (final String libName : libNames)
         {
             try
             {
                 System.loadLibrary(libName);
-                lastException = null;
+                errors.clear();
                 break;
             }
             catch (final Throwable e)
             {
-                lastException = e;
+                errors.add(e);
             }
         }
-        if (lastException != null)
+        if (!errors.isEmpty())
+        {
+            final StringWriter out = new StringWriter();
+            for (final Throwable error: errors)
+            {
+                error.printStackTrace(new PrintWriter(out));
+            }
+            LOG.severe(out.toString());
             throw new RuntimeException(
-                "Unable to load JNI library of usb4java: "
-                    + lastException, lastException);
+                "Unable to load JNI library of usb4java");
+        }
     }
 
 
