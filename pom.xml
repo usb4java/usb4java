@@ -165,12 +165,12 @@
     <repository>
       <id>ailis-releases</id>
       <name>Ailis Maven Releases</name>
-      <url>https://nexus.ailis.de/content/repositories/releases</url>
+      <url>http://nexus.ailis.de/content/repositories/releases</url>
     </repository>
     <snapshotRepository>
       <id>ailis-snapshots</id>
       <name>Ailis Maven Snapshots</name>
-      <url>https://nexus.ailis.de/content/repositories/snapshots</url>
+      <url>http://nexus.ailis.de/content/repositories/snapshots</url>
     </snapshotRepository>    
   </distributionManagement>
   
