@@ -8,6 +8,11 @@
     <author email="k@ailis.de">Klaus Reimer</author>
   </properties>
   <body>
+    <release version="0.3.4" date="2011-10-31" description="Minor update">
+      <action dev="k" type="fix" date="2011-10-31">
+        Improved error messages when loading the JNI library fails.
+      </action>
+    </release>
     <release version="0.3.3" date="2011-03-28" description="Minor update">
       <action dev="k" type="fix" date="2011-03-28">
         Fixed library paths in dylibs so they can be placed in 
