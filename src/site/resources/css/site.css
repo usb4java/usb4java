@@ -1,0 +1,13 @@
+#bannerRight img
+{
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: 0;
+}
+
+#breadcrumbs
+{
+    padding-right: 150px;
+}
+
