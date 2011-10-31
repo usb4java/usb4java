@@ -10,7 +10,7 @@ To use usb4java you have to compile the JAR file and the libusb JNI wrapper
 library. The following sections try to explain this in some short words.
 For more detailed information please visit the usb4java website:
 
-http://www.ailis.de/~k/projects/usb4java/
+http://kayahr.github.com/usb4java
 
 
 libusb JNI wrapper
