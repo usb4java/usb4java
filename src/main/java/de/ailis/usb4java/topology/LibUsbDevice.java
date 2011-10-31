@@ -635,7 +635,7 @@ public abstract class LibUsbDevice implements UsbDevice
      */
 
     @Override
-    public final void syncSubmit(@SuppressWarnings("rawtypes") final List list)
+    public final void syncSubmit(final List list)
         throws UsbException, IllegalArgumentException, UsbDisconnectedException
     {
         if (list == null)
@@ -657,7 +657,7 @@ public abstract class LibUsbDevice implements UsbDevice
 
     @Override
     public final void
-        asyncSubmit(@SuppressWarnings("rawtypes") final List list)
+        asyncSubmit(final List list)
             throws UsbException, IllegalArgumentException,
             UsbDisconnectedException
     {

@@ -280,7 +280,7 @@ public final class LibUsbPipe implements UsbPipe
      */
 
     @Override
-    public void syncSubmit(@SuppressWarnings("rawtypes") final List list)
+    public void syncSubmit(final List list)
         throws UsbException, UsbNotActiveException, UsbNotOpenException,
         IllegalArgumentException, UsbDisconnectedException
     {
@@ -297,7 +297,7 @@ public final class LibUsbPipe implements UsbPipe
      */
 
     @Override
-    public void asyncSubmit(@SuppressWarnings("rawtypes") final List list)
+    public void asyncSubmit(final List list)
         throws UsbException, UsbNotActiveException, UsbNotOpenException,
         IllegalArgumentException, UsbDisconnectedException
     {

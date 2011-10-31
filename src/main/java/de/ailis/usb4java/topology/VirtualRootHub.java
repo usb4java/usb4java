@@ -275,8 +275,7 @@ public final class VirtualRootHub implements UsbHub,
      */
 
     @Override
-    public void syncSubmit(@SuppressWarnings("rawtypes") final List list)
-        throws UsbException
+    public void syncSubmit(final List list) throws UsbException
     {
         throw new UsbException("Can't syncSubmit on virtual device");
     }
@@ -287,8 +286,7 @@ public final class VirtualRootHub implements UsbHub,
      */
 
     @Override
-    public void asyncSubmit(@SuppressWarnings("rawtypes") final List list)
-        throws UsbException
+    public void asyncSubmit(final List list) throws UsbException
     {
         throw new UsbException("Can't asyncSubmit on virtual device");
     }
