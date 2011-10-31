@@ -41,8 +41,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <releasesUrl>http://www.ailis.de/nexus/content/repositories/releases/de/ailis/${project.artifactId}/${project.artifactId}/${project.version}</releasesUrl>
-    <snapshotsUrl>http://www.ailis.de/nexus/content/repositories/snapshots/de/ailis/${project.artifactId}/${project.artifactId}</snapshotsUrl>
+    <releasesUrl>http://nexus.ailis.de/content/repositories/releases/de/ailis/${project.artifactId}/${project.artifactId}/${project.version}</releasesUrl>
+    <snapshotsUrl>http://nexus.ailis.de/content/repositories/snapshots/de/ailis/${project.artifactId}/${project.artifactId}</snapshotsUrl>
   </properties>
   
   <scm>
@@ -144,14 +144,14 @@
     <repository>
       <id>ailis-releases</id>
       <name>Ailis Maven Releases</name>
-      <url>http://www.ailis.de/nexus/content/groups/public/</url>
+      <url>http://nexus.ailis.de/content/groups/public/</url>
       <releases><enabled>true</enabled></releases>
       <snapshots><enabled>false</enabled></snapshots>
     </repository>
     <repository> 
       <id>ailis-snapshots</id>
       <name>Ailis Maven Snapshots</name>
-      <url>http://www.ailis.de/nexus/content/groups/public-snapshots/</url>
+      <url>http://nexus.ailis.de/content/groups/public-snapshots/</url>
       <releases><enabled>false</enabled></releases>
       <snapshots><enabled>true</enabled></snapshots>
     </repository>
@@ -165,12 +165,12 @@
     <repository>
       <id>ailis-releases</id>
       <name>Ailis Maven Releases</name>
-      <url>https://www.ailis.de/nexus/content/repositories/releases</url>
+      <url>https://nexus.ailis.de/content/repositories/releases</url>
     </repository>
     <snapshotRepository>
       <id>ailis-snapshots</id>
       <name>Ailis Maven Snapshots</name>
-      <url>https://www.ailis.de/nexus/content/repositories/snapshots</url>
+      <url>https://nexus.ailis.de/content/repositories/snapshots</url>
     </snapshotRepository>    
   </distributionManagement>
   
