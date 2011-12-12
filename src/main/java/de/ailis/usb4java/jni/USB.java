@@ -19,6 +19,10 @@ import java.util.logging.Logger;
  * functions of libusb 0.x and defines all the constants. Usage is the same as
  * documented by libusb.
  *
+ * A common error is passing indirect buffers to the methods provided here.
+ * You always must use direct buffers which can be obtained by 
+ * ByteBuffer.allocateDirect()
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 
@@ -485,7 +489,8 @@ public final class USB
      * @param index
      *            The index or offset (unsigned short).
      * @param bytes
-     *            The bytes to transfer.
+     *            The bytes to transfer. This must be a direct buffer
+     *            obtained for example by ByteBuffer.allocateDirect().
      * @param timeout
      *            The timeout in milliseconds.
      * @return The number of bytes written/read or < 0 on error.
@@ -511,7 +516,8 @@ public final class USB
      * @param langid
      *            The language id.
      * @param buffer
-     *            The buffer to write the string to.
+     *            The buffer to write the string to. This must be a direct
+     *            buffer obtained for example by ByteBuffer.allocateDirect().
      * @return The number of bytes read or < 0 on error.
      */
 
@@ -576,7 +582,8 @@ public final class USB
      * @param index
      *            The string description index.
      * @param buffer
-     *            The buffer to write the string to.
+     *            The buffer to write the string to. This must be a direct
+     *            buffer obtained for example by ByteBuffer.allocateDirect().
      * @return The number of bytes read or < 0 on error.
      */
 
@@ -666,7 +673,8 @@ public final class USB
      * @param index
      *            The descriptor index.
      * @param buffer
-     *            The buffer to put the read bytes in.
+     *            The buffer to put the read bytes in. This must be a direct
+     *            buffer obtained for example by ByteBuffer.allocateDirect().
      * @return Number of bytes read or < 0 on error.
      */
 
@@ -691,7 +699,8 @@ public final class USB
      * @param index
      *            The descriptor index.
      * @param buffer
-     *            The buffer to put the read bytes in.
+     *            The buffer to put the read bytes in. This must be a direct
+     *            buffer obtained for example by ByteBuffer.allocateDirect().
      * @return Number of bytes read or < 0 on error.
      */
 
@@ -711,7 +720,8 @@ public final class USB
      * @param ep
      *            The endpoint.
      * @param bytes
-     *            The bytes to write.
+     *            The bytes to write. This must be a direct buffer
+     *            obtained for example by ByteBuffer.allocateDirect().
      * @param timeout
      *            The timeout in milliseconds.
      * @return Bytes written on success or < 0 on error.
@@ -732,7 +742,8 @@ public final class USB
      * @param ep
      *            The endpoint.
      * @param bytes
-     *            The read bytes.
+     *            The read bytes. This must be a direct
+     *            buffer obtained for example by ByteBuffer.allocateDirect().
      * @param timeout
      *            The timeout in milliseconds.
      * @return Bytes read on success or < 0 on error.
@@ -775,7 +786,8 @@ public final class USB
      * @param ep
      *            The endpoint.
      * @param bytes
-     *            The read bytes.
+     *            The read bytes. This must be a direct
+     *            buffer obtained for example by ByteBuffer.allocateDirect().
      * @param timeout
      *            The timeout in milliseconds.
      * @return Bytes read on success or < 0 on error.
@@ -809,7 +821,8 @@ public final class USB
      * @param iface
      *            The interface number.
      * @param buffer
-     *            The buffer to place the name in.
+     *            The buffer to place the name in. This must be a direct
+     *            buffer obtained for example by ByteBuffer.allocateDirect().
      * @return 0 on success or < 0 on error.
      */
 
