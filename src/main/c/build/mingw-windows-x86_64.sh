@@ -33,9 +33,9 @@ then
 fi
 
 # Build libusb4java
-./configure \
+CFLAGS=-m64 ./configure \
     --prefix=/ \
-    --host=amd64-mingw32msvc \
+    --host=x86_64-w64-mingw32 \
     --with-libusb-includes=$INCLUDES \
     --with-libusb-libs=$LIBS,$BINS
 make clean install-strip DESTDIR=$TMPDIR
