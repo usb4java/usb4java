@@ -10,7 +10,7 @@ cd $(dirname $0)/..
 OS=linux
 ARCH=x86
 TMPDIR=$(pwd)/tmp
-DISTDIR=$(pwd)/../assembly/${OS}-${ARCH}
+DISTDIR=$(pwd)/../resources/${OS}-${ARCH}
 
 # Clean up
 rm -rf $TMPDIR

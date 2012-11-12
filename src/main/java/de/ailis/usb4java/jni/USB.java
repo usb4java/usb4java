@@ -5,12 +5,8 @@
 
 package de.ailis.usb4java.jni;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 
@@ -224,37 +220,9 @@ public final class USB
     /** Endpoint interrupt type. */
     public static final int USB_ENDPOINT_TYPE_INTERRUPT = 3;
 
-    /** Possible library names we try to load. */
-    private static String[] libNames = new String[] { "usb4java", "usb4java32",
-        "libusb4java", "libusb4java32" };
-
     static
     {
-        final List<Throwable> errors = new ArrayList<Throwable>();
-        for (final String libName : libNames)
-        {
-            try
-            {
-                System.loadLibrary(libName);
-                errors.clear();
-                break;
-            }
-            catch (final Throwable e)
-            {
-                errors.add(e);
-            }
-        }
-        if (!errors.isEmpty())
-        {
-            final StringWriter out = new StringWriter();
-            for (final Throwable error: errors)
-            {
-                error.printStackTrace(new PrintWriter(out));
-            }
-            LOG.severe(out.toString());
-            throw new RuntimeException(
-                "Unable to load JNI library of usb4java");
-        }
+        NativesLoader.load();
     }
 
 

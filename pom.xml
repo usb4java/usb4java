@@ -113,30 +113,6 @@
         </configuration>
       </plugin>
           
-      <plugin> 
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.2.1</version><!--$NO-MVN-MAN-VER$-->
-        <configuration>
-          <descriptors>
-            <descriptor>src/main/assembly/src.xml</descriptor>
-            <descriptor>src/main/assembly/linux-x86.xml</descriptor>
-            <descriptor>src/main/assembly/linux-x86_64.xml</descriptor>
-            <descriptor>src/main/assembly/windows-x86.xml</descriptor>
-            <descriptor>src/main/assembly/windows-x86_64.xml</descriptor>
-            <descriptor>src/main/assembly/macosx-universal.xml</descriptor>
-          </descriptors>
-        </configuration>
-        <executions>
-          <execution>
-            <id>package-assembly</id>
-            <phase>package</phase>
-            <goals>
-              <goal>attached</goal>
-            </goals>
-          </execution>
-        </executions> 
-      </plugin>
-
     </plugins>
   </build>  
   

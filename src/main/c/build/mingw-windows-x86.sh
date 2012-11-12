@@ -9,7 +9,7 @@ cd $(dirname $0)/..
 OS=windows
 ARCH=x86
 TMPDIR=$(pwd)/tmp
-DISTDIR=$(pwd)/../assembly/${OS}-${ARCH}
+DISTDIR=$(pwd)/../resources/${OS}-${ARCH}
 
 # Clean up
 rm -rf $TMPDIR
