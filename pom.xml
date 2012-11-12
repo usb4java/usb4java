@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
   
   <groupId>de.ailis.usb4java</groupId>
-  <artifactId>usb4java</artifactId>
-  <packaging>jar</packaging>
+  <artifactId>usb4java-parent</artifactId>
+  <packaging>pom</packaging>
   <name>usb4java</name>
-  <version>0.3.5-SNAPSHOT</version>
-  <url>http://kayahr.github.com/${project.artifactId}/</url>
+  <version>0.4.0-SNAPSHOT</version>
+  <url>http://kayahr.github.com/usb4java/</url>
   <description>
     USB library for Java based on libusb-0.1.x and implementing javax.usb
     (JSR-80).
@@ -41,79 +41,37 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <releasesUrl>http://nexus.ailis.de/content/repositories/releases/de/ailis/${project.artifactId}/${project.artifactId}/${project.version}</releasesUrl>
-    <snapshotsUrl>http://nexus.ailis.de/content/repositories/snapshots/de/ailis/${project.artifactId}/${project.artifactId}</snapshotsUrl>
+    <releasesUrl>http://nexus.ailis.de/content/repositories/releases/de/ailis/usb4java/usb4java/${project.version}</releasesUrl>
+    <snapshotsUrl>http://nexus.ailis.de/content/repositories/snapshots/de/ailis/usb4java/usb4java</snapshotsUrl>
   </properties>
   
   <scm>
-    <connection>scm:git:git://github.com/kayahr/${project.artifactId}.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/kayahr/${project.artifactId}.git</developerConnection>
-    <url>http://github.com/kayahr/${project.artifactId}</url>
+    <connection>scm:git:git://github.com/kayahr/usb4java.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/kayahr/usb4java.git</developerConnection>
+    <url>http://github.com/kayahr/usb4java</url>
   </scm>
        
   <issueManagement>
     <system>GitHub</system>
-    <url>https://github.com/kayahr/${project.artifactId}/issues</url>
+    <url>https://github.com/kayahr/usb4java/issues</url>
   </issueManagement>
   
   <build>
-    <plugins>
-    
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3.2</version>
-        <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
-          <encoding>${project.build.sourceEncoding}</encoding>
-        </configuration>
-      </plugin>
+    <pluginManagement>
+      <plugins>
       
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-site-plugin</artifactId> 
-        <version>3.0</version>
-        <configuration>
-          <chmod>false</chmod>
-          <locales>en</locales>
-          <inputEncoding>${project.build.sourceEncoding}</inputEncoding>
-          <outputEncoding>${project.build.sourceEncoding}</outputEncoding>
-          <reportPlugins>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-project-info-reports-plugin</artifactId>
-              <version>2.4</version>
-              <configuration>
-                <dependencyDetailEnabled>false</dependencyDetailEnabled>
-                <dependencyLocationsEnabled>false</dependencyLocationsEnabled>                
-              </configuration>
-              <reports>
-                <report>summary</report>
-                <report>dependencies</report>
-                <report>project-team</report>
-                <report>issue-tracking</report>
-                <report>license</report>
-                <report>scm</report>
-              </reports>
-            </plugin>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-changes-plugin</artifactId>
-              <version>2.6</version>
-              <reportSets>
-                <reportSet>
-                  <reports>
-                    <report>changes-report</report>
-                  </reports>
-                </reportSet>
-              </reportSets>
-            </plugin>            
-          </reportPlugins>
-        </configuration>
-      </plugin>
-          
-    </plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>2.3.2</version>
+          <configuration>
+            <source>1.6</source>
+            <target>1.6</target>
+            <encoding>${project.build.sourceEncoding}</encoding>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>      
   </build>  
   
   <repositories>
@@ -136,7 +94,7 @@
   <distributionManagement>
     <site>
       <id>project-website</id>
-      <url>file://${project.basedir}/../${project.artifactId}-site/</url>
+      <url>file://${project.basedir}/../usb4java-site/</url>
     </site>
     <repository>
       <id>ailis-releases</id>
@@ -150,12 +108,29 @@
     </snapshotRepository>    
   </distributionManagement>
   
-  <dependencies>
-    <dependency>
-      <groupId>javax.usb</groupId>
-      <artifactId>usb</artifactId>
-      <version>1.0.2</version>
-    </dependency> 
-  </dependencies>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>de.ailis.usb4java</groupId>
+        <artifactId>usb4java</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>de.ailis.usb4java</groupId>
+        <artifactId>usb4java-natives</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.usb</groupId>
+        <artifactId>usb</artifactId>
+        <version>1.0.2</version>
+      </dependency> 
+    </dependencies>
+  </dependencyManagement>
 
+  <modules>
+    <module>usb4java</module>
+    <module>usb4java-natives</module>
+  </modules>
+  
 </project>

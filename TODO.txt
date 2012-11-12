@@ -1,5 +1,0 @@
-* Do extensive tests with USB pipes. interrupt data transfer seems to work
-  (MouseDriver demo is working) but never used bulk transfer and it's unclear
-  if the queue implementation is working correctly under stress.
-
-* Implement Control transfers in pipe.

@@ -1,0 +1,56 @@
+ -----------------------------------------------------------------------------
+ About
+ -----------------------------------------------------------------------------
+
+What is usb4java?
+
+  usb4java is a Java library to access USB devices. The low-level part is
+  based on the native {{{http://www.libusb.org/}libusb 0.1}} shared library
+  and reflects this API as complete as possible. Java NIO buffers are used
+  for data exchange between libusb and Java. The high-level part implements
+  the {{{http://javax-usb.sourceforge.net/}javax.usb standard (JSR-80)}}.
+  
+  Supported platforms are Linux (x86 32/64 bit), Mac OS X (x86 32/64 bit,
+  PowerPC 32 bit) and Windows (x86 32/64 bit). But other platforms may work
+  as well (as long as they have Java 6 and are supported by libusb) by
+  compiling the JNI library manually. 
+  
+  For Windows the libusb port of the
+  {{{http://sourceforge.net/apps/trac/libusb-win32/wiki}libusb-win32}} project
+  is used and you need to create and install a driver for the USB device you
+  want to use with usb4java (Instructions can be found on the libusb-win32
+  website).
+  
+  <<Warning! usb4java is a brand-new project and is not well tested.
+  The low-level API will most likely work as expected because it simply
+  wraps a stable native API but the javax.usb based high-level API is
+  a complicated piece of software and may contain many bugs. But
+  to squish them I need testers so please give it a try and give me feedback
+  or send me patches: {{{mailto:k@ailis.de}k@ailis.de}}>>     
+   
+
+License
+
+  This library is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  {{{./license.html}GNU Lesser General Public License}} for more details.
+   
+      
+Getting started
+
+  {{{./download.html}Download}} the latest usb4java and then 
+  read the {{{./quickstart.html}quick start guide}} and the {{{./faq.html}FAQ}}.
+
+
+Report problems
+
+  If you have any problems with usb4java or find bugs in the software or this
+  web site (even if it's just a typo) then please let me know: 
+  {{{mailto:k@ailis.de}k@ailis.de}}
+  

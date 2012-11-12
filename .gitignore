@@ -1,7 +1,7 @@
-/target
-/.settings
-/.classpath
-/.project
+target
+.settings
+.classpath
+.project
 libtool
 install-sh
 Makefile.in

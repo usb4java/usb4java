@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<document xmlns="http://maven.apache.org/changes/1.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 
+                             http://maven.apache.org/plugins/maven-changes-plugin/xsd/changes-1.0.0.xsd">
+  <properties>
+    <title>Changelog</title>
+    <author email="k@ailis.de">Klaus Reimer</author>
+  </properties>
+  <body>
+    <release version="0.4.0" date="2012-11-12" description="Major update">
+      <action dev="kayahr" type="fix" date="2012-02-20">
+        Corrected endpoint index in JNI libraries.
+      </action>
+      <action dev="kayahr" type="add" date="2012-11-12">
+        Refactored loading of native libraries. The libraries are now a
+        standard Java dependency and are automatically extracted during
+        runtime. So no java.library.path or LD_LIBRARY_PATH tinkering
+        needed anymore. Just put the two JARs into your class path and
+        that's it.
+      </action>
+    </release>
+    <release version="0.3.4" date="2011-10-31" description="Minor update">
+      <action dev="kayahr" type="fix" date="2011-10-31">
+        Improved error messages when loading the JNI library fails.
+      </action>
+    </release>
+    <release version="0.3.3" date="2011-03-28" description="Minor update">
+      <action dev="kayahr" type="fix" date="2011-03-28">
+        Fixed library paths in dylibs so they can be placed in 
+        *.app/Contents/MacOS.
+      </action>
+    </release>
+    <release version="0.3.2" date="2011-03-27" description="Minor update">
+      <action dev="kayahr" type="add" date="2011-03-27">
+        Now trying to load the JNI library with the following library names:
+        usb4java, usb4java32, libusb4java, libusb4java32.
+      </action>
+    </release>
+    <release version="0.3.1" date="2011-03-05" description="Hotfix">
+      <action dev="kayahr" type="fix" date="2011-03-05">
+        Fixed missing support for custom buffer offsets and lengths.
+      </action>
+    </release>
+    <release version="0.3.0" date="2011-02-20" description="Minor update">
+      <action dev="kayahr" type="fix" date="2011-02-20">
+        Fixed problem with empty control requests on Mac OS X.
+      </action>
+      <action dev="kayahr" type="add" date="2011-02-20">
+        Implemented configuration to control the communication timeout.
+      </action>
+    </release>
+    <release version="0.2.0" date="2011-02-11" description="Minor update">
+      <action dev="kayahr" type="add" date="2011-02-11">
+        Implemented configuration to control the scan mode and to improve
+        scan performance by filtering for specific vendor and product ids.
+      </action>
+    </release>
+    <release version="0.1.1" date="2011-02-08" description="Hotfix">
+      <action dev="kayahr" type="fix" date="2011-02-08">
+        libusb reports broken bus root devices when detaching USB devices
+        and when user has no root permissions on linux. Fixed it by
+        only trusting root devices which are also in the device list of a bus. 
+      </action>
+    </release>
+  </body>
+</document>
