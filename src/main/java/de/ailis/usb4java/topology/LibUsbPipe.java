@@ -226,7 +226,7 @@ public final class LibUsbPipe implements UsbPipe
      */
 
     @Override
-    public UsbIrp asyncSubmit(final byte[] data) throws UsbException,
+    public UsbIrp asyncSubmit(final byte[] data) throws
         UsbNotActiveException, UsbNotOpenException, IllegalArgumentException,
         UsbDisconnectedException
     {
@@ -262,7 +262,7 @@ public final class LibUsbPipe implements UsbPipe
      */
 
     @Override
-    public void asyncSubmit(final UsbIrp irp) throws UsbException,
+    public void asyncSubmit(final UsbIrp irp) throws
         UsbNotActiveException, UsbNotOpenException, IllegalArgumentException,
         UsbDisconnectedException
     {
@@ -298,7 +298,7 @@ public final class LibUsbPipe implements UsbPipe
 
     @Override
     public void asyncSubmit(final List list)
-        throws UsbException, UsbNotActiveException, UsbNotOpenException,
+        throws UsbNotActiveException, UsbNotOpenException,
         IllegalArgumentException, UsbDisconnectedException
     {
         for (final Object item : list)

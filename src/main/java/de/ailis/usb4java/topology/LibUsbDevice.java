@@ -620,7 +620,7 @@ public abstract class LibUsbDevice implements UsbDevice
      */
 
     @Override
-    public final void asyncSubmit(final UsbControlIrp irp) throws UsbException,
+    public final void asyncSubmit(final UsbControlIrp irp) throws
         IllegalArgumentException, UsbDisconnectedException
     {
         if (irp == null)
@@ -656,10 +656,8 @@ public abstract class LibUsbDevice implements UsbDevice
      */
 
     @Override
-    public final void
-        asyncSubmit(final List list)
-            throws UsbException, IllegalArgumentException,
-            UsbDisconnectedException
+    public final void asyncSubmit(final List list) throws
+        IllegalArgumentException, UsbDisconnectedException
     {
         if (list == null)
             throw new IllegalArgumentException("list must not be null");

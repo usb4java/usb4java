@@ -76,7 +76,7 @@ public final class Services implements UsbServices
      */
 
     @Override
-    public UsbHub getRootUsbHub() throws UsbException
+    public UsbHub getRootUsbHub()
     {
         this.deviceScanner.firstScan();
         return this.rootHub;

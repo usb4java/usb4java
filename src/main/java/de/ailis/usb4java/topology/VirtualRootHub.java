@@ -129,7 +129,7 @@ public final class VirtualRootHub implements UsbHub,
      */
 
     @Override
-    public String getProductString() throws UsbException
+    public String getProductString()
     {
         return PRODUCT;
     }
