@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+  <properties>
+    <title>usb4java</title>
+  </properties>
+  <body>
+    <section name="What is usb4java?">
+      <p>
+        usb4java is a Java library to access USB devices in Java. The low-level 
+        part is based on the native 
+        <a href="http://www.libusb.org/">libusb 0.1.x</a> shared library and 
+        reflects this API as complete as possible. Java NIO buffers are 
+        used for data exchange between libusb and Java. The high-level part 
+        implements the <a href="http://javax-usb.sourceforge.net/">javax.usb
+        standard (JSR-80)</a>.
+      </p>
+      <p>
+        Supported platforms are <strong>Linux</strong> (x86 32/64 bit), 
+        <strong>Mac OS X</strong> (x86 32/64 bit, PowerPC 32 bit) and 
+        <strong>Windows</strong> (x86 32/64 bit). But other platforms may work
+        as well (as long as they have Java 6 and are supported by libusb) by
+        compiling the JNI library manually.
+      </p>
+      <p>
+        For Windows the libusb port of the 
+        <a href="http://sourceforge.net/apps/trac/libusb-win32/wiki">libusb-win32</a> 
+        project is used and you need to create and install a driver for the USB 
+        device you want to use with usb4java (Instructions can be found on the 
+        libusb-win32 website).
+      </p>
+    </section>
+    
+    <section name="Download">
+      <ul class="download">
+        <li>Current version: <strong><a href="${releasesUrl}/${project.version}/${project.artifactId}-${project.version}.jar">${project.artifactId}-${project.version}.jar</a></strong></li>
+        <li><a href="${releasesUrl}/">Older versions</a></li>
+        <li><a href="${snapshotsUrl}/">Snapshots</a></li>
+        <li><a href="http://github.com/kayahr/${project.artifactId}/">Source code repository</a></li>
+      </ul>
+    </section>
+    
+    <section name="License">
+      <p>
+        This library is free software: you can redistribute it and/or modify
+        it under the terms of the GNU Lesser General Public License as 
+        published by the Free Software Foundation, either version 3 of the 
+        License, or (at your option) any later version.
+      </p>
+      <p>
+        This library is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        <a href="license.html">GNU Lesser General Public License</a> for more 
+        details.
+      </p>
+    </section>
+    
+    <section name="Getting started">
+      <p>
+        <a href="${releasesUrl}/${project.version}/${project.artifactId}-${project.version}.jar">Download</a>
+        the latest usb4java and then read the 
+        <a href="quickstart.html">quick start guide</a> and the 
+        <a href="faq.html">FAQ</a>.
+      </p>
+    </section>
+    
+    <section name="Donation">
+      <p>
+        If you like ${project.name}, please consider making a small donation
+        to support my work on free software like this. Thank you!
+      </p>
+      <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+        <input type="hidden" name="cmd" value="_s-xclick" />
+        <input type="hidden" name="hosted_button_id" value="KEM2AXUYDG9PN" />
+        <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!" />
+      </form>
+    </section>
+        
+    <section name="Problems">
+      <p>
+        If you have any problems with ${project.name} or find bugs in the software or this
+        web site (even if it's just a typo) then please let me know by creating
+        an <a href="${project.issueManagement.url}">issue on GitHub</a>.
+      </p>
+    </section>
+  </body>
+</document>

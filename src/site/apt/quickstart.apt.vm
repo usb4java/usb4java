@@ -4,8 +4,9 @@
  
 Installation
 
-  {{{./download.html}Download}} the <usb4java.jar> and <usb4java-natives.jar> 
-  files and add them to your class path.
+  Download the latest <usb4java.jar> and put it into your class path. Since
+  version 0.5.0 you no longer need to care about the native libraries. They
+  are included in the JAR file and will be used from there.
   
   If you are using the high-level <javax.usb> API then you also need the
   <jsr80.jar> which can be downloaded from the
@@ -33,15 +34,15 @@ The low-level API
   The following differences exists between the <libusb 0.1 API> and
   the low-level API of <usb4java>:
     
-  * <interface> of the configuration descriptor is named <iface> because
+  * <interface> in the configuration descriptor is named <iface> because
     <interface> is a reserved word in Java.
     
-  * <MaxPower> of the configuration descriptor is named <bMaxPower> to
+  * <MaxPower> in the configuration descriptor is named <bMaxPower> to
     be compatible to the USB specification and because method names starting
     with upper-case letters are quite unusual in Java.
     
   * Whenever libusb expects a byte pointer and a length you have to use
-    a Java NIO ByteBuffer instead.
+    a direct Java NIO ByteBuffer instead.
     
   * The method <libusb_has_get_driver_np()> can be used to check if the
     platform-dependent method <usb_get_driver_np()> is available. 

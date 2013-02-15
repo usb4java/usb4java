@@ -4,8 +4,8 @@
  
 Frequently asked questions
 
-  If you have a question which is not answered here please drop me a mail
-  at {{{mailto:k@ailis.de}k@ailis.de}}.
+  If you have a question which is not answered here please create an
+  {{{${project.issueManagement.url}}issue on GitHub}}.
   
 * usb4java lists no USB devices on Linux. Why?
 
@@ -39,3 +39,12 @@ Frequently asked questions
   explain here. The
   {{{http://sourceforge.net/apps/trac/libusb-win32/wiki}libusb-win32 project}}
   explains how to do it.
+  
+* usb4java crashes on 64 bit Windows when using 32 bit Java. Why?
+
+  In theory this should work but currently it doesn't. 
+  usb4java correctly uses the 32 bit libusb wrapper, the same library which 
+  works fine on a 32 bit Windows machine. I have no idea why it doesn't work, 
+  the crash happens in the JVM itself. Only workaround I know of is using 64 
+  bit Java instead.
+  
