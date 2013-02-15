@@ -3,7 +3,7 @@
  * See LICENSE.txt for licensing information.
  */
 
-package de.ailis.usb4java.tools;
+package de.ailis.usb4java;
 
 import static de.ailis.usb4java.jni.USB.usb_find_busses;
 import static de.ailis.usb4java.jni.USB.usb_find_devices;
@@ -13,31 +13,26 @@ import de.ailis.usb4java.jni.USB_Bus;
 import de.ailis.usb4java.jni.USB_Device;
 import de.ailis.usb4java.jni.USB_Device_Descriptor;
 
-
 /**
  * Demo program which dumps a detailed list of all USB devices to stdout.
  *
  * @author Klaus Reimer (k@ailis.de)
  */
-
-public final class Dump
+public final class Main
 {
     /**
      * Private constructor to prevent instantiation.
      */
-
-    private Dump()
+    private Main()
     {
         // Empty
     }
-
 
     /**
      * Dumps the device tree. Please note that the displayed tree can only
      * display devices to which the user has write access. On some platforms
      * the tree can't be dumped at all.
      */
-
     private static void dumpDeviceTree()
     {
         usb_init();
@@ -56,7 +51,6 @@ public final class Dump
         }
     }
 
-
     /**
      * Dumps a sub device tree.
      *
@@ -65,7 +59,6 @@ public final class Dump
      * @param indent
      *            The indent string.
      */
-
     private static void dumpSubDeviceTree(final USB_Device device,
         final String indent)
     {
@@ -77,11 +70,9 @@ public final class Dump
             dumpSubDeviceTree(child, indent + "     ");
     }
 
-
     /**
      * Dumps all busses to stdout.
      */
-
     private static void dumpBusses()
     {
         usb_init();
@@ -95,14 +86,12 @@ public final class Dump
         }
     }
 
-
     /**
      * Main method.
      *
      * @param args
      *            The command line arguments.
      */
-
     public static void main(final String[] args)
     {
         dumpDeviceTree();
