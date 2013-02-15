@@ -6,7 +6,7 @@
   <artifactId>usb4java</artifactId>
   <packaging>jar</packaging>
   <name>usb4java</name>
-  <version>0.5.0</version>
+  <version>0.5.1-SNAPSHOT</version>
   <url>http://kayahr.github.com/usb4java/</url>
   <description>
     USB library for Java based on libusb-0.1.x and implementing javax.usb
