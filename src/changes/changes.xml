@@ -7,7 +7,13 @@
     <title>Changelog</title>
     <author email="k@ailis.de">Klaus Reimer</author>
   </properties>
-  <body>
+  <body>    
+    <release version="0.5.0" date="2013-02-15" description="Major update">
+      <action dev="kayahr" type="add" date="2013-02-15">
+        Refactored project structure back into a single project. Native
+        libraries are now included in the main JAR file.
+      </action>
+    </release>
     <release version="0.4.0" date="2012-11-12" description="Major update">
       <action dev="kayahr" type="fix" date="2012-02-20">
         Corrected endpoint index in JNI libraries.
