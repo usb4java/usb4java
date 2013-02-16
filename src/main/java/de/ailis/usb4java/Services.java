@@ -32,7 +32,7 @@ public final class Services implements UsbServices
         "usb4java JSR-80 implementation";
 
     /** The implementation version. */
-    private static final String IMP_VERSION = "0.5.0";
+    private static final String IMP_VERSION = "0.5.1";
 
     /** The API version. */
     private static final String API_VERSION = "1.0.2";
