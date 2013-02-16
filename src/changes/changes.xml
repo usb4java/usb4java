@@ -10,6 +10,9 @@
   <body>    
     <release version="0.5.1" date="2013-02-16" description="Minor update">
       <action dev="kayahr" type="add" date="2013-02-16">
+        Add native library for linux-arm platform (Raspberry Pi).          
+      </action>
+      <action dev="kayahr" type="add" date="2013-02-16">
         Made library loading more universal to support loading shared libraries
         for platforms not officially supported by usb4java.  
       </action>
