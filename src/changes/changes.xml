@@ -10,12 +10,16 @@
   <body>    
     <release version="0.5.1" date="2013-02-16" description="Minor update">
       <action dev="kayahr" type="add" date="2013-02-16">
-        Add native library for linux-arm platform (Raspberry Pi).          
-      </action>
-      <action dev="kayahr" type="add" date="2013-02-16">
         Made library loading more universal to support loading shared libraries
         for platforms not officially supported by usb4java.  
       </action>
+      <action dev="kayahr" type="add" date="2013-02-16">
+        Add native library for linux-arm platform (Raspberry Pi).          
+      </action>
+      <action dev="kayahr" type="update" date="2013-02-16">
+        Native libraries are no longer extracted to a temporary directory when
+        they are not in a JAR file.
+      </action>      
     </release>
     <release version="0.5.0" date="2013-02-15" description="Major update">
       <action dev="kayahr" type="add" date="2013-02-15">

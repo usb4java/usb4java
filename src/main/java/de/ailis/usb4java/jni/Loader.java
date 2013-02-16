@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 /**
  * Utility class to load native libraries from classpath.
@@ -65,9 +67,11 @@ final class Loader
      */
     private static String getArch()
     {
+        final String os = getOS();
+        if (os.equals("macosx")) return "universal";
         final String arch = System.getProperty("os.arch");
         if (arch.equals("i386")) return "x86";
-        if (arch.equals("amd64")) return "x86_64";
+        if (arch.equals("amd64")) return "x86_641";
         return arch.toLowerCase().replace(" ", "");
     }
 
@@ -81,7 +85,7 @@ final class Loader
         final String key = "usb4java.libext." + getOS();
         final String ext = System.getProperty(key);
         if (ext != null) return ext;
-        if (OS.equals("linux") || OS.equals("freebsd") || OS.equals("sunos"))
+        if (OS.equals("linux2") || OS.equals("freebsd") || OS.equals("sunos"))
             return "so";
         if (OS.equals("windows"))
             return "dll";
@@ -195,6 +199,29 @@ final class Loader
         final String source = '/' +
             Loader.class.getPackage().getName().replace('.',  '/') +
             '/' + platform + "/" + lib;
+
+        // Check if native library is present
+        final URL url = Loader.class.getResource(source);
+        if (url == null) throw new RuntimeException(
+            "Native library not found in classpath: " + source);
+
+        // If native library was found in an already extracted form then
+        // return this one without extracting it
+        if (url.getProtocol().equals("file"))
+        {
+            try
+            {
+                return new File(url.toURI()).getAbsolutePath();
+            }
+            catch (final URISyntaxException e)
+            {
+                // Can't happen because we are not constructing the URI
+                // manually. But even when it happens then we fall back to
+                // extracting the library.
+            }
+        }
+
+        // Extract the library and return the path to the extracted file.
         final File dest = new File(TMP, lib);
         try
         {
