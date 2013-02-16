@@ -6,7 +6,7 @@
   <body>
     <section name="What is usb4java?">
       <p>
-        usb4java is a Java library to access USB devices in Java. The low-level 
+        usb4java is a Java library to access USB devices. The low-level 
         part is based on the native 
         <a href="http://www.libusb.org/">libusb 0.1.x</a> shared library and 
         reflects this API as complete as possible. Java NIO buffers are 
@@ -15,7 +15,7 @@
         standard (JSR-80)</a>.
       </p>
       <p>
-        Supported platforms are <strong>Linux</strong> (x86 32/64 bit), 
+        Supported platforms are <strong>Linux</strong> (x86 32/64 bit, ARM 32 bit), 
         <strong>Mac OS X</strong> (x86 32/64 bit, PowerPC 32 bit) and 
         <strong>Windows</strong> (x86 32/64 bit). But other platforms may work
         as well (as long as they have Java 6 and are supported by libusb) by
@@ -27,6 +27,16 @@
         project is used and you need to create and install a driver for the USB 
         device you want to use with usb4java (Instructions can be found on the 
         libusb-win32 website).
+      </p>
+    </section>
+    
+    <section name="News">
+      <p>
+        <em>(2013-02-16)</em> Released usb4java version 0.5.1 with support
+        for the <strong>linux-arm</strong> platform. Tested with OpenJDK 7 and 
+        Oracle Java 7 on <a href="http://www.raspberrypi.org/">Raspberry Pi</a>.
+        Read the <a href="changes-report.html">change log</a> for a more
+        detailed list of changes.
       </p>
     </section>
     
