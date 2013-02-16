@@ -30,6 +30,7 @@
       <item name="Quick start" href="./quickstart.html" />
       <item name="FAQ" href="./faq.html" />
       <item name="Configuration" href="./configuration.html" />
+      <item name="Native libs" href="./nativelibs.html" />
     </menu>
     
     <menu ref="reports" />

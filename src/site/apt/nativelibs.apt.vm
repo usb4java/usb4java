@@ -1,0 +1,116 @@
+ -----------------------------------------------------------------------------
+ Native libraries
+ -----------------------------------------------------------------------------
+ 
+Library loading
+
+  The native libraries for all supported platforms are included in the
+  usb4java JAR file. usb4java determines on startup which libraries are needed
+  for the current platform and extracts them to a temporary directory and
+  loads them from there. This makes it easy to use usb4java because you just
+  need to put the JAR in your classpath. No need to fiddle around with
+  <java.library.path> or environment variables like <LD_LIBRARY_PATH> or
+  <DYLD_LIBRARY_PATH>.
+  
+  usb4java only extracts the files into a temporary directory when they
+  are inside a JAR file. So if you prefer direct loading without extracting
+  to a temporary directory then you may want to use the <usb4java-nonatives.jar>
+  file instead and ship the native libraries with your application in extracted 
+  form. Here is an example application layout:
+  
++-----------------------------------------------------------------------------+
+natives/
+  de/ailis/usb4java/jni/
+    linux-x86/libusb4java.so
+    windows-x86/libusb4java.dll
+    macosx-universal/libusb4java.dylib
+lib/
+  usb4java-nonatives.jar
+  usb.jar
+myapp.sh
++-----------------------------------------------------------------------------+          
+
+  To make this work just make sure to put the <natives> folder into your
+  classpath. The native libraries itself can be found in the <usb4java.jar>
+  file.
+  
+  
+Unsupported platforms
+
+  When you use usb4java on a platform which is not directly supported by
+  usb4java then you might get one of the following two exceptions:
+
++----+
+Native library not found in classpath: /de/ailis/usb4java/jni/freebsd-x86/libusb4java.so
++----+
+
++----+
+Unable to determine the shared library file extension for operating system 
+'strangeos'. Please specify Java parameter -Dusb4java.libext.strangeos=<FILE-EXTENSION>
++----+
+
+  If you get the second one then this simply means that your operating system
+  is completely unknown to the usb4java author and usb4java does not know the
+  file extension of shared libraries on this platform. You can fix this by
+  specifying a Java parameter like this (As explained in the exception):
+  
++----+
+-Dusb4java.libext.strangeos=so
++----+
+
+  After this you will most likely get the other exception, which means that 
+  there is no native JNI wrapper present for this platform. Your only chance
+  here is to compile this wrapper yourself. I can't predict how this works
+  on really strange platforms but chances are high that your platform is
+  somewhat Unix-compatible. So try this:
+
+  1. Install a Java JDK ({{{http://openjdk.java.net/}OpenJDK}} for example).
+     Make sure the environment variable <JAVA_HOME> is pointing to the
+     directory where you have installed the JDK.
+  
+  2. Install a {{{http://gcc.gnu.org/}GNU compiler}}, 
+     {{{http://www.gnu.org/software/autoconf/}autoconf}}, 
+     {{{http://www.gnu.org/software/automake/}automake}} and 
+     {{{http://www.gnu.org/software/libtool/}libtool}}.
+  
+  3. Install the {{{http://www.libusb.org/}libusb}} development files.
+  
+  4. Install {{{http://git-scm.com/}Git}}.
+  
+  5. Clone the {{{https://github.com/kayahr/usb4java/}usb4java source code repository}} with Git:
+  
++----
+$ git clone git://github.com/kayahr/usb4java.git
++----
+
+  6. Go to the directory containing the C sources of the JNI wrapper:
+  
++----
+$ cd usb4java/src/main/c
++----
+
+  7. Compile the wrapper:
+  
++----
+$ make -f Makefile.scm
+$ ./configure --prefix=/
+$ make install-strip DESTDIR=/tmp
++---- 
+
+  8. When compilation was successful then the native library can be found in 
+     the directory </tmp/lib>. The file name depends on your operating system.
+     Make sure you rename it to <libusb4java.so> (Or whatever file extension
+     your platform uses) and copy this file into the directory 
+     </de/ailis/usb4java/jni/OS-ARCH/> in your classpath where <OS> is the name
+     of your operating system and <ARCH> is your CPU architecture (Both
+     must match the names mentioned in the exception thrown by usb4java.)
+     
+  If you can't use the GNU compiler or the autotools then you are on your own.
+  If you have some experience with compiling JNI libraries then I guess this
+  won't be hard for you. There are only a couple of source files in the <src>
+  sub folder. You could write a new simple Makefile or whatever is needed on
+  your platform.
+
+  If you have problems then please open an 
+  {{{${project.issueManagement.url}}issue on GitHub}}. Someone may be able to
+  help.
