@@ -17,22 +17,14 @@ import java.io.InputStream;
  */
 final class Loader
 {
-    /** If Windows operating system. */
-    private static final boolean WINDOWS = System.getProperty("os.name")
-        .contains("Windows");
+    /** The operating system name. */
+    private static final String OS = getOS();
 
-    /** If Linux operating system. */
-    private static final boolean LINUX = System.getProperty("os.name")
-        .contains("Linux");
+    /** The CPU architecture name. */
+    private static final String ARCH = getArch();
 
-    /** If Mac operating system. */
-    private static final boolean MAC = System.getProperty("os.name").contains(
-        "Mac");
-
-    /** If 64 bit operating system. */
-    private static final boolean IS_64_BIT = System.getProperty("os.arch")
-        .equals("amd64") ||
-        System.getProperty("os.arch").equals("x86_64");
+    /** The shared library extension name. */
+    private static final String EXT = getExt();
 
     /** The temporary directory for native libraries. */
     private static final File TMP = createTempDirectory();
@@ -46,6 +38,58 @@ final class Loader
     private Loader()
     {
         // Nothing to do here
+    }
+
+    /**
+     * Returns the operating system name. This could be "linux", "windows"
+     * or "macosx" or (for any other non-supported platform) the value
+     * of the "os.name" property converted to lower case and with removed
+     * space characters.
+     *
+     * @return The operating system name.
+     */
+    private static String getOS()
+    {
+        final String os = System.getProperty("os.name");
+        if (os.contains("Windows")) return "windows";
+        return os.toLowerCase().replace(" ", "");
+    }
+
+    /**
+     * Returns the CPU architecture. This will be "x86" or "x86_64" (Platform
+     * names i386 und amd64 are converted accordingly) or (when platform is
+     * unsupported) the value of os.arch converted to lower-case and with
+     * removed space characters.
+     *
+     * @return The CPU architecture
+     */
+    private static String getArch()
+    {
+        final String arch = System.getProperty("os.arch");
+        if (arch.equals("i386")) return "x86";
+        if (arch.equals("amd64")) return "x86_64";
+        return arch.toLowerCase().replace(" ", "");
+    }
+
+    /**
+     * Returns the shared library extension name.
+     *
+     * @return The shared library extension name.
+     */
+    private static String getExt()
+    {
+        final String key = "usb4java.libext." + getOS();
+        final String ext = System.getProperty(key);
+        if (ext != null) return ext;
+        if (OS.equals("linux") || OS.equals("freebsd") || OS.equals("sunos"))
+            return "so";
+        if (OS.equals("windows"))
+            return "dll";
+        if (OS.equals("macosx"))
+            return "dylib";
+        throw new RuntimeException("Unable to determine the shared library " +
+            "file extension for operating system '" + OS +
+            "'. Please specify Java parameter -D" + key + "=<FILE-EXTENSION>");
     }
 
     /**
@@ -79,16 +123,7 @@ final class Loader
      */
     private static String getPlatform()
     {
-        if (WINDOWS)
-            return IS_64_BIT ? "windows-x86_64" : "windows-x86";
-        else if (MAC)
-            return "macosx-universal";
-        else if (LINUX)
-            return IS_64_BIT ? "linux-x86_64" : "linux-x86";
-        else
-            throw new RuntimeException("Unsupported operating system ("
-                + System.getProperty("os.name") + ") and/or architecture ("
-                + System.getProperty("os.arch") + ")");
+        return OS + "-" + ARCH;
     }
 
     /**
@@ -99,16 +134,7 @@ final class Loader
      */
     private static String getLibName()
     {
-        if (WINDOWS)
-            return "libusb4java.dll";
-        else if (MAC)
-            return "libusb4java.dylib";
-        else if (LINUX)
-            return "libusb4java.so";
-        else
-            throw new RuntimeException("Unsupported operating system ("
-                + System.getProperty("os.name") + ") and/or architecture ("
-                + System.getProperty("os.arch") + ")");
+        return "libusb4java." + EXT;
     }
 
     /**
@@ -120,18 +146,10 @@ final class Loader
      */
     private static String getExtraLibName()
     {
-        if (WINDOWS)
-            return "libusb0.dll";
-        else if (MAC)
-            return "libusb.dylib";
-        else if (LINUX)
-            return null;
-        else
-            throw new RuntimeException("Unsupported operating system ("
-                + System.getProperty("os.name") + ") and/or architecture ("
-                + System.getProperty("os.arch") + ")");
+        if (OS.equals("windows")) return "libusb0.dll";
+        if (OS.equals("mnacosx")) return "libusb.dylib";
+        return null;
     }
-
 
     /**
      * Copies the specified input stream to the specified output file.
@@ -174,13 +192,14 @@ final class Loader
     private static String extractLibrary(final String platform, final String lib)
     {
         // Extract the usb4java library
-        final String source = "de/ailis/usb4java/jni/" + platform + "/" + lib;
+        final String source = '/' +
+            Loader.class.getPackage().getName().replace('.',  '/') +
+            '/' + platform + "/" + lib;
         final File dest = new File(TMP, lib);
         try
         {
             final InputStream stream =
-                Loader.class.getClassLoader()
-                    .getResourceAsStream(source);
+                Loader.class.getResourceAsStream(source);
             if (stream == null)
                 throw new RuntimeException("Unable to find " + source
                     + " in the classpath");
