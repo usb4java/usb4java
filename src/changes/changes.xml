@@ -24,6 +24,9 @@
         Improve error handling during native lib loading so javax.usb no
         longer hides the important exceptions.
       </action>      
+      <action dev="kayahr" type="fix" date="2013-02-20">
+        Fix logic error in AbstractIrqQueue#isBusy().
+      </action>      
     </release>
     <release version="0.5.0" date="2013-02-15" description="Major update">
       <action dev="kayahr" type="add" date="2013-02-15">
