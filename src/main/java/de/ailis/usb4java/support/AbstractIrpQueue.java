@@ -170,7 +170,7 @@ public abstract class AbstractIrpQueue<T extends UsbIrp>
     {
         synchronized (this.irps)
         {
-            return this.irps.isEmpty() || this.processor != null;
+            return !this.irps.isEmpty() || this.processor != null;
         }
     }
 
