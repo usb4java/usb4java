@@ -14,22 +14,13 @@ import java.net.URL;
 
 /**
  * Utility class to load native libraries from classpath.
- *
+ * 
  * @author Klaus Reimer (k@ailis.de)
  */
-final class Loader
+public final class Loader
 {
-    /** The operating system name. */
-    private static final String OS = getOS();
-
-    /** The CPU architecture name. */
-    private static final String ARCH = getArch();
-
-    /** The shared library extension name. */
-    private static final String EXT = getExt();
-
     /** The temporary directory for native libraries. */
-    private static final File TMP = createTempDirectory();
+    private static File tmp;
 
     /** If library is already loaded. */
     private static boolean loaded = false;
@@ -43,11 +34,11 @@ final class Loader
     }
 
     /**
-     * Returns the operating system name. This could be "linux", "windows"
-     * or "macosx" or (for any other non-supported platform) the value
-     * of the "os.name" property converted to lower case and with removed
-     * space characters.
-     *
+     * Returns the operating system name. This could be "linux", "windows" or
+     * "macosx" or (for any other non-supported platform) the value of the
+     * "os.name" property converted to lower case and with removed space
+     * characters.
+     * 
      * @return The operating system name.
      */
     private static String getOS()
@@ -62,7 +53,7 @@ final class Loader
      * names i386 und amd64 are converted accordingly) or (when platform is
      * unsupported) the value of os.arch converted to lower-case and with
      * removed space characters.
-     *
+     * 
      * @return The CPU architecture
      */
     private static String getArch()
@@ -71,42 +62,46 @@ final class Loader
         if (os.equals("macosx")) return "universal";
         final String arch = System.getProperty("os.arch");
         if (arch.equals("i386")) return "x86";
-        if (arch.equals("amd64")) return "x86_641";
+        if (arch.equals("amd64")) return "x86_64";
         return arch.toLowerCase().replace(" ", "");
     }
 
     /**
      * Returns the shared library extension name.
-     *
+     * 
      * @return The shared library extension name.
      */
     private static String getExt()
     {
+        final String os = getOS();
         final String key = "usb4java.libext." + getOS();
         final String ext = System.getProperty(key);
         if (ext != null) return ext;
-        if (OS.equals("linux2") || OS.equals("freebsd") || OS.equals("sunos"))
+        if (os.equals("linux") || os.equals("freebsd") || os.equals("sunos"))
             return "so";
-        if (OS.equals("windows"))
+        if (os.equals("windows"))
             return "dll";
-        if (OS.equals("macosx"))
+        if (os.equals("macosx"))
             return "dylib";
-        throw new RuntimeException("Unable to determine the shared library " +
-            "file extension for operating system '" + OS +
+        throw new LoaderException("Unable to determine the shared library " +
+            "file extension for operating system '" + os +
             "'. Please specify Java parameter -D" + key + "=<FILE-EXTENSION>");
     }
 
     /**
      * Creates the temporary directory used for unpacking the native libraries.
      * This directory is marked for deletion on exit.
-     *
+     * 
      * @return The temporary directory for native libraries.
      */
     private static File createTempDirectory()
     {
+        // Return cached tmp directory when already created
+        if (tmp != null) return tmp;
+
         try
         {
-            final File tmp = File.createTempFile("usb4java", null);
+            tmp = File.createTempFile("usb4java", null);
             tmp.delete();
             tmp.mkdirs();
             tmp.deleteOnExit();
@@ -114,7 +109,7 @@ final class Loader
         }
         catch (final IOException e)
         {
-            throw new RuntimeException("Unable to create temporary directory " +
+            throw new LoaderException("Unable to create temporary directory " +
                 "for usb4java natives: " + e, e);
         }
     }
@@ -122,42 +117,43 @@ final class Loader
     /**
      * Returns the platform name. This could be for example "linux-x86" or
      * "windows-x86_64".
-     *
+     * 
      * @return The architecture name. Never null.
      */
     private static String getPlatform()
     {
-        return OS + "-" + ARCH;
+        return getOS() + "-" + getArch();
     }
 
     /**
      * Returns the name of the usb4java native library. This could be
      * "libusb4java.dll" for example.
-     *
+     * 
      * @return The usb4java native library name. Never null.
      */
     private static String getLibName()
     {
-        return "libusb4java." + EXT;
+        return "libusb4java." + getExt();
     }
 
     /**
      * Returns the name of the libusb native library. This could be
      * "libusb0.dll" for example or null if this library is not needed on the
      * current platform (Because it is provided by the operating system).
-     *
+     * 
      * @return The libusb native library name or null if not needed.
      */
     private static String getExtraLibName()
     {
-        if (OS.equals("windows")) return "libusb0.dll";
-        if (OS.equals("mnacosx")) return "libusb.dylib";
+        String os = getOS();
+        if (os.equals("windows")) return "libusb0.dll";
+        if (os.equals("mnacosx")) return "libusb.dylib";
         return null;
     }
 
     /**
      * Copies the specified input stream to the specified output file.
-     *
+     * 
      * @param input
      *            The input stream.
      * @param output
@@ -186,7 +182,7 @@ final class Loader
 
     /**
      * Extracts a single library.
-     *
+     * 
      * @param platform
      *            The platform name (For example "linux-x86")
      * @param lib
@@ -197,12 +193,12 @@ final class Loader
     {
         // Extract the usb4java library
         final String source = '/' +
-            Loader.class.getPackage().getName().replace('.',  '/') +
+            Loader.class.getPackage().getName().replace('.', '/') +
             '/' + platform + "/" + lib;
 
         // Check if native library is present
         final URL url = Loader.class.getResource(source);
-        if (url == null) throw new RuntimeException(
+        if (url == null) throw new LoaderException(
             "Native library not found in classpath: " + source);
 
         // If native library was found in an already extracted form then
@@ -222,13 +218,13 @@ final class Loader
         }
 
         // Extract the library and return the path to the extracted file.
-        final File dest = new File(TMP, lib);
+        final File dest = new File(createTempDirectory(), lib);
         try
         {
             final InputStream stream =
                 Loader.class.getResourceAsStream(source);
             if (stream == null)
-                throw new RuntimeException("Unable to find " + source
+                throw new LoaderException("Unable to find " + source
                     + " in the classpath");
             try
             {
@@ -241,7 +237,7 @@ final class Loader
         }
         catch (final IOException e)
         {
-            throw new RuntimeException(
+            throw new LoaderException(
                 "Unable to extract native library " + source + " to " + dest
                     + ": " + e, e);
         }
@@ -256,7 +252,7 @@ final class Loader
      * Extracts the usb4java library (and the libusb library if needed) and
      * returns the absolute filename to be loaded by Java. The extracted
      * libraries are marked for deletion on exit.
-     *
+     * 
      * @return The absolute path to the extracted usb4java library.
      */
     private static String extract()
@@ -272,9 +268,15 @@ final class Loader
 
     /**
      * Loads the libusb0.1.x native wrapper library. Can be safely called
-     * multiple times. Duplicate calls are ignored.
+     * multiple times. Duplicate calls are ignored. This method is automatically
+     * called when the {@link USB} class is loaded. When you need to do it
+     * earlier (To catch exceptions for example) then simply call this method
+     * manually.
+     * 
+     * @throws LoaderException
+     *             When loading the native wrapper libraries failed.
      */
-    public static void load()
+    public static void load() throws LoaderException
     {
         if (loaded) return;
         final String path = extract();

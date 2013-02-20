@@ -15,6 +15,8 @@ import javax.usb.UsbServices;
 import javax.usb.event.UsbServicesEvent;
 import javax.usb.event.UsbServicesListener;
 
+import de.ailis.usb4java.jni.Loader;
+import de.ailis.usb4java.jni.LoaderException;
 import de.ailis.usb4java.support.Config;
 import de.ailis.usb4java.support.UsbServicesListenerList;
 import de.ailis.usb4java.topology.UsbDeviceScanner;
@@ -55,10 +57,13 @@ public final class Services implements UsbServices
      *
      * @throws UsbException
      *             When properties could not be loaded.
+     * @throws LoaderException
+     *             When native libraries could not be loaded.
      */
-    public Services() throws UsbException
+    public Services() throws UsbException, LoaderException
     {
         this.config = new Config(UsbHostManager.getProperties());
+        Loader.load();
         usb_init();
         this.rootHub = new VirtualRootHub();
         this.deviceScanner =

@@ -20,6 +20,10 @@
         Native libraries are no longer extracted to a temporary directory when
         they are not in a JAR file.
       </action>      
+      <action dev="kayahr" type="fix" date="2013-02-18">
+        Improve error handling during native lib loading so javax.usb no
+        longer hides the important exceptions.
+      </action>      
     </release>
     <release version="0.5.0" date="2013-02-15" description="Major update">
       <action dev="kayahr" type="add" date="2013-02-15">
