@@ -14,11 +14,50 @@ import java.net.URL;
 
 /**
  * Utility class to load native libraries from classpath.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class Loader
 {
+    /** Constant for Mac OS X operating system. */
+    private static final String OS_MACOSX = "macosx";
+
+    /** Constant for Linux operating system. */
+    private static final String OS_LINUX = "linux";
+
+    /** Constant for Windows operating system. */
+    private static final String OS_WINDOWS = "windows";
+
+    /** Constant for FreeBSD operating system. */
+    private static final String OS_FREEBSD = "freebsd";
+
+    /** Constant for SunOS operating system. */
+    private static final String OS_SUNOS = "sunos";
+
+    /** Constant for i386 architecture. */
+    private static final String ARCH_I386 = "i386";
+
+    /** Constant for x86 architecture. */
+    private static final String ARCH_X86 = "x86";
+
+    /** Constant for x86_64 architecture. */
+    private static final String ARCH_X86_64 = "x86_64";
+
+    /** Constant for amd64 architecture. */
+    private static final String ARCH_AMD64 = "amd64";
+
+    /** Constant for universal architecture. */
+    private static final String ARCH_UNIVERSAL = "universal";
+
+    /** Constant for so file extension. */
+    private static final String EXT_SO = "so";
+
+    /** Constant for dll file extension. */
+    private static final String EXT_DLL = "dll";
+
+    /** Constant for dylib file extension. */
+    private static final String EXT_DYLIB = "dylib";
+
     /** The temporary directory for native libraries. */
     private static File tmp;
 
@@ -38,13 +77,13 @@ public final class Loader
      * "macosx" or (for any other non-supported platform) the value of the
      * "os.name" property converted to lower case and with removed space
      * characters.
-     * 
+     *
      * @return The operating system name.
      */
     private static String getOS()
     {
         final String os = System.getProperty("os.name");
-        if (os.contains("Windows")) return "windows";
+        if (os.toLowerCase().contains(OS_WINDOWS)) return OS_WINDOWS;
         return os.toLowerCase().replace(" ", "");
     }
 
@@ -53,22 +92,22 @@ public final class Loader
      * names i386 und amd64 are converted accordingly) or (when platform is
      * unsupported) the value of os.arch converted to lower-case and with
      * removed space characters.
-     * 
+     *
      * @return The CPU architecture
      */
     private static String getArch()
     {
         final String os = getOS();
-        if (os.equals("macosx")) return "universal";
+        if (os.equals(OS_MACOSX)) return ARCH_UNIVERSAL;
         final String arch = System.getProperty("os.arch");
-        if (arch.equals("i386")) return "x86";
-        if (arch.equals("amd64")) return "x86_64";
+        if (arch.equals(ARCH_I386)) return ARCH_X86;
+        if (arch.equals(ARCH_AMD64)) return ARCH_X86_64;
         return arch.toLowerCase().replace(" ", "");
     }
 
     /**
      * Returns the shared library extension name.
-     * 
+     *
      * @return The shared library extension name.
      */
     private static String getExt()
@@ -77,12 +116,12 @@ public final class Loader
         final String key = "usb4java.libext." + getOS();
         final String ext = System.getProperty(key);
         if (ext != null) return ext;
-        if (os.equals("linux") || os.equals("freebsd") || os.equals("sunos"))
-            return "so";
-        if (os.equals("windows"))
-            return "dll";
-        if (os.equals("macosx"))
-            return "dylib";
+        if (os.equals(OS_LINUX) || os.equals(OS_FREEBSD) || os.equals(OS_SUNOS))
+            return EXT_SO;
+        if (os.equals(OS_WINDOWS))
+            return EXT_DLL;
+        if (os.equals(OS_MACOSX))
+            return EXT_DYLIB;
         throw new LoaderException("Unable to determine the shared library " +
             "file extension for operating system '" + os +
             "'. Please specify Java parameter -D" + key + "=<FILE-EXTENSION>");
@@ -91,7 +130,7 @@ public final class Loader
     /**
      * Creates the temporary directory used for unpacking the native libraries.
      * This directory is marked for deletion on exit.
-     * 
+     *
      * @return The temporary directory for native libraries.
      */
     private static File createTempDirectory()
@@ -117,7 +156,7 @@ public final class Loader
     /**
      * Returns the platform name. This could be for example "linux-x86" or
      * "windows-x86_64".
-     * 
+     *
      * @return The architecture name. Never null.
      */
     private static String getPlatform()
@@ -128,7 +167,7 @@ public final class Loader
     /**
      * Returns the name of the usb4java native library. This could be
      * "libusb4java.dll" for example.
-     * 
+     *
      * @return The usb4java native library name. Never null.
      */
     private static String getLibName()
@@ -140,20 +179,20 @@ public final class Loader
      * Returns the name of the libusb native library. This could be
      * "libusb0.dll" for example or null if this library is not needed on the
      * current platform (Because it is provided by the operating system).
-     * 
+     *
      * @return The libusb native library name or null if not needed.
      */
     private static String getExtraLibName()
     {
-        String os = getOS();
-        if (os.equals("windows")) return "libusb0.dll";
-        if (os.equals("mnacosx")) return "libusb.dylib";
+        final String os = getOS();
+        if (os.equals(OS_WINDOWS)) return "libusb0." + EXT_DLL;
+        if (os.equals(OS_MACOSX)) return "libusb." + EXT_DYLIB;
         return null;
     }
 
     /**
      * Copies the specified input stream to the specified output file.
-     * 
+     *
      * @param input
      *            The input stream.
      * @param output
@@ -182,7 +221,7 @@ public final class Loader
 
     /**
      * Extracts a single library.
-     * 
+     *
      * @param platform
      *            The platform name (For example "linux-x86")
      * @param lib
@@ -252,7 +291,7 @@ public final class Loader
      * Extracts the usb4java library (and the libusb library if needed) and
      * returns the absolute filename to be loaded by Java. The extracted
      * libraries are marked for deletion on exit.
-     * 
+     *
      * @return The absolute path to the extracted usb4java library.
      */
     private static String extract()
@@ -272,7 +311,7 @@ public final class Loader
      * called when the {@link USB} class is loaded. When you need to do it
      * earlier (To catch exceptions for example) then simply call this method
      * manually.
-     * 
+     *
      * @throws LoaderException
      *             When loading the native wrapper libraries failed.
      */
