@@ -25,7 +25,7 @@
         longer hides the important exceptions.
       </action>      
       <action dev="kayahr" type="fix" date="2013-02-20">
-        Fix logic error in AbstractIrqQueue#isBusy().
+        Fix logic error in AbstractIrpQueue#isBusy().
       </action>      
     </release>
     <release version="0.5.0" date="2013-02-15" description="Major update">
