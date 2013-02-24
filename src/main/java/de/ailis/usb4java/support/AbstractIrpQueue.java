@@ -75,11 +75,10 @@ public abstract class AbstractIrpQueue<T extends UsbIrp>
      */
     final void process()
     {
-        while (true)
+        // Get the next IRP
+        T irp = this.irps.poll();
+        while (irp != null)
         {
-            // Get the next IRP
-            final T irp = this.irps.poll();
-
             // Process the IRP
             try
             {
@@ -97,20 +96,25 @@ public abstract class AbstractIrpQueue<T extends UsbIrp>
             {
                 irp.setUsbException(e);
             }
+        
+            // Get next IRP and mark the thread as closing before sending the
+            // events for the previous IRP
+            T nextIrp = this.irps.poll();
+            if (nextIrp == null) this.processor = null;
+            
+            // Finish the previous IRP
             irp.complete();
             finishIrp(irp);
-
-            // When no more IRPs are present in the queue then terminate
-            // the thread.
-            if (this.irps.isEmpty())
-            {
-                this.processor = null;
-                synchronized (this.irps)
-                {
-                    this.irps.notifyAll();
-                }
-                break;
-            }
+            
+            // Process next IRP (if present)
+            irp = nextIrp;
+        }
+        
+        // No more IRPs are present in the queue so terminate the thread.
+        this.processor = null;
+        synchronized (this.irps)
+        {
+            this.irps.notifyAll();
         }
     }
 
