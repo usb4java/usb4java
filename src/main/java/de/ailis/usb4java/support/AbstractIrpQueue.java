@@ -5,8 +5,8 @@
 
 package de.ailis.usb4java.support;
 
-import java.util.Deque;
-import java.util.LinkedList;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.usb.UsbException;
 import javax.usb.UsbHostManager;
@@ -25,7 +25,7 @@ import de.ailis.usb4java.topology.Usb4JavaDevice;
 public abstract class AbstractIrpQueue<T extends UsbIrp>
 {
     /** The queued packets. */
-    private final Deque<T> irps = new LinkedList<T>();
+    private final Queue<T> irps = new ConcurrentLinkedQueue<T>();
 
     /** The queue processor thread. */
     private Thread processor;
@@ -52,24 +52,21 @@ public abstract class AbstractIrpQueue<T extends UsbIrp>
      */
     public final void add(final T irp)
     {
-        synchronized (this.irps)
-        {
-            this.irps.add(irp);
+        this.irps.add(irp);
 
-            // Start the queue processor if not already running.
-            if (this.processor == null)
+        // Start the queue processor if not already running.
+        if (this.processor == null)
+        {
+            this.processor = new Thread(new Runnable()
             {
-                this.processor = new Thread(new Runnable()
+                @Override
+                public void run()
                 {
-                    @Override
-                    public void run()
-                    {
-                        process();
-                    }
-                });
-                this.processor.setDaemon(true);
-                this.processor.start();
-            }
+                    process();
+                }
+            });
+            this.processor.setDaemon(true);
+            this.processor.start();
         }
     }
 
@@ -80,39 +77,39 @@ public abstract class AbstractIrpQueue<T extends UsbIrp>
     {
         while (true)
         {
-            synchronized (this.irps)
-            {
-                // Get the next IRP
-                final T irp = this.irps.poll();
+            // Get the next IRP
+            final T irp = this.irps.poll();
 
-                // Process the IRP
+            // Process the IRP
+            try
+            {
+                UsbLock.acquire();
                 try
                 {
-                    UsbLock.acquire();
-                    try
-                    {
-                        processIrp(irp);
-                    }
-                    finally
-                    {
-                        UsbLock.release();
-                    }
+                    processIrp(irp);
                 }
-                catch (final UsbException e)
+                finally
                 {
-                    irp.setUsbException(e);
+                    UsbLock.release();
                 }
-                irp.complete();
-                finishIrp(irp);
+            }
+            catch (final UsbException e)
+            {
+                irp.setUsbException(e);
+            }
+            irp.complete();
+            finishIrp(irp);
 
-                // When no more IRPs are present in the queue then terminate
-                // the thread.
-                if (this.irps.isEmpty())
+            // When no more IRPs are present in the queue then terminate
+            // the thread.
+            if (this.irps.isEmpty())
+            {
+                this.processor = null;
+                synchronized (this.irps)
                 {
-                    this.processor = null;
                     this.irps.notifyAll();
-                    break;
                 }
+                break;
             }
         }
     }
@@ -143,19 +140,19 @@ public abstract class AbstractIrpQueue<T extends UsbIrp>
      */
     public final void abort()
     {
-        synchronized (this.irps)
+        this.irps.clear();
+        while (isBusy())
         {
-            this.irps.clear();
-            while (isBusy())
+            try
             {
-                try
+                synchronized (this.irps)
                 {
                     this.irps.wait();
                 }
-                catch (final InterruptedException e)
-                {
-                    Thread.currentThread().interrupt();
-                }
+            }
+            catch (final InterruptedException e)
+            {
+                Thread.currentThread().interrupt();
             }
         }
     }
@@ -168,10 +165,7 @@ public abstract class AbstractIrpQueue<T extends UsbIrp>
      */
     public final boolean isBusy()
     {
-        synchronized (this.irps)
-        {
-            return !this.irps.isEmpty() || this.processor != null;
-        }
+        return !this.irps.isEmpty() || this.processor != null;
     }
 
     /**
