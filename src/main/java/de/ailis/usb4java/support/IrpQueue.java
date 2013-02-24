@@ -17,6 +17,7 @@ import javax.usb.UsbEndpoint;
 import javax.usb.UsbEndpointDescriptor;
 import javax.usb.UsbException;
 import javax.usb.UsbIrp;
+import javax.usb.UsbShortPacketException;
 
 import de.ailis.usb4java.exceptions.Usb4JavaException;
 import de.ailis.usb4java.jni.USB_Dev_Handle;
@@ -73,11 +74,15 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
                     case UsbConst.ENDPOINT_DIRECTION_OUT:
                         irp.setActualLength(bulkWrite(irp.getData(),
                             irp.getOffset(), irp.getLength()));
+                        if (irp.getActualLength() < irp.getLength() && !irp.getAcceptShortPacket())
+                            throw new UsbShortPacketException();
                         break;
 
                     case UsbConst.ENDPOINT_DIRECTION_IN:
                         irp.setActualLength(bulkRead(irp.getData(),
                             irp.getOffset(), irp.getLength()));
+                        if (irp.getActualLength() < irp.getLength() && !irp.getAcceptShortPacket())
+                            throw new UsbShortPacketException();
                         break;
 
                     default:
@@ -136,22 +141,24 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
      */
     private int bulkRead(final byte[] data, final int offset, final int len)
         throws UsbException
-    {
+    {        
         final UsbEndpointDescriptor descriptor = getEndpointDescriptor();
-        final int size = Math.min(len, descriptor.wMaxPacketSize()
-            & 0xffff);
-        final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
+        final USB_Dev_Handle handle = this.device.open();
         int read = 0;
         while (read < len)
         {
-            buffer.rewind();
-            final int result = usb_bulk_read(this.device.open(),
+            final int size = Math.min(len - read, descriptor.wMaxPacketSize() & 0xffff);
+            final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
+            final int result = usb_bulk_read(handle,
                 descriptor.bEndpointAddress(), buffer, getConfig().getTimeout());
             if (result < 0) throw new Usb4JavaException(
                 "Unable to read from interrupt endpoint", result);
             buffer.rewind();
             buffer.get(data, offset + read, result);
             read += result;
+            
+            // Short packet detected, aborting
+            if (result < size) break;
         }
         return read;
     }
@@ -173,14 +180,13 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
         throws UsbException
     {
         final UsbEndpointDescriptor descriptor = getEndpointDescriptor();
-        final int total = len;
-        final int size = Math.min(total, descriptor.wMaxPacketSize() & 0xffff);
-        final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
         final USB_Dev_Handle handle = this.device.open();
         int written = 0;
-        while (written < total)
+        while (written < len)
         {
-            buffer.put(data, offset + written, Math.min(total - written, size));
+            final int size = Math.min(len - written, descriptor.wMaxPacketSize() & 0xffff);
+            final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
+            buffer.put(data, offset + written, size);
             buffer.rewind();
             final int result = usb_bulk_write(handle,
                 descriptor.bEndpointAddress(), buffer,
@@ -188,7 +194,9 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
             if (result < 0) throw new Usb4JavaException(
                 "Unable to write to bulk endpoint", result);
             written += result;
-            buffer.rewind();
+
+            // Short packet detected, aborting
+            if (result < size) break;
         }
         return written;
     }
