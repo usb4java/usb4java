@@ -4,6 +4,11 @@ import javax.usb.*;
 import junit.framework.TestCase;
 import junit.framework.Assert;
 import javax.usb.util.*;
+
+import org.junit.runner.RunWith;
+
+import de.ailis.usb4java.TCKRunner;
+
 import java.util.*;
  
 /**
@@ -37,6 +42,7 @@ import java.util.*;
  
  
 @SuppressWarnings("all")
+@RunWith(TCKRunner.class)
 public class IrpTest extends TestCase
 {
  

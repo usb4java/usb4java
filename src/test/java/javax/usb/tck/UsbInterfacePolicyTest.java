@@ -26,6 +26,10 @@ import java.util.*;
 
 import javax.usb.*;
 
+import org.junit.runner.RunWith;
+
+import de.ailis.usb4java.TCKRunner;
+
 /**
  * Usb Interface Policy Test
  * <p>
@@ -35,6 +39,7 @@ import javax.usb.*;
  * @author Dale Heeks
  */
 @SuppressWarnings("all")
+@RunWith(TCKRunner.class)
 public class UsbInterfacePolicyTest extends TestCase
 {
 

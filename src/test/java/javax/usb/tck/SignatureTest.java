@@ -10,6 +10,11 @@ package javax.usb.tck;
  */
 
 import javax.usb.tck.sigtest.*;
+
+import org.junit.runner.RunWith;
+
+import de.ailis.usb4java.TCKRunner;
+
 import java.io.*;
 import junit.framework.*;
 
@@ -24,6 +29,7 @@ import junit.framework.*;
  * @author Bob Rossi
  */
 @SuppressWarnings("all")
+@RunWith(TCKRunner.class)
 public class SignatureTest extends TestCase
 {
     /**

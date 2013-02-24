@@ -23,6 +23,10 @@ import java.util.*;
 import javax.usb.*;
 import javax.usb.event.*;
 
+import org.junit.runner.RunWith;
+
+import de.ailis.usb4java.TCKRunner;
+
 import junit.framework.TestCase;
 
 /**
@@ -37,6 +41,7 @@ import junit.framework.TestCase;
 
 
 @SuppressWarnings("all")
+@RunWith(TCKRunner.class)
 public class DefaultControlPipeTestIRP extends TestCase
 {
     public void setUp() throws Exception

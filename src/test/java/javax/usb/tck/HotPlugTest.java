@@ -27,6 +27,10 @@ import javax.usb.*;
 import javax.usb.event.*;
 import javax.usb.util.StandardRequest;
 
+import org.junit.runner.RunWith;
+
+import de.ailis.usb4java.TCKRunner;
+
 import junit.framework.TestCase;
 
 /**
@@ -39,6 +43,7 @@ import junit.framework.TestCase;
 
 
 @SuppressWarnings("all")
+@RunWith(TCKRunner.class)
 public class HotPlugTest extends TestCase
 {
 
