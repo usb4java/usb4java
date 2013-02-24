@@ -214,7 +214,7 @@ public final class Usb4JavaInterface implements UsbInterface
     public Usb4JavaInterface getSetting(final byte number)
     {
         return (this.configuration).getSettings(
-            this.descriptor.bInterfaceNumber()).get(number);
+            this.descriptor.bInterfaceNumber()).get(number & 0xff);
     }
 
     /**
@@ -224,7 +224,7 @@ public final class Usb4JavaInterface implements UsbInterface
     public boolean containsSetting(final byte number)
     {
         return (this.configuration).getSettings(
-            this.descriptor.bInterfaceNumber()).containsKey(number);
+            this.descriptor.bInterfaceNumber()).containsKey(number & 0xff);
     }
 
     /**
