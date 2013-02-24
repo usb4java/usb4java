@@ -29,7 +29,17 @@ static unsigned usbWriteLength;
 /** The blinks memory */
 static unsigned char buffer[512];
 
-static unsigned char buffer_size;
+static int buffer_read_index = 0;
+
+static int buffer_write_index = 0;
+
+static int dropper_index = 0;
+
+static int to_read = 0;
+
+static int to_write = 0;
+
+static unsigned char buffer_transform;
 
 static uint16_t restart;
 
@@ -111,12 +121,16 @@ usbMsgLen_t usbFunctionSetup(uchar setupData[8])
             if (!(usbData->bmRequestType & USBRQ_DIR_DEVICE_TO_HOST))
             {
                 pwmSet(CHANNEL0, 255, 0);
-                pwmSet(CHANNEL1, 0, 0);
-                pwmSet(CHANNEL2, 0, 0);
+                pwmSet(CHANNEL1, 255, 0);
+                pwmSet(CHANNEL2, 255, 0);
                 restart--;
                 return 0;
             }
             break;
+            
+        default:
+            break;
+            
             
     }
 
@@ -125,9 +139,61 @@ usbMsgLen_t usbFunctionSetup(uchar setupData[8])
 
 void usbFunctionWriteOut(uchar *data, uchar len)
 {
-    buffer_size = len;
     int i;
-    for (i = 0; i < len; i++) buffer[i] = data[i];
+
+    // Check if this is a new data block
+    if (!to_write)
+    {
+        buffer_transform = data[0];
+        to_write = (((int) data[1]) << 8) | data[2];
+        dropper_index = 0;
+    }
+        
+    // Copy and transform data
+    for (i = 0; i < len; i++)
+    {
+        switch (buffer_transform)
+        {
+            case 1:
+                buffer[buffer_write_index] = data[i];
+                to_write--;
+                buffer_write_index++;
+                break;
+                
+            case 2:
+                buffer[buffer_write_index] = data[i] ^ 0xff;
+                to_write--;
+                buffer_write_index++;
+                break;
+                
+            case 3:
+                buffer[buffer_write_index] = data[i] ^ 0x55;
+                to_write--;
+                buffer_write_index++;
+                break;
+                
+            case 4:
+                if (dropper_index != 2)
+                {
+                    buffer[buffer_write_index] = data[i] ^ 0x55;
+                    buffer_write_index++;
+                    dropper_index++;
+                } else dropper_index = 0;
+                to_write--;
+                break;
+                
+            default:
+                pwmSet(CHANNEL0, 255, 0);
+                pwmSet(CHANNEL1, 0, 0);
+                pwmSet(CHANNEL2, 0, 0);
+        }
+    }
+    
+    // When write is complete then start reading
+    if (!to_write)
+    {
+        to_read = buffer_write_index;
+    }
 }
 
 /**
@@ -172,10 +238,18 @@ int main()
             usbPoll();
             
             
-            if (usbInterruptIsReady() && buffer_size)
-            {               // only if previous data was sent
-                usbSetInterrupt(buffer, buffer_size);
-                buffer_size = 0;
+            int len = buffer_write_index - buffer_read_index;
+            if (len > 0 && usbInterruptIsReady())
+            {           
+                if (len > 8) len = 8;
+                usbSetInterrupt(&buffer[buffer_read_index], len);
+                buffer_read_index += len;
+                to_read -= len;
+                if (!to_read)
+                {
+                    buffer_read_index = 0;
+                    buffer_write_index = 0;
+                }
             }
             
             if (restart < 50) restart--;
