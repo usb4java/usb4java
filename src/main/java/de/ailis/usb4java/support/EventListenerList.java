@@ -31,6 +31,7 @@ public abstract class EventListenerList<T extends EventListener>
      */
     public final void add(final T listener)
     {
+        if (this.listeners.contains(listener)) return;
         this.listeners.add(listener);
     }
 
