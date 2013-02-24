@@ -7,12 +7,14 @@ package de.ailis.usb4java.support;
 
 import static de.ailis.usb4java.jni.USB.usb_bulk_read;
 import static de.ailis.usb4java.jni.USB.usb_bulk_write;
+import static de.ailis.usb4java.jni.USB.usb_control_msg;
 import static de.ailis.usb4java.jni.USB.usb_interrupt_read;
 import static de.ailis.usb4java.jni.USB.usb_interrupt_write;
 
 import java.nio.ByteBuffer;
 
 import javax.usb.UsbConst;
+import javax.usb.UsbControlIrp;
 import javax.usb.UsbEndpoint;
 import javax.usb.UsbEndpointDescriptor;
 import javax.usb.UsbException;
@@ -65,6 +67,13 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
     {
         final UsbEndpoint endpoint = this.pipe.getUsbEndpoint();
         final byte direction = endpoint.getDirection();
+        final byte type = endpoint.getType();
+        if (type == UsbConst.ENDPOINT_TYPE_CONTROL)
+        {
+            processControlIrp((UsbControlIrp) irp);
+            return;
+        }
+        
         switch (direction)
         {
             case UsbConst.ENDPOINT_DIRECTION_OUT:
@@ -97,6 +106,35 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
         return this.pipe.getUsbEndpoint().getUsbEndpointDescriptor();
     }
 
+    /**
+     * Processes the control IRP.
+     *
+     * @param irp
+     *            The IRP to process.
+     * @throws UsbException
+     *             When processing the IRP fails.
+     */
+    private void processControlIrp(final UsbControlIrp irp) throws UsbException
+    {
+        final ByteBuffer buffer =
+            ByteBuffer.allocateDirect(irp.getLength());
+        buffer.put(irp.getData(), irp.getOffset(), irp.getLength());
+        buffer.rewind();
+        final USB_Dev_Handle handle = this.device.open();
+        final int len =
+            usb_control_msg(handle, irp.bmRequestType(),
+                irp.bRequest(), irp.wValue(), irp.wIndex(), buffer,
+                getConfig().getTimeout());
+        if (len < 0)
+            throw new Usb4JavaException(
+                "Unable to submit control message", len);
+        buffer.rewind();
+        buffer.get(irp.getData(), irp.getOffset(), len);
+        irp.setActualLength(len);
+        if (irp.getActualLength() != irp.getLength() && !irp.getAcceptShortPacket())
+            throw new UsbShortPacketException();
+    }
+    
     /**
      * Reads bytes from an interrupt endpoint into the specified data array.
      *
