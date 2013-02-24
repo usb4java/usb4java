@@ -105,7 +105,8 @@ usbMsgLen_t usbFunctionSetup(uchar setupData[8])
     {
         case 0x14:
             return 0xff;
-            
+
+        case 0x1:            
         case 0xb0:
             if (usbData->bmRequestType & USBRQ_DIR_DEVICE_TO_HOST)
             {

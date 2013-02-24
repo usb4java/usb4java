@@ -266,7 +266,7 @@ section at the end of this file).
  * to fine tune control over USB descriptors such as the string descriptor
  * for the serial number.
  */
-#define USB_CFG_DEVICE_CLASS        0    /* set to 0 if deferred to interface */
+#define USB_CFG_DEVICE_CLASS        0xff    /* set to 0 if deferred to interface */
 #define USB_CFG_DEVICE_SUBCLASS     0
 /* See USB specification if you want to conform to an existing device class.
  * Class 0xff is "vendor specific".
@@ -345,7 +345,7 @@ section at the end of this file).
  */
 
 #define USB_CFG_DESCR_PROPS_DEVICE                  0
-#define USB_CFG_DESCR_PROPS_CONFIGURATION           (USB_PROP_IS_RAM | USB_PROP_LENGTH(18 + 10 * 7))
+#define USB_CFG_DESCR_PROPS_CONFIGURATION           (USB_PROP_IS_RAM | USB_PROP_LENGTH(18 + 12 * 7))
 #define USB_CFG_DESCR_PROPS_STRINGS                 0
 #define USB_CFG_DESCR_PROPS_STRING_0                0
 #define USB_CFG_DESCR_PROPS_STRING_VENDOR           0
