@@ -29,6 +29,8 @@ static unsigned usbWriteLength;
 /** The blinks memory */
 static unsigned char buffer[512];
 
+static int buffer_size;
+
 static int buffer_read_index = 0;
 
 static int buffer_write_index = 0;
@@ -101,18 +103,22 @@ usbMsgLen_t usbFunctionSetup(uchar setupData[8])
     
     switch (usbData->bRequest)
     {
+        case 0x14:
+            return 0xff;
+            
         case 0xb0:
             if (usbData->bmRequestType & USBRQ_DIR_DEVICE_TO_HOST)
             {
                 /* Read mode */
-                usbMsgPtr = &buffer[usbData->wIndex.word];
-                return usbData->wLength.word;
+                usbMsgPtr = &buffer[usbData->wIndex.word];    
+                return usbData->wLength.word > buffer_size ? buffer_size : usbData->wLength.word;
             }
             else
             {
                 /* Write mode */
                 usbWriteIndex = usbData->wIndex.word;
                 usbWriteLength = usbData->wLength.word;
+                buffer_size = usbData->wLength.word;
                 return USB_NO_MSG;
             }
             break;
