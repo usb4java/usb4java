@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
 import javax.usb.UsbControlIrp;
 import javax.usb.UsbException;
 import javax.usb.UsbIrp;
+import javax.usb.event.UsbDeviceDataEvent;
 
 import de.ailis.usb4java.exceptions.Usb4JavaException;
 import de.ailis.usb4java.jni.USB_Dev_Handle;
@@ -24,15 +25,22 @@ import de.ailis.usb4java.topology.Usb4JavaDevice;
  */
 public final class ControlIrpQueue extends AbstractIrpQueue<UsbControlIrp>
 {
+    /** The USB device listener list. */
+    private final UsbDeviceListenerList listeners;
+    
     /**
      * Constructor.
-     *
+     * 
      * @param device
      *            The USB device.
+     * @param listeners
+     *            The USB device listener list.
      */
-    public ControlIrpQueue(final Usb4JavaDevice device)
+    public ControlIrpQueue(final Usb4JavaDevice device, 
+        final UsbDeviceListenerList listeners)
     {
         super(device);
+        this.listeners = listeners;
     }
 
     /**
@@ -64,6 +72,7 @@ public final class ControlIrpQueue extends AbstractIrpQueue<UsbControlIrp>
     @Override
     protected void finishIrp(final UsbIrp irp)
     {
-        // Empty
+        this.listeners.dataEventOccurred(new UsbDeviceDataEvent( 
+            this.device, (UsbControlIrp) irp));
     }
 }

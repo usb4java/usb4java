@@ -81,7 +81,8 @@ public abstract class Usb4JavaDevice implements UsbDevice
     private UsbPort port;
 
     /** The IRP queue. */
-    private final ControlIrpQueue queue = new ControlIrpQueue(this);
+    private final ControlIrpQueue queue = new ControlIrpQueue(this, 
+        this.listeners);
 
     /**
      * Constructor.
