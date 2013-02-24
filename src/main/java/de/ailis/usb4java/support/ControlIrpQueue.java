@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
 import javax.usb.UsbControlIrp;
 import javax.usb.UsbException;
 import javax.usb.UsbIrp;
+import javax.usb.UsbShortPacketException;
 import javax.usb.event.UsbDeviceDataEvent;
 
 import de.ailis.usb4java.exceptions.Usb4JavaException;
@@ -64,6 +65,8 @@ public final class ControlIrpQueue extends AbstractIrpQueue<UsbControlIrp>
         buffer.rewind();
         buffer.get(irp.getData(), irp.getOffset(), len);
         irp.setActualLength(len);
+        if (irp.getActualLength() != irp.getLength() && !irp.getAcceptShortPacket())
+            throw new UsbShortPacketException();
     }
 
     /**
