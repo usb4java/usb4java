@@ -141,13 +141,19 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
         final int size = Math.min(len, descriptor.wMaxPacketSize()
             & 0xffff);
         final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
-        final int result = usb_bulk_read(this.device.open(),
-            descriptor.bEndpointAddress(), buffer, getConfig().getTimeout());
-        if (result < 0) throw new Usb4JavaException(
-            "Unable to read from interrupt endpoint", result);
-        buffer.rewind();
-        buffer.get(data, offset, result);
-        return result;
+        int read = 0;
+        while (read < len)
+        {
+            buffer.rewind();
+            final int result = usb_bulk_read(this.device.open(),
+                descriptor.bEndpointAddress(), buffer, getConfig().getTimeout());
+            if (result < 0) throw new Usb4JavaException(
+                "Unable to read from interrupt endpoint", result);
+            buffer.rewind();
+            buffer.get(data, offset + read, result);
+            read += result;
+        }
+        return read;
     }
 
     /**
