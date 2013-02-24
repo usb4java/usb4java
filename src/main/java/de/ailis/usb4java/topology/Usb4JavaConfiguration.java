@@ -161,7 +161,7 @@ public final class Usb4JavaConfiguration implements UsbConfiguration
     @Override
     public Usb4JavaInterface getUsbInterface(final byte number)
     {
-        return this.activeSettings.get((int) number);
+        return this.activeSettings.get(number & 0xff);
     }
 
     /**
