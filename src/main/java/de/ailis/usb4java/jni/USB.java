@@ -246,7 +246,7 @@ public final class USB
      * usb_find_busses will find all of the busses on the system. Returns the
      * number of changes since previous call to this function (total of new
      * busses and busses removed).
-     *
+     * 
      * @return The number of changes since previous call.
      */
     public static native int usb_find_busses();
