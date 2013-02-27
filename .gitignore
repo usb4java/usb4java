@@ -1,6 +1,7 @@
 target
 .settings
 .classpath
+*.log
 .project
 libtool
 install-sh
