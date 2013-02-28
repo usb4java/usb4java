@@ -3,7 +3,7 @@
  * See LICENSE.txt for licensing information.
  */
 
-package de.ailis.usb4java.libusbx;
+package de.ailis.usb4java.libusb;
 
 import java.io.File;
 import java.io.FileOutputStream;

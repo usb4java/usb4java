@@ -519,6 +519,7 @@ public class HotPlugTest extends TestCase
             fail("Timed out waiting for service attach event.");
         } catch ( Exception e )
         {
+            e.printStackTrace();
             fail("Exception not expected.");
         }
         // tested: when online again, send data without error

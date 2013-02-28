@@ -6,10 +6,9 @@
 #ifndef USB4JAVA_CONTEXT_H
 #define USB4JAVA_CONTEXT_H
 
-#include <jni.h>
-#include <libusb.h>
+#include "usb4java.h"
 
-void wrap_context(JNIEnv*, libusb_context*, jobject);
-libusb_context* unwrap_context(JNIEnv*, jobject);
+void setContext(JNIEnv*, libusb_context*, jobject);
+libusb_context* unwrapContext(JNIEnv*, jobject);
 
 #endif

@@ -3,25 +3,14 @@
  * See COPYING file for copying conditions
  */
 
-#include "usb4java.h"
 #include "Context.h"
 
-void wrap_context(JNIEnv* env, libusb_context* data, jobject obj)
+void setContext(JNIEnv* env, libusb_context* context, jobject object)
 {
-    jobject buffer = (*env)->NewDirectByteBuffer(env, data, 0);
-    jclass cls = (*env)->GetObjectClass(env, obj);
-    jfieldID field = (*env)->GetFieldID(env, cls, "data",
-        "Ljava/nio/ByteBuffer;");
-    (*env)->SetObjectField(env, obj, field, buffer);
+    SET_POINTER(env, context, object);
 }
 
-libusb_context* unwrap_context(JNIEnv* env, jobject obj)
+libusb_context* unwrapContext(JNIEnv* env, jobject context)
 {
-     if (!obj) return NULL;
-     jclass cls = (*env)->GetObjectClass(env, obj);
-     jfieldID field = (*env)->GetFieldID(env, cls, "data",
-         "Ljava/nio/ByteBuffer;");
-     jobject buffer = (*env)->GetObjectField(env, obj, field);
-     return (libusb_context *)
-         (*env)->GetDirectBufferAddress(env, buffer);
+     UNWRAP_POINTER(env, context, libusb_context*);
 }

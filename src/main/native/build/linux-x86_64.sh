@@ -9,7 +9,7 @@ cd $(dirname $0)/..
 OS=linux
 ARCH=x86_64
 TMPDIR=$(pwd)/tmp
-DISTDIR=$(pwd)/../resources/de/ailis/usb4java/libusbx/${OS}-${ARCH}
+DISTDIR=$(pwd)/../resources/de/ailis/usb4java/libusb/${OS}-${ARCH}
 
 # Clean up
 rm -rf $TMPDIR

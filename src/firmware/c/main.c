@@ -20,6 +20,12 @@
 #define CHANNEL4 PIN_PB3
 #define CHANNEL5 PIN_PD3
 
+/**  Blinks memory size */
+#define MEM_SIZE 16
+
+/** The flash checksum constant (1010 0101) */
+#define FLASH_CHECKSUM 0xa5
+
 /** Data transfer write index */
 static unsigned usbWriteIndex;
 
@@ -27,6 +33,11 @@ static unsigned usbWriteIndex;
 static unsigned usbWriteLength;
 
 /** The blinks memory */
+static unsigned char memory[MEM_SIZE];
+
+/** The flash checksum flag in EEPROM */
+static uint8_t flashChecksum = 0;
+
 static unsigned char buffer[512];
 
 static int buffer_size;
@@ -44,6 +55,25 @@ static int to_write = 0;
 static unsigned char buffer_transform;
 
 static uint16_t restart;
+
+/**
+ * Reads the flash checksum into RAM.
+ */
+static void readFlashChecksum() 
+{
+    eeprom_busy_wait();
+    flashChecksum = eeprom_read_byte((uint8_t *) 0);
+}
+
+/**
+ * Writes the flash checksum to EEPROM.
+ */
+static void writeFlashChecksum()
+{
+    eeprom_busy_wait();
+    eeprom_write_byte((uint8_t *) 0, flashChecksum);
+}
+
 
 static void reenumerate(uint16_t delay)
 {
@@ -105,6 +135,12 @@ usbMsgLen_t usbFunctionSetup(uchar setupData[8])
     {
         case 0x14:
             return 0xff;
+
+        /* Go into flash mode */
+        case 0x2:
+            restart--;
+            memory[0] &= 0xbf;
+            break;
 
         case 0x1:            
         case 0xb0:
@@ -214,14 +250,35 @@ static void initUSB(void)
 }
 
 /**
+ * Enters the boot loader.
+ */
+static void enterBootloader()
+{
+    /* Invalidate the checksum in flash */
+    flashChecksum = FLASH_CHECKSUM ^ 0xff;
+    writeFlashChecksum();
+
+    /* Enable the watchdog and enter an endless loop. This will reboot
+     the device */
+    cli();
+    wdt_enable(WDTO_500MS);
+    while (1);
+}
+
+/**
  * Main program.
  */
 int main()
 {   
+    uchar i;
+    
     /* Disable the watchdog */
     MCUSR = 0;
     wdt_disable();
-    
+
+    /* Read the flash checksum from EEPROM */
+    readFlashChecksum();
+            
     /* Initialize USB and enable global interrupts */
     initUSB();
 
@@ -234,16 +291,23 @@ int main()
     pwmSet(CHANNEL4, 0, 0);
     pwmSet(CHANNEL5, 0, 0);
     
+    /* Initialize the blinks memory from eeprom */
+    eeprom_busy_wait();
+    eeprom_read_block(memory, (uint8_t*) 1, MEM_SIZE);
+    
+    /* Make sure bits 7 is cleared and bit 6 is set */
+    memory[0] &= 0x7f;
+    memory[0] |= 0x40;
     
     /* Infinite program loop */
-    while (1)
+    i = 0;
+    while (memory[0] & 0x40)
     {
         restart = 50;
         while (restart)
         {
             /* Process USB events */
             usbPoll();
-            
             
             int len = buffer_write_index - buffer_read_index;
             if (len > 0 && usbInterruptIsReady())
@@ -260,8 +324,23 @@ int main()
             }
             
             if (restart < 50) restart--;
+
+            /* When this loop has been executed for 100 times then
+               mark the flash as OK */
+            if ((flashChecksum != FLASH_CHECKSUM) && (i < 100))
+            {
+                i++;
+                if (i == 100)
+                {
+                    flashChecksum = FLASH_CHECKSUM;
+                    writeFlashChecksum();
+                }
+            }
         }
         reenumerate(500);
     }
+
+    enterBootloader();
+
     return 0;
 }

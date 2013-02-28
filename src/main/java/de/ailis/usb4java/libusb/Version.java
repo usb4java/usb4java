@@ -1,30 +1,23 @@
 /*
- * Copyright (C) 2011 Klaus Reimer <k@ailis.de>
- * See LICENSE.txt for licensing information.
+ * Copyright 2013 Klaus Reimer <k@ailis.de>
+ * See LICENSE.md for licensing information.
+ * 
+ * Based on libusbx <http://libusbx.org/>:  
+ * 
+ * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
+ * Copyright 2007-2008 Daniel Drake <dsd@gentoo.org>
+ * Copyright 2012 Pete Batard <pete@akeo.ie>
  */
 
-package de.ailis.usb4java.libusbx;
-
-import java.nio.ByteBuffer;
+package de.ailis.usb4java.libusb;
 
 /**
  * Structure providing the version of the libusbx runtime.
  */
 public final class Version
 {
-    /** The version data. */
-    private final ByteBuffer data;
-
-    /**
-     * Constructor.
-     *
-     * @param data
-     *            The version data.
-     */
-    private Version(final ByteBuffer data)
-    {
-        this.data = data;
-    }
+    /** The native pointer to the version structure. */
+    long pointer;
 
     /**
      * Returns the library major version.
