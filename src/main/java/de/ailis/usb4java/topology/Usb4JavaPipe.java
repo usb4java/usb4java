@@ -340,4 +340,14 @@ public final class Usb4JavaPipe implements UsbPipe
             this.listeners.dataEventOccurred(new UsbPipeDataEvent(this, irp));
         }
     }
+    
+    /**
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString()
+    {
+        return String.format("USB pipe of endpoint %02x",
+            this.endpoint.getUsbEndpointDescriptor().bEndpointAddress());
+    }
 }

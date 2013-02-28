@@ -341,4 +341,14 @@ public final class VirtualRootHub implements UsbHub,
     {
         this.ports.disconnectUsbDevice(device);
     }
+
+    /**
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString()
+    {
+        return this.getManufacturerString() + " " + this.getProductString() + 
+            " " + this.getSerialNumberString();
+    }
 }

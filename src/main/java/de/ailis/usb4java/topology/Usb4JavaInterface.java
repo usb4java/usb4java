@@ -295,4 +295,14 @@ public final class Usb4JavaInterface implements UsbInterface
         if (iInterface == 0) return null;
         return this.configuration.getUsbDevice().getString(iInterface);
     }
+        
+    /**
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString()
+    {
+        return String.format("USB interface %02x", 
+            this.descriptor.bInterfaceNumber());
+    }    
 }

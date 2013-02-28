@@ -235,4 +235,14 @@ public final class Usb4JavaConfiguration implements UsbConfiguration
         if (iConfiguration == 0) return null;
         return this.device.getString(iConfiguration);
     }
+
+    /**
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString()
+    {
+        return String.format("USB configuration %02x",
+            this.descriptor.bConfigurationValue());
+    }
 }

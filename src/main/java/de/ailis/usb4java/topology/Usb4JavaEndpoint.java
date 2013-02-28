@@ -89,4 +89,14 @@ public final class Usb4JavaEndpoint implements UsbEndpoint
     {
         return this.pipe;
     }
+    
+    /**
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString()
+    {
+        return String.format("USB endpoint %02x", 
+            this.descriptor.bEndpointAddress());
+    }
 }
