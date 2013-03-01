@@ -11,6 +11,7 @@
 
 package de.ailis.usb4java.libusb;
 
+import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 /**
@@ -1121,4 +1122,45 @@ public final class LibUSB
      */
     public static native void freeConfigDescriptor(
         final ConfigDescriptor descriptor);
+
+    /**
+     * Retrieve a descriptor from the default control pipe.
+     * 
+     * This is a convenience function which formulates the appropriate control
+     * message to retrieve the descriptor.
+     * 
+     * @param handle
+     *            A device handle.
+     * @param type
+     *            The descriptor type, see DT_* constants.
+     * @param index
+     *            The index of the descriptor to retrieve.
+     * @param data
+     *            Output buffer for descriptor
+     * @return number of bytes returned in data, or ERROR code on failure
+     * 
+     */
+    public static native int getDescriptor(final DeviceHandle handle,
+        final int type, final int index, final ByteBuffer data);
+
+    /**
+     * Retrieve a descriptor from a device.
+     * 
+     * This is a convenience function which formulates the appropriate control
+     * message to retrieve the descriptor. The string returned is Unicode, as
+     * detailed in the USB specifications.
+     * 
+     * @param handle
+     *            A device handle.
+     * @param index
+     *            The index of the descriptor to retrieve.
+     * @param langId
+     *            The language ID for the string descriptor.
+     * @param data
+     *            Output buffer for descriptor.
+     * @return number of bytes returned in data, or LIBUSB_ERROR code on failure
+     * @see #getStringDescriptorAscii(DeviceHandle, int, StringBuffer, int)
+     */
+    public static native int getStringDescriptor(final DeviceHandle handle,
+        final int index, final int langId, final ByteBuffer data);
 }

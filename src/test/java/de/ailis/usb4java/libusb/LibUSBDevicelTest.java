@@ -9,6 +9,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 import org.junit.After;
@@ -832,5 +833,49 @@ public class LibUSBDevicelTest
     public void testGetStringDescriptorAsciiWithoutBuffer()
     {
         LibUSB.getStringDescriptorAscii(new DeviceHandle(), 0, null, 0);
+    }
+
+    /**
+     * Tests the
+     * {@link LibUSB#getDescriptor(DeviceHandle, int, int, ByteBuffer)}
+     * method without a handle.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetDescriptorWithoutHandle()
+    {
+        LibUSB.getDescriptor(null, 0, 0, ByteBuffer.allocate(18));
+    }
+
+    /**
+     * Tests the
+     * {@link LibUSB#getDescriptor(DeviceHandle, int, int, ByteBuffer)}
+     * method without a buffer.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetDescriptorWithoutBuffer()
+    {
+        LibUSB.getDescriptor(new DeviceHandle(), 0, 0, null);
+    }
+
+    /**
+     * Tests the
+     * {@link LibUSB#getStringDescriptor(DeviceHandle, int, int, ByteBuffer)}
+     * method without a handle.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetStringDescriptorWithoutHandle()
+    {
+        LibUSB.getStringDescriptor(null, 0, 0, ByteBuffer.allocate(18));
+    }
+
+    /**
+     * Tests the
+     * {@link LibUSB#getStringDescriptor(DeviceHandle, int, int, ByteBuffer)}
+     * method without a buffer.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetStringDescriptorWithoutBuffer()
+    {
+        LibUSB.getStringDescriptor(new DeviceHandle(), 0, 0, null);
     }
 }

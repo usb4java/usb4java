@@ -185,6 +185,7 @@ public final class Loader
     private static String getExtraLibName()
     {
         final String os = getOS();
+        if (os.equals(OS_LINUX)) return "libusb-1.0.so.0";
         if (os.equals(OS_WINDOWS)) return "libusb0." + EXT_DLL;
         if (os.equals(OS_MACOSX)) return "libusb." + EXT_DYLIB;
         return null;

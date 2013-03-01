@@ -13,7 +13,7 @@ DISTDIR=$(pwd)/../resources/de/ailis/usb4java/libusb/${OS}-${ARCH}
 
 # Clean up
 rm -rf $TMPDIR
-rm -rf $DISTDIR
+rm -rf $DISTDIR/libusb4java.so
 
 # Build autoconf stuff if needed
 if [ ! -e configure ]

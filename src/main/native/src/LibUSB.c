@@ -521,7 +521,8 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getActiveConfigDescriptor)
  */
 JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getConfigDescriptor)
 (
-    JNIEnv *env, jclass class, jobject device, jint index, jobject descriptor)
+    JNIEnv *env, jclass class, jobject device, jint index, jobject descriptor
+)
 {
     NOT_NULL(env, device, return 0);
     NOT_NULL(env, descriptor, return 0);
@@ -537,7 +538,8 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getConfigDescriptor)
  */
 JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getConfigDescriptorByValue)
 (
-    JNIEnv *env, jclass class, jobject device, jint index, jobject descriptor)
+    JNIEnv *env, jclass class, jobject device, jint index, jobject descriptor
+)
 {
     NOT_NULL(env, device, return 0);
     NOT_NULL(env, descriptor, return 0);
@@ -553,8 +555,43 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getConfigDescriptorByValue)
  */
 JNIEXPORT void JNICALL METHOD_NAME(LibUSB, freeConfigDescriptor)
 (
-    JNIEnv *env, jclass class, jobject descriptor)
+    JNIEnv *env, jclass class, jobject descriptor
+)
 {
     NOT_NULL(env, descriptor, return);
     libusb_free_config_descriptor(unwrapConfigDescriptor(env, descriptor));
+}
+
+/**
+ * int getDescriptor(DeviceHandle, int, int, ByteBuffer)
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getDescriptor)
+(
+    JNIEnv *env, jclass class, jobject handle, jint type, jint index,
+    jobject data
+)
+{
+    NOT_NULL(env, handle, return 0);
+    NOT_NULL(env, data, return 0);
+    unsigned char *ptr = (*env)->GetDirectBufferAddress(env, data);
+    jlong size = (*env)->GetDirectBufferCapacity(env, data);
+    return libusb_get_descriptor(unwrapDeviceHandle(env, handle),
+        type, index, ptr, size);
+}
+
+/**
+ * int getStringDescriptor(DeviceHandle, int, int, ByteBuffer)
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getStringDescriptor)
+(
+    JNIEnv *env, jclass class, jobject handle, jint index, jint langId,
+    jobject data
+)
+{
+    NOT_NULL(env, handle, return 0);
+    NOT_NULL(env, data, return 0);
+    unsigned char *ptr = (*env)->GetDirectBufferAddress(env, data);
+    jlong size = (*env)->GetDirectBufferCapacity(env, data);
+    return libusb_get_string_descriptor(unwrapDeviceHandle(env, handle),
+        index, langId, ptr, size);
 }
