@@ -1163,4 +1163,131 @@ public final class LibUSB
      */
     public static native int getStringDescriptor(final DeviceHandle handle,
         final int index, final int langId, final ByteBuffer data);
+
+    /**
+     * Perform a USB control transfer.
+     * 
+     * The direction of the transfer is inferred from the bmRequestType field of
+     * the setup packet.
+     * 
+     * The wValue, wIndex and wLength fields values should be given in
+     * host-endian byte order.
+     * 
+     * @param handle
+     *            A handle for the device to communicate with.
+     * @param bmRequestType
+     *            The request type field for the setup packet.
+     * @param bRequest
+     *            The request field for the setup packet.
+     * @param wValue
+     *            The value field for the setup packet.
+     * @param wIndex
+     *            The index field for the setup packet.
+     * @param data
+     *            A suitably-sized data buffer for either input or output
+     *            (depending on direction bits within bmRequestType).
+     * @param timeout
+     *            Timeout (in millseconds) that this function should wait before
+     *            giving up due to no response being received. For an unlimited
+     *            timeout, use value 0.
+     * @return on success the number of bytes actually transferred,
+     *         {@link #ERROR_TIMEOUT} if the transfer timed out,
+     *         {@link #ERROR_PIPE} if the control request was not supported by
+     *         the device, {@link #ERROR_NO_DEVICE} if the device has been
+     *         disconnected, another ERROR code on other failures
+     */
+    public static native int controlTransfer(final DeviceHandle handle,
+        final int bmRequestType, final int bRequest, final int wValue,
+        int wIndex, final ByteBuffer data, final int timeout);
+
+    /**
+     * Perform a USB bulk transfer.
+     * 
+     * The direction of the transfer is inferred from the direction bits of the
+     * endpoint address.
+     * 
+     * For bulk reads, the length field indicates the maximum length of data you
+     * are expecting to receive. If less data arrives than expected, this
+     * function will return that data, so be sure to check the transferred
+     * output parameter.
+     * 
+     * You should also check the transferred parameter for bulk writes. Not all
+     * of the data may have been written.
+     * 
+     * Also check transferred when dealing with a timeout error code. libusbx
+     * may have to split your transfer into a number of chunks to satisfy
+     * underlying O/S requirements, meaning that the timeout may expire after
+     * the first few chunks have completed. libusbx is careful not to lose any
+     * data that may have been transferred; do not assume that timeout
+     * conditions indicate a complete lack of I/O.
+     * 
+     * @param handle
+     *            A handle for the device to communicate with.
+     * @param endpoint
+     *            The address of a valid endpoint to communicate with.
+     * @param data
+     *            A suitably-sized data buffer for either input or output
+     *            (depending on endpoint).
+     * @param transferred
+     *            Output location for the number of bytes actually transferred.
+     * @param timeout
+     *            timeout (in millseconds) that this function should wait before
+     *            giving up due to no response being received. For an unlimited
+     *            timeout, use value 0.
+     * @return 0 on success (and populates transferred), {@link #ERROR_TIMEOUT}
+     *         if the transfer timed out (and populates transferred),
+     *         {@link #ERROR_PIPE} if the endpoint halted,
+     *         {@link #ERROR_OVERFLOW} if the device offered more data, see
+     *         Packets and overflows, {@link #ERROR_NO_DEVICE} if the device has
+     *         been disconnected, another ERROR code on other failures.
+     */
+    public static native int bulkTransfer(final DeviceHandle handle,
+        final int endpoint, final ByteBuffer data, final IntBuffer transferred,
+        final int timeout);
+
+    /**
+     * Perform a USB interrupt transfer.
+     * 
+     * The direction of the transfer is inferred from the direction bits of the
+     * endpoint address.
+     * 
+     * For interrupt reads, the length field indicates the maximum length of
+     * data you are expecting to receive. If less data arrives than expected,
+     * this function will return that data, so be sure to check the transferred
+     * output parameter.
+     * 
+     * You should also check the transferred parameter for interrupt writes. Not
+     * all of the data may have been written.
+     * 
+     * Also check transferred when dealing with a timeout error code. libusbx
+     * may have to split your transfer into a number of chunks to satisfy
+     * underlying O/S requirements, meaning that the timeout may expire after
+     * the first few chunks have completed. libusbx is careful not to lose any
+     * data that may have been transferred; do not assume that timeout
+     * conditions indicate a complete lack of I/O.
+     * 
+     * The default endpoint bInterval value is used as the polling interval.
+     * 
+     * @param handle
+     *            A handle for the device to communicate with.
+     * @param endpoint
+     *            The address of a valid endpoint to communicate with.
+     * @param data
+     *            A suitably-sized data buffer for either input or output
+     *            (depending on endpoint).
+     * @param transferred
+     *            Output location for the number of bytes actually transferred.
+     * @param timeout
+     *            Timeout (in millseconds) that this function should wait before
+     *            giving up due to no response being received. For an unlimited
+     *            timeout, use value 0.
+     * @return 0 on success (and populates transferred), {@link #ERROR_TIMEOUT}
+     *         if the transfer timed out, {@link #ERROR_PIPE} if the endpoint
+     *         halted, {@link #ERROR_OVERFLOW} if the device offered more data,
+     *         see Packets and overflows, {@link #ERROR_NO_DEVICE} if the device
+     *         has been disconnected, another ERROR code on other error
+     */
+    public static native int interruptTransfer(final DeviceHandle handle,
+        final int endpoint, final ByteBuffer data, final IntBuffer transferred,
+        final int timeout);
 }

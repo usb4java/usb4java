@@ -58,6 +58,18 @@
     return (TYPE) (*ENV)->GetDirectBufferAddress(ENV, buffer); \
 }
 
+#define DIRECT_BUFFER(ENV, VAR, ACTION) \
+{ \
+    jclass cls = (*ENV)->GetObjectClass(ENV, VAR); \
+    jmethodID method = (*ENV)->GetMethodID(ENV, cls, "isDirect", \
+        "()Z"); \
+    if (!(*ENV)->CallBooleanMethod(ENV, VAR, method)) \
+    { \
+        illegalArgument(ENV, #VAR" must be a direct buffer"); \
+        ACTION; \
+    } \
+}
+
 #define NOT_NULL(ENV, VAR, ACTION) \
     if (!VAR) \
     { \

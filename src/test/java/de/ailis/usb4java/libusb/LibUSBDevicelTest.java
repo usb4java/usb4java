@@ -837,8 +837,8 @@ public class LibUSBDevicelTest
 
     /**
      * Tests the
-     * {@link LibUSB#getDescriptor(DeviceHandle, int, int, ByteBuffer)}
-     * method without a handle.
+     * {@link LibUSB#getDescriptor(DeviceHandle, int, int, ByteBuffer)} method
+     * without a handle.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testGetDescriptorWithoutHandle()
@@ -848,8 +848,8 @@ public class LibUSBDevicelTest
 
     /**
      * Tests the
-     * {@link LibUSB#getDescriptor(DeviceHandle, int, int, ByteBuffer)}
-     * method without a buffer.
+     * {@link LibUSB#getDescriptor(DeviceHandle, int, int, ByteBuffer)} method
+     * without a buffer.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testGetDescriptorWithoutBuffer()
@@ -877,5 +877,135 @@ public class LibUSBDevicelTest
     public void testGetStringDescriptorWithoutBuffer()
     {
         LibUSB.getStringDescriptor(new DeviceHandle(), 0, 0, null);
+    }
+
+    /**
+     * Tests the
+     * {@link LibUSB#controlTransfer(DeviceHandle, int, int, int, int, ByteBuffer, int)}
+     * method without a handle.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testControlTransferWithoutHandle()
+    {
+        LibUSB.controlTransfer(null, 0, 0, 0, 0, ByteBuffer.allocate(0), 0);
+    }
+
+    /**
+     * Tests the
+     * {@link LibUSB#controlTransfer(DeviceHandle, int, int, int, int, ByteBuffer, int)}
+     * method without a buffer.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testControlTransferWithoutBuffer()
+    {
+        LibUSB.controlTransfer(new DeviceHandle(), 0, 0, 0, 0, null, 0);
+    }
+
+    /**
+     * Tests the
+     * {@link LibUSB#controlTransfer(DeviceHandle, int, int, int, int, ByteBuffer, int)}
+     * method with an indirect buffer.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testControlTransferWithIndirectBuffer()
+    {
+        LibUSB.controlTransfer(new DeviceHandle(), 0, 0, 0, 0,
+            ByteBuffer.allocate(0), 0);
+    }
+
+    /**
+     * Tests the
+     * {@link LibUSB#bulkTransfer(DeviceHandle, int, ByteBuffer, IntBuffer, int)}
+     * method without a handle.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testBulkTransferWithoutHandle()
+    {
+        LibUSB.bulkTransfer(null, 0, ByteBuffer.allocate(0),
+            IntBuffer.allocate(1), 0);
+    }
+
+    /**
+     * Tests the
+     * {@link LibUSB#bulkTransfer(DeviceHandle, int, ByteBuffer, IntBuffer, int)}
+     * method without a data buffer.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testBulkTransferWithoutDataBuffer()
+    {
+        LibUSB.bulkTransfer(new DeviceHandle(), 0, null,
+            IntBuffer.allocate(1), 0);
+    }
+
+    /**
+     * Tests the
+     * {@link LibUSB#bulkTransfer(DeviceHandle, int, ByteBuffer, IntBuffer, int)}
+     * method with an indirect data buffer.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testBulkTransferWithIndirectDataBuffer()
+    {
+        LibUSB.bulkTransfer(new DeviceHandle(), 0, ByteBuffer.allocate(0),
+            IntBuffer.allocate(1), 0);
+    }
+
+    /**
+     * Tests the
+     * {@link LibUSB#bulkTransfer(DeviceHandle, int, ByteBuffer, IntBuffer, int)}
+     * method without a transferred buffer.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testBulkTransferWithoutTransferredBuffer()
+    {
+        LibUSB.bulkTransfer(new DeviceHandle(), 0, ByteBuffer.allocate(0),
+            null, 0);
+    }
+
+    /**
+     * Tests the
+     * {@link LibUSB#interruptTransfer(DeviceHandle, int, ByteBuffer, IntBuffer, int)}
+     * method without a handle.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testInterruptTransferWithoutHandle()
+    {
+        LibUSB.interruptTransfer(null, 0, ByteBuffer.allocate(0),
+            IntBuffer.allocate(1), 0);
+    }
+
+    /**
+     * Tests the
+     * {@link LibUSB#interruptTransfer(DeviceHandle, int, ByteBuffer, IntBuffer, int)}
+     * method without a data buffer.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testInterruptTransferWithoutDataBuffer()
+    {
+        LibUSB.interruptTransfer(new DeviceHandle(), 0, null,
+            IntBuffer.allocate(1), 0);
+    }
+
+    /**
+     * Tests the
+     * {@link LibUSB#interruptTransfer(DeviceHandle, int, ByteBuffer, IntBuffer, int)}
+     * method with an indirect data buffer.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testInterruptTransferWithIndirectDataBuffer()
+    {
+        LibUSB.interruptTransfer(new DeviceHandle(), 0, ByteBuffer.allocate(0),
+            IntBuffer.allocate(1), 0);
+    }
+
+    /**
+     * Tests the
+     * {@link LibUSB#interruptTransfer(DeviceHandle, int, ByteBuffer, IntBuffer, int)}
+     * method without a transferred buffer.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testInterruptTransferWithoutTransferredBuffer()
+    {
+        LibUSB.interruptTransfer(new DeviceHandle(), 0, ByteBuffer.allocate(0),
+            null, 0);
     }
 }

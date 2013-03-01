@@ -573,6 +573,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getDescriptor)
 {
     NOT_NULL(env, handle, return 0);
     NOT_NULL(env, data, return 0);
+    DIRECT_BUFFER(env, data, return 0);
     unsigned char *ptr = (*env)->GetDirectBufferAddress(env, data);
     jlong size = (*env)->GetDirectBufferCapacity(env, data);
     return libusb_get_descriptor(unwrapDeviceHandle(env, handle),
@@ -590,8 +591,83 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getStringDescriptor)
 {
     NOT_NULL(env, handle, return 0);
     NOT_NULL(env, data, return 0);
+    DIRECT_BUFFER(env, data, return 0);
     unsigned char *ptr = (*env)->GetDirectBufferAddress(env, data);
     jlong size = (*env)->GetDirectBufferCapacity(env, data);
     return libusb_get_string_descriptor(unwrapDeviceHandle(env, handle),
         index, langId, ptr, size);
+}
+
+/**
+ * int controlTransfer(DeviceHandle, int, int, int, int, ByteBuffer, int)
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, controlTransfer)
+(
+    JNIEnv *env, jclass class, jobject handle, jint bmRequestType,
+    jint bRequest, jint wValue, jint wIndex, jobject data, jint timeout
+)
+{
+    NOT_NULL(env, handle, return 0);
+    NOT_NULL(env, data, return 0);
+    DIRECT_BUFFER(env, data, return 0);
+    unsigned char *ptr = (*env)->GetDirectBufferAddress(env, data);
+    jlong size = (*env)->GetDirectBufferCapacity(env, data);
+    return libusb_control_transfer(unwrapDeviceHandle(env, handle),
+        bmRequestType, bRequest, wValue, wIndex, ptr, size, timeout);
+}
+
+/**
+ * int bulkTransfer(DeviceHandle, int, int, int, int, ByteBuffer, int)
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, bulkTransfer)
+(
+    JNIEnv *env, jclass class, jobject handle, jint endpoint,
+    jobject data, jobject transferred, jint timeout
+)
+{
+    NOT_NULL(env, handle, return 0);
+    NOT_NULL(env, data, return 0);
+    NOT_NULL(env, transferred, return 0);
+    DIRECT_BUFFER(env, data, return 0);
+    int sent;
+    unsigned char *ptr = (*env)->GetDirectBufferAddress(env, data);
+    jlong size = (*env)->GetDirectBufferCapacity(env, data);
+    int result = libusb_bulk_transfer(unwrapDeviceHandle(env, handle),
+        endpoint, ptr, size, &sent, timeout);
+    if (!result)
+    {
+        jclass cls = (*env)->GetObjectClass(env, transferred);
+        jmethodID method = (*env)->GetMethodID(env, cls, "put",
+            "(II)Ljava/nio/IntBuffer;");
+        (*env)->CallVoidMethod(env, transferred, method, 0, sent);
+    }
+    return result;
+}
+
+/**
+ * int interruptTransfer(DeviceHandle, int, int, int, int, ByteBuffer, int)
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, interruptTransfer)
+(
+    JNIEnv *env, jclass class, jobject handle, jint endpoint,
+    jobject data, jobject transferred, jint timeout
+)
+{
+    NOT_NULL(env, handle, return 0);
+    NOT_NULL(env, data, return 0);
+    NOT_NULL(env, transferred, return 0);
+    DIRECT_BUFFER(env, data, return 0);
+    int sent;
+    unsigned char *ptr = (*env)->GetDirectBufferAddress(env, data);
+    jlong size = (*env)->GetDirectBufferCapacity(env, data);
+    int result = libusb_interrupt_transfer(unwrapDeviceHandle(env, handle),
+        endpoint, ptr, size, &sent, timeout);
+    if (!result)
+    {
+        jclass cls = (*env)->GetObjectClass(env, transferred);
+        jmethodID method = (*env)->GetMethodID(env, cls, "put",
+            "(II)Ljava/nio/IntBuffer;");
+        (*env)->CallVoidMethod(env, transferred, method, 0, sent);
+    }
+    return result;
 }
