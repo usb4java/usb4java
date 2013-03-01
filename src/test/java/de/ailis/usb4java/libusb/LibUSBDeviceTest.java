@@ -22,7 +22,7 @@ import org.junit.Test;
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
-public class LibUSBDevicelTest
+public class LibUSBDeviceTest
 {
     /** The libusb contxet. */
     private Context context;
