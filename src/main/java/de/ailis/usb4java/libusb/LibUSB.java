@@ -302,7 +302,7 @@ public final class LibUSB
     // field.
 
     /** Control endpoint. */
-    public static final int LIBUSB_TRANSFER_TYPE_CONTROL = 0;
+    public static final int TRANSFER_TYPE_CONTROL = 0;
 
     /** Isochronous endpoint. */
     public static final int TRANSFER_TYPE_ISOCHRONOUS = 1;
@@ -1039,4 +1039,86 @@ public final class LibUSB
             return buffer.toString();
         return null;
     }
+
+    /**
+     * Get the USB configuration descriptor for the currently active
+     * configuration.
+     * 
+     * This is a non-blocking function which does not involve any requests being
+     * sent to the device.
+     * 
+     * @param device
+     *            A device.
+     * @param descriptor
+     *            Output location for the USB configuration descriptor. Only
+     *            valid if 0 was returned. Must be freed with
+     *            {@link #freeConfigDescriptor(ConfigDescriptor)} after use.
+     * @return 0 on success, {@link #ERROR_NOT_FOUND} if the device is in
+     *         unconfigured state another ERROR code on error
+     * 
+     * @see #getConfigDescriptor(Device, int, ConfigDescriptor)
+     */
+    public static native int getActiveConfigDescriptor(final Device device,
+        final ConfigDescriptor descriptor);
+
+    /**
+     * Get a USB configuration descriptor based on its index.
+     * 
+     * This is a non-blocking function which does not involve any requests being
+     * sent to the device.
+     * 
+     * @param device
+     *            A device.
+     * @param index
+     *            The index of the configuration you wish to retrieve
+     * @param descriptor
+     *            Output location for the USB configuration descriptor. Only
+     *            valid if 0 was returned. Must be freed with
+     *            {@link #freeConfigDescriptor(ConfigDescriptor)} after use.
+     * @return 0 on success {@link #ERROR_NOT_FOUND} if the configuration does
+     *         not exist another ERROR code on error.
+     * 
+     * @see #getActiveConfigDescriptor(Device, ConfigDescriptor)
+     * @see #getConfigDescriptorByValue(Device, int, ConfigDescriptor)
+     */
+    public static native int getConfigDescriptor(final Device device,
+        final int index, final ConfigDescriptor descriptor);
+
+    /**
+     * Get a USB configuration descriptor with a specific bConfigurationValue.
+     * 
+     * This is a non-blocking function which does not involve any requests being
+     * sent to the device.
+     * 
+     * @param device
+     *            A device.
+     * @param value
+     *            The bConfigurationValue of the configuration you wish to
+     *            retrieve.
+     * @param descriptor
+     *            Output location for the USB configuration descriptor. Only
+     *            valid if 0 was returned. Must be freed with
+     *            libusb_free_config_descriptor() after use.
+     * @return 0 on success {@link #ERROR_NOT_FOUND} if the configuration does
+     *         not exist another ERROR code on error See also:
+     * 
+     * @see #getActiveConfigDescriptor(Device, ConfigDescriptor)
+     * @see #getConfigDescriptor(Device, int, ConfigDescriptor)
+     */
+    public static native int getConfigDescriptorByValue(final Device device,
+        final int value, final ConfigDescriptor descriptor);
+
+    /**
+     * Free a configuration descriptor obtained from
+     * {@link #getConfigDescriptor(Device, int, ConfigDescriptor)} or
+     * {@link #getActiveConfigDescriptor(Device, ConfigDescriptor)}.
+     * 
+     * It is safe to call this function with a NULL config parameter, in which
+     * case the function simply returns.
+     * 
+     * @param descriptor
+     *            The configuration descriptor to free
+     */
+    public static native void freeConfigDescriptor(
+        final ConfigDescriptor descriptor);
 }

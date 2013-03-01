@@ -92,6 +92,69 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
      * 
      * @return The extra descriptors length.
      */
-    public native int extra_length();
+    public native int extraLength();
 
+
+    /**
+     * Returns a dump of this descriptor.
+     *
+     * @return The descriptor dump.
+     */
+    public String dump()
+    {
+        return String.format("Endpoint Descriptor:%n"
+            + "  bLength           %5d%n"
+            + "  bDecsriptorType   %5d%n"
+            + "  bEndpointAddress   0x%02x%n"
+            + "  bmAttributes       0x%02x%n"
+            + "  wMaxPacketSize    %5d%n"
+            + "  bInterval         %5d%n"
+            + "  extralen     %10d%n"
+            + "  extra:%n"
+            + "%s",
+            bLength(), bDescriptorType(), bEndpointAddress(), bmAttributes(),
+            wMaxPacketSize(), bInterval(), extraLength(),
+            DumpUtils.toHexDump(extra()).replaceAll("(?m)^", "    "));
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(final Object o)
+    {
+        if (o == null) return false;
+        if (o == this) return true;
+        if (o.getClass() != getClass()) return false;
+        final EndpointDescriptor other = (EndpointDescriptor) o;
+        return bDescriptorType() == other.bDescriptorType()
+            && bLength() == other.bLength()
+            && bEndpointAddress() == other.bEndpointAddress()
+            && bmAttributes() == other.bmAttributes()
+            && bInterval() == other.bInterval()
+            && bSynchAddress() == other.bSynchAddress()
+            && wMaxPacketSize() == other.wMaxPacketSize()
+            && extraLength() == other.extraLength()
+            && extra().equals(other.extra());
+    }
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode()
+    {
+        int result = 17;
+        result = 37 * result + bLength();
+        result = 37 * result + bDescriptorType();
+        result = 37 * result + bEndpointAddress();
+        result = 37 * result + bmAttributes();
+        result = 37 * result + wMaxPacketSize();
+        result = 37 * result + bInterval();
+        result = 37 * result + bRefresh();
+        result = 37 * result + bSynchAddress();
+        result = 37 * result + extra().hashCode();
+        result = 37 * result + extraLength();
+        return result;
+    }
 }

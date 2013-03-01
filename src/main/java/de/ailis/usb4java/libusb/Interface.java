@@ -11,7 +11,6 @@
 
 package de.ailis.usb4java.libusb;
 
-
 /**
  * A collection of alternate settings for a particular USB interface.
  */
@@ -22,16 +21,44 @@ public final class Interface
 
     /**
      * Returns the array with interface descriptors. The length of this array is
-     * determined by the {@link #numAltSetting()} field.
+     * determined by the {@link #numAltsetting()} field.
      * 
-     * @return The array with interfaces.
+     * @return The array with interface descriptors.
      */
-    public native InterfaceDescriptor[] iface();
+    public native InterfaceDescriptor[] altsetting();
 
     /**
      * Returns the number of alternate settings that belong to this interface.
      * 
      * @return The number of alternate settings.
      */
-    public native int numAltSetting();
+    public native int numAltsetting();
+
+    /**
+     * Returns a dump of this interface.
+     *
+     * @return The interface dump.
+     */
+    public String dump()
+    {
+        return dump(null);
+    }
+
+    /**
+     * Returns a dump of this descriptor.
+     *
+     * @param handle
+     *            The USB device handle for resolving string descriptors. If
+     *            null then no strings are resolved.
+     * @return The descriptor dump.
+     */
+    public String dump(final DeviceHandle handle)
+    {
+        final StringBuilder builder = new StringBuilder();
+        for (final InterfaceDescriptor descriptor : altsetting())
+        {
+            builder.append(descriptor.dump(handle));
+        }
+        return builder.toString();
+    }
 }

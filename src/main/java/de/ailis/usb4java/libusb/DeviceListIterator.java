@@ -46,7 +46,7 @@ final class DeviceListIterator implements Iterator<Device>
     @Override
     public Device next()
     {
-        return this.devices.get(++this.index);
+        return this.devices.get(this.index++);
     }
 
     /**

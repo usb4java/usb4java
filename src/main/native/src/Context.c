@@ -12,5 +12,5 @@ void setContext(JNIEnv* env, libusb_context* context, jobject object)
 
 libusb_context* unwrapContext(JNIEnv* env, jobject context)
 {
-     UNWRAP_POINTER(env, context, libusb_context*);
+    UNWRAP_POINTER(env, context, libusb_context*);
 }

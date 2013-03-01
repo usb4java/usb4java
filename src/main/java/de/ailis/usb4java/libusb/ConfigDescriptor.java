@@ -79,7 +79,7 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
      *
      * @return The array with interfaces.
      */
-    public native InterfaceDescriptor[] iface();
+    public native Interface[] iface();
     
     /**
      * Extra descriptors.
@@ -96,6 +96,92 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
      * 
      * @return The extra descriptors length.
      */
-    public native int extra_length();
+    public native int extraLength();
+    
 
+    /**
+     * Returns a dump of this descriptor.
+     *
+     * @return The descriptor dump.
+     */
+    public String dump()
+    {
+        return dump(null);
+    }
+
+    /**
+     * Returns a dump of this descriptor.
+     *
+     * @param handle
+     *            The USB device handle for resolving string descriptors. If
+     *            null then no strings are resolved.
+     * @return The descriptor dump.
+     */
+    public String dump(final DeviceHandle handle)
+    {
+        final StringBuilder builder = new StringBuilder();
+        builder
+            .append(String.format("Configuration Descriptor:%n"
+                + "  bLength               %5d%n"
+                + "  bDescriptorType       %5d%n"
+                + "  wTotalLength          %5d%n"
+                + "  bNumInterfaces        %5d%n"
+                + "  bConfigurationValue   %5d%n"
+                + "  iConfiguration        %5d%n"
+                + "  bmAttributes           %#04x%n"
+                + "  MaxPower              %5d mA%n"
+                + "  extralen         %10d%n"
+                + "  extra:%n"
+                + "%s",
+                bLength(), bDescriptorType(), wTotalLength(), bNumInterfaces(),
+                bConfigurationValue(), iConfiguration(), bmAttributes(),
+                bMaxPower() * 2, extraLength(), DumpUtils.toHexDump(extra())
+                    .replaceAll("(?m)^", "    ")));
+        for (final Interface descriptor : iface())
+        {
+            builder.append(descriptor.dump(handle)
+                    .replaceAll("(?m)^", "  "));
+        }
+        return builder.toString();
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(final Object o)
+    {
+        if (o == null) return false;
+        if (o == this) return true;
+        if (o.getClass() != getClass()) return false;
+        final ConfigDescriptor other = (ConfigDescriptor) o;
+        return bDescriptorType() == other.bDescriptorType()
+            && bLength() == other.bLength()
+            && bConfigurationValue() == other.bConfigurationValue()
+            && bmAttributes() == other.bmAttributes()
+            && bNumInterfaces() == other.bNumInterfaces()
+            && iConfiguration() == other.iConfiguration()
+            && bMaxPower() == other.bMaxPower()
+            && wTotalLength() == other.wTotalLength();
+    }
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode()
+    {
+        int result = 17;
+        result = 37 * result + bLength();
+        result = 37 * result + bDescriptorType();
+        result = 37 * result + wTotalLength();
+        result = 37 * result + bNumInterfaces();
+        result = 37 * result + bConfigurationValue();
+        result = 37 * result + iConfiguration();
+        result = 37 * result + bmAttributes();
+        result = 37 * result + bMaxPower();
+        result = 37 * result + extra().hashCode();
+        result = 37 * result + extraLength();
+        return result;
+    }
 }

@@ -146,11 +146,11 @@ public final class DeviceDescriptor implements UsbDeviceDescriptor
             + "  iProduct              %5d %s%n"
             + "  iSerialNumber         %5d %s%n"
             + "  bNumConfigurations    %5d%n",
-            bLength(), bDescriptorType(), decodeBCD(bcdUSB()),
-            bDeviceClass(), getUSBClassName(bDeviceClass()),
+            bLength(), bDescriptorType(), DumpUtils.decodeBCD(bcdUSB()),
+            bDeviceClass(), DumpUtils.getUSBClassName(bDeviceClass()),
             bDeviceSubClass(), bDeviceProtocol(),
             bMaxPacketSize0(), idVendor(), idProduct(),
-            decodeBCD(bcdDevice()), iManufacturer, sManufacturer,
+            DumpUtils.decodeBCD(bcdDevice()), iManufacturer, sManufacturer,
             iProduct, sProduct, iSerialNumber, sSerialNumber,
             bNumConfigurations());
     }
@@ -205,68 +205,5 @@ public final class DeviceDescriptor implements UsbDeviceDescriptor
         result = 37 * result + iSerialNumber();
         result = 37 * result + bNumConfigurations();
         return result;
-    }
-
-    /**
-     * Returns the name of the specified USB class. "unknown" is returned for a
-     * class which is unknown to libusb.
-     * 
-     * @param usbClass
-     *            The numeric USB class.
-     * @return The USB class name.
-     */
-    private static String getUSBClassName(final int usbClass)
-    {
-        switch (usbClass)
-        {
-            case LibUSB.CLASS_PER_INTERFACE:
-                return "Per interface";
-            case LibUSB.CLASS_AUDIO:
-                return "Audio";
-            case LibUSB.CLASS_COMM:
-                return "Communications";
-            case LibUSB.CLASS_HID:
-                return "HID";
-            case LibUSB.CLASS_IMAGE:
-                return "Imaging";
-            case LibUSB.CLASS_PRINTER:
-                return "Printer";
-            case LibUSB.CLASS_MASS_STORAGE:
-                return "Mass Storage";
-            case LibUSB.CLASS_HUB:
-                return "Hub";
-            case LibUSB.CLASS_DATA:
-                return "Data";
-            case LibUSB.CLASS_SMART_CARD:
-                return "Smart Card";
-            case LibUSB.CLASS_CONTENT_SECURITY:
-                return "Content Security";
-            case LibUSB.CLASS_VIDEO:
-                return "Video";
-            case LibUSB.CLASS_VENDOR_SPEC:
-                return "Vendor-specific";
-            case LibUSB.CLASS_APPLICATION:
-                return "Application";
-            case LibUSB.CLASS_PERSONAL_HEALTHCARE:
-                return "Personal Healthcare";
-            case LibUSB.CLASS_DIAGNOSTIC_DEVICE:
-                return "Diagnostic Device";
-            case LibUSB.CLASS_WIRELESS:
-                return "Wireless";
-            default:
-                return "Unknown";
-        }
-    }
-
-    /**
-     * Decodes a binary-coded decimal into a string and returns it.
-     * 
-     * @param bcd
-     *            The binary-coded decimal to decode.
-     * @return The decoded binary-coded decimal.
-     */
-    private static String decodeBCD(final int bcd)
-    {
-        return String.format("%x.%02x", bcd >> Byte.SIZE, bcd & 0xff);
     }
 }

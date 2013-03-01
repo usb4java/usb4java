@@ -34,6 +34,7 @@
 
 #define UNWRAP_POINTER(ENV, OBJECT, TYPE) \
 { \
+    if (!OBJECT) return NULL; \
     jclass cls = (*ENV)->GetObjectClass(ENV, OBJECT); \
     jfieldID field = (*ENV)->GetFieldID(ENV, cls, "pointer", "J"); \
     return (TYPE) (*ENV)->GetLongField(ENV, OBJECT, field); \
@@ -56,5 +57,14 @@
     jobject buffer = (*ENV)->GetObjectField(ENV, OBJECT, field); \
     return (TYPE) (*ENV)->GetDirectBufferAddress(ENV, buffer); \
 }
+
+#define NOT_NULL(ENV, VAR, ACTION) \
+    if (!VAR) \
+    { \
+        illegalArgument(ENV, #VAR" must not be null"); \
+        ACTION; \
+    }
+
+jint illegalArgument(JNIEnv *env, char *message);
 
 #endif
