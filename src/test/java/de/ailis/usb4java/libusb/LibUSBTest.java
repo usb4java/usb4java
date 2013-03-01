@@ -204,7 +204,6 @@ public class LibUSBTest
     @Test
     public void testErrorName()
     {
-        assertEquals("LIBUSB_SUCCESS", LibUSB.errorName(LibUSB.SUCCESS));
         assertEquals("LIBUSB_ERROR_IO", LibUSB.errorName(LibUSB.ERROR_IO));
         assertEquals("**UNKNOWN**", LibUSB.errorName(0x1234));
     }
