@@ -179,9 +179,9 @@ public final class LibUSB
     public static final int RECIPIENT_OTHER = 0x03;
 
     // Capabilities supported by this instance of libusb. Test if the loaded
-    // library supports a given capability by calling libusb_has_capability().
+    // library supports a given capability by calling hasCapability().
 
-    /** The libusb_has_capability() API is available. */
+    /** The hasCapability() API is available. */
     public static final int CAP_HAS_CAPABILITY = 0x00;
 
     // Device and/or Interface Class codes.
@@ -250,12 +250,16 @@ public final class LibUSB
     // Descriptor types as defined by the USB specification.
 
     /**
-     * Device descriptor. See libusb_device_descriptor.
+     * Device descriptor.
+     * 
+     * @see DeviceDescriptor
      */
     public static final int DT_DEVICE = 0x01;
 
     /**
-     * Configuration descriptor. See libusb_config_descriptor.
+     * Configuration descriptor.
+     * 
+     * @see ConfigDescriptor
      */
     public static final int DT_CONFIG = 0x02;
 
@@ -265,14 +269,14 @@ public final class LibUSB
     /**
      * Interface descriptor.
      * 
-     * See libusb_interface_descriptor.
+     * @see InterfaceDescriptor
      */
     public static final int DT_INTERFACE = 0x04;
 
     /**
      * Endpoint descriptor.
      * 
-     * See libusb_endpoint_descriptor.
+     * @see EndpointDescriptor
      */
     public static final int DT_ENDPOINT = 0x05;
 
@@ -316,7 +320,7 @@ public final class LibUSB
 
     // Synchronization type for isochronous endpoints.
     // Values for bits 2:3 of the bmAttributes field in
-    // libusb_endpoint_descriptor.
+    // EndpointDescriptor.
 
     /** No synchronization. */
     public static final int ISO_SYNC_TYPE_NONE = 0;
@@ -331,7 +335,7 @@ public final class LibUSB
     public static final int ISO_SYNC_TYPE_SYNC = 3;
 
     // Usage type for isochronous endpoints. Values for bits 4:5 of the
-    // bmAttributes field in libusb_endpoint_descriptor.
+    // bmAttributes field in EndpointDescriptor.
 
     /** Data endpoint. */
     public static final int ISO_USAGE_TYPE_DATA = 0;
@@ -1099,7 +1103,7 @@ public final class LibUSB
      * @param descriptor
      *            Output location for the USB configuration descriptor. Only
      *            valid if 0 was returned. Must be freed with
-     *            libusb_free_config_descriptor() after use.
+     *            {@link #freeConfigDescriptor(ConfigDescriptor)} after use.
      * @return 0 on success {@link #ERROR_NOT_FOUND} if the configuration does
      *         not exist another ERROR code on error See also:
      * 
@@ -1290,4 +1294,371 @@ public final class LibUSB
     public static native int interruptTransfer(final DeviceHandle handle,
         final int endpoint, final ByteBuffer data, final IntBuffer transferred,
         final int timeout);
+
+    /**
+     * Attempt to acquire the event handling lock.
+     * 
+     * This lock is used to ensure that only one thread is monitoring libusbx
+     * event sources at any one time.
+     * 
+     * You only need to use this lock if you are developing an application which
+     * calls poll() or select() on libusbx's file descriptors directly. If you
+     * stick to libusbx's event handling loop functions (e.g.
+     * {@link #handleEvents(Context)}) then you do not need to be concerned with
+     * this locking.
+     * 
+     * While holding this lock, you are trusted to actually be handling events.
+     * If you are no longer handling events, you must call
+     * {@link #unlockEvents(Context)} as soon as possible.
+     * 
+     * @param context
+     *            The context to operate on, or NULL for the default context.
+     * @return 0 if the lock was obtained successfully, 1 if the lock was not
+     *         obtained (i.e. another thread holds the lock)
+     */
+    public static native int tryLockEvents(final Context context);
+
+    /**
+     * Acquire the event handling lock, blocking until successful acquisition if
+     * it is contended.
+     * 
+     * This lock is used to ensure that only one thread is monitoring libusbx
+     * event sources at any one time.
+     * 
+     * You only need to use this lock if you are developing an application which
+     * calls poll() or select() on libusbx's file descriptors directly. If you
+     * stick to libusbx's event handling loop functions (e.g.
+     * {@link #handleEvents(Context)}) then you do not need to be concerned with
+     * this locking.
+     * 
+     * While holding this lock, you are trusted to actually be handling events.
+     * If you are no longer handling events, you must call
+     * {@link #unlockEvents(Context)} as soon as possible.
+     * 
+     * @param context
+     *            The context to operate on, or NULL for the default context.
+     */
+    public static native void lockEvents(final Context context);
+
+    /**
+     * Release the lock previously acquired with {@link #tryLockEvents(Context)}
+     * or {@link #lockEvents(Context)}.
+     * 
+     * Releasing this lock will wake up any threads blocked on
+     * {@link #waitForEvent(Context, long)}.
+     * 
+     * @param context
+     *            The context to operate on, or NULL for the default context
+     */
+    public static native void unlockEvents(final Context context);
+
+    /**
+     * Determine if it is still OK for this thread to be doing event handling.
+     * 
+     * Sometimes, libusbx needs to temporarily pause all event handlers, and
+     * this is the function you should use before polling file descriptors to
+     * see if this is the case.
+     * 
+     * If this function instructs your thread to give up the events lock, you
+     * should just continue the usual logic that is documented in Multi-threaded
+     * applications and asynchronous I/O. On the next iteration, your thread
+     * will fail to obtain the events lock, and will hence become an event
+     * waiter.
+     * 
+     * This function should be called while the events lock is held: you don't
+     * need to worry about the results of this function if your thread is not
+     * the current event handler.
+     * 
+     * @param context
+     *            The context to operate on, or NULL for the default context.
+     * @return 1 if event handling can start or continue, 0 if this thread must
+     *         give up the events lock
+     */
+    public static native int eventHandlingOk(final Context context);
+
+    /**
+     * Determine if an active thread is handling events (i.e. if anyone is
+     * holding the event handling lock).
+     * 
+     * @param context
+     *            The context to operate on, or NULL for the default context.
+     * @return 1 if a thread is handling events, 0 if there are no threads
+     *         currently handling events.
+     */
+    public static native int eventHandlerActive(final Context context);
+
+    /**
+     * Acquire the event waiters lock.
+     * 
+     * This lock is designed to be obtained under the situation where you want
+     * to be aware when events are completed, but some other thread is event
+     * handling so calling {@link #handleEvents(Context)} is not allowed.
+     * 
+     * You then obtain this lock, re-check that another thread is still handling
+     * events, then call {@link #waitForEvent(Context, long)}.
+     * 
+     * You only need to use this lock if you are developing an application which
+     * calls poll() or select() on libusbx's file descriptors directly, and may
+     * potentially be handling events from 2 threads simultaenously. If you
+     * stick to libusbx's event handling loop functions (e.g.
+     * {@link #handleEvents(Context)}) then you do not need to be concerned with
+     * this locking.
+     * 
+     * @param context
+     *            The context to operate on, or NULL for the default context.
+     */
+    public static native void lockEventWaiters(final Context context);
+
+    /**
+     * Release the event waiters lock.
+     * 
+     * @param context
+     *            The context to operate on, or NULL for the default context.
+     */
+    public static native void unlockEventWaiters(final Context context);
+
+    /**
+     * Wait for another thread to signal completion of an event.
+     * 
+     * Must be called with the event waiters lock held, see
+     * {@link #lockEventWaiters(Context)}.
+     * 
+     * This function will block until any of the following conditions are met:
+     * 
+     * The timeout expires A transfer completes A thread releases the event
+     * handling lock through {@link #unlockEvents(Context)} Condition 1 is
+     * obvious. Condition 2 unblocks your thread after the callback for the
+     * transfer has completed. Condition 3 is important because it means that
+     * the thread that was previously handling events is no longer doing so, so
+     * if any events are to complete, another thread needs to step up and start
+     * event handling.
+     * 
+     * This function releases the event waiters lock before putting your thread
+     * to sleep, and reacquires the lock as it is being woken up.
+     * 
+     * @param context
+     *            The context to operate on, or NULL for the default context.
+     * @param timeout
+     *            Maximum timeout for this blocking function. A 0 value
+     *            indicates unlimited timeout.
+     * 
+     * @return 0 after a transfer completes or another thread stops event
+     *         handling, 1 if the timeout expired
+     */
+    public static native int waitForEvent(final Context context,
+        final long timeout);
+
+    /**
+     * Handle any pending events.
+     * 
+     * libusbx determines "pending events" by checking if any timeouts have
+     * expired and by checking the set of file descriptors for activity.
+     * 
+     * If a zero timeval is passed, this function will handle any
+     * already-pending events and then immediately return in non-blocking style.
+     * 
+     * If a non-zero timeval is passed and no events are currently pending, this
+     * function will block waiting for events to handle up until the specified
+     * timeout. If an event arrives or a signal is raised, this function will
+     * return early.
+     * 
+     * If the parameter completed is not NULL then after obtaining the event
+     * handling lock this function will return immediately if the integer
+     * pointed to is not 0. This allows for race free waiting for the completion
+     * of a specific transfer.
+     * 
+     * @param context
+     *            the context to operate on, or NULL for the default context
+     * @param timeout
+     *            the maximum time to block waiting for events, or 0 for
+     *            non-blocking mode.
+     * @param completed
+     *            Buffer for completion integer to check, or NULL.
+     * @return 0 on success, or a ERROR code on failure
+     */
+    public static native int handleEventsTimeoutCompleted(
+        final Context context, final long timeout, final IntBuffer completed);
+
+    /**
+     * Handle any pending events.
+     * 
+     * Like {@link #handleEventsTimeoutCompleted(Context, long, IntBuffer)}, but
+     * without the completed parameter, calling this function is equivalent to
+     * calling {@link #handleEventsTimeoutCompleted(Context, long, IntBuffer)}
+     * with a NULL completed parameter.
+     * 
+     * This function is kept primarily for backwards compatibility. All new code
+     * should call {@link #handleEventsCompleted(Context, IntBuffer)} or
+     * {@link #handleEventsTimeoutCompleted(Context, long, IntBuffer)} to avoid
+     * race conditions.
+     * 
+     * @param context
+     *            The context to operate on, or NULL for the default context
+     * @param timeout
+     *            The maximum time to block waiting for events, or an all zero
+     *            timeval struct for non-blocking mode
+     * @return 0 on success, or a ERROR code on failure
+     */
+    public static native int handleEventsTimeout(final Context context,
+        final long timeout);
+
+    /**
+     * Handle any pending events in blocking mode.
+     * 
+     * There is currently a timeout hardcoded at 60 seconds but we plan to make
+     * it unlimited in future. For finer control over whether this function is
+     * blocking or non-blocking, or for control over the timeout, use
+     * {@link #handleEventsTimeoutCompleted(Context, long, IntBuffer)} instead.
+     * 
+     * This function is kept primarily for backwards compatibility. All new code
+     * should call {@link #handleEventsCompleted(Context, IntBuffer)} or
+     * {@link #handleEventsTimeoutCompleted(Context, long, IntBuffer)} to avoid
+     * race conditions.
+     * 
+     * @param context
+     *            The context to operate on, or NULL for the default context.
+     * @return 0 on success, or a ERROR code on failure.
+     */
+    public static native int handleEvents(final Context context);
+
+    /**
+     * Handle any pending events in blocking mode.
+     * 
+     * Like {@link #handleEvents(Context)}, with the addition of a completed
+     * parameter to allow for race free waiting for the completion of a specific
+     * transfer.
+     * 
+     * See {@link #handleEventsTimeoutCompleted(Context, long, IntBuffer)} for
+     * details on the completed parameter.
+     * 
+     * @param context
+     *            The context to operate on, or NULL for the default context.
+     * @param completed
+     *            Buffer for completion integer to check, or NULL.
+     * @return 0 on success, or a ERROR code on failure.
+     */
+    public static native int handleEventsCompleted(final Context context,
+        final IntBuffer completed);
+
+    /**
+     * Handle any pending events by polling file descriptors, without checking
+     * if any other threads are already doing so.
+     * 
+     * Must be called with the event lock held, see {@link #lockEvents(Context)}
+     * .
+     * 
+     * This function is designed to be called under the situation where you have
+     * taken the event lock and are calling poll()/select() directly on
+     * libusbx's file descriptors (as opposed to using
+     * {@link #handleEvents(Context)} or similar). You detect events on
+     * libusbx's descriptors, so you then call this function with a zero timeout
+     * value (while still holding the event lock).
+     * 
+     * @param context
+     *            The context to operate on, or NULL for the default context.
+     * @param timeout
+     *            The maximum time to block waiting for events, or zero for
+     *            non-blocking mode
+     * @return 0 on success, or a ERROR code on failure.
+     */
+    public static native int handleEventsLocked(final Context context,
+        final long timeout);
+
+    /**
+     * Determines whether your application must apply special timing
+     * considerations when monitoring libusbx's file descriptors.
+     * 
+     * This function is only useful for applications which retrieve and poll
+     * libusbx's file descriptors in their own main loop (The more advanced
+     * option).
+     * 
+     * Ordinarily, libusbx's event handler needs to be called into at specific
+     * moments in time (in addition to times when there is activity on the file
+     * descriptor set). The usual approach is to use
+     * {@link #getNextTimeout(Context, IntBuffer)} to learn about when the next
+     * timeout occurs, and to adjust your poll()/select() timeout accordingly so
+     * that you can make a call into the library at that time.
+     * 
+     * Some platforms supported by libusbx do not come with this baggage - any
+     * events relevant to timing will be represented by activity on the file
+     * descriptor set, and {@link #getNextTimeout(Context, IntBuffer)} will
+     * always return 0. This function allows you to detect whether you are
+     * running on such a platform.
+     * 
+     * @param context
+     *            The context to operate on, or NULL for the default context
+     * @return 0 if you must call into libusbx at times determined by
+     *         {@link #getNextTimeout(Context, IntBuffer)}, or 1 if all timeout
+     *         events are handled internally or through regular activity on the
+     *         file descriptors.
+     */
+    public static native int pollfdsHandleTimeouts(final Context context);
+
+    /**
+     * Determine the next internal timeout that libusbx needs to handle.
+     * 
+     * You only need to use this function if you are calling poll() or select()
+     * or similar on libusbx's file descriptors yourself - you do not need to
+     * use it if you are calling {@link #handleEvents(Context)} or a variant
+     * directly.
+     * 
+     * You should call this function in your main loop in order to determine how
+     * long to wait for select() or poll() to return results. libusbx needs to
+     * be called into at this timeout, so you should use it as an upper bound on
+     * your select() or poll() call.
+     * 
+     * When the timeout has expired, call into
+     * {@link #handleEventsTimeout(Context, long)} (perhaps in non-blocking
+     * mode) so that libusbx can handle the timeout.
+     * 
+     * This function may return 1 (success) and an all-zero timeval. If this is
+     * the case, it indicates that libusbx has a timeout that has already
+     * expired so you should call {@link #handleEventsTimeout(Context, long)} or
+     * similar immediately. A return code of 0 indicates that there are no
+     * pending timeouts.
+     * 
+     * On some platforms, this function will always returns 0 (no pending
+     * timeouts). See Notes on time-based events.
+     * 
+     * @param context
+     *            The context to operate on, or NULL for the default context
+     * @param timeout
+     *            Output location for a relative time against the current clock
+     *            in which libusbx must be called into in order to process
+     *            timeout events
+     * @return 0 if there are no pending timeouts, 1 if a timeout was returned,
+     *         or {@link #ERROR_OTHER} failure
+     */
+    public static native int getNextTimeout(final Context context,
+        final IntBuffer timeout);
+
+    /**
+     * Register notification functions for file descriptor additions/removals.
+     * 
+     * These functions will be invoked for every new or removed file descriptor
+     * that libusbx uses as an event source.
+     * 
+     * To remove notifiers, pass NULL values for the function pointers.
+     * 
+     * Note that file descriptors may have been added even before you register
+     * these notifiers (e.g. at {@link #init(Context)} time).
+     * 
+     * Additionally, note that the removal notifier may be called during
+     * {@link #exit(Context)} (e.g. when it is closing file descriptors that
+     * were opened and added to the poll set at {@link #init(Context)} time). If
+     * you don't want this, remove the notifiers immediately before calling
+     * {@link #exit(Context)}.
+     * 
+     * @param context
+     *            The context to operate on, or NULL for the default context.
+     * @param addedCallback
+     *            Pointer to function for addition notifications.
+     * @param removedCallback
+     *            Pointer to function for removal notifications.
+     * @param userData
+     *            User data to be passed back to callbacks (useful for passing
+     *            context information).
+     */
+    public static native void setPollfdNotifiers(final Context context,
+        Object addedCallback, Object removedCallback, ByteBuffer userData);
 }
