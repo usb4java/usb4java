@@ -12,6 +12,7 @@
  */
 
 #include <stdlib.h>
+#include <time.h>
 #include "usb4java.h"
 #include "Version.h"
 #include "Context.h"
@@ -671,3 +672,211 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, interruptTransfer)
     }
     return result;
 }
+
+/**
+ * int tryLockEvents(Context)
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, tryLockEvents)
+(
+    JNIEnv *env, jclass class, jobject context
+)
+{
+    return libusb_try_lock_events(unwrapContext(env, context));
+}
+
+/**
+ * void lockEvents(Context)
+ */
+JNIEXPORT void JNICALL METHOD_NAME(LibUSB, lockEvents)
+(
+    JNIEnv *env, jclass class, jobject context
+)
+{
+    libusb_lock_events(unwrapContext(env, context));
+}
+
+/**
+ * void unlockEvents(Context)
+ */
+JNIEXPORT void JNICALL METHOD_NAME(LibUSB, unlockEvents)
+(
+    JNIEnv *env, jclass class, jobject context
+)
+{
+    libusb_unlock_events(unwrapContext(env, context));
+}
+
+/**
+ * int eventHandlingOk(Context)
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, eventHandlingOk)
+(
+    JNIEnv *env, jclass class, jobject context
+)
+{
+    return libusb_event_handling_ok(unwrapContext(env, context));
+}
+
+/**
+ * int eventHandlerActive(Context)
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, eventHandlerActive)
+(
+    JNIEnv *env, jclass class, jobject context
+)
+{
+    return libusb_event_handler_active(unwrapContext(env, context));
+}
+
+/**
+ * void lockEventWaiters(Context)
+ */
+JNIEXPORT void JNICALL METHOD_NAME(LibUSB, lockEventWaiters)
+(
+    JNIEnv *env, jclass class, jobject context
+)
+{
+    libusb_lock_event_waiters(unwrapContext(env, context));
+}
+
+/**
+ * void unlockEventWaiters(Context)
+ */
+JNIEXPORT void JNICALL METHOD_NAME(LibUSB, unlockEventWaiters)
+(
+    JNIEnv *env, jclass class, jobject context
+)
+{
+    libusb_unlock_event_waiters(unwrapContext(env, context));
+}
+
+/**
+ * int waitForEvent(Context, long)
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, waitForEvent)
+(
+    JNIEnv *env, jclass class, jobject context, jlong timeout
+)
+{
+    struct timeval tv;
+    tv.tv_sec = timeout / 1000000;
+    tv.tv_usec = timeout % 1000000;
+    return libusb_wait_for_event(unwrapContext(env, context), &tv);
+}
+
+/**
+ * int handleEventsTimeoutCompleted(Context, long, IntBuffer)
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, handleEventsTimeoutCompleted)
+(
+    JNIEnv *env, jclass class, jobject context, jlong timeout,
+    jobject completed
+)
+{
+    struct timeval tv;
+    tv.tv_sec = timeout / 1000000;
+    tv.tv_usec = timeout % 1000000;
+    int complete;
+    int result = libusb_handle_events_timeout_completed(
+        unwrapContext(env, context), &tv, &complete);
+    if (!result && completed)
+    {
+        jclass cls = (*env)->GetObjectClass(env, completed);
+        jmethodID method = (*env)->GetMethodID(env, cls, "put", "(II)Ljava/nio/IntBuffer;");
+        (*env)->CallVoidMethod(env, completed, method, 0, complete);
+    }
+    return result;
+}
+
+/**
+ * int handleEventsTimeout(Context, long)
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, handleEventsTimeout)
+(
+    JNIEnv *env, jclass class, jobject context, jlong timeout
+)
+{
+    struct timeval tv;
+    tv.tv_sec = timeout / 1000000;
+    tv.tv_usec = timeout % 1000000;
+    return libusb_handle_events_timeout(unwrapContext(env, context), &tv);
+}
+
+/**
+ * int handleEvents(Context)
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, handleEvents)
+(
+    JNIEnv *env, jclass class, jobject context
+)
+{
+    return libusb_handle_events(unwrapContext(env, context));
+}
+
+/**
+ * int handleEventsCompleted(Context, IntBuffer)
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, handleEventsCompleted)
+(
+    JNIEnv *env, jclass class, jobject context, jobject completed
+)
+{
+    int complete;
+    int result = libusb_handle_events_completed(
+        unwrapContext(env, context), &complete);
+    if (!result && completed)
+    {
+        jclass cls = (*env)->GetObjectClass(env, completed);
+        jmethodID method = (*env)->GetMethodID(env, cls, "put", "(II)Ljava/nio/IntBuffer;");
+        (*env)->CallVoidMethod(env, completed, method, 0, complete);
+    }
+    return result;
+}
+
+/**
+ * int handleEventsLocked(Context, long)
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, handleEventsLocked)
+(
+    JNIEnv *env, jclass class, jobject context, jlong timeout
+)
+{
+    struct timeval tv;
+    tv.tv_sec = timeout / 1000000;
+    tv.tv_usec = timeout % 1000000;
+    return libusb_handle_events_locked(unwrapContext(env, context), &tv);
+}
+
+/**
+ * int pollfdsHandleTimeouts(Context)
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, pollfdsHandleTimeouts)
+(
+    JNIEnv *env, jclass class, jobject context
+)
+{
+    return libusb_pollfds_handle_timeouts(unwrapContext(env, context));
+}
+
+/**
+ * int getNextTimeout(Context, LongBuffer)
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getNextTimeout)
+(
+    JNIEnv *env, jclass class, jobject context, jobject timeout
+)
+{
+    struct timeval tv;
+    int result = libusb_get_next_timeout(
+        unwrapContext(env, context), &tv);
+    if (result == 1)
+    {
+        jclass cls = (*env)->GetObjectClass(env, timeout);
+        jmethodID method = (*env)->GetMethodID(env, cls, "put",
+            "(II)Ljava/nio/LongBuffer;");
+        (*env)->CallVoidMethod(env, timeout, method, 0,
+            tv.tv_sec * 1000000 + tv.tv_usec);
+    }
+    return result;
+}
+
