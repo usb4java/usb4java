@@ -185,7 +185,7 @@ public final class Loader
     private static String getExtraLibName()
     {
         final String os = getOS();
-        if (os.equals(OS_LINUX)) return "libusb-1.0.so.0";
+        if (os.equals(OS_LINUX)) return "libusb-1.0." + EXT_SO;
         if (os.equals(OS_WINDOWS)) return "libusb0." + EXT_DLL;
         if (os.equals(OS_MACOSX)) return "libusb." + EXT_DYLIB;
         return null;
@@ -289,24 +289,6 @@ public final class Loader
     }
 
     /**
-     * Extracts the usb4java library (and the libusb library if needed) and
-     * returns the absolute filename to be loaded by Java. The extracted
-     * libraries are marked for deletion on exit.
-     *
-     * @return The absolute path to the extracted usb4java library.
-     */
-    private static String extract()
-    {
-        final String platform, lib, extraLib;
-
-        platform = getPlatform();
-        lib = getLibName();
-        extraLib = getExtraLibName();
-        if (extraLib != null) extractLibrary(platform, extraLib);
-        return extractLibrary(platform, lib);
-    }
-
-    /**
      * Loads the libusbx native wrapper library. Can be safely called
      * multiple times. Duplicate calls are ignored. This method is automatically
      * called when the {@link LibUSB} class is loaded. When you need to do it
@@ -319,8 +301,13 @@ public final class Loader
     public static void load() throws LoaderException
     {
         if (loaded) return;
-        final String path = extract();
-        System.load(path);
+        
+        final String platform = getPlatform();
+        final String lib = getLibName();
+        final String extraLib = getExtraLibName();
+        if (extraLib != null)
+            System.load(extractLibrary(platform, extraLib));
+        System.load(extractLibrary(platform, lib));
         loaded = true;
     }
 }
