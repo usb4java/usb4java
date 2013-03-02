@@ -5,6 +5,7 @@
 
 package de.ailis.usb4java.libusb;
 
+import static de.ailis.usb4java.UsbAssume.assumeUsbTestsEnabled;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
@@ -49,11 +50,19 @@ public class LibUSBDeviceTest
     public void setUp()
     {
         this.context = new Context();
-        LibUSB.init(this.context);
-        this.device = findTestDevice();
-        if (this.device == null)
-            throw new IllegalStateException("Need at least one USB device " +
-                "with at least one endpoint to execute this test");
+        try
+        {
+            LibUSB.init(this.context);
+            this.device = findTestDevice();
+            if (this.device == null)
+                throw new IllegalStateException("Need at least one USB device " +
+                    "with at least one endpoint to execute this test");
+        }
+        catch (Throwable e)
+        {
+            this.context = null;
+            this.device = null;
+        }
     }
 
     /**
@@ -116,7 +125,7 @@ public class LibUSBDeviceTest
     public void tearDown()
     {
         if (this.device != null) LibUSB.unrefDevice(this.device);
-        LibUSB.exit(this.context);
+        if (this.context != null) LibUSB.exit(this.context);
     }
 
     /**
@@ -125,6 +134,7 @@ public class LibUSBDeviceTest
     @Test
     public void testGetBusNumber()
     {
+        assumeUsbTestsEnabled();
         assertTrue(LibUSB.getBusNumber(this.device) >= 0);
     }
 
@@ -134,6 +144,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testGetBusNumberWithoutDevice()
     {
+        assumeUsbTestsEnabled();
         LibUSB.getBusNumber(null);
     }
 
@@ -143,6 +154,7 @@ public class LibUSBDeviceTest
     @Test
     public void testGetPortNumber()
     {
+        assumeUsbTestsEnabled();
         assertTrue(LibUSB.getPortNumber(this.device) >= 0);
     }
 
@@ -152,6 +164,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testGetPortNumberWithoutDevice()
     {
+        assumeUsbTestsEnabled();
         LibUSB.getPortNumber(null);
     }
 
@@ -161,6 +174,7 @@ public class LibUSBDeviceTest
     @Test
     public void testGetPortPath()
     {
+        assumeUsbTestsEnabled();
         byte[] path = new byte[8];
         int result = LibUSB.getPortPath(this.context, this.device, path);
         assertTrue(result > 0);
@@ -174,6 +188,7 @@ public class LibUSBDeviceTest
     @Test
     public void testGetPortPathWithTooSmallBuffer()
     {
+        assumeUsbTestsEnabled();
         byte[] path = new byte[0];
         int result = LibUSB.getPortPath(this.context, this.device, path);
         assertEquals(LibUSB.ERROR_OVERFLOW, result);
@@ -186,6 +201,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testGetPortPathWithoutDevice()
     {
+        assumeUsbTestsEnabled();
         LibUSB.getPortPath(this.context, null, new byte[8]);
     }
 
@@ -196,6 +212,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testGetPortPathWithoutBuffer()
     {
+        assumeUsbTestsEnabled();
         LibUSB.getPortPath(this.context, this.device, null);
     }
 
@@ -205,6 +222,7 @@ public class LibUSBDeviceTest
     @Test
     public void testGetParent()
     {
+        assumeUsbTestsEnabled();
         DeviceList list = new DeviceList();
         LibUSB.getDeviceList(this.context, list);
         try
@@ -228,6 +246,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testGetParentWithoutDevice()
     {
+        assumeUsbTestsEnabled();
         DeviceList list = new DeviceList();
         LibUSB.getDeviceList(this.context, list);
         try
@@ -246,6 +265,7 @@ public class LibUSBDeviceTest
     @Test
     public void testGetDeviceAddress()
     {
+        assumeUsbTestsEnabled();
         assertTrue(LibUSB.getDeviceAddress(this.device) >= 0);
     }
 
@@ -256,6 +276,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testGetDeviceAddressWithoutDevice()
     {
+        assumeUsbTestsEnabled();
         LibUSB.getDeviceAddress(null);
     }
 
@@ -265,6 +286,7 @@ public class LibUSBDeviceTest
     @Test
     public void testGetDeviceSpeed()
     {
+        assumeUsbTestsEnabled();
         int speed = LibUSB.getDeviceSpeed(this.device);
         assertTrue(speed >= LibUSB.SPEED_UNKNOWN && speed <= LibUSB.SPEED_SUPER);
     }
@@ -275,6 +297,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testGetDeviceSpeedWithoutDevice()
     {
+        assumeUsbTestsEnabled();
         LibUSB.getDeviceSpeed(null);
     }
 
@@ -284,6 +307,7 @@ public class LibUSBDeviceTest
     @Test
     public void testGetMaxPacketSizeWithInvalidEndpoint()
     {
+        assumeUsbTestsEnabled();
         assertEquals(LibUSB.ERROR_NOT_FOUND,
             LibUSB.getMaxPacketSize(this.device, 0));
     }
@@ -294,6 +318,7 @@ public class LibUSBDeviceTest
     @Test
     public void testGetMaxPacketSize()
     {
+        assumeUsbTestsEnabled();
         assertTrue(LibUSB.getMaxPacketSize(this.device, this.endpoint) > 0);
     }
 
@@ -304,6 +329,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testGetMaxPacketSizeWithoutDevice()
     {
+        assumeUsbTestsEnabled();
         LibUSB.getMaxPacketSize(null, 0);
     }
 
@@ -313,6 +339,7 @@ public class LibUSBDeviceTest
     @Test
     public void testGetMaxIsoPacketSizeWithInvalidEndpoint()
     {
+        assumeUsbTestsEnabled();
         assertEquals(LibUSB.ERROR_NOT_FOUND,
             LibUSB.getMaxIsoPacketSize(this.device, 0));
     }
@@ -323,6 +350,7 @@ public class LibUSBDeviceTest
     @Test
     public void testGetMaxIsoPacketSize()
     {
+        assumeUsbTestsEnabled();
         assertTrue(LibUSB.getMaxIsoPacketSize(this.device, this.endpoint) > 0);
     }
 
@@ -333,6 +361,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testGetMaxIsoPacketSizeWithoutDevice()
     {
+        assumeUsbTestsEnabled();
         LibUSB.getMaxIsoPacketSize(null, 0);
     }
 
@@ -343,6 +372,7 @@ public class LibUSBDeviceTest
     @Test
     public void testRefUnRefDevice()
     {
+        assumeUsbTestsEnabled();
         Device device = LibUSB.refDevice(this.device);
         try
         {
@@ -352,7 +382,6 @@ public class LibUSBDeviceTest
         {
             LibUSB.unrefDevice(device);
         }
-
     }
 
     /**
@@ -361,6 +390,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testRefDeviceWithoutDevice()
     {
+        assumeUsbTestsEnabled();
         LibUSB.refDevice(null);
     }
 
@@ -370,6 +400,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testUnrefDeviceWithoutDevice()
     {
+        assumeUsbTestsEnabled();
         LibUSB.unrefDevice(null);
     }
 
@@ -383,6 +414,7 @@ public class LibUSBDeviceTest
     @Test
     public void testOpen()
     {
+        assumeUsbTestsEnabled();
         DeviceHandle handle = new DeviceHandle();
         int result = LibUSB.open(this.device, handle);
         assertTrue(result == LibUSB.SUCCESS || result == LibUSB.ERROR_ACCESS);
@@ -396,6 +428,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testOpenWithoutDevice()
     {
+        assumeUsbTestsEnabled();
         DeviceHandle handle = new DeviceHandle();
         LibUSB.open(null, handle);
     }
@@ -407,6 +440,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testOpenWithoutHandle()
     {
+        assumeUsbTestsEnabled();
         LibUSB.open(this.device, null);
     }
 
@@ -416,6 +450,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testCloseWithoutHandle()
     {
+        assumeUsbTestsEnabled();
         LibUSB.close(null);
     }
 
@@ -427,6 +462,7 @@ public class LibUSBDeviceTest
     @Test
     public void testOpenDeviceWithVidPid()
     {
+        assumeUsbTestsEnabled();
         DeviceHandle handle = LibUSB.openDeviceWithVidPid(this.context,
             this.vendorId, this.productId);
         if (handle != null) LibUSB.close(handle);
@@ -438,6 +474,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testGetDeviceWithoutHandle()
     {
+        assumeUsbTestsEnabled();
         LibUSB.getDevice(null);
     }
 
@@ -449,6 +486,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testGetConfigurationWithoutHandle()
     {
+        assumeUsbTestsEnabled();
         LibUSB.getConfiguration(null, IntBuffer.allocate(1));
     }
 
@@ -460,6 +498,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testGetConfigurationWithoutBuffer()
     {
+        assumeUsbTestsEnabled();
         LibUSB.getConfiguration(new DeviceHandle(), null);
     }
 
@@ -470,6 +509,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testSetConfigurationWithoutHandle()
     {
+        assumeUsbTestsEnabled();
         LibUSB.setConfiguration(null, 0);
     }
 
@@ -480,6 +520,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testClaimInterfaceWithoutHandle()
     {
+        assumeUsbTestsEnabled();
         LibUSB.claimInterface(null, 0);
     }
 
@@ -490,6 +531,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testReleaseInterfaceWithoutHandle()
     {
+        assumeUsbTestsEnabled();
         LibUSB.releaseInterface(null, 0);
     }
 
@@ -500,6 +542,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testSetInterfaceAltSettingWithoutHandle()
     {
+        assumeUsbTestsEnabled();
         LibUSB.setInterfaceAltSetting(null, 0, 0);
     }
 
@@ -510,6 +553,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testClearHaltWithoutHandle()
     {
+        assumeUsbTestsEnabled();
         LibUSB.clearHalt(null, 0);
     }
 
@@ -520,6 +564,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testResetDeviceWithoutHandle()
     {
+        assumeUsbTestsEnabled();
         LibUSB.resetDevice(null);
     }
 
@@ -530,6 +575,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testKernelDriverActiveWithoutHandle()
     {
+        assumeUsbTestsEnabled();
         LibUSB.kernelDriverActive(null, 0);
     }
 
@@ -540,6 +586,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testDetachKernelDriverWithoutHandle()
     {
+        assumeUsbTestsEnabled();
         LibUSB.detachKernelDriver(null, 0);
     }
 
@@ -550,6 +597,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testAttachKernelDriverWithoutHandle()
     {
+        assumeUsbTestsEnabled();
         LibUSB.attachKernelDriver(null, 0);
     }
 
@@ -560,6 +608,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testGetDeviceDescriptorWithoutDevice()
     {
+        assumeUsbTestsEnabled();
         LibUSB.getDeviceDescriptor(null, new DeviceDescriptor());
     }
 
@@ -570,6 +619,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testGetDeviceDescriptorWithoutDescriptor()
     {
+        assumeUsbTestsEnabled();
         LibUSB.getDeviceDescriptor(this.device, null);
     }
 
@@ -584,6 +634,7 @@ public class LibUSBDeviceTest
     @Test
     public void testGetDeviceDescriptor()
     {
+        assumeUsbTestsEnabled();
         DeviceDescriptor desc = new DeviceDescriptor();
         LibUSB.getDeviceDescriptor(this.device, desc);
         desc.bcdDevice();
@@ -605,6 +656,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testGetActiveConfigDescriptorWithoutDevice()
     {
+        assumeUsbTestsEnabled();
         LibUSB.getActiveConfigDescriptor(null, new ConfigDescriptor());
     }
 
@@ -616,6 +668,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testGetActiveConfigDescriptorWithoutDescriptor()
     {
+        assumeUsbTestsEnabled();
         LibUSB.getActiveConfigDescriptor(this.device, null);
     }
 
@@ -708,6 +761,7 @@ public class LibUSBDeviceTest
     @Test
     public void testGetActiveConfigDescriptor()
     {
+        assumeUsbTestsEnabled();
         ConfigDescriptor desc = new ConfigDescriptor();
         LibUSB.getActiveConfigDescriptor(this.device, desc);
         try
@@ -728,6 +782,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testGetConfigDescriptorWithoutDevice()
     {
+        assumeUsbTestsEnabled();
         LibUSB.getConfigDescriptor(null, 0, new ConfigDescriptor());
     }
 
@@ -739,6 +794,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testGetConfigDescriptorWithoutDescriptor()
     {
+        assumeUsbTestsEnabled();
         LibUSB.getConfigDescriptor(this.device, 0, null);
     }
 
@@ -749,6 +805,7 @@ public class LibUSBDeviceTest
     @Test
     public void testGetConfigDescriptor()
     {
+        assumeUsbTestsEnabled();
         ConfigDescriptor desc = new ConfigDescriptor();
         LibUSB.getConfigDescriptor(this.device, 0, desc);
         try
@@ -769,6 +826,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testGetConfigDescriptorByValueWithoutDevice()
     {
+        assumeUsbTestsEnabled();
         LibUSB.getConfigDescriptorByValue(null, 0, new ConfigDescriptor());
     }
 
@@ -780,6 +838,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testGetConfigDescriptorByValueWithoutDescriptor()
     {
+        assumeUsbTestsEnabled();
         LibUSB.getConfigDescriptorByValue(this.device, 0, null);
     }
 
@@ -791,6 +850,7 @@ public class LibUSBDeviceTest
     @Test
     public void testGetConfigDescriptorByValue()
     {
+        assumeUsbTestsEnabled();
         ConfigDescriptor desc = new ConfigDescriptor();
         LibUSB.getConfigDescriptorByValue(this.device, this.configValue, desc);
         try
@@ -810,6 +870,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testFreeConfigDescriptorWithoutDescriptor()
     {
+        assumeUsbTestsEnabled();
         LibUSB.freeConfigDescriptor(null);
     }
 
@@ -821,6 +882,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testGetStringDescriptorAsciiWithoutHandle()
     {
+        assumeUsbTestsEnabled();
         LibUSB.getStringDescriptorAscii(null, 0, new StringBuffer(), 0);
     }
 
@@ -832,6 +894,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testGetStringDescriptorAsciiWithoutBuffer()
     {
+        assumeUsbTestsEnabled();
         LibUSB.getStringDescriptorAscii(new DeviceHandle(), 0, null, 0);
     }
 
@@ -843,6 +906,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testGetDescriptorWithoutHandle()
     {
+        assumeUsbTestsEnabled();
         LibUSB.getDescriptor(null, 0, 0, ByteBuffer.allocate(18));
     }
 
@@ -854,6 +918,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testGetDescriptorWithoutBuffer()
     {
+        assumeUsbTestsEnabled();
         LibUSB.getDescriptor(new DeviceHandle(), 0, 0, null);
     }
 
@@ -865,6 +930,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testGetStringDescriptorWithoutHandle()
     {
+        assumeUsbTestsEnabled();
         LibUSB.getStringDescriptor(null, 0, 0, ByteBuffer.allocate(18));
     }
 
@@ -876,6 +942,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testGetStringDescriptorWithoutBuffer()
     {
+        assumeUsbTestsEnabled();
         LibUSB.getStringDescriptor(new DeviceHandle(), 0, 0, null);
     }
 
@@ -887,6 +954,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testControlTransferWithoutHandle()
     {
+        assumeUsbTestsEnabled();
         LibUSB.controlTransfer(null, 0, 0, 0, 0, ByteBuffer.allocate(0), 0);
     }
 
@@ -898,6 +966,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testControlTransferWithoutBuffer()
     {
+        assumeUsbTestsEnabled();
         LibUSB.controlTransfer(new DeviceHandle(), 0, 0, 0, 0, null, 0);
     }
 
@@ -909,6 +978,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testControlTransferWithIndirectBuffer()
     {
+        assumeUsbTestsEnabled();
         LibUSB.controlTransfer(new DeviceHandle(), 0, 0, 0, 0,
             ByteBuffer.allocate(0), 0);
     }
@@ -921,6 +991,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testBulkTransferWithoutHandle()
     {
+        assumeUsbTestsEnabled();
         LibUSB.bulkTransfer(null, 0, ByteBuffer.allocate(0),
             IntBuffer.allocate(1), 0);
     }
@@ -933,6 +1004,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testBulkTransferWithoutDataBuffer()
     {
+        assumeUsbTestsEnabled();
         LibUSB.bulkTransfer(new DeviceHandle(), 0, null,
             IntBuffer.allocate(1), 0);
     }
@@ -945,6 +1017,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testBulkTransferWithIndirectDataBuffer()
     {
+        assumeUsbTestsEnabled();
         LibUSB.bulkTransfer(new DeviceHandle(), 0, ByteBuffer.allocate(0),
             IntBuffer.allocate(1), 0);
     }
@@ -957,6 +1030,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testBulkTransferWithoutTransferredBuffer()
     {
+        assumeUsbTestsEnabled();
         LibUSB.bulkTransfer(new DeviceHandle(), 0, ByteBuffer.allocate(0),
             null, 0);
     }
@@ -969,6 +1043,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testInterruptTransferWithoutHandle()
     {
+        assumeUsbTestsEnabled();
         LibUSB.interruptTransfer(null, 0, ByteBuffer.allocate(0),
             IntBuffer.allocate(1), 0);
     }
@@ -981,6 +1056,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testInterruptTransferWithoutDataBuffer()
     {
+        assumeUsbTestsEnabled();
         LibUSB.interruptTransfer(new DeviceHandle(), 0, null,
             IntBuffer.allocate(1), 0);
     }
@@ -993,6 +1069,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testInterruptTransferWithIndirectDataBuffer()
     {
+        assumeUsbTestsEnabled();
         LibUSB.interruptTransfer(new DeviceHandle(), 0, ByteBuffer.allocate(0),
             IntBuffer.allocate(1), 0);
     }
@@ -1005,6 +1082,7 @@ public class LibUSBDeviceTest
     @Test(expected = IllegalArgumentException.class)
     public void testInterruptTransferWithoutTransferredBuffer()
     {
+        assumeUsbTestsEnabled();
         LibUSB.interruptTransfer(new DeviceHandle(), 0, ByteBuffer.allocate(0),
             null, 0);
     }

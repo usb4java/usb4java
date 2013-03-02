@@ -5,8 +5,8 @@
 
 package de.ailis.usb4java.libusb;
 
+import static de.ailis.usb4java.UsbAssume.assumeUsbTestsEnabled;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -146,6 +146,7 @@ public class LibUSBTest
     @Test
     public void testGetVersion()
     {
+        assumeUsbTestsEnabled();
         final Version version = LibUSB.getVersion();
         assertNotNull(version);
         assertEquals(1, version.major());
@@ -162,6 +163,7 @@ public class LibUSBTest
     @Test
     public void testInitDeinitWithDefaultContext()
     {
+        assumeUsbTestsEnabled();
         assertEquals(LibUSB.SUCCESS, LibUSB.init(null));
         LibUSB.exit(null);
     }
@@ -173,38 +175,9 @@ public class LibUSBTest
     @Test
     public void testInitDeinitWithContext()
     {
+        assumeUsbTestsEnabled();
         Context context = new Context();
         assertEquals(LibUSB.SUCCESS, LibUSB.init(context));
         LibUSB.exit(context);
-    }
-
-    /**
-     * Checks the {@link LibUSB#le16ToCpu(int)} and
-     * {@link LibUSB#cpuToLe16(int)} methods.
-     */
-    @Test
-    public void testEndianConversion()
-    {
-        assertEquals(0x1234, LibUSB.le16ToCpu(LibUSB.cpuToLe16(0x1234)));
-    }
-
-    /**
-     * Tests the {@link LibUSB#hasCapability(int)} method.
-     */
-    @Test
-    public void testHasCapability()
-    {
-        assertTrue(LibUSB.hasCapability(LibUSB.CAP_HAS_CAPABILITY));
-        assertFalse(LibUSB.hasCapability(0x12345678));
-    }
-
-    /**
-     * Tests the {@link LibUSB#errorName(int)} method.
-     */
-    @Test
-    public void testErrorName()
-    {
-        assertEquals("LIBUSB_ERROR_IO", LibUSB.errorName(LibUSB.ERROR_IO));
-        assertEquals("**UNKNOWN**", LibUSB.errorName(0x1234));
     }
 }
