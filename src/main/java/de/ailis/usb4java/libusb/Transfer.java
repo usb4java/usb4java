@@ -1,0 +1,131 @@
+/*
+ * Copyright 2013 Klaus Reimer <k@ailis.de>
+ * See LICENSE.md for licensing information.
+ * 
+ * Based on libusbx <http://libusbx.org/>:  
+ * 
+ * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
+ * Copyright 2007-2008 Daniel Drake <dsd@gentoo.org>
+ * Copyright 2012 Pete Batard <pete@akeo.ie>
+ */
+
+package de.ailis.usb4java.libusb;
+
+import java.nio.ByteBuffer;
+
+/**
+ * The generic USB transfer structure.
+ * 
+ * The user populates this structure and then submits it in order to request a
+ * transfer. After the transfer has completed, the library populates the
+ * transfer with the results and passes it back to the user.
+ */
+public final class Transfer
+{
+    /** The native pointer to the transfer structure. */
+    long pointer;
+
+    /**
+     * Returns the handle of the device that this transfer will be submitted to.
+     * 
+     * @return The handle of the device.
+     */
+    public native DeviceHandle getDevHandle();
+
+    /**
+     * Sets the handle of the device that this transfer will be submitted to.
+     * 
+     * @param handle
+     *            The handle of the device.
+     */
+    public native void setDevHandle(final DeviceHandle handle);
+
+    /**
+     * Returns the bitwise OR combination of libusb transfer flags.
+     * 
+     * @return The transfer flags.
+     */
+    public native int getFlags();
+
+    /**
+     * Sets the bitwise OR combination of libusb transfer flags.
+     * 
+     * @param flags
+     *            The transfer flags to set.
+     */
+    public native void setFlags(final int flags);
+
+    /**
+     * Returns the address of the endpoint where this transfer will be sent.
+     * 
+     * @return The endpoint address.
+     */
+    public native int getEndpoint();
+
+    /**
+     * Sets the address of the endpoint where this transfer will be sent.
+     * 
+     * @param endpoint
+     *            The endpoint address to set
+     */
+    public native void setEndpoint(final int endpoint);
+
+    /**
+     * Returns the type of the endpoint.
+     * 
+     * @return The endpoint type.
+     */
+    public native int getType();
+
+    /**
+     * Sets the type of the endpoint.
+     * 
+     * @param type
+     *            The endpoint type to set.
+     */
+    public native void setType(final int type);
+
+    /**
+     * Returns the timeout for this transfer in milliseconds. A value of 0
+     * indicates no timeout.
+     * 
+     * @return The timeout.
+     */
+    public native long getTimeout();
+
+    /**
+     * Sets the timeout for this transfer in milliseconds. A value of 0
+     * indicates no timeout.
+     * 
+     * @param timeout
+     *            The timeout to set.
+     */
+    public native void setTimeout(final int timeout);
+
+    /**
+     * Returns the status of the transfer. Read-only, and only for use within
+     * transfer callback function.
+     * 
+     * If this is an isochronous transfer, this field may read
+     * {@link LibUSB#TRANSFER_COMPLETED} even if there were errors in the
+     * frames. Use the status field in each packet to determine if errors
+     * occurred.
+     * 
+     * @return The transfer status.
+     */
+    public native int getStatus();
+
+    public native int getLength();
+
+    public native void setLength(final int length);
+
+    public native int getActualLength();
+
+    public native ByteBuffer getBuffer();
+
+    public native void setBuffer(final ByteBuffer buffer);
+
+    public native int getNumIsoPackets();
+
+    public native void setNumIsoPackets(final int numIsoPackets);
+}

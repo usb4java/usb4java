@@ -347,6 +347,80 @@ public final class LibUSB
     /** Implicit feedback Data endpoint. */
     public static final int ISO_USAGE_TYPE_IMPLICIT = 2;
 
+    /** Report short frames as errors. */
+    public static final int TRANSFER_SHORT_NOT_OK = 1 << 0;
+
+    // Transfer flags
+
+    /**
+     * Automatically free transfer buffer during {@link #freeTransfer(Transfer)}
+     * TODO Not sure how to do this memory management between Java and C.
+     */
+    public static final int TRANSFER_FREE_BUFFER = 1 << 1;
+
+    /**
+     * Automatically call {@link #freeTransfer(Transfer)} after callback
+     * returns.
+     * 
+     * If this flag is set, it is illegal to call
+     * {@link #freeTransfer(Transfer)} from your transfer callback, as this will
+     * result in a double-free when this flag is acted upon.
+     */
+    public static final int TRANSFER_FREE_TRANSFER = 1 << 2;
+
+    /**
+     * Terminate transfers that are a multiple of the endpoint's wMaxPacketSize
+     * with an extra zero length packet.
+     * 
+     * This is useful when a device protocol mandates that each logical request
+     * is terminated by an incomplete packet (i.e. the logical requests are not
+     * separated by other means).
+     * 
+     * This flag only affects host-to-device transfers to bulk and interrupt
+     * endpoints. In other situations, it is ignored.
+     * 
+     * This flag only affects transfers with a length that is a multiple of the
+     * endpoint's wMaxPacketSize. On transfers of other lengths, this flag has
+     * no effect. Therefore, if you are working with a device that needs a ZLP
+     * whenever the end of the logical request falls on a packet boundary, then
+     * it is sensible to set this flag on every transfer (you do not have to
+     * worry about only setting it on transfers that end on the boundary).
+     * 
+     * This flag is currently only supported on Linux. On other systems,
+     * libusb_submit_transfer() will return {@link #ERROR_NOT_SUPPORTED} for
+     * every transfer where this flag is set.
+     */
+    public static final int TRANSFER_ADD_ZERO_PACKET = 1 << 3;
+
+    // Transfer status codes
+
+    /**
+     * Transfer completed without error. Note that this does not indicate that
+     * the entire amount of requested data was transferred.
+     */
+    public static int TRANSFER_COMPLETED = 0;
+
+    /** Transfer failed. */
+    public static int TRANSFER_ERROR = 1;
+
+    /** Transfer timed out. */
+    public static int TRANSFER_TIMED_OUT = 2;
+
+    /** Transfer was cancelled. */
+    public static int TRANSFER_CANCELLED = 3;
+
+    /**
+     * For bulk/interrupt endpoints: halt condition detected (endpoint stalled).
+     * For control endpoints: control request not supported.
+     */
+    public static int TRANSFER_STALL = 4;
+
+    /** Device was disconnected. */
+    public static int TRANSFER_NO_DEVICE = 5;
+
+    /** Device sent more data than requested. */
+    public static int TRANSFER_OVERFLOW = 6;
+
     /** The currently set pollfd listener. */
     private static PollfdListener pollfdListener;
 
@@ -1676,12 +1750,13 @@ public final class LibUSB
     }
 
     /**
-     * Callback function, invoked when a new file descriptor should be added 
-     * to the set of file descriptors monitored for events.
+     * Callback function, invoked when a new file descriptor should be added to
+     * the set of file descriptors monitored for events.
      * 
      * @param fd
      *            The new file descriptor,
-     *            @param events events to monitor for, see libusb_pollfd for a description
+     * @param events
+     *            events to monitor for, see libusb_pollfd for a description
      */
     static void triggerPollfdAdded(final FileDescriptor fd, final int events)
     {
@@ -1718,4 +1793,52 @@ public final class LibUSB
      *            The context to operate on, or NULL for the default context
      */
     static native void unsetPollfdNotifiers(final Context context);
+
+    /**
+     * Allocate a libusbx transfer with a specified number of isochronous packet
+     * descriptors.
+     * 
+     * The returned transfer is pre-initialized for you. When the new transfer
+     * is no longer needed, it should be freed with
+     * {@link #freeTransfer(Transfer)}.
+     * 
+     * Transfers intended for non-isochronous endpoints (e.g. control, bulk,
+     * interrupt) should specify an iso_packets count of zero.
+     * 
+     * For transfers intended for isochronous endpoints, specify an appropriate
+     * number of packet descriptors to be allocated as part of the transfer. The
+     * returned transfer is not specially initialized for isochronous I/O; you
+     * are still required to call the {@link Transfer#setNumIsoPackets(int)} a
+     * {@link Transfer#setType(int)} methods accordingly.
+     * 
+     * It is safe to allocate a transfer with some isochronous packets and then
+     * use it on a non-isochronous endpoint. If you do this, ensure that at time
+     * of submission, numIsoPackets is 0 and that type is set appropriately.
+     * 
+     * @param isoPackets
+     *            Number of isochronous packet descriptors to allocate.
+     * @return A newly allocated transfer, or NULL on error
+     */
+    public static native Transfer allocTransfer(final int isoPackets);
+
+    /**
+     * Free a transfer structure.
+     * 
+     * This should be called for all transfers allocated with
+     * {@link #allocTransfer(int)}.
+     * 
+     * If the LIBUSB_TRANSFER_FREE_BUFFER flag is set and the transfer buffer is
+     * non-NULL, this function will also free the transfer buffer using the
+     * standard system memory allocator (e.g. free()).
+     * 
+     * It is legal to call this function with a NULL transfer. In this case, the
+     * function will simply return safely.
+     * 
+     * It is not legal to free an active transfer (one which has been submitted
+     * and has not yet completed).
+     * 
+     * @param transfer
+     *            The transfer to free
+     */
+    public static native void freeTransfer(final Transfer transfer);
 }

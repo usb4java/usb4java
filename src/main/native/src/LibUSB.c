@@ -21,6 +21,7 @@
 #include "DeviceList.h"
 #include "DeviceDescriptor.h"
 #include "ConfigDescriptor.h"
+#include "Transfer.h"
 
 static JavaVM *jvm;
 
@@ -937,4 +938,26 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUSB, unsetPollfdNotifiers)
 {
     libusb_set_pollfd_notifiers(unwrapContext(env, context),
         NULL, NULL, NULL);
+}
+
+/**
+ * Transfer allocTransfer(int)
+ */
+JNIEXPORT jobject JNICALL METHOD_NAME(LibUSB, allocTransfer)
+(
+    JNIEnv *env, jclass class, jint isoPackets
+)
+{
+    return wrapTransfer(env, libusb_alloc_transfer(isoPackets));
+}
+
+/**
+ * void freeTransfer(Transfer)
+ */
+JNIEXPORT void JNICALL METHOD_NAME(LibUSB, freeTransfer)
+(
+    JNIEnv *env, jclass class, jobject transfer
+)
+{
+    libusb_free_transfer(unwrapTransfer(env, transfer));
 }
