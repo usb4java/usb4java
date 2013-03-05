@@ -77,6 +77,15 @@
         ACTION; \
     }
 
+#define THREAD_BEGIN(ENV) \
+    JNIEnv *ENV; \
+    jint getEnvResult = (*jvm)->GetEnv(jvm, (void **) &ENV, JNI_VERSION_1_4); \
+    if (getEnvResult == JNI_EDETACHED) \
+        (*jvm)->AttachCurrentThread(jvm, (void**) &ENV, NULL);
+
+#define THREAD_END \
+    if (getEnvResult == JNI_EDETACHED) (*jvm)->DetachCurrentThread(jvm);
+
 jint illegalArgument(JNIEnv *env, char *message);
 
 #endif

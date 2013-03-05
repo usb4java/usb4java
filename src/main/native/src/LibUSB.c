@@ -22,6 +22,8 @@
 #include "DeviceDescriptor.h"
 #include "ConfigDescriptor.h"
 
+static JavaVM *jvm;
+
 /**
  * Version getVersion()
  */
@@ -880,3 +882,59 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getNextTimeout)
     return result;
 }
 
+static void triggerPollfdAdded(int fd, short events, void *user_data)
+{
+    THREAD_BEGIN(env)
+
+    jclass fdcls = (*env)->FindClass(env, "java/io/FileDescriptor");
+    jmethodID constructor = (*env)->GetMethodID(env, fdcls, "<init>", "(I)V");
+    jobject object = (*env)->NewObject(env, fdcls, constructor, fd);
+
+    jclass cls = (*env)->FindClass(env, PACKAGE_DIR"/LibUSB");
+    jmethodID method = (*env)->GetStaticMethodID(env, cls,
+        "triggerPollfdAdded", "(Ljava/io/FileDescriptor;)V");
+    (*env)->CallStaticVoidMethod(env, cls, method, object, events);
+
+    THREAD_END
+}
+
+static void triggerPollfdRemoved(int fd, void *user_data)
+{
+    THREAD_BEGIN(env)
+
+    jclass fdcls = (*env)->FindClass(env, "java/io/FileDescriptor");
+    jmethodID constructor = (*env)->GetMethodID(env, fdcls, "<init>", "(I)V");
+    jobject object = (*env)->NewObject(env, fdcls, constructor, fd);
+
+    jclass cls = (*env)->FindClass(env, PACKAGE_DIR"/LibUSB");
+    jmethodID method = (*env)->GetStaticMethodID(env, cls,
+        "triggerPollfdRemoved", "(Ljava/io/FileDescriptor;)V");
+    (*env)->CallStaticVoidMethod(env, cls, method, object);
+
+    THREAD_END
+}
+
+/**
+ * void setPollfdNotifiers(Context)
+ */
+JNIEXPORT void JNICALL METHOD_NAME(LibUSB, setPollfdNotifiers)
+(
+    JNIEnv *env, jclass class, jobject context
+)
+{
+    (*env)->GetJavaVM(env, &jvm);
+    libusb_set_pollfd_notifiers(unwrapContext(env, context),
+        triggerPollfdAdded, triggerPollfdRemoved, NULL);
+}
+
+/**
+ * void unsetPollfdNotifiers(Context)
+ */
+JNIEXPORT void JNICALL METHOD_NAME(LibUSB, unsetPollfdNotifiers)
+(
+    JNIEnv *env, jclass class, jobject context
+)
+{
+    libusb_set_pollfd_notifiers(unwrapContext(env, context),
+        NULL, NULL, NULL);
+}

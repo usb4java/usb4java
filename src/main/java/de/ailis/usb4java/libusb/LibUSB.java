@@ -11,6 +11,7 @@
 
 package de.ailis.usb4java.libusb;
 
+import java.io.FileDescriptor;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
@@ -345,6 +346,12 @@ public final class LibUSB
 
     /** Implicit feedback Data endpoint. */
     public static final int ISO_USAGE_TYPE_IMPLICIT = 2;
+
+    /** The currently set pollfd listener. */
+    private static PollfdListener pollfdListener;
+
+    /** The currently set pollfd listener user data. */
+    private static Object pollfdListenerUserData;
 
     static
     {
@@ -1651,14 +1658,64 @@ public final class LibUSB
      * 
      * @param context
      *            The context to operate on, or NULL for the default context.
-     * @param addedCallback
-     *            Pointer to function for addition notifications.
-     * @param removedCallback
-     *            Pointer to function for removal notifications.
+     * @param listener
+     *            The listener for addition and removal notifications.
      * @param userData
      *            User data to be passed back to callbacks (useful for passing
      *            context information).
      */
-    public static native void setPollfdNotifiers(final Context context,
-        Object addedCallback, Object removedCallback, ByteBuffer userData);
+    public static void setPollfdNotifiers(final Context context,
+        final PollfdListener listener, final Object userData)
+    {
+        pollfdListener = listener;
+        pollfdListenerUserData = userData;
+        if (listener == null)
+            unsetPollfdNotifiers(context);
+        else
+            setPollfdNotifiers(context);
+    }
+
+    /**
+     * Callback function, invoked when a new file descriptor should be added 
+     * to the set of file descriptors monitored for events.
+     * 
+     * @param fd
+     *            The new file descriptor,
+     *            @param events events to monitor for, see libusb_pollfd for a description
+     */
+    static void triggerPollfdAdded(final FileDescriptor fd, final int events)
+    {
+        if (pollfdListener != null)
+            pollfdListener.pollfdAdded(fd, events, pollfdListenerUserData);
+    }
+
+    /**
+     * Called internally from JNI when a pollfd was removed.
+     * 
+     * @param fd
+     *            The removed file descriptor.
+     */
+    static void triggerPollfdRemoved(final FileDescriptor fd)
+    {
+        if (pollfdListener != null)
+            pollfdListener.pollfdRemoved(fd, pollfdListenerUserData);
+    }
+
+    /**
+     * Configures libusbx to inform this class about pollfd additions and
+     * removals.
+     * 
+     * @param context
+     *            The context to operate on, or NULL for the default context
+     */
+    static native void setPollfdNotifiers(final Context context);
+
+    /**
+     * Tells libusbx to stop informing this class about pollfd additions and
+     * removals.
+     * 
+     * @param context
+     *            The context to operate on, or NULL for the default context
+     */
+    static native void unsetPollfdNotifiers(final Context context);
 }
