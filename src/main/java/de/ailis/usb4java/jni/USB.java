@@ -9,6 +9,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.logging.Logger;
 
+import de.ailis.usb4java.libusb.LibUSB;
+
 
 /**
  * This is the main class of the usb4java JNI wrapper. It wraps the global
@@ -35,189 +37,400 @@ public final class USB
 
     // === USB class constants ===============================================
 
-    /** Per interface class. */
-    public static final int USB_CLASS_PER_INTERFACE = 0;
+    /** 
+     * Per interface class.
+     * @deprecated Use {@link LibUSB#CLASS_PER_INTERFACE}. 
+     */
+    @Deprecated
+    public static final int USB_CLASS_PER_INTERFACE = LibUSB.CLASS_PER_INTERFACE;
 
-    /** Audio class. */
-    public static final int USB_CLASS_AUDIO = 1;
+    /** 
+     * Audio class. 
+     * @deprecated Use {@link LibUSB#CLASS_AUDIO}. 
+     */
+    @Deprecated
+    public static final int USB_CLASS_AUDIO = LibUSB.CLASS_AUDIO;
 
-    /** Comm class. */
-    public static final int USB_CLASS_COMM = 2;
+    /** 
+     * Comm class. 
+     * @deprecated Use {@link LibUSB#CLASS_COMM}. 
+     */
+    @Deprecated
+    public static final int USB_CLASS_COMM = LibUSB.CLASS_COMM;
 
-    /** HID class. */
-    public static final int USB_CLASS_HID = 3;
+    /** 
+     * HID class.
+     * @deprecated Use {@link LibUSB#CLASS_HID}. 
+     */
+    @Deprecated
+    public static final int USB_CLASS_HID = LibUSB.CLASS_HID;
 
-    /** PTP class. */
-    public static final int USB_CLASS_PTP = 6;
+    /** 
+     * PTP class. 
+     * @deprecated Use {@link LibUSB#CLASS_PTP}. 
+     */
+    @Deprecated
+    public static final int USB_CLASS_PTP = LibUSB.CLASS_PTP;
 
-    /** Printer class. */
-    public static final int USB_CLASS_PRINTER = 7;
+    /** 
+     * Printer class. 
+     * @deprecated Use {@link LibUSB#CLASS_PRINTER}. 
+     */
+    @Deprecated
+    public static final int USB_CLASS_PRINTER = LibUSB.CLASS_PRINTER;
 
-    /** Mass storage class. */
-    public static final int USB_CLASS_MASS_STORAGE = 8;
+    /** 
+     * Mass storage class. 
+     * @deprecated Use {@link LibUSB#CLASS_MASS_STORAGE}. 
+     */
+    @Deprecated
+    public static final int USB_CLASS_MASS_STORAGE = LibUSB.CLASS_MASS_STORAGE;
 
-    /** HUB class. */
-    public static final int USB_CLASS_HUB = 9;
+    /** 
+     * HUB class. 
+     * @deprecated Use {@link LibUSB#CLASS_HUB}. 
+     */
+    @Deprecated
+    public static final int USB_CLASS_HUB = LibUSB.CLASS_HUB;
 
-    /** Data class. */
-    public static final int USB_CLASS_DATA = 10;
+    /** 
+     * Data class. 
+     * @deprecated Use {@link LibUSB#CLASS_DATA}. 
+     */
+    @Deprecated
+    public static final int USB_CLASS_DATA = LibUSB.CLASS_DATA;
 
-    /** Vendor specific class. */
-    public static final int USB_CLASS_VENDOR_SPEC = 0xff;
+    /** 
+     * Vendor specific class. 
+     * @deprecated Use {@link LibUSB#CLASS_VENDOR_SPEC}. 
+     */
+    @Deprecated
+    public static final int USB_CLASS_VENDOR_SPEC = LibUSB.CLASS_VENDOR_SPEC;
 
 
     // === Device descriptor type constants ==================================
 
+    /** 
+     * Device descriptor type. 
+     * @deprecated Use {@link LibUSB#DT_DEVICE}. 
+     */
+    @Deprecated
+    public static final int USB_DT_DEVICE = LibUSB.DT_DEVICE;
 
-    /** Device descriptor type. */
-    public static final int USB_DT_DEVICE = 0x01;
+    /** 
+     * Config descriptor type. 
+     * @deprecated Use {@link LibUSB#DT_CONFIG}. 
+     */
+    @Deprecated
+    public static final int USB_DT_CONFIG = LibUSB.DT_CONFIG;
 
-    /** Config descriptor type. */
-    public static final int USB_DT_CONFIG = 0x02;
+    /** 
+     * String descriptor type. 
+     * @deprecated Use {@link LibUSB#DT_STRING}. 
+     */
+    @Deprecated
+    public static final short USB_DT_STRING = LibUSB.DT_STRING;
 
-    /** String descriptor type. */
-    public static final short USB_DT_STRING = 0x03;
+    /** 
+     * Interface descriptor type. 
+     * @deprecated Use {@link LibUSB#DT_INTERFACE}. 
+     */
+    @Deprecated
+    public static final int USB_DT_INTERFACE = LibUSB.DT_INTERFACE;
 
-    /** Interface descriptor type. */
-    public static final int USB_DT_INTERFACE = 0x04;
+    /** 
+     * Endpoint descriptor type. 
+     * @deprecated Use {@link LibUSB#DT_ENDPOINT}. 
+     */
+    @Deprecated
+    public static final int USB_DT_ENDPOINT = LibUSB.DT_ENDPOINT;
 
-    /** Endpoint descriptor type. */
-    public static final int USB_DT_ENDPOINT = 0x05;
+    /** 
+     * HID descriptor type. 
+     * @deprecated Use {@link LibUSB#DT_HID}. 
+     */
+    @Deprecated
+    public static final int USB_DT_HID = LibUSB.DT_HID;
 
-    /** HID descriptor type. */
-    public static final int USB_DT_HID = 0x21;
+    /** 
+     * Report descriptor type. 
+     * @deprecated Use {@link LibUSB#DT_REPORT}. 
+     */
+    @Deprecated
+    public static final int USB_DT_REPORT = LibUSB.DT_REPORT;
 
-    /** Report descriptor type. */
-    public static final int USB_DT_REPORT = 0x22;
+    /** 
+     * Physical descriptor type. 
+     * @deprecated Use {@link LibUSB#DT_PHYSICAL}. 
+     */
+    @Deprecated
+    public static final int USB_DT_PHYSICAL = LibUSB.DT_PHYSICAL;
 
-    /** Physical descriptor type. */
-    public static final int USB_DT_PHYSICAL = 0x23;
-
-    /** Hub descriptor type. */
-    public static final int USB_DT_HUB = 0x29;
+    /** 
+     * Hub descriptor type.
+     * @deprecated Use {@link LibUSB#DT_HUB}. 
+     */
+    @Deprecated
+    public static final int USB_DT_HUB = LibUSB.DT_HUB;
 
 
     // === Descriptor sizes per descriptor type ==============================
 
-    /** Device type descriptor size. */
-    public static final int USB_DT_DEVICE_SIZE = 18;
+    /** 
+     * Device type descriptor size.
+     * @deprecated Use {@link LibUSB#DT_DEVICE_SIZE}. 
+     */
+    @Deprecated
+    public static final int USB_DT_DEVICE_SIZE = LibUSB.DT_DEVICE_SIZE;
 
-    /** Config type descriptor size. */
-    public static final int USB_DT_CONFIG_SIZE = 9;
+    /** 
+     * Config type descriptor size. 
+     * @deprecated Use {@link LibUSB#DT_CONFIG_SIZE}. 
+     */
+    @Deprecated
+    public static final int USB_DT_CONFIG_SIZE = LibUSB.DT_CONFIG_SIZE;
 
-    /** Interface type descriptor size. */
-    public static final int USB_DT_INTERFACE_SIZE = 9;
+    /** 
+     * Interface type descriptor size. 
+     * @deprecated Use {@link LibUSB#DT_INTERFACE_SIZE}. 
+     */
+    @Deprecated
+    public static final int USB_DT_INTERFACE_SIZE = LibUSB.DT_INTERFACE_SIZE;
 
-    /** Endpoint type descriptor size. */
-    public static final int USB_DT_ENDPOINT_SIZE = 7;
+    /** 
+     * Endpoint type descriptor size. 
+     * @deprecated Use {@link LibUSB#DT_ENDPOINT_SIZE}. 
+     */
+    @Deprecated
+    public static final int USB_DT_ENDPOINT_SIZE = LibUSB.DT_ENDPOINT_SIZE;
 
-    /** Audio endpoint type descriptor size. */
-    public static final int USB_DT_ENDPOINT_AUDIO_SIZE = 9;
+    /** 
+     * Audio endpoint type descriptor size. 
+     * @deprecated Use {@link LibUSB#DT_ENDPOINT_AUDIO_SIZE}. 
+     */
+    @Deprecated
+    public static final int USB_DT_ENDPOINT_AUDIO_SIZE = LibUSB.DT_ENDPOINT_AUDIO_SIZE;
 
-    /** Hub Non-Var type descriptor size. */
-    public static final int USB_DT_HUB_NONVAR_SIZE = 7;
+    /** 
+     * Hub Non-Var type descriptor size. 
+     * @deprecated Use {@link LibUSB#DT_HUB_NONVAR_SIZE}. 
+     */
+    @Deprecated
+    public static final int USB_DT_HUB_NONVAR_SIZE = LibUSB.DT_HUB_NONVAR_SIZE;
 
 
     // === Standard requests =================================================
 
-    /** Get status request. */
-    public static final int USB_REQ_GET_STATUS = 0x00;
+    /** 
+     * Get status request.
+     * @deprecated Use {@link LibUSB#REQUEST_GET_STATUS}. 
+     */
+    @Deprecated
+    public static final int USB_REQ_GET_STATUS = LibUSB.REQUEST_GET_STATUS;
 
-    /** Clear feature request. */
-    public static final int USB_REQ_CLEAR_FEATURE = 0x01;
+    /** 
+     * Clear feature request. 
+     * @deprecated Use {@link LibUSB#REQUEST_CLEAR_FEATURE}. 
+     */
+    @Deprecated
+    public static final int USB_REQ_CLEAR_FEATURE = LibUSB.REQUEST_CLEAR_FEATURE;
 
-    /** Set feature request. */
-    public static final int USB_REQ_SET_FEATURE = 0x03;
+    /** 
+     * Set feature request. 
+     * @deprecated Use {@link LibUSB#REQUEST_SET_FEATURE}. 
+     */
+    @Deprecated
+    public static final int USB_REQ_SET_FEATURE = LibUSB.REQUEST_SET_FEATURE;
 
-    /** Set address request. */
-    public static final int USB_REQ_SET_ADDRESS = 0x05;
+    /** 
+     * Set address request. 
+     * @deprecated Use {@link LibUSB#REQUEST_SET_ADDRESS}. 
+     */
+    @Deprecated
+    public static final int USB_REQ_SET_ADDRESS = LibUSB.REQUEST_SET_ADDRESS;
 
-    /** Get descriptor request. */
-    public static final int USB_REQ_GET_DESCRIPTOR = 0x06;
+    /** 
+     * Get descriptor request. 
+     * @deprecated Use {@link LibUSB#REQUEST_GET_DESCRIPTOR}. 
+     */
+    @Deprecated
+    public static final int USB_REQ_GET_DESCRIPTOR = LibUSB.REQUEST_GET_DESCRIPTOR;
 
-    /** Set descriptor request. */
-    public static final int USB_REQ_SET_DESCRIPTOR = 0x07;
+    /** 
+     * Set descriptor request. 
+     * @deprecated Use {@link LibUSB#REQUEST_SET_DESCRIPTOR}. 
+     */
+    @Deprecated
+    public static final int USB_REQ_SET_DESCRIPTOR = LibUSB.REQUEST_SET_DESCRIPTOR;
 
-    /** Get configuration request. */
-    public static final int USB_REQ_GET_CONFIGURATION = 0x08;
+    /** 
+     * Get configuration request. 
+     * @deprecated Use {@link LibUSB#REQUEST_GET_CONFIGURATION}. 
+     */
+    @Deprecated
+    public static final int USB_REQ_GET_CONFIGURATION = LibUSB.REQUEST_GET_CONFIGURATION;
 
-    /** Set configuration request. */
-    public static final int USB_REQ_SET_CONFIGURATION = 0x09;
+    /** 
+     * Set configuration request. 
+     * @deprecated Use {@link LibUSB#REQUEST_SET_CONFIGURATION}. 
+     */
+    @Deprecated
+    public static final int USB_REQ_SET_CONFIGURATION = LibUSB.REQUEST_SET_CONFIGURATION;
 
-    /** Get interface request. */
-    public static final int USB_REQ_GET_INTERFACE = 0x0a;
+    /** 
+     * Get interface request. 
+     * @deprecated Use {@link LibUSB#REQUEST_GET_INTERFACE}. 
+     */
+    @Deprecated
+    public static final int USB_REQ_GET_INTERFACE = LibUSB.REQUEST_GET_INTERFACE;
 
-    /** Set interface request. */
-    public static final int USB_REQ_SET_INTERFACE = 0x0b;
+    /** 
+     * Set interface request. 
+     * @deprecated Use {@link LibUSB#REQUEST_SET_INTERFACE}. 
+     */
+    @Deprecated
+    public static final int USB_REQ_SET_INTERFACE = LibUSB.REQUEST_SET_INTERFACE;
 
-    /** Synch frame request. */
-    public static final int USB_REQ_SYNCH_FRAME = 0x0c;
+    /** 
+     * Synch frame request.
+     * @deprecated Use {@link LibUSB#REQUEST_SYNCH_FRAME}. 
+     */
+    @Deprecated
+    public static final int USB_REQ_SYNCH_FRAME = LibUSB.REQUEST_SYNCH_FRAME;
 
 
     // === Request types =====================================================
 
-    /** Standard request type. */
-    public static final int USB_TYPE_STANDARD = 0;
+    /** 
+     * Standard request type.
+     * @deprecated Use {@link LibUSB#REQUEST_TYPE_STANDARD}. 
+     */
+    @Deprecated
+    public static final int USB_TYPE_STANDARD = LibUSB.REQUEST_TYPE_STANDARD;
 
-    /** Class request type. */
-    public static final int USB_TYPE_CLASS = 32;
+    /** 
+     * Class request type. 
+     * @deprecated Use {@link LibUSB#REQUEST_TYPE_CLASS}. 
+     */
+    @Deprecated
+    public static final int USB_TYPE_CLASS = LibUSB.REQUEST_TYPE_CLASS;
 
-    /** Vendor request type. */
-    public static final int USB_TYPE_VENDOR = 64;
+    /** 
+     * Vendor request type. 
+     * @deprecated Use {@link LibUSB#REQUEST_TYPE_VENDOR}. 
+     */
+    @Deprecated
+    public static final int USB_TYPE_VENDOR = LibUSB.REQUEST_TYPE_VENDOR;
 
-    /** Reserved request type. */
-    public static final int USB_TYPE_RESERVED = 96;
+    /** 
+     * Reserved request type. 
+     * @deprecated Use {@link LibUSB#REQUEST_TYPE_RESERVED}. 
+     */
+    @Deprecated
+    public static final int USB_TYPE_RESERVED = LibUSB.REQUEST_TYPE_RESERVED;
 
 
     // === Request recipients ================================================
 
-    /** Device recipient. */
-    public static final int USB_RECIP_DEVICE = 0x00;
+    /** 
+     * Device recipient. 
+     * @deprecated Use {@link LibUSB#RECIPIENT_DEVICE}. 
+     */
+    @Deprecated
+    public static final int USB_RECIP_DEVICE = LibUSB.RECIPIENT_DEVICE;
 
-    /** Interface recipient. */
-    public static final int USB_RECIP_INTERFACE = 0x01;
+    /** 
+     * Interface recipient. 
+     * @deprecated Use {@link LibUSB#RECIPIENT_INTERFACE}. 
+     */
+    @Deprecated
+    public static final int USB_RECIP_INTERFACE = LibUSB.RECIPIENT_INTERFACE;
 
-    /** Endpoint recipient. */
-    public static final int USB_RECIP_ENDPOINT = 0x02;
+    /** 
+     * Endpoint recipient. 
+     * @deprecated Use {@link LibUSB#RECIPIENT_ENDPOINT}. 
+     */
+    @Deprecated
+    public static final int USB_RECIP_ENDPOINT = LibUSB.RECIPIENT_ENDPOINT;
 
-    /** Other recipient. */
-    public static final int USB_RECIP_OTHER = 0x03;
+    /** 
+     * Other recipient. 
+     * @deprecated Use {@link LibUSB#RECIPIENT_OTHER}. 
+     */
+    @Deprecated
+    public static final int USB_RECIP_OTHER = LibUSB.RECIPIENT_OTHER;
 
 
     // === Request directions ================================================
 
-    /** Device-to-host (IN) direction. */
-    public static final int USB_ENDPOINT_IN = 0x80;
+    /** 
+     * Device-to-host (IN) direction. 
+     * @deprecated Use {@link LibUSB#ENDPOINT_IN}. 
+     */
+    @Deprecated
+    public static final int USB_ENDPOINT_IN = LibUSB.ENDPOINT_IN;
 
-    /** Host-to-Device (OUT) direction. */
-    public static final int USB_ENDPOINT_OUT = 0x00;
+    /** 
+     * Host-to-Device (OUT) direction.
+     * @deprecated Use {@link LibUSB#ENDPOINT_OUT}. 
+     */
+    @Deprecated
+    public static final int USB_ENDPOINT_OUT = LibUSB.ENDPOINT_OUT;
 
 
     // === Masks =============================================================
 
-    /** Endpoint address mask. */
-    public static final int USB_ENDPOINT_ADDRESS_MASK = 0x0f;
+    /** 
+     * Endpoint address mask. 
+     * @deprecated Use {@link LibUSB#ENDPOINT_ADDRESS_MASK}. 
+     */
+    @Deprecated
+    public static final int USB_ENDPOINT_ADDRESS_MASK = LibUSB.ENDPOINT_ADDRESS_MASK;
 
-    /** Endpoint direction mask. */
-    public static final int USB_ENDPOINT_DIR_MASK = 0x80;
+    /** 
+     * Endpoint direction mask. 
+     * @deprecated Use {@link LibUSB#ENDPOINT_DIR_MASK}. 
+     */
+    @Deprecated
+    public static final int USB_ENDPOINT_DIR_MASK = LibUSB.ENDPOINT_DIR_MASK;
 
-    /** Endpoint type mask. */
-    public static final int USB_ENDPOINT_TYPE_MASK = 0x03;
+    /** 
+     * Endpoint type mask.
+     * @deprecated Use {@link LibUSB#TRANSFER_TYPE_MASK}. 
+     */
+    @Deprecated
+    public static final int USB_ENDPOINT_TYPE_MASK = LibUSB.TRANSFER_TYPE_MASK;
 
 
     // === Endpoint types ====================================================
 
-    /** Endpoint control type. */
-    public static final int USB_ENDPOINT_TYPE_CONTROL = 0;
+    /** 
+     * Endpoint control type. 
+     * @deprecated Use {@link LibUSB#TRANSFER_TYPE_CONTROL}. 
+     */
+    @Deprecated
+    public static final int USB_ENDPOINT_TYPE_CONTROL = LibUSB.TRANSFER_TYPE_CONTROL;//0;
 
-    /** Endpoint isochronous type. */
-    public static final int USB_ENDPOINT_TYPE_ISOCHRONOUS = 1;
+    /** 
+     * Endpoint isochronous type. 
+     * @deprecated Use {@link LibUSB#TRANSFER_TYPE_ISOCHRONOUS}. 
+     */
+    @Deprecated
+    public static final int USB_ENDPOINT_TYPE_ISOCHRONOUS = LibUSB.TRANSFER_TYPE_ISOCHRONOUS;//1;
 
-    /** Endpoint bulk type. */
-    public static final int USB_ENDPOINT_TYPE_BULK = 2;
+    /** 
+     * Endpoint bulk type. 
+     * @deprecated Use {@link LibUSB#TRANSFER_TYPE_BULK}. 
+     */
+    @Deprecated
+    public static final int USB_ENDPOINT_TYPE_BULK = LibUSB.TRANSFER_TYPE_BULK;//2;
 
-    /** Endpoint interrupt type. */
-    public static final int USB_ENDPOINT_TYPE_INTERRUPT = 3;
+    /** 
+     * Endpoint interrupt type. 
+     * @deprecated Use {@link LibUSB#TRANSFER_TYPE_INTERRUPT}. 
+     */
+    @Deprecated
+    public static final int USB_ENDPOINT_TYPE_INTERRUPT = LibUSB.TRANSFER_TYPE_INTERRUPT;//3;
 
     static
     {
@@ -237,7 +450,10 @@ public final class USB
      *
      * Just like the name implies, usb_init sets up some internal structures.
      * usb_init must be called before any other libusb functions.
+     * 
+     * @deprecated Use {@link LibUSB#init(de.ailis.usb4java.libusb.Context)}.
      */
+    @Deprecated
     public static native void usb_init();
 
     /**
@@ -248,7 +464,10 @@ public final class USB
      * busses and busses removed).
      * 
      * @return The number of changes since previous call.
+     * 
+     * @deprecated Use {@link LibUSB#getDeviceList(de.ailis.usb4java.libusb.Context, de.ailis.usb4java.libusb.DeviceList)}
      */
+    @Deprecated
     public static native int usb_find_busses();
 
     /**
@@ -259,7 +478,10 @@ public final class USB
      * previous call to this function (total of new device and devices removed).
      *
      * @return The number of changes since previous call.
+     * 
+     * @deprecated Use {@link LibUSB#getDeviceList(de.ailis.usb4java.libusb.Context, de.ailis.usb4java.libusb.DeviceList)}
      */
+    @Deprecated
     public static native int usb_find_devices();
 
     /**
@@ -271,7 +493,10 @@ public final class USB
      * global variables (like Delphi).
      *
      * @return The list of USB busses found.
+     * 
+     * @deprecated Use {@link LibUSB#getDeviceList(de.ailis.usb4java.libusb.Context, de.ailis.usb4java.libusb.DeviceList)}
      */
+    @Deprecated
     public static native USB_Bus usb_get_busses();
 
     /**
@@ -284,7 +509,10 @@ public final class USB
      * @param device
      *            The USB device.
      * @return The USB device handle.
+     * 
+     * @deprecated Use {@link LibUSB#open(de.ailis.usb4java.libusb.Device, de.ailis.usb4java.libusb.DeviceHandle)}
      */
+    @Deprecated
     public static native USB_Dev_Handle usb_open(final USB_Device device);
 
     /**
@@ -297,7 +525,10 @@ public final class USB
      * @param handle
      *            The USB device handle.
      * @return 0 on success or < 0 on error.
+     * 
+     * @deprecated Use {@link LibUSB#close(de.ailis.usb4java.libusb.DeviceHandle)}
      */
+    @Deprecated
     public static native int usb_close(final USB_Dev_Handle handle);
 
     /**
@@ -312,7 +543,10 @@ public final class USB
      * @param configuration
      *            The configuration to activate.
      * @return 0 on success or < 0 on error.
+     * 
+     * @deprecated Use {@link LibUSB#setConfiguration(de.ailis.usb4java.libusb.DeviceHandle, int)}
      */
+    @Deprecated
     public static native int usb_set_configuration(final USB_Dev_Handle handle,
         final int configuration);
 
@@ -328,7 +562,10 @@ public final class USB
      * @param alternate
      *            The alternate setting to activate.
      * @return 0 on success or < 0 on error.
+     * 
+     * @deprecated Use {@link LibUSB#setInterfaceAltSetting(de.ailis.usb4java.libusb.DeviceHandle, int, int)}
      */
+    @Deprecated
     public static native int usb_set_altinterface(final USB_Dev_Handle handle,
         final int alternate);
 
@@ -344,7 +581,10 @@ public final class USB
      * @param ep
      *            The endpoint.
      * @return 0 on success or < 0 on error.
+     * 
+     * @deprecated Use {@link LibUSB#clearHalt(de.ailis.usb4java.libusb.DeviceHandle, int)}
      */
+    @Deprecated
     public static native int usb_clear_halt(final USB_Dev_Handle handle,
         final int ep);
 
@@ -361,7 +601,10 @@ public final class USB
      * @param handle
      *            The USB device handle.
      * @return 0 on success or < 0 on error.
+     * 
+     * @deprecated Use {@link LibUSB#resetDevice(de.ailis.usb4java.libusb.DeviceHandle)}
      */
+    @Deprecated
     public static native int usb_reset(final USB_Dev_Handle handle);
 
     /**
@@ -380,7 +623,10 @@ public final class USB
      * @param iface
      *            The interface to claim.
      * @return 0 on success or < 0 on error.
+     * 
+     * @deprecated Use {@link LibUSB#claimInterface(de.ailis.usb4java.libusb.DeviceHandle, int)}
      */
+    @Deprecated
     public static native int usb_claim_interface(final USB_Dev_Handle handle,
         final int iface);
 
@@ -397,7 +643,10 @@ public final class USB
      * @param iface
      *            The interface to release.
      * @return 0 on success or < 0 on error.
+     * 
+     * @deprecated Use {@link LibUSB#releaseInterface(de.ailis.usb4java.libusb.DeviceHandle, int)} 
      */
+    @Deprecated
     public static native int usb_release_interface(final USB_Dev_Handle handle,
         final int iface);
 
@@ -434,7 +683,10 @@ public final class USB
      * @param timeout
      *            The timeout in milliseconds.
      * @return The number of bytes written/read or < 0 on error.
+     * 
+     * @deprecated Use {@link LibUSB#controlTransfer(de.ailis.usb4java.libusb.DeviceHandle, int, int, int, int, ByteBuffer, int)}
      */
+    @Deprecated
     public static native int usb_control_msg(final USB_Dev_Handle handle,
         final int requesttype, final int request, final int value,
         final int index, final ByteBuffer bytes, final int timeout);
@@ -457,7 +709,10 @@ public final class USB
      *            The buffer to write the string to. This must be a direct
      *            buffer obtained for example by ByteBuffer.allocateDirect().
      * @return The number of bytes read or < 0 on error.
+     * 
+     * @deprecated {@link LibUSB#getStringDescriptor(de.ailis.usb4java.libusb.DeviceHandle, int, int, ByteBuffer)}
      */
+    @Deprecated
     public static native int usb_get_string(final USB_Dev_Handle handle,
         final int index, final int langid, final ByteBuffer buffer);
 
@@ -473,7 +728,12 @@ public final class USB
      * @param size
      *            The maximum number of bytes to read.
      * @return The string descriptor or null if an error occurred.
+     * 
+     * TODO Check if a convenient replacement must be implemented
+     * 
+     * @deprecated There is no direct replacement for this. You may want to use {@link LibUSB#getStringDescriptor(de.ailis.usb4java.libusb.DeviceHandle, int, int, ByteBuffer)}.
      */
+    @Deprecated
     public static USB_String_Descriptor usb_get_string(
         final USB_Dev_Handle handle,
         final int index, final int langid, final int size)
@@ -494,7 +754,12 @@ public final class USB
      * @param langid
      *            The language id.
      * @return The string descriptor or null if an error occurred.
+     * 
+     * TODO Check if a convenient replacement must be implemented
+     * 
+     * @deprecated There is no direct replacement for this. You may want to use {@link LibUSB#getStringDescriptor(de.ailis.usb4java.libusb.DeviceHandle, int, int, ByteBuffer)}.
      */
+    @Deprecated
     public static USB_String_Descriptor usb_get_string(
         final USB_Dev_Handle handle, final int index, final int langid)
     {
@@ -517,7 +782,10 @@ public final class USB
      *            The buffer to write the string to. This must be a direct
      *            buffer obtained for example by ByteBuffer.allocateDirect().
      * @return The number of bytes read or < 0 on error.
+     * 
+     * @deprecated {@link LibUSB#getStringDescriptor(de.ailis.usb4java.libusb.DeviceHandle, int)}
      */
+    @Deprecated
     public static native int usb_get_string_simple(final USB_Dev_Handle handle,
         final int index, final ByteBuffer buffer);
 
@@ -533,7 +801,10 @@ public final class USB
      * @param size
      *            The maximum number of characters to read.
      * @return The string or null if an error occurred.
+     * 
+     * @deprecated {@link LibUSB#getStringDescriptor(de.ailis.usb4java.libusb.DeviceHandle, int)}
      */
+    @Deprecated
     public static String usb_get_string_simple(final USB_Dev_Handle handle,
         final int index, final int size)
     {
@@ -556,7 +827,9 @@ public final class USB
      * @param index
      *            The string description index.
      * @return The string or null if an error occurred.
+     * @deprecated {@link LibUSB#getStringDescriptor(de.ailis.usb4java.libusb.DeviceHandle, int)}
      */
+    @Deprecated
     public static String usb_get_string_simple(final USB_Dev_Handle handle,
         final int index)
     {
@@ -565,11 +838,17 @@ public final class USB
 
     /**
      * Returns the languages the specified device supports.
-     *
+     * 
      * @param handle
      *            The USB device handle.
      * @return Array with supported language codes.
+     * 
+     * TODO Check if a replacement is needed.
+     * 
+     * @deprecated There is no replacement yet. You may need to retrieve the
+     *             data from the string descriptor yourself for now.
      */
+    @Deprecated
     public static short[] usb_get_languages(final USB_Dev_Handle handle)
     {
         final ByteBuffer buffer = ByteBuffer
@@ -600,7 +879,10 @@ public final class USB
      *            The buffer to put the read bytes in. This must be a direct
      *            buffer obtained for example by ByteBuffer.allocateDirect().
      * @return Number of bytes read or < 0 on error.
+     * 
+     * @deprecated Use {@link LibUSB#getDescriptor(de.ailis.usb4java.libusb.DeviceHandle, int, int, ByteBuffer)}
      */
+    @Deprecated
     public static native int usb_get_descriptor(final USB_Dev_Handle handle,
         final int type, final int index, final ByteBuffer buffer);
 
@@ -624,7 +906,12 @@ public final class USB
      *            The buffer to put the read bytes in. This must be a direct
      *            buffer obtained for example by ByteBuffer.allocateDirect().
      * @return Number of bytes read or < 0 on error.
+     * 
+     * TODO Find out what is the replacement for this method.
+     * 
+     * @deprecated Don't know what the replacement for this method is in libusb1. Please check libusb1 documentation and then tell me.
      */
+    @Deprecated
     public static native int usb_get_descriptor_by_endpoint(
         final USB_Dev_Handle handle, final int ep, final int type,
         final int index, final ByteBuffer buffer);
@@ -645,7 +932,10 @@ public final class USB
      * @param timeout
      *            The timeout in milliseconds.
      * @return Bytes written on success or < 0 on error.
+     * 
+     * @deprecated Use {@link LibUSB#bulkTransfer(de.ailis.usb4java.libusb.DeviceHandle, int, ByteBuffer, java.nio.IntBuffer, int)}
      */
+    @Deprecated
     public static native int usb_bulk_write(final USB_Dev_Handle handle,
         final int ep, final ByteBuffer bytes, final int timeout);
 
@@ -665,7 +955,10 @@ public final class USB
      * @param timeout
      *            The timeout in milliseconds.
      * @return Bytes read on success or < 0 on error.
+     * 
+     * @deprecated Use {@link LibUSB#bulkTransfer(de.ailis.usb4java.libusb.DeviceHandle, int, ByteBuffer, java.nio.IntBuffer, int)}
      */
+    @Deprecated
     public static native int usb_bulk_read(final USB_Dev_Handle handle,
         final int ep, final ByteBuffer bytes, final int timeout);
 
@@ -686,7 +979,10 @@ public final class USB
      * @param timeout
      *            The timeout in milliseconds.
      * @return Bytes written on success or < 0 on error.
+     * 
+     * @deprecated Use {@link LibUSB#interruptTransfer(de.ailis.usb4java.libusb.DeviceHandle, int, ByteBuffer, java.nio.IntBuffer, int)}
      */
+    @Deprecated
     public static native int usb_interrupt_write(final USB_Dev_Handle handle,
         final int ep, final ByteBuffer bytes, final int timeout);
 
@@ -707,7 +1003,10 @@ public final class USB
      * @param timeout
      *            The timeout in milliseconds.
      * @return Bytes read on success or < 0 on error.
+     * 
+     * @deprecated Use {@link LibUSB#interruptTransfer(de.ailis.usb4java.libusb.DeviceHandle, int, ByteBuffer, java.nio.IntBuffer, int)}
      */
+    @Deprecated
     public static native int usb_interrupt_read(final USB_Dev_Handle handle,
         final int ep, final ByteBuffer bytes, final int timeout);
 
@@ -715,28 +1014,37 @@ public final class USB
      * Returns the last error message.
      *
      * @return The last error message.
+     * 
+     * @deprecated Use {@link LibUSB#errorName(int)} with the error result code you received from a LibUSB function.
      */
+    @Deprecated
     public static native String usb_strerror();
 
     /**
      * Get driver name bound to interface.
-     *
+     * 
      * This function will obtain the name of the driver bound to the interface
      * specified by the parameter interface and place it into the specified
      * buffer. Returns 0 on success or < 0 on error.
-     *
+     * 
      * Implemented on Linux only. On other platforms an UnsatisfiedLinkError
      * exception will be thrown.
-     *
+     * 
      * @param handle
      *            The USB device handle.
      * @param iface
      *            The interface number.
      * @param buffer
-     *            The buffer to place the name in. This must be a direct
-     *            buffer obtained for example by ByteBuffer.allocateDirect().
+     *            The buffer to place the name in. This must be a direct buffer
+     *            obtained for example by ByteBuffer.allocateDirect().
      * @return 0 on success or < 0 on error.
+     * 
+     * @deprecated Looks like there is no replacement in libusb 1.0 for this
+     *             method. Correct me if I'm wrong. If you just want to check if
+     *             a kernel driver is active then you can use
+     *             {@link LibUSB#kernelDriverActive(de.ailis.usb4java.libusb.DeviceHandle, int)}
      */
+    @Deprecated
     public static native int usb_get_driver_np(final USB_Dev_Handle handle,
         final int iface, final ByteBuffer buffer);
 
@@ -754,7 +1062,13 @@ public final class USB
      * @param iface
      *            The interface number.
      * @return The driver name or null on error.
+     * 
+     * @deprecated Looks like there is no replacement in libusb 1.0 for this
+     *             method. Correct me if I'm wrong. If you just want to check if
+     *             a kernel driver is active then you can use
+     *             {@link LibUSB#kernelDriverActive(de.ailis.usb4java.libusb.DeviceHandle, int)}
      */
+    @Deprecated
     public static String usb_get_driver_np(final USB_Dev_Handle handle,
         final int iface)
     {
@@ -786,7 +1100,10 @@ public final class USB
      * @param iface
      *            The interface number.
      * @return 0 on success or < 0 on error.
+     * 
+     * @deprecated Use {@link LibUSB#detachKernelDriver(de.ailis.usb4java.libusb.DeviceHandle, int)}
      */
+    @Deprecated
     public static native int usb_detach_kernel_driver_np(
         final USB_Dev_Handle handle, final int iface);
 
@@ -794,13 +1111,23 @@ public final class USB
      * Checks if libusb supports the usb_get_driver_np function.
      *
      * @return True if support is present, false if not.
+     * 
+     * @deprecated There is no replacment for this method in libusb 1.0
      */
+    @Deprecated
     public static native boolean libusb_has_get_driver_np();
 
     /**
      * Checks if libusb supports the usb_detach_kernel_driver_np function.
-     *
+     * 
      * @return True if support is present, false if not.
+     * 
+     * @deprecated There is no replacement for this method in libusb 1.0 but you
+     *             can call
+     *             {@link LibUSB#detachKernelDriver(de.ailis.usb4java.libusb.DeviceHandle, int)}
+     *             on all operating systems instead. If not supported then this
+     *             method returns a corresponding error code.
      */
+    @Deprecated 
     public static native boolean libusb_has_detach_kernel_driver_np();
 }

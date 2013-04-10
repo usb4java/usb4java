@@ -295,6 +295,27 @@ public final class LibUSB
 
     /** Hub descriptor. */
     public static final int DT_SUPERSPEED_HUB = 0x2a;
+    
+    
+    // Descriptor sizes per descriptor type
+    
+    /** Size of a device descriptor. */
+    public static final int DT_DEVICE_SIZE = 18;
+    
+    /** Size of a config descriptor. */
+    public static final int DT_CONFIG_SIZE = 9;
+    
+    /** Size of an interface descriptor. */
+    public static final int DT_INTERFACE_SIZE = 9; 
+
+    /** Size of an interface descriptor. */
+    public static final int DT_ENDPOINT_SIZE = 7; 
+
+    /** Size of an interface descriptor. */
+    public static final int DT_ENDPOINT_AUDIO_SIZE = 9; 
+
+    /** Size of an interface descriptor. */
+    public static final int DT_HUB_NONVAR_SIZE = 7; 
 
     // Endpoint direction. Values for bit 7 of the endpoint address scheme.
 
@@ -303,6 +324,19 @@ public final class LibUSB
 
     /** Out: host-to-device. */
     public static final int ENDPOINT_OUT = 0x00;
+    
+    
+    // === Masks =============================================================
+
+    /** Endpoint address mask. */
+    public static final int ENDPOINT_ADDRESS_MASK = 0x0f;
+
+    /** Endpoint direction mask. */
+    public static final int ENDPOINT_DIR_MASK = 0x80;
+    
+    /** Transfer type mask. */
+    public static final int TRANSFER_TYPE_MASK = 0x03;
+        
 
     // Endpoint transfer type. Values for bits 0:1 of the endpoint attributes
     // field.
