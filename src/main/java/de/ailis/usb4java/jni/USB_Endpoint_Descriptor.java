@@ -7,26 +7,64 @@ package de.ailis.usb4java.jni;
 
 import java.nio.ByteBuffer;
 
+import de.ailis.usb4java.libusb.EndpointDescriptor;
+
 /**
  * This descriptor contains information about an endpoint.
  *
  * @author Klaus Reimer (k@ailis.de)
+ *
+ * @deprecated Use the new libusb 1.0 API or the JSR 80 API.
  */
-
+@Deprecated
 public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
 {
     /** The number of hex dump columns for dumping extra descriptor. */
     private static final int HEX_DUMP_COLS = 16;
+    
+    /** The endpoint address. */
+    private final int bEndpointAddress;
+    
+    /** The endpoint attributes. */
+    private final int bmAttributes;
+    
+    /** The maximum packet size. */
+    private final int wMaxPacketSize;
+    
+    /** The polling interval. */
+    private final int bInterval;
+    
+    /** The refresh rate. */
+    private final int bRefresh;
+    
+    /** The synch endpoint address. */
+    private final int bSynchAddress;
+    
+    /** The exra descriptor data. */
+    private final byte[] extra;
+    
+    /** The length of the extra descriptor data. */
+    private final int extralen;
 
     /**
      * Constructor.
      *
-     * @param data
-     *            The descriptor data.
+     * @param desc
+     *           The new descriptor.
      */
-    public USB_Endpoint_Descriptor(final ByteBuffer data)
+    USB_Endpoint_Descriptor(final EndpointDescriptor desc)
     {
-        super(data);
+        super(desc);
+        
+        this.bEndpointAddress = desc.bEndpointAddress() & 0xff;
+        this.bInterval = desc.bInterval() & 0xff;
+        this.bmAttributes = desc.bmAttributes() & 0xff;
+        this.bRefresh = desc.bRefresh() & 0xff;
+        this.bSynchAddress = desc.bSynchAddress() & 0xff;
+        this.wMaxPacketSize = desc.wMaxPacketSize() & 0xffff;        
+        this.extralen = desc.extraLength();
+        this.extra = new byte[this.extralen];
+        desc.extra().get(this.extra);
     }
 
     /**
@@ -39,7 +77,10 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      *
      * @return The endpoint address (unsigned byte).
      */
-    public native int bEndpointAddress();
+    public int bEndpointAddress()
+    {
+        return this.bEndpointAddress;
+    }
 
     /**
      * Returns the endpoint attributes. This is a bitmask with the following
@@ -57,7 +98,10 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      *
      * @return The endpoint attributes bitmask (unsigned byte).
      */
-    public native int bmAttributes();
+    public int bmAttributes()
+    {
+        return this.bmAttributes;
+    }
 
     /**
      * Returns the maximum packet size the endpoint is capable of sending or
@@ -73,7 +117,10 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      *
      * @return The maximum packet size of the endpoint (unsigned short).
      */
-    public native int wMaxPacketSize();
+    public int wMaxPacketSize()
+    {
+        return this.wMaxPacketSize;
+    }
 
     /**
      * Returns the interval for polling endpoint for data transfers in frames or
@@ -81,7 +128,10 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      *
      * @return The interval for polling endpoint (unsigned byte).
      */
-    public native int bInterval();
+    public int bInterval()
+    {
+        return this.bInterval;
+    }
 
     /**
      * Returns the rate at which synchronization feedback is provided. (For
@@ -89,28 +139,40 @@ public final class USB_Endpoint_Descriptor extends USB_Descriptor_Header
      *
      * @return The synchronization rate (unsigned byte).
      */
-    public native int bRefresh();
+    public int bRefresh()
+    {
+        return this.bRefresh;
+    }
 
     /**
      * Returns the address if the synch endpoint. (For audio devices only)
      *
      * @return The address of the synch endpoint (unsigned byte).
      */
-    public native int bSynchAddress();
+    public int bSynchAddress()
+    {
+        return this.bSynchAddress;
+    }
 
     /**
      * Returns the extra descriptor data.
      *
      * @return The extra descriptor data.
      */
-    public native ByteBuffer extra();
+    public ByteBuffer extra()
+    {
+        return ByteBuffer.wrap(this.extra);
+    }
 
     /**
      * Returns the size of the extra descriptor data in bytes.
      *
      * @return The extra descriptor size.
      */
-    public native int extralen();
+    public int extralen()
+    {
+        return this.extralen;
+    }
 
     /**
      * Returns a dump of this descriptor.

@@ -7,7 +7,7 @@ package de.ailis.usb4java.jni;
 
 import static de.ailis.usb4java.jni.USB.usb_get_string_simple;
 
-import java.nio.ByteBuffer;
+import javax.usb.UsbDeviceDescriptor;
 
 /**
  * The USB device descriptor contains global information about a USB device and
@@ -15,19 +15,25 @@ import java.nio.ByteBuffer;
  * descriptor.
  *
  * @author Klaus Reimer (k@ailis.de)
+ * 
+ * @deprecated Use the new libusb 1.0 API or the JSR 80 API.
  */
-
+@Deprecated
 public final class USB_Device_Descriptor extends USB_Descriptor_Header
 {
+    /** The wrapped descriptor. */
+    private final UsbDeviceDescriptor desc;
+    
     /**
      * Constructor.
      *
-     * @param data
-     *            The descriptor data.
+     * @param desc
+     *            The wrapped descriptor.
      */
-    public USB_Device_Descriptor(final ByteBuffer data)
+    USB_Device_Descriptor(UsbDeviceDescriptor desc)
     {
-        super(data);
+        super(desc);
+        this.desc = desc;
     }
 
     /**
@@ -37,7 +43,10 @@ public final class USB_Device_Descriptor extends USB_Descriptor_Header
      *
      * @return The USB specification release number (unsigned short).
      */
-    public native int bcdUSB();
+    public int bcdUSB()
+    {
+        return this.desc.bcdUSB() & 0xffff;
+    }
 
     /**
      * Returns the device class code as assigned by the USB-IF.
@@ -54,7 +63,10 @@ public final class USB_Device_Descriptor extends USB_Descriptor_Header
      *
      * @return The device class code (unsigned byte).
      */
-    public native int bDeviceClass();
+    public int bDeviceClass()
+    {
+        return this.desc.bDeviceClass() & 0xff;
+    }
 
     /**
      * Returns the device sub class code as assigned by the USB-IF.
@@ -70,7 +82,10 @@ public final class USB_Device_Descriptor extends USB_Descriptor_Header
      *
      * @return The device subclass code (unsigned byte).
      */
-    public native int bDeviceSubClass();
+    public int bDeviceSubClass()
+    {
+        return this.desc.bDeviceSubClass() & 0xff;
+    }
 
     /**
      * Returns the device protocol code as assigned by the USB-IF.
@@ -89,7 +104,10 @@ public final class USB_Device_Descriptor extends USB_Descriptor_Header
      *
      * @return The device protocol code (unsigned byte).
      */
-    public native int bDeviceProtocol();
+    public int bDeviceProtocol()
+    {
+        return this.desc.bDeviceProtocol() & 0xff;
+    }
 
     /**
      * Returns the maximum packet size for endpoint zero. Only sizes of 8, 16,
@@ -97,56 +115,80 @@ public final class USB_Device_Descriptor extends USB_Descriptor_Header
      *
      * @return The maximum packet size for endpoint zero (unsigned byte).
      */
-    public native int bMaxPacketSize0();
+    public int bMaxPacketSize0()
+    {
+        return this.desc.bMaxPacketSize0() & 0xff;
+    }
 
     /**
      * Returns the vendor ID as assigned by the USB-IF.
      *
      * @return The vendor ID (unsigned short).
      */
-    public native int idVendor();
+    public int idVendor()
+    {
+        return this.desc.idVendor() & 0xffff;
+    }
 
     /**
      * Returns the product ID as assigned by the manufacturer.
      *
      * @return The product ID (unsigned short).
      */
-    public native int idProduct();
+    public int idProduct()
+    {
+        return this.desc.idProduct() & 0xffff;
+    }
 
     /**
      * Returns the device release number in binary-coded decimal.
      *
      * @return THe device release number (unsigned short).
      */
-    public native int bcdDevice();
+    public int bcdDevice()
+    {
+        return this.desc.bcdDevice() & 0xffff;
+    }
 
     /**
      * Returns the index of the manufacturer string descriptor.
      *
      * @return The index of the manufacturer string descriptor (unsigned byte).
      */
-    public native int iManufacturer();
+    public int iManufacturer()
+    {
+        return this.desc.iManufacturer() & 0xff;
+    }
 
     /**
      * Returns the index of the product string descriptor.
      *
      * @return The index of the product string descriptor (unsigned byte).
      */
-    public native int iProduct();
+    public int iProduct()
+    {
+        return this.desc.iProduct() & 0xff;
+    }
 
     /**
      * Returns the index of the serial number string descriptor.
      *
      * @return The index of the serial number string descriptor (unsigned byte).
      */
-    public native int iSerialNumber();
+    public int iSerialNumber()
+    {
+        return this.desc.iSerialNumber() & 0xff;
+    }
 
     /**
      * Returns the number of configurations.
      *
      * @return The number of configurations (unsigned byte).
      */
-    public native int bNumConfigurations();
+    public int bNumConfigurations()
+    {
+        return this.desc.bNumConfigurations() & 0xff;
+    }
 
     /**
      * Returns a dump of this descriptor.

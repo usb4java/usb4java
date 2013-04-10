@@ -18,28 +18,35 @@ import static de.ailis.usb4java.jni.USB.USB_CLASS_VENDOR_SPEC;
 
 import java.nio.ByteBuffer;
 
+import javax.usb.UsbDescriptor;
+
 /**
  * All standard descriptors have the two fields bLength and bDescriptorType in
  * common. So this base class implements them.
  *
  * @author Klaus Reimer (k@ailis.de)
+ * 
+ * @deprecated Use the new libusb 1.0 API or the JSR 80 API.
  */
+@Deprecated
 public abstract class USB_Descriptor_Header
 {
-    /** The descriptor data. */
-    protected final ByteBuffer data;
-
+    /** The descriptor length. */
+    private final int bLength;
+    
+    /** The descriptor type. */
+    private final int bDescriptorType;
+    
     /**
      * Constructor.
      *
-     * @param data
-     *            The descriptor data.
+     * @param desc
+     *            The wrapped descriptor.
      */
-    public USB_Descriptor_Header(final ByteBuffer data)
+    USB_Descriptor_Header(final UsbDescriptor desc)
     {
-        if (data == null)
-            throw new IllegalArgumentException("data must not be null");
-        this.data = data;
+        this.bLength = desc.bLength() & 0xff;
+        this.bDescriptorType = desc.bDescriptorType() & 0xff;
     }
 
     /**
@@ -47,15 +54,20 @@ public abstract class USB_Descriptor_Header
      *
      * @return The size of the descriptor in bytes (unsigned byte).
      */
-
-    public final native int bLength();
+    public final int bLength()
+    {
+        return this.bLength;
+    }
 
     /**
      * Returns the interface descriptor type.
      *
      * @return The interface descriptor type (unsigned byte).
      */
-    public final native int bDescriptorType();
+    public final int bDescriptorType()
+    {
+        return this.bDescriptorType;
+    }
 
     /**
      * Returns the name of the specified USB class. "unknown" is returned for a

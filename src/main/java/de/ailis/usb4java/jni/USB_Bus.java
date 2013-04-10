@@ -5,84 +5,196 @@
 
 package de.ailis.usb4java.jni;
 
-import java.nio.ByteBuffer;
+import de.ailis.usb4java.libusb.LibUSB;
 
 /**
  * The USB Bus.
- *
+ * 
+ * @deprecated Use the
+ *             {@link LibUSB#getDeviceList(de.ailis.usb4java.libusb.Context, de.ailis.usb4java.libusb.DeviceList)}
+ *             method of the new libusb 1.0 API to enumerate USB devices.
+ * 
  * @author Klaus Reimer (k@ailis.de)
  */
+@Deprecated
 public final class USB_Bus
 {
-    /** Low-level bus structure. */
-    private final ByteBuffer bus;
+    /** The location. */
+    private final long location;
+
+    /** The next USB bus. */
+    private USB_Bus next;
+
+    /** The previous USB bus. */
+    private USB_Bus prev;
+
+    /** The USB devices. Null if none. */
+    USB_Device devices;
 
     /**
      * Constructor.
-     *
-     * @param bus
-     *            The low-level bus structure.
+     * 
+     * @param location
+     *            The bus location.
      */
-    private USB_Bus(final ByteBuffer bus)
+    USB_Bus(final long location)
     {
-        this.bus = bus;
+        this.location = location;
+    }
+
+    /**
+     * Checks if there is already a bus with the specified location. Only call
+     * this on the first bus in the list.
+     * 
+     * @param location
+     *            The bus location.
+     * @return True if bus already exists, false if not.
+     */
+    boolean exists(final long location)
+    {
+        if (this.location == location) return true;
+        if (this.next != null) return this.next.exists(location);
+        return false;
+    }
+
+    /**
+     * Adds the specified bus to the list.
+     * 
+     * @param bus
+     *            The bus to add.
+     */
+    void add(final USB_Bus bus)
+    {
+        if (this.next == null)
+        {
+            this.next = bus;
+            bus.prev = this;
+        }
+        else
+            this.next.add(bus);
+    }
+
+    /**
+     * Counts the differences between this bus and the specified one.
+     * 
+     * @param other
+     *            The other bus to compare to.
+     * @return The number of differences.
+     */
+    int diff(final USB_Bus other)
+    {
+        if (other == null) return count();
+
+        int changes = 0;
+        
+        USB_Bus bus = other;
+        while (bus != null)
+        {
+            if (!exists(bus.location)) changes++;
+            bus = bus.next;
+        }
+
+        bus = this;
+        while (bus != null)
+        {
+            if (!other.exists(bus.location)) changes++;
+            bus = bus.next;
+        }
+
+        return changes;
+    }
+
+    /**
+     * Counts the number of busses. Only call this on the first bus in the list.
+     * 
+     * @return The number of busses in the list.
+     */
+    int count()
+    {
+        int count = 1;
+        USB_Bus bus = this.next;
+        while (bus != null)
+        {
+            count++;
+            bus = bus.next;
+        }
+        return count;
     }
 
     /**
      * Returns the directory name of the USB bus.
-     *
+     * 
      * @return The directory name. Never null.
      */
-    public native String dirname();
+    public String dirname()
+    {
+        return String.format("%03d", this.location);
+    }
 
     /**
      * Returns the next USB bus or null if none.
-     *
+     * 
      * @return The next USB bus or null if none.
      */
-    public native USB_Bus next();
+    public USB_Bus next()
+    {
+        return this.next;
+    }
 
     /**
      * Returns the previous USB bus or null if none.
-     *
+     * 
      * @return The previous USB bus or null if none.
      */
-    public native USB_Bus prev();
+    public USB_Bus prev()
+    {
+        return this.prev;
+    }
 
     /**
      * Returns the location.
-     *
+     * 
      * @return The location (32 bit unsigned integer).
      */
-    public native long location();
+    public long location()
+    {
+        return this.location;
+    }
 
     /**
      * Returns the USB devices. Actually this returns the first USB device and
      * you can use the {@link USB_Device#next()} and {@link USB_Device#prev()}
      * methods to navigate to the other devices. When no USB device was found
      * then null is returned.
-     *
+     * 
      * @return The first USB device or null if none.
      */
-    public native USB_Device devices();
+    public USB_Device devices()
+    {
+        return this.devices;
+    }
 
     /**
      * Returns the USB root device.
-     *
+     * 
      * @return The USB root device or null if none or if it could not be
      *         determined because of insufficient permissions.
      */
-    public native USB_Device root_dev();
+    public USB_Device root_dev()
+    {
+        return null;
+    }
 
     /**
      * Returns a dump of this descriptor.
-     *
+     * 
      * @return The descriptor dump.
      */
     public String dump()
     {
         final USB_Device rootDev = root_dev();
-        final String rootDevName = rootDev == null ? "None or unknown" : rootDev
+        final String rootDevName =
+            rootDev == null ? "None or unknown" : rootDev
                 .filename();
         final StringBuilder builder = new StringBuilder();
         builder.append(String.format("Bus:%n"

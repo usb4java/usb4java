@@ -7,60 +7,115 @@ package de.ailis.usb4java.jni;
 
 import java.nio.ByteBuffer;
 
+import de.ailis.usb4java.libusb.ConfigDescriptor;
 
 /**
  * The USB configuration descriptor describes information about a specific USB
  * device configuration.
  *
  * @author Klaus Reimer (k@ailis.de)
+ * 
+ * @deprecated Use the new libusb 1.0 API or the JSR 80 API.
  */
-
+@Deprecated
 public final class USB_Config_Descriptor extends USB_Descriptor_Header
 {
     /** The number of hex dump columns for dumping extra descriptor. */
     private static final int HEX_DUMP_COLS = 16;
 
+    /** The total descriptor length. */
+    private final int wTotalLength;
+
+    /** The number of interfaces. */
+    private final int bNumInterfaces;
+
+    /** The configuration value. */
+    private final int bConfigurationValue;
+
+    /** The configuration number. */
+    private final int iConfiguration;
+
+    /** The attributes. */
+    private final int bmAttributes;
+
+    /** The maximum power. */
+    private final int bMaxPower;
+    
+    /** The length of the extra data. */
+    private final int extralen;
+
+    /** The extra data. */
+    private final byte[] extra;
+
+    /** The interfaces. */
+    private final USB_Interface[] iface;
+
     /**
      * Constructor.
-     *
-     * @param data
-     *            The descriptor data
+     * 
+     * @param desc
+     *            The new config descriptor.
      */
-    public USB_Config_Descriptor(final ByteBuffer data)
+    public USB_Config_Descriptor(final ConfigDescriptor desc)
     {
-        super(data);
+        super(desc);
+        this.bConfigurationValue = desc.bConfigurationValue() & 0xff;
+        this.bmAttributes = desc.bmAttributes() & 0xff;
+        this.bMaxPower = desc.bMaxPower() & 0xff;
+        this.bNumInterfaces = desc.bNumInterfaces() & 0xff;
+        this.iConfiguration = desc.iConfiguration() & 0xff;
+        this.wTotalLength = desc.wTotalLength() & 0xffff;
+        this.extralen = desc.extraLength();
+        this.extra = new byte[this.extralen];
+        desc.extra().get(this.extra);
+        this.iface = new USB_Interface[this.bNumInterfaces];
+        for (int i = 0; i < this.bNumInterfaces; i++)
+            this.iface[i] = new USB_Interface(desc.iface()[i]);    
+
     }
 
     /**
      * Returns the total size of the data returned for this configuration
      * including the length of all descriptors returned for this configuration.
-     *
+     * 
      * @return The total length of all configuration data (unsigned short).
      */
-    public native int wTotalLength();
+    public int wTotalLength()
+    {
+        return this.wTotalLength;
+    }
 
     /**
      * Returns the number of supported interfaces.
-     *
+     * 
      * @return The number of supported interfaces (unsigned byte).
      */
-    public native int bNumInterfaces();
+    public int bNumInterfaces()
+    {
+        return this.bNumInterfaces;
+    }
 
     /**
      * The value to be used for usb_set_configuration() to select this
      * configuration.
-     *
+     * 
      * @return The configuration value (unsigned byte).
      */
-    public native int bConfigurationValue();
+    public int bConfigurationValue()
+    {
+        return this.bConfigurationValue;
+    }
 
     /**
      * Returns the index of the string descriptor describing this configuration.
-     *
+     * 
      * @return The index of the string descriptor describing this configuration
      *         (unsigned byte).
      */
-    public native int iConfiguration();
+    public int iConfiguration()
+    {
+        return this.iConfiguration;
+    }
 
     /**
      * Returns a bitmap with configuration attributes.
@@ -74,46 +129,61 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
      * <li>Bit 1: Reserved.</li>
      * <li>Bit 0: Reserved.</li>
      * </ul>
-     *
+     * 
      * @return A bitmap with configuration attributes (unsigned byte).
      */
-    public native int bmAttributes();
+    public int bmAttributes()
+    {
+        return this.bmAttributes;
+    }
 
     /**
      * Returns the maximum power consumption of the device when this
      * configuration is active and the device is fully operational. The power is
      * expressed in 2 maA units (50 means 100mA for example).
-     *
+     * 
      * @return The maximum power consumption in 2mA units (unsigned byte).
      */
-    public native int bMaxPower();
+    public int bMaxPower()
+    {
+        return this.bMaxPower;
+    }
 
     /**
      * Returns the length of the extra data block in bytes.
-     *
+     * 
      * @return The length of the extra data block in bytes.
      */
-    public native int extralen();
+    public int extralen()
+    {
+        return this.extralen;
+    }
 
     /**
      * Returns the extra data block.
-     *
+     * 
      * @return The extra data block.
      */
-    public native ByteBuffer extra();
+    public ByteBuffer extra()
+    {
+        return ByteBuffer.wrap(this.extra);
+    }
 
     /**
      * Returns the interfaces of this USB configuration. The original method is
      * named "interface" but this can't be used in Java because it is a reserved
      * word.
-     *
+     * 
      * @return The interfaces of this USB configuration.
      */
-    public native USB_Interface[] iface();
+    public USB_Interface[] iface()
+    {
+        return this.iface;
+    }
 
     /**
      * Returns a dump of this descriptor.
-     *
+     * 
      * @return The descriptor dump.
      */
     public String dump()
@@ -123,7 +193,7 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
 
     /**
      * Returns a dump of this descriptor.
-     *
+     * 
      * @param handle
      *            The USB device handle for resolving string descriptors. If
      *            null then no strings are resolved.
@@ -149,10 +219,10 @@ public final class USB_Config_Descriptor extends USB_Descriptor_Header
                 bConfigurationValue(), iConfiguration(), bmAttributes(),
                 bMaxPower() * 2, extralen(), toHexDump(extra(), HEX_DUMP_COLS)
                     .replaceAll("(?m)^", "    ")));
-        for (final USB_Interface descriptor : iface())
+        for (final USB_Interface descriptor: iface())
         {
             builder.append(descriptor.dump(handle)
-                    .replaceAll("(?m)^", "  "));
+                .replaceAll("(?m)^", "  "));
         }
         return builder.toString();
     }

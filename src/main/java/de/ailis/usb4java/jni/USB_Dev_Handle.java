@@ -5,27 +5,32 @@
 
 package de.ailis.usb4java.jni;
 
-import java.nio.ByteBuffer;
+import de.ailis.usb4java.libusb.DeviceHandle;
 
 
 /**
  * USB Device handle.
  *
  * @author Klaus Reimer (k@ailis.de)
+ * 
+ * @deprecated Use the new libusb 1.0 API or the JSR 80 API.
  */
-
+@Deprecated
 public final class USB_Dev_Handle
 {
-    /** The low-level USB device handle structure. */
-    private final ByteBuffer handle;
+    /** The new device handle device handle structure. */
+    final DeviceHandle handle;
+    
+    /** The last claimed interface. */
+    int lastClaimedInterface = -1;
 
     /**
      * Constructor.
      *
      * @param handle
-     *            The low-level USB device handle structure.
+     *            The new handle.
      */
-    private USB_Dev_Handle(final ByteBuffer handle)
+    USB_Dev_Handle(final DeviceHandle handle)
     {
         this.handle = handle;
     }

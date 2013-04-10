@@ -9,69 +9,132 @@ import static de.ailis.usb4java.jni.USB.usb_get_string_simple;
 
 import java.nio.ByteBuffer;
 
+import de.ailis.usb4java.libusb.InterfaceDescriptor;
+
 /**
  * The interface descriptor describes a specific interface of a USB
  * configuration.
- *
+ * 
  * @author Klaus Reimer (k@ailis.de)
+ * 
+ * @deprecated Use the new libusb 1.0 API or the JSR 80 API.
  */
+@Deprecated
 public final class USB_Interface_Descriptor extends USB_Descriptor_Header
 {
     /** The number of hex dump columns for dumping extra descriptor. */
     private static final int HEX_DUMP_COLS = 16;
 
+    /** The interface number. */
+    private final int bInterfaceNumber;
+
+    /** The alternate setting. */
+    private final int bAlternateSetting;
+
+    /** The number of endpoints. */
+    private final int bNumEndPoints;
+
+    /** The interface class. */
+    private final int bInterfaceClass;
+
+    /** The interface sub class. */
+    private final int bInterfaceSubClass;
+
+    /** The interface protocol. */
+    private final int bInterfaceProtocol;
+
+    /** The interface id. */
+    private final int iInterface;
+
+    /** The endpoint descriptors. */
+    private final USB_Endpoint_Descriptor[] endpoint;
+
+    /** The extra descriptor data. */
+    private final byte[] extra;
+
+    /** The length of the extra data. */
+    private final int extralen;
+
     /**
      * Constructor.
-     *
-     * @param data
-     *            The descriptor data
+     * 
+     * @param desc
+     *            The new descriptor.
      */
-    public USB_Interface_Descriptor(final ByteBuffer data)
+    USB_Interface_Descriptor(final InterfaceDescriptor desc)
     {
-        super(data);
+        super(desc);
+        this.bInterfaceClass = desc.bInterfaceClass() & 0xff;
+        this.bAlternateSetting = desc.bAlternateSetting() & 0xff;
+        this.bInterfaceNumber = desc.bInterfaceNumber() & 0xff;
+        this.bInterfaceProtocol = desc.bInterfaceProtocol() & 0xff;
+        this.bInterfaceSubClass = desc.bInterfaceSubClass() & 0xff;
+        this.bNumEndPoints = desc.bNumEndpoints() & 0xff;
+        this.extralen = desc.extraLength();
+        this.iInterface = desc.iInterface() & 0xff;
+        this.extra = new byte[this.extralen];
+        desc.extra().get(this.extra);
+        this.endpoint = new USB_Endpoint_Descriptor[this.bNumEndPoints];
+        for (int i = 0; i < this.bNumEndPoints; i++)
+            this.endpoint[i] = new USB_Endpoint_Descriptor(desc.endpoint()[i]);
     }
 
     /**
      * Returns the zero-based interface number.
-     *
+     * 
      * @return The interface number (unsigned byte).
      */
-    public native int bInterfaceNumber();
+    public int bInterfaceNumber()
+    {
+        return this.bInterfaceNumber;
+    }
 
     /**
      * Returns the value used to select this alternate setting for the
      * interface.
-     *
+     * 
      * @return The value used to select this alternate setting (unsigned byte).
      */
-    public native int bAlternateSetting();
+    public int bAlternateSetting()
+    {
+        return this.bAlternateSetting;
+    }
 
     /**
      * Returns the number of endpoints.
-     *
+     * 
      * @return The number of endpoints (unsigned byte).
      */
-    public native int bNumEndpoints();
+    public int bNumEndpoints()
+    {
+        return this.bNumEndPoints;
+    }
 
     /**
      * Returns the interface class code as assigned by the USB-IF. Class 0 is
      * reserved for future standardization. Class 0xff means that the interface
      * class is vendor-specific. All other values are reserved for assignment by
      * the USB_IF.
-     *
+     * 
      * @return The interface class code (unsigned byte).
      */
-    public native int bInterfaceClass();
+    public int bInterfaceClass()
+    {
+        return this.bInterfaceClass;
+    }
 
     /**
      * Returns the interface sub class code as assigned by the USB-IF. These
      * codes are qualified by the interface class. If bInterfaceClass is 0 then
      * the sub class is also 0. If class is not 0xff then all sub classes are
      * reserved by the USB-IF.
-     *
+     * 
      * @return The interface sub class code (unsigned byte).
      */
-    public native int bInterfaceSubClass();
+    public int bInterfaceSubClass()
+    {
+        return this.bInterfaceSubClass;
+    }
 
     /**
      * Returns the protocol code as assigned by the USB-IF. These codes are
@@ -81,42 +144,57 @@ public final class USB_Interface_Descriptor extends USB_Descriptor_Header
      * field is set to zero then the device does not use a class-specific
      * protocol on this interface. If this field is set to 0xff then the device
      * uses a vendor-specific protocol for this interface.
-     *
+     * 
      * @return The protocol code (unsigned byte).
      */
-    public native int bInterfaceProtocol();
+    public int bInterfaceProtocol()
+    {
+        return this.bInterfaceProtocol;
+    }
 
     /**
      * Returns the index of the string descriptor describing this interface.
-     *
+     * 
      * @return The string descriptor index (unsigned byte).
      */
-    public native int iInterface();
+    public int iInterface()
+    {
+        return this.iInterface;
+    }
 
     /**
      * Returns the array with endpoints.
-     *
+     * 
      * @return The array with endpoints.
      */
-    public native USB_Endpoint_Descriptor[] endpoint();
+    public USB_Endpoint_Descriptor[] endpoint()
+    {
+        return this.endpoint;
+    }
 
     /**
      * Returns the extra descriptor data.
-     *
+     * 
      * @return The extra descriptor data.
      */
-    public native ByteBuffer extra();
+    public ByteBuffer extra()
+    {
+        return ByteBuffer.wrap(this.extra);
+    }
 
     /**
      * Returns the size of the extra data in bytes.
-     *
+     * 
      * @return The size of the extra data in bytes.
      */
-    public native int extralen();
+    public int extralen()
+    {
+        return this.extralen;
+    }
 
     /**
      * Returns a dump of this descriptor.
-     *
+     * 
      * @return The descriptor dump.
      */
     public String dump()
@@ -126,7 +204,7 @@ public final class USB_Interface_Descriptor extends USB_Descriptor_Header
 
     /**
      * Returns a dump of this descriptor.
-     *
+     * 
      * @param handle
      *            The USB device handle for resolving string descriptors. If
      *            null then no strings are resolved.
@@ -159,7 +237,7 @@ public final class USB_Interface_Descriptor extends USB_Descriptor_Header
             toHexDump(extra(), HEX_DUMP_COLS)
                 .replaceAll("(?m)^", "    ")));
         if (extralen() != 0) return builder.toString();
-        for (final USB_Endpoint_Descriptor edesc : endpoint())
+        for (final USB_Endpoint_Descriptor edesc: endpoint())
         {
             builder.append(edesc.dump().replaceAll("(?m)^", "  "));
         }

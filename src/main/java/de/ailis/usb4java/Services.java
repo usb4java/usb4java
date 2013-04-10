@@ -15,8 +15,8 @@ import javax.usb.UsbServices;
 import javax.usb.event.UsbServicesEvent;
 import javax.usb.event.UsbServicesListener;
 
-import de.ailis.usb4java.jni.Loader;
-import de.ailis.usb4java.jni.LoaderException;
+import de.ailis.usb4java.libusb.Loader;
+import de.ailis.usb4java.libusb.LoaderException;
 import de.ailis.usb4java.support.Config;
 import de.ailis.usb4java.support.UsbServicesListenerList;
 import de.ailis.usb4java.topology.UsbDeviceScanner;

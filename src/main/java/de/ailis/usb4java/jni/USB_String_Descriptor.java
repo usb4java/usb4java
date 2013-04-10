@@ -10,15 +10,22 @@ import java.nio.ByteOrder;
 import java.nio.CharBuffer;
 import java.util.Arrays;
 
+import javax.usb.UsbDescriptor;
+
 
 /**
  * A string descriptor.
  *
  * @author Klaus Reimer (k@ailis.de)
+ * 
+ * @deprecated Use the new libusb 1.0 API or the JSR 80 API.
  */
-
+@Deprecated
 public final class USB_String_Descriptor extends USB_Descriptor_Header
 {
+    /** The descriptor data. */
+    private final ByteBuffer data;
+    
     /**
      * Constructor.
      *
@@ -27,7 +34,22 @@ public final class USB_String_Descriptor extends USB_Descriptor_Header
      */
     public USB_String_Descriptor(final ByteBuffer data)
     {
-        super(data);
+        super(new UsbDescriptor()
+        {
+            
+            @Override
+            public byte bLength()
+            {
+                return data.get(0);
+            }
+            
+            @Override
+            public byte bDescriptorType()
+            {
+                return data.get(1);
+            }
+        });
+        this.data = data;
     }
 
     /**
