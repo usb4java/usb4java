@@ -79,17 +79,28 @@
         If you like ${project.name}, please consider making a small donation
         to support my work on free software like this. Thank you!
       </p>
-      <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+      <form action="https://www.paypal.com/cgi-bin/webscr" method="post"
+            style="display:inline;margin-right: 10px">
         <input type="hidden" name="cmd" value="_s-xclick" />
         <input type="hidden" name="hosted_button_id" value="KEM2AXUYDG9PN" />
         <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!" />
       </form>
+      <a href="http://flattr.com/thing/1149805/usb4java" target="_blank">
+        <img src="http://api.flattr.com/button/flattr-badge-large.png"
+             alt="Flattr this" title="Flattr this" />
+      </a>
     </section>
         
-    <section name="Problems">
+    <section name="Support">
       <p>
-        If you have any problems with ${project.name} or find bugs in the software or this
-        web site (even if it's just a typo) then please let me know by creating
+        For questions and discussions please use the 
+        <a href="http://groups.google.com/group/usb4java">usb4java</a> Google Group.
+        You can subscribe to it via email by sending a mail to 
+        <a href="mailto:usb4java+subscribe@googlegroups.com">usb4java+subscribe@googlegroups.com</a>.
+      </p>
+      <p> 
+        If you have found a bug in the software or this
+        web site (even if it's just a typo) then please create
         an <a href="${project.issueManagement.url}">issue on GitHub</a>.
       </p>
     </section>
