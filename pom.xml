@@ -26,6 +26,16 @@
     </license>
   </licenses>
     
+  <mailingLists>
+    <mailingList>
+      <name>Discussions</name>
+      <subscribe>usb4java-subscribe@googlegroups.com</subscribe>
+      <unsubscribe>usb4java-unsubscribe@googlegroups.com</unsubscribe>
+      <post>usb4java@googlegroups.com</post>
+      <archive>http://groups.google.com/group/usb4java</archive>
+    </mailingList>  
+  </mailingLists>    
+  
   <developers>
     <developer>
       <id>kayahr</id>
@@ -76,6 +86,7 @@
             <reports>
               <report>summary</report>
               <report>project-team</report>
+              <report>mailing-list</report>
               <report>issue-tracking</report>
               <report>scm</report>
               <report>cim</report>
