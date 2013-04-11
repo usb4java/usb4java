@@ -8,7 +8,9 @@ package de.ailis.usb4java.jni;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import de.ailis.usb4java.libusb.Context;
@@ -770,10 +772,33 @@ public final class USB
                     // Process next device
                     dev = dev.next();
                 }
+                                
+                // Fill children arrays
+                USB_Device device = bus.devices();
+                while (device != null)
+                {
+                    List<USB_Device> children = new ArrayList<USB_Device>();
+                    USB_Device check = bus.devices();
+                    while (check != null)
+                    {
+                        Device parent = LibUSB.getParent(check.device);
+                        if (parent != null)
+                        {
+                            int devnum = LibUSB.getDeviceAddress(parent);
+                            if (device.devnum() == devnum)
+                                children.add(check);
+                        }
+                        check = check.next();
+                    }
+                    device.children = children.toArray(new USB_Device[children.size()]);
+                    device = device.next();
+                }                
 
                 // Process next bus
                 bus = bus.next();
             }
+            
+            
         }
         finally
         {

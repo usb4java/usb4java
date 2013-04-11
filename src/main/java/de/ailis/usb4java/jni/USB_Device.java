@@ -42,8 +42,11 @@ public final class USB_Device
     /** The libusb 1.0 device reference. */
     Device device;
     
-    /** THe config descriptors. Null if device is not yet initialized. */
+    /** The config descriptors. Null if device is not yet initialized. */
     private USB_Config_Descriptor[] config;
+    
+    /** The child devices. */
+    USB_Device[] children = new USB_Device[0];
 
     /**
      * Constructor.
@@ -89,8 +92,7 @@ public final class USB_Device
      */
     public USB_Device[] children()
     {
-        // Not supported in libusb 1.0
-        return null;
+        return this.children;
     }
 
     /**
