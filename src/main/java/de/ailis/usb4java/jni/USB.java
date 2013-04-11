@@ -21,9 +21,7 @@ import de.ailis.usb4java.libusb.LibUSB;
 
 /**
  * This is a deprecated libusb 0.1 wrapper using the new libusb 1.0 methods as
- * backend. Some stuff may not work as intended. For example the device
- * enumeration is pretty different so this wrapper always gives you a single
- * virtual USB Bus which contains all USB devices.
+ * backend.
  * 
  * @author Klaus Reimer (k@ailis.de)
  * 
