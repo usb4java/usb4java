@@ -1,6 +1,6 @@
 /*
  * Copyright 2013 Klaus Reimer <k@ailis.de>
- * See LICENSE.md for licensing information.
+ * See LICENSE.txt for licensing information.
  * 
  * Based on libusbx <http://libusbx.org/>:  
  * 
@@ -25,9 +25,6 @@ public final class DeviceHandle
     /** The native pointer to the device handle structure. */
     long pointer;
     
-    /**
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode()
     {
@@ -37,9 +34,6 @@ public final class DeviceHandle
         return result;
     }
 
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(Object obj)
     {
@@ -49,5 +43,11 @@ public final class DeviceHandle
         DeviceHandle other = (DeviceHandle) obj;
         if (this.pointer != other.pointer) return false;
         return true;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return String.format("libusb handle 0x%x", this.pointer);
     }
 }

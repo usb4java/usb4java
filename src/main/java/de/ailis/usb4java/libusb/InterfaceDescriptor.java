@@ -1,6 +1,6 @@
 /*
  * Copyright 2013 Klaus Reimer <k@ailis.de>
- * See LICENSE.md for licensing information.
+ * See LICENSE.txt for licensing information.
  * 
  * Based on libusbx <http://libusbx.org/>:  
  * 
@@ -26,57 +26,30 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
     /** The native pointer to the descriptor structure. */
     long pointer;
 
-    /**
-     * @see javax.usb.UsbDescriptor#bLength()
-     */
     @Override
     public native byte bLength();
 
-    /**
-     * @see javax.usb.UsbDescriptor#bDescriptorType()
-     */
     @Override
     public native byte bDescriptorType();
 
-    /**
-     * @see javax.usb.UsbInterfaceDescriptor#bInterfaceNumber()
-     */
     @Override
     public native byte bInterfaceNumber();
 
-    /**
-     * @see javax.usb.UsbInterfaceDescriptor#bAlternateSetting()
-     */
     @Override
     public native byte bAlternateSetting();
 
-    /**
-     * @see javax.usb.UsbInterfaceDescriptor#bNumEndpoints()
-     */
     @Override
     public native byte bNumEndpoints();
 
-    /**
-     * @see javax.usb.UsbInterfaceDescriptor#bInterfaceClass()
-     */
     @Override
     public native byte bInterfaceClass();
 
-    /**
-     * @see javax.usb.UsbInterfaceDescriptor#bInterfaceSubClass()
-     */
     @Override
     public native byte bInterfaceSubClass();
 
-    /**
-     * @see javax.usb.UsbInterfaceDescriptor#bInterfaceProtocol()
-     */
     @Override
     public native byte bInterfaceProtocol();
 
-    /**
-     * @see javax.usb.UsbInterfaceDescriptor#iInterface()
-     */
     @Override
     public native byte iInterface();
 
@@ -103,7 +76,6 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
      * @return The extra descriptors length.
      */
     public native int extraLength();
-
 
     /**
      * Returns a dump of this descriptor.
@@ -155,9 +127,6 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
         return builder.toString();
     }
 
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(final Object o)
     {
@@ -178,9 +147,6 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
             && extra().equals(other.extra());
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode()
     {
@@ -197,5 +163,11 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
         result = 37 * result + extra().hashCode();
         result = 37 * result + extraLength();
         return result;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return dump();
     }
 }

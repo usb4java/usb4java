@@ -1,6 +1,6 @@
 /*
  * Copyright 2013 Klaus Reimer <k@ailis.de>
- * See LICENSE.md for licensing information.
+ * See LICENSE.txt for licensing information.
  * 
  * Based on libusbx <http://libusbx.org/>:  
  * 
@@ -26,39 +26,21 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
     /** The native pointer to the descriptor structure. */
     long pointer;
 
-    /**
-     * @see javax.usb.UsbDescriptor#bLength()
-     */
     @Override
     public native byte bLength();
 
-    /**
-     * @see javax.usb.UsbDescriptor#bDescriptorType()
-     */
     @Override
     public native byte bDescriptorType();
 
-    /**
-     * @see javax.usb.UsbEndpointDescriptor#bEndpointAddress()
-     */
     @Override
     public native byte bEndpointAddress();
 
-    /**
-     * @see javax.usb.UsbEndpointDescriptor#bmAttributes()
-     */
     @Override
     public native byte bmAttributes();
 
-    /**
-     * @see javax.usb.UsbEndpointDescriptor#wMaxPacketSize()
-     */
     @Override
     public native short wMaxPacketSize();
 
-    /**
-     * @see javax.usb.UsbEndpointDescriptor#bInterval()
-     */
     @Override
     public native byte bInterval();
 
@@ -93,7 +75,6 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
      * @return The extra descriptors length.
      */
     public native int extraLength();
-
 
     /**
      * Returns a dump of this descriptor.
@@ -156,5 +137,11 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
         result = 37 * result + extra().hashCode();
         result = 37 * result + extraLength();
         return result;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return dump();
     }
 }

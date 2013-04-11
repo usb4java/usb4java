@@ -1,6 +1,6 @@
 /*
  * Copyright 2013 Klaus Reimer <k@ailis.de>
- * See LICENSE.md for licensing information.
+ * See LICENSE.txt for licensing information.
  * 
  * Based on libusbx <http://libusbx.org/>:  
  * 
@@ -25,52 +25,28 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
 {
     /** The native pointer to the descriptor structure. */
     long pointer;
-
-    /**
-     * @see javax.usb.UsbDescriptor#bLength()
-     */
+    
     @Override
     public native byte bLength();
 
-    /**
-     * @see javax.usb.UsbDescriptor#bDescriptorType()
-     */
     @Override
     public native byte bDescriptorType();
 
-    /**
-     * @see javax.usb.UsbConfigurationDescriptor#wTotalLength()
-     */
     @Override
     public native short wTotalLength();
 
-    /**
-     * @see javax.usb.UsbConfigurationDescriptor#bNumInterfaces()
-     */
     @Override
     public native byte bNumInterfaces();
 
-    /**
-     * @see javax.usb.UsbConfigurationDescriptor#bConfigurationValue()
-     */
     @Override
     public native byte bConfigurationValue();
 
-    /**
-     * @see javax.usb.UsbConfigurationDescriptor#iConfiguration()
-     */
     @Override
     public native byte iConfiguration();
 
-    /**
-     * @see javax.usb.UsbConfigurationDescriptor#bmAttributes()
-     */
     @Override
     public native byte bmAttributes();
 
-    /**
-     * @see javax.usb.UsbConfigurationDescriptor#bMaxPower()
-     */
     @Override
     public native byte bMaxPower();
  
@@ -97,7 +73,6 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
      * @return The extra descriptors length.
      */
     public native int extraLength();
-    
 
     /**
      * Returns a dump of this descriptor.
@@ -129,7 +104,7 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
                 + "  bConfigurationValue   %5d%n"
                 + "  iConfiguration        %5d%n"
                 + "  bmAttributes           %#04x%n"
-                + "  MaxPower              %5d mA%n"
+                + "  bMaxPower             %5d mA%n"
                 + "  extralen         %10d%n"
                 + "  extra:%n"
                 + "%s",
@@ -145,9 +120,6 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
         return builder.toString();
     }
 
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(final Object o)
     {
@@ -165,9 +137,6 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
             && wTotalLength() == other.wTotalLength();
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode()
     {
@@ -183,5 +152,11 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
         result = 37 * result + extra().hashCode();
         result = 37 * result + extraLength();
         return result;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return dump();
     }
 }

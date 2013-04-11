@@ -1,6 +1,6 @@
 /*
  * Copyright 2013 Klaus Reimer <k@ailis.de>
- * See LICENSE.md for licensing information.
+ * See LICENSE.txt for licensing information.
  * 
  * Based on libusbx <http://libusbx.org/>:  
  * 
@@ -35,9 +35,6 @@ public final class Device
     /** The native pointer to the device structure. */
     long pointer;
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode()
     {
@@ -47,9 +44,6 @@ public final class Device
         return result;
     }
 
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(Object obj)
     {
@@ -59,5 +53,11 @@ public final class Device
         Device other = (Device) obj;
         if (this.pointer != other.pointer) return false;
         return true;
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.format("libusb device 0x%x", this.pointer);
     }
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2013 Klaus Reimer <k@ailis.de>
- * See LICENSE.md for licensing information.
+ * See LICENSE.txt for licensing information.
  */
 
 package de.ailis.usb4java.libusb;
@@ -31,27 +31,18 @@ final class DeviceListIterator implements Iterator<Device>
         this.devices = devices;
     }
 
-    /**
-     * @see java.util.Iterator#hasNext()
-     */
     @Override
     public boolean hasNext()
     {
         return this.nextIndex < this.devices.getSize();
     }
 
-    /**
-     * @see java.util.Iterator#next()
-     */
     @Override
     public Device next()
     {
         return this.devices.get(this.nextIndex++);
     }
 
-    /**
-     * @see java.util.Iterator#remove()
-     */
     @Override
     public void remove()
     {

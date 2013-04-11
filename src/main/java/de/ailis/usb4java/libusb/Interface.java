@@ -1,6 +1,6 @@
 /*
  * Copyright 2013 Klaus Reimer <k@ailis.de>
- * See LICENSE.md for licensing information.
+ * See LICENSE.txt for licensing information.
  * 
  * Based on libusbx <http://libusbx.org/>:  
  * 
@@ -60,5 +60,31 @@ public final class Interface
             builder.append(descriptor.dump(handle));
         }
         return builder.toString();
+    }
+
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (int) (this.pointer ^ (this.pointer >>> 32));
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        Device other = (Device) obj;
+        if (this.pointer != other.pointer) return false;
+        return true;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return dump();
     }
 }

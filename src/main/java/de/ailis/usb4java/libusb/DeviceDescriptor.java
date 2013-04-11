@@ -1,6 +1,6 @@
 /*
  * Copyright 2013 Klaus Reimer <k@ailis.de>
- * See LICENSE.md for licensing information.
+ * See LICENSE.txt for licensing information.
  * 
  * Based on libusbx <http://libusbx.org/>:  
  * 
@@ -26,90 +26,58 @@ public final class DeviceDescriptor implements UsbDeviceDescriptor
     /** The native data of the descriptor structure. */
     ByteBuffer data;
     
-    /**
-     * @see javax.usb.UsbDescriptor#bLength()
-     */
     @Override
     public native byte bLength();
 
-    /**
-     * @see javax.usb.UsbDescriptor#bDescriptorType()
-     */
     @Override
     public native byte bDescriptorType();
 
-    /**
-     * @see javax.usb.UsbDeviceDescriptor#bcdUSB()
-     */
     @Override
     public native short bcdUSB();
 
-    /**
-     * @see javax.usb.UsbDeviceDescriptor#bDeviceClass()
-     */
     @Override
     public native byte bDeviceClass();
 
-    /**
-     * @see javax.usb.UsbDeviceDescriptor#bDeviceSubClass()
-     */
     @Override
     public native byte bDeviceSubClass();
 
-    /**
-     * @see javax.usb.UsbDeviceDescriptor#bDeviceProtocol()
-     */
     @Override
     public native byte bDeviceProtocol();
 
-    /**
-     * @see javax.usb.UsbDeviceDescriptor#bMaxPacketSize0()
-     */
     @Override
     public native byte bMaxPacketSize0();
 
-    /**
-     * @see javax.usb.UsbDeviceDescriptor#idVendor()
-     */
     @Override
     public native short idVendor();
 
-    /**
-     * @see javax.usb.UsbDeviceDescriptor#idProduct()
-     */
     @Override
     public native short idProduct();
 
-    /**
-     * @see javax.usb.UsbDeviceDescriptor#bcdDevice()
-     */
     @Override
     public native short bcdDevice();
 
-    /**
-     * @see javax.usb.UsbDeviceDescriptor#iManufacturer()
-     */
     @Override
     public native byte iManufacturer();
 
-    /**
-     * @see javax.usb.UsbDeviceDescriptor#iProduct()
-     */
     @Override
     public native byte iProduct();
 
-    /**
-     * @see javax.usb.UsbDeviceDescriptor#iSerialNumber()
-     */
     @Override
     public native byte iSerialNumber();
 
-    /**
-     * @see javax.usb.UsbDeviceDescriptor#bNumConfigurations()
-     */
     @Override
     public native byte bNumConfigurations();
 
+    /**
+     * Returns a dump of this descriptor.
+     *
+     * @return The descriptor dump.
+     */
+    public String dump()
+    {
+        return dump(null);
+    }
+    
     /**
      * Returns a dump of this descriptor.
      * 
@@ -205,5 +173,11 @@ public final class DeviceDescriptor implements UsbDeviceDescriptor
         result = 37 * result + iSerialNumber();
         result = 37 * result + bNumConfigurations();
         return result;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return dump();
     }
 }
