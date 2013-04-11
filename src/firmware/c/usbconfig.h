@@ -218,8 +218,8 @@ section at the end of this file).
 
 /* -------------------------- Device Description --------------------------- */
 
-//#define  USB_CFG_VENDOR_ID       0x47, 0x05 /* = 0x16c0 = 5824 = voti.nl */
-#define  USB_CFG_VENDOR_ID       0xc0, 0x16 /* = 0x16c0 = 5824 = voti.nl */
+#define  USB_CFG_VENDOR_ID       0x47, 0x05 /* = 0x16c0 = 5824 = voti.nl */
+//#define  USB_CFG_VENDOR_ID       0xc0, 0x16 /* = 0x16c0 = 5824 = voti.nl */
 /* USB vendor ID for the device, low byte first. If you have registered your
  * own Vendor ID, define it here. Otherwise you may use one of obdev's free
  * shared VID/PID pairs. Be sure to read USB-IDs-for-free.txt for rules!
@@ -228,8 +228,8 @@ section at the end of this file).
  * with libusb: 0x16c0/0x5dc.  Use this VID/PID pair ONLY if you understand
  * the implications!
  */
-//#define  USB_CFG_DEVICE_ID       0x02, 0x10 /* = 0x05dc = 1500 */
-#define  USB_CFG_DEVICE_ID       0xdc, 0x05 /* = 0x05dc = 1500 */
+#define  USB_CFG_DEVICE_ID       0x02, 0x10 /* = 0x05dc = 1500 */
+//#define  USB_CFG_DEVICE_ID       0xdc, 0x05 /* = 0x05dc = 1500 */
 /* This is the ID of the product, low byte first. It is interpreted in the
  * scope of the vendor ID. If you have registered your own VID with usb.org
  * or if you have licensed a PID from somebody else, define it here. Otherwise
@@ -347,7 +347,7 @@ section at the end of this file).
  */
 
 #define USB_CFG_DESCR_PROPS_DEVICE                  0
-#define USB_CFG_DESCR_PROPS_CONFIGURATION           (USB_PROP_IS_RAM | USB_PROP_LENGTH(18 + 2 * 7))
+#define USB_CFG_DESCR_PROPS_CONFIGURATION           (USB_PROP_IS_RAM | USB_PROP_LENGTH(18 + 12 * 7))
 #define USB_CFG_DESCR_PROPS_STRINGS                 0
 #define USB_CFG_DESCR_PROPS_STRING_0                0
 #define USB_CFG_DESCR_PROPS_STRING_VENDOR           0
