@@ -31,13 +31,13 @@ public final class VirtualRootHub implements UsbHub,
     UsbPorts<Usb4JavaPort, Usb4JavaDevice>
 {
     /** The manufacturer string. */
-    private static final String MANUFACTURER = "de.ailis.usb4java";
+    private static final String MANUFACTURER = "usb4java";
 
     /** The manufacturer string. */
-    private static final String PRODUCT = "Virtual Root Hub";
+    private static final String PRODUCT = "virtual root hub";
 
     /** The serial number. */
-    private static final String SERIAL_NUMBER = "0.1.0";
+    private static final String SERIAL_NUMBER = "1.0.0";
 
     /** The configurations. */
     private final List<UsbConfiguration> configurations =
