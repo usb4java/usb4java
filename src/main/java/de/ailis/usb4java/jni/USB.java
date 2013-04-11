@@ -790,8 +790,24 @@ public final class USB
                     }
                     device.children = children.toArray(new USB_Device[children.size()]);
                     device = device.next();
-                }                
-
+                }
+                
+                // Search for root device
+                USB_Device root = null;
+                int rootsFound = 0;
+                device = bus.devices();
+                while (device != null)
+                {
+                    Device parent = LibUSB.getParent(device.device);
+                    if (parent == null)
+                    {
+                        root = device;
+                        rootsFound++;
+                    }
+                    device = device.next();
+                }
+                if (rootsFound == 1) bus.root_dev = root;
+                
                 // Process next bus
                 bus = bus.next();
             }

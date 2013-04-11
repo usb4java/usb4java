@@ -73,10 +73,10 @@ public final class UsbDeviceScanner
             final List<USB_Device> devices = new ArrayList<USB_Device>();
             while (bus != null)
             {
-                USB_Device device = bus.devices();
-                if (this.config.getScanHierarchy())
+                USB_Device device = bus.root_dev();
+                if (this.config.getScanHierarchy() && device != null)
                 {
-                    if (device != null) devices.add(device);
+                    devices.add(device);
                 }
                 else
                 {

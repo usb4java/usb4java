@@ -30,6 +30,9 @@ public final class USB_Bus
 
     /** The USB devices. Null if none. */
     USB_Device devices;
+    
+    /** The root device. Null if none. */
+    USB_Device root_dev;
 
     /**
      * Constructor.
@@ -182,7 +185,7 @@ public final class USB_Bus
      */
     public USB_Device root_dev()
     {
-        return null;
+        return this.root_dev;
     }
 
     /**
