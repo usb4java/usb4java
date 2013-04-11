@@ -12,7 +12,7 @@ import java.util.Arrays;
 import javax.usb.UsbStringDescriptor;
 
 /**
- * A string descriptor.
+ * Simple string descriptor.
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
@@ -46,49 +46,24 @@ public final class SimpleUsbStringDescriptor extends SimpleUsbDescriptor impleme
      * @param descriptor
      *            The descriptor from which to copy the data.
      */
-    public SimpleUsbStringDescriptor(UsbStringDescriptor descriptor)
+    public SimpleUsbStringDescriptor(final UsbStringDescriptor descriptor)
     {
         super(descriptor.bLength(), descriptor.bDescriptorType());
         this.bString = descriptor.bString().clone();
     }
 
-    /**
-     * @see javax.usb.UsbStringDescriptor#bString()
-     */
     @Override
     public byte[] bString()
     {
         return this.bString.clone();
     }
 
-    /**
-     * @see javax.usb.UsbStringDescriptor#getString()
-     */
     @Override
     public String getString() throws UnsupportedEncodingException
     {
         return new String(this.bString, "UTF-16LE");
     }
 
-    /**
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString()
-    {
-        try
-        {
-            return getString();
-        }
-        catch (UnsupportedEncodingException e)
-        {
-            return super.toString();
-        }
-    }
-
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(final Object o)
     {
@@ -101,9 +76,6 @@ public final class SimpleUsbStringDescriptor extends SimpleUsbDescriptor impleme
             && Arrays.equals(this.bString, other.bString);
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode()
     {
@@ -112,5 +84,18 @@ public final class SimpleUsbStringDescriptor extends SimpleUsbDescriptor impleme
         result = 37 * result + bDescriptorType();
         result = 37 * result + Arrays.hashCode(this.bString);
         return result;
+    }
+    
+    @Override
+    public String toString()
+    {
+        try
+        {
+            return getString();
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            return super.toString();
+        }
     }
 }

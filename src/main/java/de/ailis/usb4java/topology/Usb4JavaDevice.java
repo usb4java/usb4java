@@ -36,7 +36,7 @@ import de.ailis.usb4java.libusb.ConfigDescriptor;
 import de.ailis.usb4java.libusb.Device;
 import de.ailis.usb4java.libusb.DeviceHandle;
 import de.ailis.usb4java.libusb.LibUSB;
-import de.ailis.usb4java.support.ControlIrpQueue2;
+import de.ailis.usb4java.support.ControlIrpQueue;
 import de.ailis.usb4java.support.UsbDeviceListenerList;
 
 /**
@@ -84,7 +84,7 @@ public class Usb4JavaDevice implements Serializable, UsbDevice
     private UsbPort port;
 
     /** The IRP queue. */
-    private final ControlIrpQueue2 queue = new ControlIrpQueue2(this,
+    private final ControlIrpQueue queue = new ControlIrpQueue(this,
         this.listeners);
 
     /** If kernel driver was detached when interface was claimed. */

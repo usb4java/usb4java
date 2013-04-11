@@ -22,7 +22,7 @@ import de.ailis.usb4java.topology.Usb4JavaDevice;
  * @param <T>
  *            The type of IRPs this queue holds.
  */
-public abstract class AbstractIrpQueue2<T extends UsbIrp>
+public abstract class AbstractIrpQueue<T extends UsbIrp>
 {
     /** The queued packets. */
     private final Queue<T> irps = new ConcurrentLinkedQueue<T>();
@@ -39,7 +39,7 @@ public abstract class AbstractIrpQueue2<T extends UsbIrp>
      * @param device
      *            The USB device.
      */
-    public AbstractIrpQueue2(final Usb4JavaDevice device)
+    public AbstractIrpQueue(final Usb4JavaDevice device)
     {
         this.device = device;
     }

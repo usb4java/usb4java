@@ -23,7 +23,7 @@ import de.ailis.usb4java.topology.Usb4JavaDevice;
  *
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class ControlIrpQueue2 extends AbstractIrpQueue2<UsbControlIrp>
+public final class ControlIrpQueue extends AbstractIrpQueue<UsbControlIrp>
 {
     /** The USB device listener list. */
     private final UsbDeviceListenerList listeners;
@@ -36,7 +36,7 @@ public final class ControlIrpQueue2 extends AbstractIrpQueue2<UsbControlIrp>
      * @param listeners
      *            The USB device listener list.
      */
-    public ControlIrpQueue2(final Usb4JavaDevice device, 
+    public ControlIrpQueue(final Usb4JavaDevice device, 
         final UsbDeviceListenerList listeners)
     {
         super(device);
@@ -44,7 +44,7 @@ public final class ControlIrpQueue2 extends AbstractIrpQueue2<UsbControlIrp>
     }
 
     /**
-     * @see AbstractIrpQueue2#processIrp(javax.usb.UsbIrp)
+     * @see AbstractIrpQueue#processIrp(javax.usb.UsbIrp)
      */
     @Override
     protected void processIrp(final UsbControlIrp irp) throws UsbException
@@ -68,7 +68,7 @@ public final class ControlIrpQueue2 extends AbstractIrpQueue2<UsbControlIrp>
     }
 
     /**
-     * @see AbstractIrpQueue2#finishIrp(javax.usb.UsbIrp)
+     * @see AbstractIrpQueue#finishIrp(javax.usb.UsbIrp)
      */
     @Override
     protected void finishIrp(final UsbIrp irp)

@@ -40,27 +40,18 @@ public abstract class SimpleUsbDescriptor implements UsbDescriptor,
         this.bDescriptorType = bDescriptorType;
     }
 
-    /**
-     * @see UsbDescriptor#bLength()
-     */
     @Override
     public final byte bLength()
     {
         return this.bLength;
     }
 
-    /**
-     * @see UsbDescriptor#bDescriptorType()
-     */
     @Override
     public final byte bDescriptorType()
     {
         return this.bDescriptorType;
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode()
     {
@@ -71,9 +62,6 @@ public abstract class SimpleUsbDescriptor implements UsbDescriptor,
         return result;
     }
 
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(Object obj)
     {
@@ -84,5 +72,12 @@ public abstract class SimpleUsbDescriptor implements UsbDescriptor,
         if (this.bDescriptorType != other.bDescriptorType) return false;
         if (this.bLength != other.bLength) return false;
         return true;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return String.format("  bLength %18d\n  bDescriptorType %10d\n",
+            this.bLength, this.bDescriptorType);
     }
 }

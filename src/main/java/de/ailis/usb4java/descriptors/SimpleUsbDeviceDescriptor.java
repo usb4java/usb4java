@@ -8,7 +8,7 @@ package de.ailis.usb4java.descriptors;
 import javax.usb.UsbDeviceDescriptor;
 
 /**
- * Virtual USB device descriptor used by the virtual USB root hub.
+ * Simple USB device descriptor.
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
@@ -133,117 +133,78 @@ public final class SimpleUsbDeviceDescriptor extends SimpleUsbDescriptor
             descriptor.bNumConfigurations());
     }
 
-    /**
-     * @see UsbDeviceDescriptor#bcdUSB()
-     */
     @Override
     public short bcdUSB()
     {
         return this.bcdUSB;
     }
 
-    /**
-     * @see UsbDeviceDescriptor#bDeviceClass()
-     */
     @Override
     public byte bDeviceClass()
     {
         return this.bDeviceClass;
     }
 
-    /**
-     * @see UsbDeviceDescriptor#bDeviceSubClass()
-     */
     @Override
     public byte bDeviceSubClass()
     {
         return this.bDeviceSubClass;
     }
 
-    /**
-     * @see UsbDeviceDescriptor#bDeviceProtocol()
-     */
     @Override
     public byte bDeviceProtocol()
     {
         return this.bDeviceProtocol;
     }
 
-    /**
-     * @see UsbDeviceDescriptor#bMaxPacketSize0()
-     */
     @Override
     public byte bMaxPacketSize0()
     {
         return this.bMaxPacketSize0;
     }
 
-    /**
-     * @see UsbDeviceDescriptor#idVendor()
-     */
     @Override
     public short idVendor()
     {
         return this.idVendor;
     }
 
-    /**
-     * @see UsbDeviceDescriptor#idProduct()
-     */
     @Override
     public short idProduct()
     {
         return this.idProduct;
     }
 
-    /**
-     * @see UsbDeviceDescriptor#bcdDevice()
-     */
     @Override
     public short bcdDevice()
     {
         return this.bcdDevice;
     }
 
-    /**
-     * @see UsbDeviceDescriptor#iManufacturer()
-     */
     @Override
     public byte iManufacturer()
     {
         return this.iManufacturer;
     }
 
-    /**
-     * @see UsbDeviceDescriptor#iProduct()
-     */
     @Override
     public byte iProduct()
     {
         return this.iProduct;
     }
 
-    /**
-     * @see UsbDeviceDescriptor#iSerialNumber()
-     */
     @Override
     public byte iSerialNumber()
     {
         return this.iSerialNumber;
     }
 
-    /**
-     * @see UsbDeviceDescriptor#bNumConfigurations()
-     */
     @Override
     public byte bNumConfigurations()
     {
         return this.bNumConfigurations;
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode()
     {
@@ -264,9 +225,6 @@ public final class SimpleUsbDeviceDescriptor extends SimpleUsbDescriptor
         return result;
     }
 
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(Object obj)
     {
@@ -287,5 +245,36 @@ public final class SimpleUsbDeviceDescriptor extends SimpleUsbDescriptor
         if (this.idProduct != other.idProduct) return false;
         if (this.idVendor != other.idVendor) return false;
         return true;
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.format("Device Descriptor:\n%s"
+            + "  bcdDevice %13x.%02x\n"
+            + "  bDeviceClass %13d\n"
+            + "  bDeviceSubClass %10d\n"
+            + "  bDeviceProtocol %10d\n"
+            + "  bMaxPacketSize0 %10d\n"
+            + "  idVendor %17s\n"
+            + "  idProduct %16s\n"
+            + "  bcdDevice %13x.%02x\n"
+            + "  iManufacturer %12d\n"
+            + "  iProduct %17d\n"
+            + "  iSerial %18d\n"
+            + "  bNumConfigurations %7d\n",
+            super.toString(),
+            (this.bcdUSB & 0xff00) >> 8, this.bcdUSB & 0xff,
+            this.bDeviceClass & 0xff,
+            this.bDeviceSubClass & 0xff,
+            this.bDeviceProtocol & 0xff,
+            this.bMaxPacketSize0 & 0xff,
+            String.format("0x%04x", this.idVendor & 0xffff),
+            String.format("0x%04x", this.idProduct & 0xffff),
+            (this.bcdDevice & 0xff00) >> 8, this.bcdDevice & 0xff,
+            this.iManufacturer & 0xff,
+            this.iProduct & 0xff,
+            this.iSerialNumber & 0xff,
+            this.bNumConfigurations & 0xff);
     }
 }

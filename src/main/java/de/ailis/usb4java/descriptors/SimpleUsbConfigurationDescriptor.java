@@ -90,57 +90,90 @@ public final class SimpleUsbConfigurationDescriptor extends SimpleUsbDescriptor
             descriptor.bMaxPower());
     }
 
-    /**
-     * @see UsbConfigurationDescriptor#wTotalLength()
-     */
     @Override
     public short wTotalLength()
     {
         return this.wTotalLength;
     }
 
-    /**
-     * @see UsbConfigurationDescriptor#bNumInterfaces()
-     */
     @Override
     public byte bNumInterfaces()
     {
         return this.bNumInterfaces;
     }
 
-    /**
-     * @see UsbConfigurationDescriptor#bConfigurationValue()
-     */
     @Override
     public byte bConfigurationValue()
     {
         return this.bConfigurationValue;
     }
 
-    /**
-     * @see UsbConfigurationDescriptor#iConfiguration()
-     */
     @Override
     public byte iConfiguration()
     {
         return this.iConfiguration;
     }
 
-    /**
-     * @see UsbConfigurationDescriptor#bmAttributes()
-     */
     @Override
     public byte bmAttributes()
     {
         return this.bmAttributes;
     }
 
-    /**
-     * @see UsbConfigurationDescriptor#bMaxPower()
-     */
     @Override
     public byte bMaxPower()
     {
         return this.bMaxPower;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + this.bConfigurationValue;
+        result = prime * result + this.bMaxPower;
+        result = prime * result + this.bNumInterfaces;
+        result = prime * result + this.bmAttributes;
+        result = prime * result + this.iConfiguration;
+        result = prime * result + this.wTotalLength;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj) return true;
+        if (!super.equals(obj)) return false;
+        if (getClass() != obj.getClass()) return false;
+        SimpleUsbConfigurationDescriptor other =
+            (SimpleUsbConfigurationDescriptor) obj;
+        if (this.bConfigurationValue != other.bConfigurationValue)
+            return false;
+        if (this.bMaxPower != other.bMaxPower) return false;
+        if (this.bNumInterfaces != other.bNumInterfaces) return false;
+        if (this.bmAttributes != other.bmAttributes) return false;
+        if (this.iConfiguration != other.iConfiguration) return false;
+        if (this.wTotalLength != other.wTotalLength) return false;
+        return true;
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.format("Configuration Descriptor:\n%s"
+            + "  wTotalLength %13d\n"
+            + "  bNumInterfaces %11d\n"
+            + "  bConfigurationValue %6d\n"
+            + "  iConfiguration %11d\n"
+            + "  bmAttributes %13s\n"
+            + "  bMaxPower %16smA\n",
+            super.toString(),
+            this.wTotalLength & 0xffff,
+            this.bNumInterfaces & 0xff,
+            this.bConfigurationValue & 0xff,
+            this.iConfiguration & 0xff,
+            String.format("0x%02x", this.bmAttributes & 0xff),
+            (this.bMaxPower & 0xff) * 2);
     }
 }

@@ -26,7 +26,7 @@ import de.ailis.usb4java.topology.Usb4JavaPipe;
  *
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class IrpQueue2 extends AbstractIrpQueue2<UsbIrp>
+public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
 {
     /** The USB pipe. */
     private final Usb4JavaPipe pipe;
@@ -37,14 +37,14 @@ public final class IrpQueue2 extends AbstractIrpQueue2<UsbIrp>
      * @param pipe
      *            The USB pipe
      */
-    public IrpQueue2(final Usb4JavaPipe pipe)
+    public IrpQueue(final Usb4JavaPipe pipe)
     {
         super(pipe.getDevice());
         this.pipe = pipe;
     }
 
     /**
-     * @see AbstractIrpQueue2#finishIrp(UsbIrp)
+     * @see AbstractIrpQueue#finishIrp(UsbIrp)
      */
     @Override
     protected void finishIrp(final UsbIrp irp)
@@ -53,7 +53,7 @@ public final class IrpQueue2 extends AbstractIrpQueue2<UsbIrp>
     }
 
     /**
-     * @see AbstractIrpQueue2#processIrp(javax.usb.UsbIrp)
+     * @see AbstractIrpQueue#processIrp(javax.usb.UsbIrp)
      */
     @Override
     protected void processIrp(final UsbIrp irp) throws UsbException

@@ -96,66 +96,105 @@ public final class SimpleUsbInterfaceDescriptor extends SimpleUsbDescriptor
             descriptor.iInterface());
     }
 
-    /**
-     * @see UsbInterfaceDescriptor#bInterfaceNumber()
-     */
     @Override
     public byte bInterfaceNumber()
     {
         return this.bInterfaceNumber;
     }
 
-    /**
-     * @see UsbInterfaceDescriptor#bAlternateSetting()
-     */
     @Override
     public byte bAlternateSetting()
     {
         return this.bAlternateSetting;
     }
 
-    /**
-     * @see UsbInterfaceDescriptor#bNumEndpoints()
-     */
     @Override
     public byte bNumEndpoints()
     {
         return this.bNumEndpoints;
     }
 
-    /**
-     * @see UsbInterfaceDescriptor#bInterfaceClass()
-     */
     @Override
     public byte bInterfaceClass()
     {
         return this.bInterfaceClass;
     }
 
-    /**
-     * @see UsbInterfaceDescriptor#bInterfaceSubClass()
-     */
     @Override
     public byte bInterfaceSubClass()
     {
         return this.bInterfaceSubClass;
     }
 
-    /**
-     * @see UsbInterfaceDescriptor#bInterfaceProtocol()
-     */
     @Override
     public byte bInterfaceProtocol()
     {
         return this.bInterfaceProtocol;
     }
 
-    /**
-     * @see UsbInterfaceDescriptor#iInterface()
-     */
     @Override
     public byte iInterface()
     {
         return this.iInterface;
+    }
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + this.bAlternateSetting;
+        result = prime * result + this.bInterfaceClass;
+        result = prime * result + this.bInterfaceNumber;
+        result = prime * result + this.bInterfaceProtocol;
+        result = prime * result + this.bInterfaceSubClass;
+        result = prime * result + this.bNumEndpoints;
+        result = prime * result + this.iInterface;
+        return result;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj) return true;
+        if (!super.equals(obj)) return false;
+        if (getClass() != obj.getClass()) return false;
+        SimpleUsbInterfaceDescriptor other = (SimpleUsbInterfaceDescriptor) obj;
+        if (this.bAlternateSetting != other.bAlternateSetting) return false;
+        if (this.bInterfaceClass != other.bInterfaceClass) return false;
+        if (this.bInterfaceNumber != other.bInterfaceNumber) return false;
+        if (this.bInterfaceProtocol != other.bInterfaceProtocol) return false;
+        if (this.bInterfaceSubClass != other.bInterfaceSubClass) return false;
+        if (this.bNumEndpoints != other.bNumEndpoints) return false;
+        if (this.iInterface != other.iInterface) return false;
+        return true;
+    }
+    
+
+    @Override
+    public String toString()
+    {
+        return String.format("Interface Descriptor:\n%s"
+            + "  bInterfaceNumber %9d\n"
+            + "  bAlternateSetting %8d\n"
+            + "  bNumEndpoints %12d\n"
+            + "  bInterfaceClass %10d\n"
+            + "  bInterfaceSubClass %7d\n"
+            + "  bInterfaceProtocol %7d\n"
+            + "  iInterface %15d\n",
+            super.toString(),
+            this.bInterfaceNumber & 0xff,
+            this.bAlternateSetting & 0xff,
+            this.bNumEndpoints & 0xff,
+            this.bInterfaceClass & 0xff,
+            this.bInterfaceSubClass & 0xff,
+            this.bInterfaceProtocol & 0xff,
+            this.iInterface & 0xff);
     }
 }

@@ -23,7 +23,7 @@ import javax.usb.event.UsbPipeListener;
 import javax.usb.util.DefaultUsbControlIrp;
 import javax.usb.util.DefaultUsbIrp;
 
-import de.ailis.usb4java.support.IrpQueue2;
+import de.ailis.usb4java.support.IrpQueue;
 import de.ailis.usb4java.support.UsbPipeListenerList;
 
 /**
@@ -43,7 +43,7 @@ public final class Usb4JavaPipe implements UsbPipe
     private boolean opened;
 
     /** The request queue. */
-    private final IrpQueue2 queue;
+    private final IrpQueue queue;
 
     /**
      * Constructor.
@@ -54,7 +54,7 @@ public final class Usb4JavaPipe implements UsbPipe
     Usb4JavaPipe(final Usb4JavaEndpoint endpoint)
     {
         this.endpoint = endpoint;
-        this.queue = new IrpQueue2(this);
+        this.queue = new IrpQueue(this);
     }
 
     /**

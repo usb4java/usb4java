@@ -13,10 +13,13 @@ import static de.ailis.usb4java.jni.USB.usb_init;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.usb.UsbConfiguration;
 import javax.usb.UsbDevice;
+import javax.usb.UsbEndpoint;
 import javax.usb.UsbException;
 import javax.usb.UsbHostManager;
 import javax.usb.UsbHub;
+import javax.usb.UsbInterface;
 import javax.usb.UsbServices;
 
 import de.ailis.usb4java.jni.USB_Bus;
@@ -86,8 +89,22 @@ public final class LsUsb
         {
             
             System.out.println(device.toString());
+            System.out.println(device.getUsbDeviceDescriptor());
+            for (UsbConfiguration config: (List<UsbConfiguration>) device.getUsbConfigurations())
+            {
+                System.out.println(config.getUsbConfigurationDescriptor());
+                for (UsbInterface iface: (List<UsbInterface>) config.getUsbInterfaces())
+                {
+                    System.out.println(iface.getUsbInterfaceDescriptor());
+                    for (UsbEndpoint endpoint: (List<UsbEndpoint>) iface.getUsbEndpoints())
+                    {
+                        System.out.println(endpoint.getUsbEndpointDescriptor());
+                    }
+                }
+            }
+            System.out.println();
         }
-        
+        /*
         System.out.println();
         
         DeviceList list = new DeviceList();
@@ -114,6 +131,7 @@ public final class LsUsb
         System.out.println("");
         
         dumpDevice(rootHub, 0);
+        */
     }
 
     /**

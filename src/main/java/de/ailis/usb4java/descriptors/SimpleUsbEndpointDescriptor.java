@@ -74,39 +74,68 @@ public final class SimpleUsbEndpointDescriptor extends SimpleUsbDescriptor
             descriptor.bInterval());
     }
 
-    /**
-     * @see javax.usb.UsbEndpointDescriptor#bEndpointAddress()
-     */
     @Override
     public byte bEndpointAddress()
     {
         return this.bEndpointAddress;
     }
 
-    /**
-     * @see javax.usb.UsbEndpointDescriptor#bmAttributes()
-     */
     @Override
     public byte bmAttributes()
     {
         return this.bmAttributes;
     }
 
-    /**
-     * @see javax.usb.UsbEndpointDescriptor#wMaxPacketSize()
-     */
     @Override
     public short wMaxPacketSize()
     {
         return this.wMaxPacketSize;
     }
 
-    /**
-     * @see javax.usb.UsbEndpointDescriptor#bInterval()
-     */
     @Override
     public byte bInterval()
     {
         return this.bInterval;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + this.bEndpointAddress;
+        result = prime * result + this.bInterval;
+        result = prime * result + this.bmAttributes;
+        result = prime * result + this.wMaxPacketSize;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj) return true;
+        if (!super.equals(obj)) return false;
+        if (getClass() != obj.getClass()) return false;
+        SimpleUsbEndpointDescriptor other = (SimpleUsbEndpointDescriptor) obj;
+        if (this.bEndpointAddress != other.bEndpointAddress) return false;
+        if (this.bInterval != other.bInterval) return false;
+        if (this.bmAttributes != other.bmAttributes) return false;
+        if (this.wMaxPacketSize != other.wMaxPacketSize) return false;
+        return true;
+    }
+   
+    @Override
+    public String toString()
+    {
+        return String.format("Endpoint Descriptor:\n%s"
+            + "  bEndpointAddress %9s\n"
+            + "  bmAttributes %13d\n"
+            + "  wMaxPacketSize %11d\n"
+            + "  bInterval %16d\n",
+            super.toString(),
+            String.format("0x%02x", this.bEndpointAddress & 0xff),
+            this.bmAttributes & 0xff,
+            this.wMaxPacketSize & 0xffff,
+            this.bInterval & 0xff);
     }
 }
