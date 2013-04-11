@@ -1,27 +1,19 @@
 /*
- * Copyright (C) 2011 Klaus Reimer <k@ailis.de>
- * See LICENSE.txt for licensing information.
+ * Copyright (C) 2013 Klaus Reimer <k@ailis.de>
+ * See LICENSE.md for licensing information.
  */
 
 package de.ailis.usb4java.topology;
 
-import static de.ailis.usb4java.jni.USB.USB_DT_STRING;
-import static de.ailis.usb4java.jni.USB.libusb_has_detach_kernel_driver_np;
-import static de.ailis.usb4java.jni.USB.usb_claim_interface;
-import static de.ailis.usb4java.jni.USB.usb_close;
-import static de.ailis.usb4java.jni.USB.usb_detach_kernel_driver_np;
-import static de.ailis.usb4java.jni.USB.usb_get_descriptor;
-import static de.ailis.usb4java.jni.USB.usb_get_string;
-import static de.ailis.usb4java.jni.USB.usb_open;
-import static de.ailis.usb4java.jni.USB.usb_release_interface;
-import static de.ailis.usb4java.jni.USB.usb_set_configuration;
-
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.usb.UsbClaimException;
 import javax.usb.UsbConst;
@@ -38,38 +30,49 @@ import javax.usb.event.UsbDeviceListener;
 import javax.usb.util.DefaultUsbControlIrp;
 
 import de.ailis.usb4java.Services;
-import de.ailis.usb4java.descriptors.Usb4JavaDeviceDescriptor;
-import de.ailis.usb4java.descriptors.Usb4JavaStringDescriptor;
+import de.ailis.usb4java.descriptors.SimpleUsbStringDescriptor;
 import de.ailis.usb4java.exceptions.Usb4JavaException;
-import de.ailis.usb4java.jni.USB_Config_Descriptor;
-import de.ailis.usb4java.jni.USB_Dev_Handle;
-import de.ailis.usb4java.jni.USB_Device;
-import de.ailis.usb4java.jni.USB_String_Descriptor;
-import de.ailis.usb4java.support.ControlIrpQueue;
+import de.ailis.usb4java.libusb.ConfigDescriptor;
+import de.ailis.usb4java.libusb.Device;
+import de.ailis.usb4java.libusb.DeviceHandle;
+import de.ailis.usb4java.libusb.LibUSB;
+import de.ailis.usb4java.support.ControlIrpQueue2;
 import de.ailis.usb4java.support.UsbDeviceListenerList;
-import de.ailis.usb4java.support.UsbLock;
 
 /**
- * usb4java implementation of JSR-80 UsbDevice.
- *
+ * A Usb device.
+ * 
  * @author Klaus Reimer (k@ailis.de)
  */
-public abstract class Usb4JavaDevice implements UsbDevice
+public class Usb4JavaDevice implements Serializable, UsbDevice
 {
-    /** The low-level USB device. */
-    protected final USB_Device device;
+    /** The serial versionUID. */
+    private static final long serialVersionUID = 1L;
 
-    /** The device descriptor. */
-    private final UsbDeviceDescriptor descriptor;
+    /** The USB device manager. */
+    private final UsbDeviceManager manager;
 
-    /** The USB configurations. */
-    private final List<Usb4JavaConfiguration> configurations;
+    /** The device id. */
+    private final DeviceId id;
+
+    /** The parent id. Null if no parent exists. */
+    private final DeviceId parentId;
+
+    /** The device speed. */
+    private final int speed;
+
+    /** The device configurations. */
+    private List<Usb4JavaConfiguration> configurations;
+
+    /** Mapping from configuration value to configuration. */
+    private Map<Byte, Usb4JavaConfiguration> configMapping =
+        new HashMap<Byte, Usb4JavaConfiguration>();
 
     /** The USB device listener list. */
     private final UsbDeviceListenerList listeners = new UsbDeviceListenerList();
 
-    /** The device handle. Null if device is not open. */
-    private USB_Dev_Handle handle;
+    /** The device handle. Null if not open. */
+    private DeviceHandle handle;
 
     /** The number of the currently active configuration. */
     private byte activeConfigurationNumber = 0;
@@ -81,44 +84,129 @@ public abstract class Usb4JavaDevice implements UsbDevice
     private UsbPort port;
 
     /** The IRP queue. */
-    private final ControlIrpQueue queue = new ControlIrpQueue(this, 
+    private final ControlIrpQueue2 queue = new ControlIrpQueue2(this,
         this.listeners);
 
+    /** If kernel driver was detached when interface was claimed. */
+    private boolean detachedKernelDriver;
+
     /**
-     * Constructor.
-     *
+     * Constructs a new device.
+     * 
+     * @param manager
+     *            The USB device manager which is responsible for this device.
+     * @param id
+     *            The device id. Must not be null.
+     * @param parentId
+     *            The parent device id. May be null if this device has no parent
+     *            (Because it is a root device).
+     * @param speed
+     *            The device speed.
      * @param device
-     *            The low-level USB device.
+     *            The libusb device. This reference is only valid during the
+     *            constructor execution, so don't store it in a property or
+     *            something like that.
+     * @throws Usb4JavaException
+     *             When device configuration could not be read.
      */
-    public Usb4JavaDevice(final USB_Device device)
+    Usb4JavaDevice(final UsbDeviceManager manager, final DeviceId id,
+        final DeviceId parentId, final int speed, final Device device)
+        throws Usb4JavaException
     {
-        this.device = device;
-        this.descriptor = new Usb4JavaDeviceDescriptor(device.descriptor());
+        if (manager == null)
+            throw new IllegalArgumentException("manager must be set");
+        if (id == null) throw new IllegalArgumentException("id must be set");
+        this.manager = manager;
+        this.id = id;
+        this.parentId = parentId;
+        this.speed = speed;
 
-        final USB_Config_Descriptor[] configs = device.config();
+        // Read device configurations
+        final int numConfigurations =
+            id.getDeviceDescriptor().bNumConfigurations() & 0xff;
         final List<Usb4JavaConfiguration> configurations =
-                new ArrayList<Usb4JavaConfiguration>(configs.length);
-        for (final USB_Config_Descriptor config : configs)
+            new ArrayList<Usb4JavaConfiguration>(numConfigurations);
+        for (int i = 0; i < numConfigurations; i += 1)
         {
-            if (config == null) continue;
-            final Usb4JavaConfiguration configuration = new Usb4JavaConfiguration(
-                this, config);
-            configurations.add(configuration);
-
-            // TODO No idea how to find out the active configuration via
-            // libusb. So for now we use the first configuration.
-            if (this.activeConfigurationNumber == 0)
+            ConfigDescriptor configDescriptor = new ConfigDescriptor();
+            int result =
+                LibUSB.getConfigDescriptor(device, i, configDescriptor);
+            if (result < 0)
+                throw new Usb4JavaException("Unable to get configuation " + i
+                    + " for device " + id);
+            try
             {
-                this.activeConfigurationNumber = (byte) config
-                        .bConfigurationValue();
+                Usb4JavaConfiguration config =
+                    new Usb4JavaConfiguration(this,
+                        configDescriptor);
+                configurations.add(config);
+                this.configMapping.put(configDescriptor.bConfigurationValue(),
+                    config);
+            }
+            finally
+            {
+                LibUSB.freeConfigDescriptor(configDescriptor);
             }
         }
         this.configurations = Collections.unmodifiableList(configurations);
+
+        // Determine the active configuration number
+        final ConfigDescriptor configDescriptor = new ConfigDescriptor();
+        final int result =
+            LibUSB.getActiveConfigDescriptor(device, configDescriptor);
+        if (result < 0)
+            throw new Usb4JavaException(
+                "Unable to read active config descriptor from device " + id,
+                result);
+        this.activeConfigurationNumber = configDescriptor.bConfigurationValue();
+        LibUSB.freeConfigDescriptor(configDescriptor);
+    }
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode()
+    {
+        return this.id.hashCode();
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        Usb4JavaDevice other = (Usb4JavaDevice) obj;
+        return this.id.equals(other.id);
+    }
+
+    /**
+     * Returns the device id.
+     * 
+     * @return The device id.
+     */
+    public DeviceId getId()
+    {
+        return this.id;
+    }
+
+    /**
+     * Returns the parent device id.
+     * 
+     * @return The parent device id or null of there is no parent.
+     */
+    public DeviceId getParentId()
+    {
+        return this.parentId;
     }
 
     /**
      * Ensures the device is connected.
-     *
+     * 
      * @throws UsbDisconnectedException
      *             When device is disconnected.
      */
@@ -130,28 +218,30 @@ public abstract class Usb4JavaDevice implements UsbDevice
     /**
      * Opens the USB device and returns the USB device handle. If device was
      * already open then the old handle is returned.
-     *
+     * 
      * @return The USB device handle.
      * @throws UsbException
      *             When USB device could not be opened.
      */
-    public final USB_Dev_Handle open() throws UsbException
+    public final DeviceHandle open() throws UsbException
     {
         if (this.handle == null)
         {
-            UsbLock.acquire();
+            final Device device = this.manager.getLibUsbDevice(this.id);
             try
             {
-                this.handle = usb_open(this.device);
-                if (this.handle == null)
+                DeviceHandle handle = new DeviceHandle();
+                int result = LibUSB.open(device, handle);
+                if (result < 0)
                 {
                     throw new Usb4JavaException("Can't open device "
-                        + this.device);
+                        + this.id, result);
                 }
+                this.handle = handle;
             }
             finally
             {
-                UsbLock.release();
+                this.manager.releaseDevice(device);
             }
         }
         return this.handle;
@@ -159,26 +249,13 @@ public abstract class Usb4JavaDevice implements UsbDevice
 
     /**
      * Closes the device. If device is not open then nothing is done.
-     *
-     * @throws UsbException
-     *             When device could not be closed.
      */
-    public final void close() throws UsbException
+    public final void close()
     {
         if (this.handle != null)
         {
-            UsbLock.acquire();
-            try
-            {
-                final int result = usb_close(this.handle);
-                if (result < 0)
-                    throw new Usb4JavaException("Can't close device "
-                        + this.device, result);
-            }
-            finally
-            {
-                UsbLock.release();
-            }
+            LibUSB.close(this.handle);
+            this.handle = null;
         }
     }
 
@@ -186,7 +263,7 @@ public abstract class Usb4JavaDevice implements UsbDevice
      * @see UsbDevice#getParentUsbPort()
      */
     @Override
-    public final UsbPort getParentUsbPort() throws UsbDisconnectedException
+    public UsbPort getParentUsbPort() throws UsbDisconnectedException
     {
         checkConnected();
         return this.port;
@@ -195,7 +272,7 @@ public abstract class Usb4JavaDevice implements UsbDevice
     /**
      * Sets the parent USB port. If port is unset then a usbDeviceDetached event
      * is send.
-     *
+     * 
      * @param port
      *            The port to set. Null to unset.
      */
@@ -210,7 +287,7 @@ public abstract class Usb4JavaDevice implements UsbDevice
         if (port == null && isUsbHub())
         {
             final Usb4JavaHub hub = (Usb4JavaHub) this;
-            for (final Usb4JavaDevice device : hub.getAttachedUsbDevices())
+            for (final Usb4JavaDevice device: hub.getAttachedUsbDevices())
                 hub.disconnectUsbDevice(device);
         }
 
@@ -243,11 +320,11 @@ public abstract class Usb4JavaDevice implements UsbDevice
      * @see UsbDevice#getManufacturerString()
      */
     @Override
-    public final String getManufacturerString() throws UsbException,
+    public String getManufacturerString() throws UsbException,
         UnsupportedEncodingException, UsbDisconnectedException
     {
         checkConnected();
-        final byte index = this.descriptor.iManufacturer();
+        final byte index = getUsbDeviceDescriptor().iManufacturer();
         if (index == 0) return null;
         return getString(index);
     }
@@ -256,11 +333,11 @@ public abstract class Usb4JavaDevice implements UsbDevice
      * @see UsbDevice#getSerialNumberString()
      */
     @Override
-    public final String getSerialNumberString() throws UsbException,
+    public String getSerialNumberString() throws UsbException,
         UnsupportedEncodingException, UsbDisconnectedException
     {
         checkConnected();
-        final byte index = this.descriptor.iSerialNumber();
+        final byte index = getUsbDeviceDescriptor().iSerialNumber();
         if (index == 0) return null;
         return getString(index);
     }
@@ -269,11 +346,11 @@ public abstract class Usb4JavaDevice implements UsbDevice
      * @see UsbDevice#getProductString()
      */
     @Override
-    public final String getProductString() throws UsbException,
+    public String getProductString() throws UsbException,
         UnsupportedEncodingException, UsbDisconnectedException
     {
         checkConnected();
-        final byte index = this.descriptor.iProduct();
+        final byte index = getUsbDeviceDescriptor().iProduct();
         if (index == 0) return null;
         return getString(index);
     }
@@ -282,16 +359,24 @@ public abstract class Usb4JavaDevice implements UsbDevice
      * @see UsbDevice#getSpeed()
      */
     @Override
-    public final Object getSpeed()
+    public Object getSpeed()
     {
-        return UsbConst.DEVICE_SPEED_UNKNOWN;
+        switch (this.speed)
+        {
+            case LibUSB.SPEED_FULL:
+                return UsbConst.DEVICE_SPEED_FULL;
+            case LibUSB.SPEED_LOW:
+                return UsbConst.DEVICE_SPEED_LOW;
+            default:
+                return UsbConst.DEVICE_SPEED_UNKNOWN;
+        }
     }
 
     /**
      * @see UsbDevice#getUsbConfigurations()
      */
     @Override
-    public final List<Usb4JavaConfiguration> getUsbConfigurations()
+    public List<Usb4JavaConfiguration> getUsbConfigurations()
     {
         return this.configurations;
     }
@@ -300,40 +385,32 @@ public abstract class Usb4JavaDevice implements UsbDevice
      * @see UsbDevice#getUsbConfiguration(byte)
      */
     @Override
-    public final Usb4JavaConfiguration getUsbConfiguration(final byte number)
+    public Usb4JavaConfiguration getUsbConfiguration(byte number)
     {
-        for (final Usb4JavaConfiguration configuration : this.configurations)
-        {
-            if (configuration.getUsbConfigurationDescriptor()
-                    .bConfigurationValue() == number)
-            {
-                return configuration;
-            }
-        }
-        return null;
+        return this.configMapping.get(number);
     }
 
     /**
      * @see UsbDevice#containsUsbConfiguration(byte)
      */
     @Override
-    public final boolean containsUsbConfiguration(final byte number)
+    public boolean containsUsbConfiguration(byte number)
     {
-        return getUsbConfiguration(number) != null;
+        return this.configMapping.containsKey(number);
     }
 
     /**
      * @see UsbDevice#getActiveUsbConfigurationNumber()
      */
     @Override
-    public final byte getActiveUsbConfigurationNumber()
+    public byte getActiveUsbConfigurationNumber()
     {
         return this.activeConfigurationNumber;
     }
 
     /**
      * Sets the active USB configuration.
-     *
+     * 
      * @param number
      *            The number of the USB configuration to activate.
      * @throws UsbException
@@ -348,25 +425,17 @@ public abstract class Usb4JavaDevice implements UsbDevice
                 throw new UsbException("Can't change configuration while an "
                     + "interface is still claimed");
 
-            UsbLock.acquire();
-            try
-            {
-                final int result = usb_set_configuration(open(), number & 0xff);
-                if (result < 0)
-                    throw new Usb4JavaException("Unable to set configuration",
-                        result);
-                this.activeConfigurationNumber = number;
-            }
-            finally
-            {
-                UsbLock.release();
-            }
+            final int result = LibUSB.setConfiguration(open(), number & 0xff);
+            if (result < 0)
+                throw new Usb4JavaException("Unable to set configuration",
+                    result);
+            this.activeConfigurationNumber = number;
         }
     }
 
     /**
      * Claims the specified interface.
-     *
+     * 
      * @param number
      *            The number of the interface to claim.
      * @param force
@@ -380,33 +449,37 @@ public abstract class Usb4JavaDevice implements UsbDevice
         throws UsbException, UsbClaimException
     {
         if (this.claimedInterfaceNumber != null)
-            throw new UsbClaimException("A interface is already claimed");
+            throw new UsbClaimException("An interface is already claimed");
 
-        UsbLock.acquire();
-        try
+        final DeviceHandle handle = open();
+
+        // Detach existing driver from the device if requested and
+        // libusb supports it.
+        if (force)
         {
-            // Detach existing driver from the device if requested and
-            // libusb supports it.
-            if (force && libusb_has_detach_kernel_driver_np())
+            int result = LibUSB.kernelDriverActive(handle, number);
+            if (result == LibUSB.ERROR_NO_DEVICE)
+                throw new UsbDisconnectedException();
+            if (result == 1)
             {
-                usb_detach_kernel_driver_np(open(), number);
+                result = LibUSB.detachKernelDriver(handle, number);
+                if (result < 0)
+                    throw new Usb4JavaException(
+                        "Unable to detach kernel driver", result);
+                this.detachedKernelDriver = true;
             }
+        }
 
-            final int result = usb_claim_interface(open(), number & 0xff);
-            if (result < 0)
-                throw new Usb4JavaException("Unable to claim interface",
-                    result);
-            this.claimedInterfaceNumber = number;
-        }
-        finally
-        {
-            UsbLock.release();
-        }
+        final int result = LibUSB.claimInterface(handle, number & 0xff);
+        if (result < 0)
+            throw new Usb4JavaException("Unable to claim interface",
+                result);
+        this.claimedInterfaceNumber = number;
     }
 
     /**
      * Releases a claimed interface.
-     *
+     * 
      * @param number
      *            The number of the interface to release.
      * @throws UsbClaimException
@@ -422,23 +495,24 @@ public abstract class Usb4JavaDevice implements UsbDevice
         if (!Byte.valueOf(number).equals(this.claimedInterfaceNumber))
             throw new UsbClaimException("Interface not claimed");
 
-        UsbLock.acquire();
-        try
+        final DeviceHandle handle = open();
+        int result = LibUSB.releaseInterface(handle, number & 0xff);
+        if (result < 0) throw new Usb4JavaException(
+            "Unable to release interface", result);
+
+        if (this.detachedKernelDriver)
         {
-            final int result = usb_release_interface(open(), number & 0xff);
+            result = LibUSB.attachKernelDriver(handle, number & 0xff);
             if (result < 0) throw new Usb4JavaException(
-                "Unable to release interface", result);
-            this.claimedInterfaceNumber = null;
+                "Uanble to re-attach kernel driver", result);
         }
-        finally
-        {
-            UsbLock.release();
-        }
+
+        this.claimedInterfaceNumber = null;
     }
 
     /**
      * Checks if the specified interface is claimed.
-     *
+     * 
      * @param number
      *            The number of the interface to check.
      * @return True if interface is claimed, false if not.
@@ -452,62 +526,54 @@ public abstract class Usb4JavaDevice implements UsbDevice
      * @see UsbDevice#getActiveUsbConfiguration()
      */
     @Override
-    public final Usb4JavaConfiguration getActiveUsbConfiguration()
+    public Usb4JavaConfiguration getActiveUsbConfiguration()
     {
-        return getUsbConfiguration(this.activeConfigurationNumber);
+        return getUsbConfiguration(getActiveUsbConfigurationNumber());
     }
 
     /**
      * @see UsbDevice#isConfigured()
      */
     @Override
-    public final boolean isConfigured()
+    public boolean isConfigured()
     {
-        return this.activeConfigurationNumber != 0;
+        return getActiveUsbConfigurationNumber() != 0;
     }
 
     /**
      * @see UsbDevice#getUsbDeviceDescriptor()
      */
     @Override
-    public final UsbDeviceDescriptor getUsbDeviceDescriptor()
+    public UsbDeviceDescriptor getUsbDeviceDescriptor()
     {
-        return this.descriptor;
+        return this.id.getDeviceDescriptor();
     }
 
     /**
      * @see UsbDevice#getUsbStringDescriptor(byte)
      */
     @Override
-    public final UsbStringDescriptor getUsbStringDescriptor(final byte index)
+    public UsbStringDescriptor getUsbStringDescriptor(byte index)
         throws UsbException, UsbDisconnectedException
     {
         checkConnected();
-        UsbLock.acquire();
-        try
-        {
-            final short[] languages = getLanguages();
-            final USB_Dev_Handle handle = open();
-            final short langid = languages.length == 0 ? 0 : languages[0];
-            final ByteBuffer buffer = ByteBuffer.allocateDirect(256);
-            final int len = usb_get_string(handle, index, langid, buffer);
-            if (len < 0)
-                throw new Usb4JavaException("Unable to get string descriptor "
-                    + index + " from device " + this.device, len);
-            return new Usb4JavaStringDescriptor(
-                new USB_String_Descriptor(buffer));
-        }
-        finally
-        {
-            UsbLock.release();
-        }
+        final short[] languages = getLanguages();
+        final DeviceHandle handle = open();
+        final short langId = languages.length == 0 ? 0 : languages[0];
+        final ByteBuffer data = ByteBuffer.allocateDirect(256);
+        final int result =
+            LibUSB.getStringDescriptor(handle, index, langId, data);
+        if (result < 0)
+            throw new Usb4JavaException("Unable to get string descriptor "
+                + index + " from device " + this, result);
+        return new SimpleUsbStringDescriptor(data);
     }
 
     /**
      * @see UsbDevice#getString(byte)
      */
     @Override
-    public final String getString(final byte index) throws UsbException,
+    public String getString(byte index) throws UsbException,
         UnsupportedEncodingException, UsbDisconnectedException
     {
         return getUsbStringDescriptor(index).getString();
@@ -515,44 +581,35 @@ public abstract class Usb4JavaDevice implements UsbDevice
 
     /**
      * Returns the languages the specified device supports.
-     *
+     * 
      * @return Array with supported language codes. Never null. May be empty.
      * @throws UsbException
      *             When string descriptor languages could not be read.
      */
     private short[] getLanguages() throws UsbException
     {
-        UsbLock.acquire();
-        try
-        {
-            final USB_Dev_Handle handle = open();
-            final ByteBuffer buffer = ByteBuffer.allocateDirect(256);
-            final int len = usb_get_descriptor(handle, USB_DT_STRING, 0,
-                buffer);
-            if (len < 0)
-                throw new Usb4JavaException(
-                    "Unable to get string descriptor languages", len);
-            if (len < 2)
-                throw new UsbException("Received illegal descriptor length: "
-                    + len);
-            final short[] languages = new short[(len - 2) / 2];
-            if (languages.length == 0) return languages;
-            buffer.position(2);
-            buffer.order(ByteOrder.LITTLE_ENDIAN).asShortBuffer()
-                    .get(languages);
-            return languages;
-        }
-        finally
-        {
-            UsbLock.release();
-        }
+        final DeviceHandle handle = open();
+        final ByteBuffer buffer = ByteBuffer.allocateDirect(256);
+        final int result = LibUSB.getDescriptor(handle, LibUSB.DT_STRING, 0,
+            buffer);
+        if (result < 0)
+            throw new Usb4JavaException(
+                "Unable to get string descriptor languages", result);
+        if (result < 2)
+            throw new UsbException("Received illegal descriptor length: "
+                + result);
+        final short[] languages = new short[(result - 2) / 2];
+        if (languages.length == 0) return languages;
+        buffer.position(2);
+        buffer.order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(languages);
+        return languages;
     }
 
     /**
-     * @see UsbDevice#syncSubmit(UsbControlIrp)
+     * @see UsbDevice#syncSubmit(javax.usb.UsbControlIrp)
      */
     @Override
-    public final void syncSubmit(final UsbControlIrp irp) throws UsbException,
+    public void syncSubmit(UsbControlIrp irp) throws UsbException,
         IllegalArgumentException, UsbDisconnectedException
     {
         if (irp == null)
@@ -564,10 +621,10 @@ public abstract class Usb4JavaDevice implements UsbDevice
     }
 
     /**
-     * @see UsbDevice#asyncSubmit(UsbControlIrp)
+     * @see UsbDevice#asyncSubmit(javax.usb.UsbControlIrp)
      */
     @Override
-    public final void asyncSubmit(final UsbControlIrp irp) throws
+    public void asyncSubmit(UsbControlIrp irp) throws
         IllegalArgumentException, UsbDisconnectedException
     {
         if (irp == null)
@@ -577,16 +634,16 @@ public abstract class Usb4JavaDevice implements UsbDevice
     }
 
     /**
-     * @see UsbDevice#syncSubmit(List)
+     * @see UsbDevice#syncSubmit(java.util.List)
      */
     @Override
-    public final void syncSubmit(final List list)
-        throws UsbException, IllegalArgumentException, UsbDisconnectedException
+    public void syncSubmit(List list) throws UsbException,
+        IllegalArgumentException, UsbDisconnectedException
     {
         if (list == null)
             throw new IllegalArgumentException("list must not be null");
         checkConnected();
-        for (final Object item : list)
+        for (final Object item: list)
         {
             if (!(item instanceof UsbControlIrp))
                 throw new IllegalArgumentException(
@@ -596,16 +653,16 @@ public abstract class Usb4JavaDevice implements UsbDevice
     }
 
     /**
-     * @see UsbDevice#asyncSubmit(List)
+     * @see UsbDevice#asyncSubmit(java.util.List)
      */
     @Override
-    public final void asyncSubmit(final List list) throws
-        IllegalArgumentException, UsbDisconnectedException
+    public void asyncSubmit(List list) throws IllegalArgumentException,
+        UsbDisconnectedException
     {
         if (list == null)
             throw new IllegalArgumentException("list must not be null");
         checkConnected();
-        for (final Object item : list)
+        for (final Object item: list)
         {
             if (!(item instanceof UsbControlIrp))
                 throw new IllegalArgumentException(
@@ -618,8 +675,8 @@ public abstract class Usb4JavaDevice implements UsbDevice
      * @see UsbDevice#createUsbControlIrp(byte, byte, short, short)
      */
     @Override
-    public final UsbControlIrp createUsbControlIrp(final byte bmRequestType,
-        final byte bRequest, final short wValue, final short wIndex)
+    public UsbControlIrp createUsbControlIrp(byte bmRequestType, byte bRequest,
+        short wValue, short wIndex)
     {
         return new DefaultUsbControlIrp(bmRequestType, bRequest, wValue,
             wIndex);
@@ -629,7 +686,7 @@ public abstract class Usb4JavaDevice implements UsbDevice
      * @see UsbDevice#addUsbDeviceListener(UsbDeviceListener)
      */
     @Override
-    public final void addUsbDeviceListener(final UsbDeviceListener listener)
+    public void addUsbDeviceListener(UsbDeviceListener listener)
     {
         this.listeners.add(listener);
     }
@@ -638,17 +695,26 @@ public abstract class Usb4JavaDevice implements UsbDevice
      * @see UsbDevice#removeUsbDeviceListener(UsbDeviceListener)
      */
     @Override
-    public final void removeUsbDeviceListener(final UsbDeviceListener listener)
+    public void removeUsbDeviceListener(UsbDeviceListener listener)
     {
         this.listeners.remove(listener);
     }
-
+    
     /**
      * @see java.lang.Object#toString()
      */
     @Override
     public final String toString()
     {
-        return this.device.toString();
+        return this.id.toString();
+    }
+
+    /**
+     * @see UsbDevice#isUsbHub()
+     */
+    @Override
+    public boolean isUsbHub()
+    {
+        return false;
     }
 }

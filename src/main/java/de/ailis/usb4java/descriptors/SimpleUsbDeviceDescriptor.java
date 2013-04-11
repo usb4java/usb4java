@@ -9,7 +9,7 @@ import javax.usb.UsbDeviceDescriptor;
 
 /**
  * Virtual USB device descriptor used by the virtual USB root hub.
- *
+ * 
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class SimpleUsbDeviceDescriptor extends SimpleUsbDescriptor
@@ -56,7 +56,7 @@ public final class SimpleUsbDeviceDescriptor extends SimpleUsbDescriptor
 
     /**
      * Constructor.
-     *
+     * 
      * @param bLength
      *            The descriptor length.
      * @param bDescriptorType
@@ -107,6 +107,30 @@ public final class SimpleUsbDeviceDescriptor extends SimpleUsbDescriptor
         this.iProduct = iProduct;
         this.iSerialNumber = iSerialNumber;
         this.bNumConfigurations = bNumConfigurations;
+    }
+
+    /**
+     * Copy constructor.
+     * 
+     * @param descriptor
+     *            The descriptor from which to copy the data.
+     */
+    public SimpleUsbDeviceDescriptor(final UsbDeviceDescriptor descriptor)
+    {
+        this(descriptor.bLength(),
+            descriptor.bDescriptorType(),
+            descriptor.bcdUSB(),
+            descriptor.bDeviceClass(),
+            descriptor.bDeviceSubClass(),
+            descriptor.bDeviceProtocol(),
+            descriptor.bMaxPacketSize0(),
+            descriptor.idVendor(),
+            descriptor.idProduct(),
+            descriptor.bcdDevice(),
+            descriptor.iManufacturer(),
+            descriptor.iProduct(),
+            descriptor.iSerialNumber(),
+            descriptor.bNumConfigurations());
     }
 
     /**
@@ -215,5 +239,53 @@ public final class SimpleUsbDeviceDescriptor extends SimpleUsbDescriptor
     public byte bNumConfigurations()
     {
         return this.bNumConfigurations;
+    }
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + this.bDeviceClass;
+        result = prime * result + this.bDeviceProtocol;
+        result = prime * result + this.bDeviceSubClass;
+        result = prime * result + this.bMaxPacketSize0;
+        result = prime * result + this.bNumConfigurations;
+        result = prime * result + this.bcdDevice;
+        result = prime * result + this.bcdUSB;
+        result = prime * result + this.iManufacturer;
+        result = prime * result + this.iProduct;
+        result = prime * result + this.iSerialNumber;
+        result = prime * result + this.idProduct;
+        result = prime * result + this.idVendor;
+        return result;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj) return true;
+        if (!super.equals(obj)) return false;
+        if (getClass() != obj.getClass()) return false;
+        SimpleUsbDeviceDescriptor other = (SimpleUsbDeviceDescriptor) obj;
+        if (this.bDeviceClass != other.bDeviceClass) return false;
+        if (this.bDeviceProtocol != other.bDeviceProtocol) return false;
+        if (this.bDeviceSubClass != other.bDeviceSubClass) return false;
+        if (this.bMaxPacketSize0 != other.bMaxPacketSize0) return false;
+        if (this.bNumConfigurations != other.bNumConfigurations) return false;
+        if (this.bcdDevice != other.bcdDevice) return false;
+        if (this.bcdUSB != other.bcdUSB) return false;
+        if (this.iManufacturer != other.iManufacturer) return false;
+        if (this.iProduct != other.iProduct) return false;
+        if (this.iSerialNumber != other.iSerialNumber) return false;
+        if (this.idProduct != other.idProduct) return false;
+        if (this.idVendor != other.idVendor) return false;
+        return true;
     }
 }

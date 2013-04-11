@@ -9,7 +9,7 @@ import javax.usb.UsbConfigurationDescriptor;
 
 /**
  * Simple USB configuration descriptor.
- *
+ * 
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class SimpleUsbConfigurationDescriptor extends SimpleUsbDescriptor
@@ -38,7 +38,7 @@ public final class SimpleUsbConfigurationDescriptor extends SimpleUsbDescriptor
 
     /**
      * Constructor.
-     *
+     * 
      * @param bLength
      *            The descriptor length.
      * @param bDescriptorType
@@ -69,6 +69,25 @@ public final class SimpleUsbConfigurationDescriptor extends SimpleUsbDescriptor
         this.iConfiguration = iConfiguration;
         this.bmAttributes = bmAttributes;
         this.bMaxPower = bMaxPower;
+    }
+
+    /**
+     * Copy constructor.
+     * 
+     * @param descriptor
+     *            The descriptor from which to copy the data.
+     */
+    public SimpleUsbConfigurationDescriptor(
+        final UsbConfigurationDescriptor descriptor)
+    {
+        this(descriptor.bLength(),
+            descriptor.bDescriptorType(),
+            descriptor.wTotalLength(),
+            descriptor.bNumInterfaces(),
+            descriptor.bConfigurationValue(),
+            descriptor.iConfiguration(),
+            descriptor.bmAttributes(),
+            descriptor.bMaxPower());
     }
 
     /**

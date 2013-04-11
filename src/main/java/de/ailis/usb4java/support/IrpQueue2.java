@@ -5,13 +5,8 @@
 
 package de.ailis.usb4java.support;
 
-import static de.ailis.usb4java.jni.USB.usb_bulk_read;
-import static de.ailis.usb4java.jni.USB.usb_bulk_write;
-import static de.ailis.usb4java.jni.USB.usb_control_msg;
-import static de.ailis.usb4java.jni.USB.usb_interrupt_read;
-import static de.ailis.usb4java.jni.USB.usb_interrupt_write;
-
 import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 
 import javax.usb.UsbConst;
 import javax.usb.UsbControlIrp;
@@ -22,8 +17,8 @@ import javax.usb.UsbIrp;
 import javax.usb.UsbShortPacketException;
 
 import de.ailis.usb4java.exceptions.Usb4JavaException;
-import de.ailis.usb4java.jni.USB_Dev_Handle;
-import de.ailis.usb4java.topology.Usb4JavaDevice;
+import de.ailis.usb4java.libusb.DeviceHandle;
+import de.ailis.usb4java.libusb.LibUSB;
 import de.ailis.usb4java.topology.Usb4JavaPipe;
 
 /**
@@ -31,27 +26,25 @@ import de.ailis.usb4java.topology.Usb4JavaPipe;
  *
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
+public final class IrpQueue2 extends AbstractIrpQueue2<UsbIrp>
 {
     /** The USB pipe. */
     private final Usb4JavaPipe pipe;
 
     /**
      * Constructor.
-     *
-     * @param device
-     *            The USB device.
+     * 
      * @param pipe
      *            The USB pipe
      */
-    public IrpQueue(final Usb4JavaDevice device, final Usb4JavaPipe pipe)
+    public IrpQueue2(final Usb4JavaPipe pipe)
     {
-        super(device);
+        super(pipe.getDevice());
         this.pipe = pipe;
     }
 
     /**
-     * @see AbstractIrpQueue#finishIrp(UsbIrp)
+     * @see AbstractIrpQueue2#finishIrp(UsbIrp)
      */
     @Override
     protected void finishIrp(final UsbIrp irp)
@@ -60,7 +53,7 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
     }
 
     /**
-     * @see AbstractIrpQueue#processIrp(javax.usb.UsbIrp)
+     * @see AbstractIrpQueue2#processIrp(javax.usb.UsbIrp)
      */
     @Override
     protected void processIrp(final UsbIrp irp) throws UsbException
@@ -120,9 +113,8 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
             ByteBuffer.allocateDirect(irp.getLength());
         buffer.put(irp.getData(), irp.getOffset(), irp.getLength());
         buffer.rewind();
-        final USB_Dev_Handle handle = this.device.open();
-        final int len =
-            usb_control_msg(handle, irp.bmRequestType(),
+        final DeviceHandle handle = this.device.open();
+        final int len = LibUSB.controlTransfer(handle, irp.bmRequestType(),
                 irp.bRequest(), irp.wValue(), irp.wIndex(), buffer,
                 getConfig().getTimeout());
         if (len < 0)
@@ -153,24 +145,25 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
     {
         final UsbEndpointDescriptor descriptor = getEndpointDescriptor();
         final byte type = this.pipe.getUsbEndpoint().getType();
-        final USB_Dev_Handle handle = this.device.open();
+        final DeviceHandle handle = this.device.open();
         int read = 0;
         while (read < len)
         {
             final int size = Math.min(len - read, descriptor.wMaxPacketSize() & 0xffff);
             final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
-            final int result;
+            IntBuffer transferred = IntBuffer.allocate(1);
+            int result;
             if (type == UsbConst.ENDPOINT_TYPE_BULK)
             {
-                result = usb_bulk_read(handle,
-                    descriptor.bEndpointAddress(), buffer, getConfig().getTimeout());
+                result = LibUSB.bulkTransfer(handle,
+                    descriptor.bEndpointAddress(), buffer, transferred, getConfig().getTimeout());
                 if (result < 0) throw new Usb4JavaException(
                     "Unable to read from bulk endpoint", result);
             }
             else if (type == UsbConst.ENDPOINT_TYPE_INTERRUPT)
             {
-                result = usb_interrupt_read(handle,
-                    descriptor.bEndpointAddress(), buffer, getConfig().getTimeout());
+                result = LibUSB.interruptTransfer(handle,
+                    descriptor.bEndpointAddress(), buffer, transferred, getConfig().getTimeout());
                 if (result < 0) throw new Usb4JavaException(
                     "Unable to read from interrupt endpoint", result);
             }
@@ -178,6 +171,7 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
             {
                 throw new UsbException("Unsupported endpoint type: " + type);
             }
+            result = transferred.get(0);
             buffer.rewind();
             buffer.get(data, offset + read, result);
             read += result;
@@ -206,7 +200,7 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
     {
         final UsbEndpointDescriptor descriptor = getEndpointDescriptor();
         final byte type = this.pipe.getUsbEndpoint().getType();
-        final USB_Dev_Handle handle = this.device.open();
+        final DeviceHandle handle = this.device.open();
         int written = 0;
         while (written < len)
         {
@@ -214,19 +208,20 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
             final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
             buffer.put(data, offset + written, size);
             buffer.rewind();
-            final int result;
+            IntBuffer transferred = IntBuffer.allocate(1);
+            int result;
             if (type == UsbConst.ENDPOINT_TYPE_BULK)
             {
-                result = usb_bulk_write(handle,
-                    descriptor.bEndpointAddress(), buffer,
+                result = LibUSB.bulkTransfer(handle,
+                    descriptor.bEndpointAddress(), buffer, transferred,
                     getConfig().getTimeout());
                 if (result < 0) throw new Usb4JavaException(
                     "Unable to write to bulk endpoint", result);
             }
             else if (type == UsbConst.ENDPOINT_TYPE_INTERRUPT)
             {
-                result = usb_interrupt_write(handle,
-                    descriptor.bEndpointAddress(), buffer,
+                result = LibUSB.interruptTransfer(handle,
+                    descriptor.bEndpointAddress(), buffer, transferred,
                     getConfig().getTimeout());
                 if (result < 0) throw new Usb4JavaException(
                     "Unable to write to interrupt endpoint", result);
@@ -235,6 +230,7 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
             {
                 throw new UsbException("Unsupported endpoint type: " + type);
             }
+            result = transferred.get(0);
             written += result;
 
             // Short packet detected, aborting

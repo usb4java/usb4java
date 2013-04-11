@@ -9,7 +9,7 @@ import javax.usb.UsbInterfaceDescriptor;
 
 /**
  * Simple USB interface descriptor.
- *
+ * 
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class SimpleUsbInterfaceDescriptor extends SimpleUsbDescriptor
@@ -41,7 +41,7 @@ public final class SimpleUsbInterfaceDescriptor extends SimpleUsbDescriptor
 
     /**
      * Constructor.
-     *
+     * 
      * @param bLength
      *            The descriptor length.
      * @param bDescriptorType
@@ -75,6 +75,25 @@ public final class SimpleUsbInterfaceDescriptor extends SimpleUsbDescriptor
         this.bInterfaceSubClass = bInterfaceSubClass;
         this.bInterfaceProtocol = bInterfaceProtocol;
         this.iInterface = iInterface;
+    }
+
+    /**
+     * Copy constructor.
+     * 
+     * @param descriptor
+     *            The descriptor from which to copy the data.
+     */
+    public SimpleUsbInterfaceDescriptor(final UsbInterfaceDescriptor descriptor)
+    {
+        this(descriptor.bLength(),
+            descriptor.bDescriptorType(),
+            descriptor.bInterfaceNumber(),
+            descriptor.bAlternateSetting(),
+            descriptor.bNumEndpoints(),
+            descriptor.bInterfaceClass(),
+            descriptor.bInterfaceSubClass(),
+            descriptor.bInterfaceProtocol(),
+            descriptor.iInterface());
     }
 
     /**

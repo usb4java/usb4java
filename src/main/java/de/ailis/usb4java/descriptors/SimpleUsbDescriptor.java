@@ -57,4 +57,32 @@ public abstract class SimpleUsbDescriptor implements UsbDescriptor,
     {
         return this.bDescriptorType;
     }
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + this.bDescriptorType;
+        result = prime * result + this.bLength;
+        return result;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        SimpleUsbDescriptor other = (SimpleUsbDescriptor) obj;
+        if (this.bDescriptorType != other.bDescriptorType) return false;
+        if (this.bLength != other.bLength) return false;
+        return true;
+    }
 }

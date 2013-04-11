@@ -5,8 +5,6 @@
 
 package de.ailis.usb4java;
 
-import static de.ailis.usb4java.jni.USB.usb_init;
-
 import javax.usb.UsbDevice;
 import javax.usb.UsbException;
 import javax.usb.UsbHostManager;
@@ -19,7 +17,7 @@ import de.ailis.usb4java.libusb.Loader;
 import de.ailis.usb4java.libusb.LoaderException;
 import de.ailis.usb4java.support.Config;
 import de.ailis.usb4java.support.UsbServicesListenerList;
-import de.ailis.usb4java.topology.UsbDeviceScanner;
+import de.ailis.usb4java.topology.UsbDeviceManager;
 import de.ailis.usb4java.topology.VirtualRootHub;
 
 /**
@@ -47,7 +45,7 @@ public final class Services implements UsbServices
     private final VirtualRootHub rootHub;
 
     /** The USB device scanner. */
-    private final UsbDeviceScanner deviceScanner;
+    private final UsbDeviceManager deviceScanner;
 
     /** If devices should be scanned by hierarchy. */
     private final Config config;
@@ -64,10 +62,8 @@ public final class Services implements UsbServices
     {
         this.config = new Config(UsbHostManager.getProperties());
         Loader.load();
-        usb_init();
         this.rootHub = new VirtualRootHub();
-        this.deviceScanner =
-            new UsbDeviceScanner(this, this.rootHub, this.config);
+        this.deviceScanner = new UsbDeviceManager(this.rootHub);
         this.deviceScanner.start();
     }
 

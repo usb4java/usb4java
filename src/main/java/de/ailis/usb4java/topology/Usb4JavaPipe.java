@@ -23,7 +23,7 @@ import javax.usb.event.UsbPipeListener;
 import javax.usb.util.DefaultUsbControlIrp;
 import javax.usb.util.DefaultUsbIrp;
 
-import de.ailis.usb4java.support.IrpQueue;
+import de.ailis.usb4java.support.IrpQueue2;
 import de.ailis.usb4java.support.UsbPipeListenerList;
 
 /**
@@ -36,9 +36,6 @@ public final class Usb4JavaPipe implements UsbPipe
     /** The endpoint this pipe belongs to. */
     private final Usb4JavaEndpoint endpoint;
 
-    /** The device. */
-    private final Usb4JavaDevice device;
-
     /** The USB pipe listeners. */
     private final UsbPipeListenerList listeners = new UsbPipeListenerList();
 
@@ -46,21 +43,18 @@ public final class Usb4JavaPipe implements UsbPipe
     private boolean opened;
 
     /** The request queue. */
-    private final IrpQueue queue;
+    private final IrpQueue2 queue;
 
     /**
      * Constructor.
      *
      * @param endpoint
      *            The endpoint this pipe belongs to.
-     * @param device
-     *            The USB device.
      */
-    Usb4JavaPipe(final Usb4JavaEndpoint endpoint, final Usb4JavaDevice device)
+    Usb4JavaPipe(final Usb4JavaEndpoint endpoint)
     {
         this.endpoint = endpoint;
-        this.device = device;
-        this.queue = new IrpQueue(device, this);
+        this.queue = new IrpQueue2(this);
     }
 
     /**
@@ -68,9 +62,9 @@ public final class Usb4JavaPipe implements UsbPipe
      *
      * @return The USB device.
      */
-    Usb4JavaDevice getDevice()
+    public Usb4JavaDevice getDevice()
     {
-        return this.device;
+        return this.endpoint.getUsbInterface().getUsbConfiguration().getUsbDevice();
     }
 
     /**
@@ -105,7 +99,7 @@ public final class Usb4JavaPipe implements UsbPipe
      */
     private void checkConnected() throws UsbDisconnectedException
     {
-        this.device.checkConnected();
+        getDevice().checkConnected();
     }
 
     /**

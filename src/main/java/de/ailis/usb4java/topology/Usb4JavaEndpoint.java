@@ -8,43 +8,45 @@ package de.ailis.usb4java.topology;
 import javax.usb.UsbConst;
 import javax.usb.UsbEndpoint;
 import javax.usb.UsbEndpointDescriptor;
+import javax.usb.UsbPipe;
+
+import de.ailis.usb4java.descriptors.SimpleUsbEndpointDescriptor;
+import de.ailis.usb4java.libusb.EndpointDescriptor;
 
 /**
  * usb4java implementation of UsbEndpoint.
- *
+ * 
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class Usb4JavaEndpoint implements UsbEndpoint
 {
-    /** The USB interface this endpoint belongs to. */
+    /** The interface this endpoint belongs to. */
     private final Usb4JavaInterface iface;
 
-    /** The USB endpoint descriptor. */
+    /** The endpoint descriptor. */
     private final UsbEndpointDescriptor descriptor;
 
     /** The USB pipe for this endpoint. */
     private final Usb4JavaPipe pipe;
-
+    
     /**
      * Constructor.
-     *
+     * 
      * @param iface
-     *            The USB interface this endpoint belongs to.
+     *            The interface this endpoint belongs to.
      * @param descriptor
-     *            The USB endpoint descriptor.
-     * @param device
-     *            The USB device.
+     *            The libusb endpoint descriptor.
      */
-    public Usb4JavaEndpoint(final Usb4JavaInterface iface,
-        final UsbEndpointDescriptor descriptor, final Usb4JavaDevice device)
+    Usb4JavaEndpoint(final Usb4JavaInterface iface,
+        final EndpointDescriptor descriptor)
     {
         this.iface = iface;
-        this.descriptor = descriptor;
-        this.pipe = new Usb4JavaPipe(this, device);
+        this.descriptor = new SimpleUsbEndpointDescriptor(descriptor);
+        this.pipe = new Usb4JavaPipe(this);
     }
 
     /**
-     * @see UsbEndpoint#getUsbInterface()
+     * @see javax.usb.UsbEndpoint#getUsbInterface()
      */
     @Override
     public Usb4JavaInterface getUsbInterface()
@@ -53,7 +55,7 @@ public final class Usb4JavaEndpoint implements UsbEndpoint
     }
 
     /**
-     * @see UsbEndpoint#getUsbEndpointDescriptor()
+     * @see javax.usb.UsbEndpoint#getUsbEndpointDescriptor()
      */
     @Override
     public UsbEndpointDescriptor getUsbEndpointDescriptor()
@@ -62,7 +64,7 @@ public final class Usb4JavaEndpoint implements UsbEndpoint
     }
 
     /**
-     * @see UsbEndpoint#getDirection()
+     * @see javax.usb.UsbEndpoint#getDirection()
      */
     @Override
     public byte getDirection()
@@ -72,7 +74,7 @@ public final class Usb4JavaEndpoint implements UsbEndpoint
     }
 
     /**
-     * @see UsbEndpoint#getType()
+     * @see javax.usb.UsbEndpoint#getType()
      */
     @Override
     public byte getType()
@@ -82,21 +84,11 @@ public final class Usb4JavaEndpoint implements UsbEndpoint
     }
 
     /**
-     * @see UsbEndpoint#getUsbPipe()
+     * @see javax.usb.UsbEndpoint#getUsbPipe()
      */
     @Override
-    public Usb4JavaPipe getUsbPipe()
+    public UsbPipe getUsbPipe()
     {
         return this.pipe;
-    }
-    
-    /**
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString()
-    {
-        return String.format("USB endpoint %02x", 
-            this.descriptor.bEndpointAddress());
     }
 }

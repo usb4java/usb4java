@@ -9,28 +9,46 @@ import java.util.List;
 
 import javax.usb.UsbHub;
 
-import de.ailis.usb4java.jni.USB_Device;
+import de.ailis.usb4java.exceptions.Usb4JavaException;
+import de.ailis.usb4java.libusb.Device;
 
 /**
  * usb4java implementation of JSR-80 UsbHub.
- *
+ * 
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class Usb4JavaHub extends Usb4JavaDevice implements UsbHub,
     UsbPorts<Usb4JavaPort, Usb4JavaDevice>
 {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 1L;
+
     /** The hub ports. */
     private final Usb4JavaPorts ports = new Usb4JavaPorts(this);
 
     /**
      * Constructor.
-     *
+     * 
+     * @param manager
+     *            The USB device manager which is responsible for this device.
+     * @param id
+     *            THe device id. Must not be null.
+     * @param parentId
+     *            The parent id. may be null if this device has no parent.
+     * @param speed
+     *            The device speed.
      * @param device
-     *            The low-level USB device.
+     *            The libusb device. This reference is only valid during the
+     *            constructor execution, so don't store it in a property or
+     *            something like that.
+     * @throws Usb4JavaException
+     *             When device configuration could not be read.
      */
-    public Usb4JavaHub(final USB_Device device)
+    public Usb4JavaHub(final UsbDeviceManager manager, final DeviceId id,
+        final DeviceId parentId, final int speed, final Device device)
+        throws Usb4JavaException
     {
-        super(device);
+        super(manager, id, parentId, speed, device);
     }
 
     /**
@@ -103,27 +121,5 @@ public final class Usb4JavaHub extends Usb4JavaDevice implements UsbHub,
     public boolean isUsbHub()
     {
         return true;
-    }
-
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(final Object obj)
-    {
-        if (obj == null) return false;
-        if (obj == this) return true;
-        if (obj.getClass() != getClass()) return false;
-        final Usb4JavaHub other = (Usb4JavaHub) obj;
-        return this.device.equals(other.device);
-    }
-
-    /**
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode()
-    {
-        return this.device.hashCode();
     }
 }
