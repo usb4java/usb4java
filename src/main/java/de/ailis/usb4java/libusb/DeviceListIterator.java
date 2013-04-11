@@ -18,7 +18,7 @@ final class DeviceListIterator implements Iterator<Device>
     private final DeviceList devices;
 
     /** The current index. */
-    private int index;
+    private int nextIndex;
 
     /**
      * Constructor.
@@ -37,7 +37,7 @@ final class DeviceListIterator implements Iterator<Device>
     @Override
     public boolean hasNext()
     {
-        return this.index < this.devices.getSize() - 1;
+        return this.nextIndex < this.devices.getSize();
     }
 
     /**
@@ -46,7 +46,7 @@ final class DeviceListIterator implements Iterator<Device>
     @Override
     public Device next()
     {
-        return this.devices.get(this.index++);
+        return this.devices.get(this.nextIndex++);
     }
 
     /**
