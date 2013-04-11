@@ -133,4 +133,16 @@ public class DeviceId implements Serializable
     {
         return this.deviceDescriptor;
     }
+    
+    /**
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString()
+    {
+        return String.format("Bus %03d Device %03d: ID %04x:%04x",
+            this.busNumber, this.deviceAddress, 
+            this.deviceDescriptor.idVendor(),
+            this.deviceDescriptor.idProduct());
+    }
 }
