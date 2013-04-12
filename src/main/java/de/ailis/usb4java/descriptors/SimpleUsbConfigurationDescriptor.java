@@ -7,6 +7,9 @@ package de.ailis.usb4java.descriptors;
 
 import javax.usb.UsbConfigurationDescriptor;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * Simple USB configuration descriptor.
  * 
@@ -129,45 +132,44 @@ public final class SimpleUsbConfigurationDescriptor extends SimpleUsbDescriptor
     @Override
     public int hashCode()
     {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + this.bConfigurationValue;
-        result = prime * result + this.bMaxPower;
-        result = prime * result + this.bNumInterfaces;
-        result = prime * result + this.bmAttributes;
-        result = prime * result + this.iConfiguration;
-        result = prime * result + this.wTotalLength;
-        return result;
+        return new HashCodeBuilder()
+            .appendSuper(super.hashCode())
+            .append(this.bConfigurationValue)
+            .append(this.bMaxPower)
+            .append(this.bNumInterfaces)
+            .append(this.bmAttributes)
+            .append(this.iConfiguration)
+            .append(this.wTotalLength)
+            .toHashCode();
     }
 
     @Override
-    public boolean equals(Object obj)
+    public boolean equals(final Object obj)
     {
         if (this == obj) return true;
-        if (!super.equals(obj)) return false;
-        if (getClass() != obj.getClass()) return false;
-        SimpleUsbConfigurationDescriptor other =
+        if (!super.equals(obj)) return false; 
+        final SimpleUsbConfigurationDescriptor other =
             (SimpleUsbConfigurationDescriptor) obj;
-        if (this.bConfigurationValue != other.bConfigurationValue)
-            return false;
-        if (this.bMaxPower != other.bMaxPower) return false;
-        if (this.bNumInterfaces != other.bNumInterfaces) return false;
-        if (this.bmAttributes != other.bmAttributes) return false;
-        if (this.iConfiguration != other.iConfiguration) return false;
-        if (this.wTotalLength != other.wTotalLength) return false;
-        return true;
+        return new EqualsBuilder()
+            .append(this.bConfigurationValue, other.bConfigurationValue)
+            .append(this.bMaxPower, other.bMaxPower)
+            .append(this.bNumInterfaces, other.bNumInterfaces)
+            .append(this.bmAttributes, other.bmAttributes)
+            .append(this.iConfiguration, other.iConfiguration)
+            .append(this.wTotalLength, other.wTotalLength)
+            .isEquals();
     }
 
     @Override
     public String toString()
     {
-        return String.format("Configuration Descriptor:\n%s"
-            + "  wTotalLength %13d\n"
-            + "  bNumInterfaces %11d\n"
-            + "  bConfigurationValue %6d\n"
-            + "  iConfiguration %11d\n"
-            + "  bmAttributes %13s\n"
-            + "  bMaxPower %16smA\n",
+        return String.format("Configuration Descriptor:%n%s"
+            + "  wTotalLength %13d%n"
+            + "  bNumInterfaces %11d%n"
+            + "  bConfigurationValue %6d%n"
+            + "  iConfiguration %11d%n"
+            + "  bmAttributes %13s%n"
+            + "  bMaxPower %16smA%n",
             super.toString(),
             this.wTotalLength & 0xffff,
             this.bNumInterfaces & 0xff,

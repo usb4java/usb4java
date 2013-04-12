@@ -14,11 +14,14 @@ import java.net.URL;
 
 /**
  * Utility class to load native libraries from classpath.
- *
+ * 
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class Loader
 {
+    /** Buffer size used for copying data. */
+    private static final int BUFFER_SIZE = 8192;
+    
     /** Constant for Mac OS X operating system. */
     private static final String OS_MACOSX = "macosx";
 
@@ -77,7 +80,7 @@ public final class Loader
      * "macosx" or (for any other non-supported platform) the value of the
      * "os.name" property converted to lower case and with removed space
      * characters.
-     *
+     * 
      * @return The operating system name.
      */
     private static String getOS()
@@ -92,7 +95,7 @@ public final class Loader
      * names i386 und amd64 are converted accordingly) or (when platform is
      * unsupported) the value of os.arch converted to lower-case and with
      * removed space characters.
-     *
+     * 
      * @return The CPU architecture
      */
     private static String getArch()
@@ -107,7 +110,7 @@ public final class Loader
 
     /**
      * Returns the shared library extension name.
-     *
+     * 
      * @return The shared library extension name.
      */
     private static String getExt()
@@ -130,7 +133,7 @@ public final class Loader
     /**
      * Creates the temporary directory used for unpacking the native libraries.
      * This directory is marked for deletion on exit.
-     *
+     * 
      * @return The temporary directory for native libraries.
      */
     private static File createTempDirectory()
@@ -141,8 +144,11 @@ public final class Loader
         try
         {
             tmp = File.createTempFile("usb4java", null);
-            tmp.delete();
-            tmp.mkdirs();
+            if (!tmp.delete())
+                throw new IOException("Unable to delete temporary file " + tmp);
+            if (!tmp.mkdirs())
+                throw new IOException("Unable to create temporary directory "
+                    + tmp);
             tmp.deleteOnExit();
             return tmp;
         }
@@ -156,7 +162,7 @@ public final class Loader
     /**
      * Returns the platform name. This could be for example "linux-x86" or
      * "windows-x86_64".
-     *
+     * 
      * @return The architecture name. Never null.
      */
     private static String getPlatform()
@@ -167,7 +173,7 @@ public final class Loader
     /**
      * Returns the name of the usb4java native library. This could be
      * "libusb4java.dll" for example.
-     *
+     * 
      * @return The usb4java native library name. Never null.
      */
     private static String getLibName()
@@ -179,7 +185,7 @@ public final class Loader
      * Returns the name of the libusb native library. This could be
      * "libusb0.dll" for example or null if this library is not needed on the
      * current platform (Because it is provided by the operating system).
-     *
+     * 
      * @return The libusb native library name or null if not needed.
      */
     private static String getExtraLibName()
@@ -193,7 +199,7 @@ public final class Loader
 
     /**
      * Copies the specified input stream to the specified output file.
-     *
+     * 
      * @param input
      *            The input stream.
      * @param output
@@ -204,7 +210,7 @@ public final class Loader
     private static void copy(final InputStream input, final File output)
         throws IOException
     {
-        final byte[] buffer = new byte[8192];
+        final byte[] buffer = new byte[BUFFER_SIZE];
         final FileOutputStream stream = new FileOutputStream(output);
         try
         {
@@ -222,7 +228,7 @@ public final class Loader
 
     /**
      * Extracts a single library.
-     *
+     * 
      * @param platform
      *            The platform name (For example "linux-x86")
      * @param lib
@@ -289,19 +295,18 @@ public final class Loader
     }
 
     /**
-     * Loads the libusbx native wrapper library. Can be safely called
-     * multiple times. Duplicate calls are ignored. This method is automatically
-     * called when the {@link LibUSB} class is loaded. When you need to do it
-     * earlier (To catch exceptions for example) then simply call this method
-     * manually.
-     *
+     * Loads the libusbx native wrapper library. Can be safely called multiple
+     * times. Duplicate calls are ignored. This method is automatically called
+     * when the {@link LibUSB} class is loaded. When you need to do it earlier
+     * (To catch exceptions for example) then simply call this method manually.
+     * 
      * @throws LoaderException
      *             When loading the native wrapper libraries failed.
      */
-    public static void load() throws LoaderException
+    public static void load()
     {
         if (loaded) return;
-        
+
         final String platform = getPlatform();
         final String lib = getLibName();
         final String extraLib = getExtraLibName();

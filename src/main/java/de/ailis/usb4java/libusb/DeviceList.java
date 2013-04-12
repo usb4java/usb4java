@@ -13,6 +13,8 @@ package de.ailis.usb4java.libusb;
 
 import java.util.Iterator;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * List of devices as returned by
  * {@link LibUSB#getDeviceList(Context, DeviceList)}
@@ -20,11 +22,21 @@ import java.util.Iterator;
 public final class DeviceList implements Iterable<Device>
 {
     /** The native pointer to the devices array. */
-    long pointer;
+    private long pointer;
 
     /** The number of devices in the list. */
-    int size;
+    private int size;
 
+    /**
+     * Returns the native pointer.
+     * 
+     * @return The native pointer.
+     */
+    public long getPointer()
+    {
+        return this.pointer;
+    }
+        
     /**
      * Returns the number of devices in the list.
      * 
@@ -48,5 +60,21 @@ public final class DeviceList implements Iterable<Device>
     public Iterator<Device> iterator()
     {
         return new DeviceListIterator(this);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder().append(this.pointer).toHashCode();
+    }
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        final DeviceList other = (DeviceList) obj;
+        return this.pointer == other.pointer;
     }
 }

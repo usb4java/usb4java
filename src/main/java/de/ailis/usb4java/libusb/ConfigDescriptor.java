@@ -15,6 +15,11 @@ import java.nio.ByteBuffer;
 
 import javax.usb.UsbConfigurationDescriptor;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import de.ailis.usb4java.utils.DumpUtils;
+
 /**
  * A structure representing the standard USB configuration descriptor.
  * 
@@ -24,8 +29,18 @@ import javax.usb.UsbConfigurationDescriptor;
 public final class ConfigDescriptor implements UsbConfigurationDescriptor
 {
     /** The native pointer to the descriptor structure. */
-    long pointer;
-    
+    private long pointer;
+
+    /**
+     * Returns the native pointer.
+     * 
+     * @return The native pointer.
+     */
+    public long getPointer()
+    {
+        return this.pointer;
+    }
+
     @Override
     public native byte bLength();
 
@@ -49,14 +64,14 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
 
     @Override
     public native byte bMaxPower();
- 
+
     /**
      * Returns the array with interfaces supported by this configuration.
-     *
+     * 
      * @return The array with interfaces.
      */
     public native Interface[] iface();
-    
+
     /**
      * Extra descriptors.
      * 
@@ -76,7 +91,7 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
 
     /**
      * Returns a dump of this descriptor.
-     *
+     * 
      * @return The descriptor dump.
      */
     public String dump()
@@ -86,7 +101,7 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
 
     /**
      * Returns a dump of this descriptor.
-     *
+     * 
      * @param handle
      *            The USB device handle for resolving string descriptors. If
      *            null then no strings are resolved.
@@ -112,48 +127,49 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
                 bConfigurationValue(), iConfiguration(), bmAttributes(),
                 bMaxPower() * 2, extraLength(), DumpUtils.toHexDump(extra())
                     .replaceAll("(?m)^", "    ")));
-        for (final Interface descriptor : iface())
+        for (final Interface descriptor: iface())
         {
             builder.append(descriptor.dump(handle)
-                    .replaceAll("(?m)^", "  "));
+                .replaceAll("(?m)^", "  "));
         }
         return builder.toString();
     }
 
     @Override
-    public boolean equals(final Object o)
+    public boolean equals(final Object obj)
     {
-        if (o == null) return false;
-        if (o == this) return true;
-        if (o.getClass() != getClass()) return false;
-        final ConfigDescriptor other = (ConfigDescriptor) o;
-        return bDescriptorType() == other.bDescriptorType()
-            && bLength() == other.bLength()
-            && bConfigurationValue() == other.bConfigurationValue()
-            && bmAttributes() == other.bmAttributes()
-            && bNumInterfaces() == other.bNumInterfaces()
-            && iConfiguration() == other.iConfiguration()
-            && bMaxPower() == other.bMaxPower()
-            && wTotalLength() == other.wTotalLength();
+        if (obj == null) return false;
+        if (obj == this) return true;
+        if (obj.getClass() != getClass()) return false;
+        final ConfigDescriptor other = (ConfigDescriptor) obj;
+        return new EqualsBuilder()
+            .append(bDescriptorType(), other.bDescriptorType())
+            .append(bLength(), other.bLength())
+            .append(bConfigurationValue(), other.bConfigurationValue())
+            .append(bmAttributes(), other.bmAttributes())
+            .append(bNumInterfaces(), other.bNumInterfaces())
+            .append(iConfiguration(), other.iConfiguration())
+            .append(bMaxPower(), other.bMaxPower())
+            .append(wTotalLength(), other.wTotalLength()).isEquals();
     }
 
     @Override
     public int hashCode()
     {
-        int result = 17;
-        result = 37 * result + bLength();
-        result = 37 * result + bDescriptorType();
-        result = 37 * result + wTotalLength();
-        result = 37 * result + bNumInterfaces();
-        result = 37 * result + bConfigurationValue();
-        result = 37 * result + iConfiguration();
-        result = 37 * result + bmAttributes();
-        result = 37 * result + bMaxPower();
-        result = 37 * result + extra().hashCode();
-        result = 37 * result + extraLength();
-        return result;
+        return new HashCodeBuilder()
+            .append(bLength())
+            .append(bDescriptorType())
+            .append(wTotalLength())
+            .append(bNumInterfaces())
+            .append(bConfigurationValue())
+            .append(iConfiguration())
+            .append(bmAttributes())
+            .append(bMaxPower())
+            .append(extra())
+            .append(extraLength())
+            .toHashCode();
     }
-    
+
     @Override
     public String toString()
     {

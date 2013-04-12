@@ -11,6 +11,8 @@
 
 package de.ailis.usb4java.libusb;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * Structure representing a libusbx session. The concept of individual libusbx
  * sessions allows for your program to use two libraries (or dynamically load
@@ -32,5 +34,31 @@ package de.ailis.usb4java.libusb;
 public final class Context
 {
     /** The native pointer to the context structure. */
-    long pointer;
+    private long pointer;
+
+    /**
+     * Returns the native pointer.
+     * 
+     * @return The native pointer.
+     */
+    public long getPointer()
+    {
+        return this.pointer;
+    }
+        
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder().append(this.pointer).toHashCode();
+    }
+    
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        final Context other = (Context) obj;
+        return this.pointer == other.pointer;
+    }    
 }

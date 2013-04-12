@@ -65,15 +65,12 @@ public final class SimpleUsbStringDescriptor extends SimpleUsbDescriptor impleme
     }
 
     @Override
-    public boolean equals(final Object o)
+    public boolean equals(final Object obj)
     {
-        if (o == null) return false;
-        if (o == this) return true;
-        if (o.getClass() != getClass()) return false;
-        final SimpleUsbStringDescriptor other = (SimpleUsbStringDescriptor) o;
-        return bDescriptorType() == other.bDescriptorType()
-            && bLength() == other.bLength()
-            && Arrays.equals(this.bString, other.bString);
+        if (this == obj) return true;
+        if (!super.equals(obj)) return false;
+        final SimpleUsbStringDescriptor other = (SimpleUsbStringDescriptor) obj;
+        return Arrays.equals(this.bString, other.bString);
     }
 
     @Override

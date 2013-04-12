@@ -11,14 +11,26 @@
 
 package de.ailis.usb4java.libusb;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * A collection of alternate settings for a particular USB interface.
  */
 public final class Interface
 {
     /** The native pointer to the descriptor structure. */
-    long pointer;
+    private long pointer;
 
+    /**
+     * Returns the native pointer.
+     * 
+     * @return The native pointer.
+     */
+    public long getPointer()
+    {
+        return this.pointer;
+    }
+        
     /**
      * Returns the array with interface descriptors. The length of this array is
      * determined by the {@link #numAltsetting()} field.
@@ -65,21 +77,17 @@ public final class Interface
     @Override
     public int hashCode()
     {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (int) (this.pointer ^ (this.pointer >>> 32));
-        return result;
+        return new HashCodeBuilder().append(this.pointer).toHashCode();
     }
 
     @Override
-    public boolean equals(Object obj)
+    public boolean equals(final Object obj)
     {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
-        Device other = (Device) obj;
-        if (this.pointer != other.pointer) return false;
-        return true;
+        final Interface other = (Interface) obj;
+        return this.pointer == other.pointer;
     }
     
     @Override

@@ -9,9 +9,11 @@ import java.io.Serializable;
 
 import javax.usb.UsbDescriptor;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * Base class for all simple USB descriptors.
- *
+ * 
  * @author Klaus Reimer (k@ailis.de)
  */
 public abstract class SimpleUsbDescriptor implements UsbDescriptor,
@@ -28,7 +30,7 @@ public abstract class SimpleUsbDescriptor implements UsbDescriptor,
 
     /**
      * Constructor.
-     *
+     * 
      * @param bLength
      *            The descriptor length.
      * @param bDescriptorType
@@ -55,29 +57,29 @@ public abstract class SimpleUsbDescriptor implements UsbDescriptor,
     @Override
     public int hashCode()
     {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + this.bDescriptorType;
-        result = prime * result + this.bLength;
-        return result;
+        return new HashCodeBuilder()
+            .appendSuper(super.hashCode())
+            .append(this.bDescriptorType)
+            .append(this.bLength)
+            .toHashCode();
     }
 
     @Override
-    public boolean equals(Object obj)
+    public boolean equals(final Object obj)
     {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
-        SimpleUsbDescriptor other = (SimpleUsbDescriptor) obj;
+        final SimpleUsbDescriptor other = (SimpleUsbDescriptor) obj;
         if (this.bDescriptorType != other.bDescriptorType) return false;
         if (this.bLength != other.bLength) return false;
         return true;
     }
-    
+
     @Override
     public String toString()
     {
-        return String.format("  bLength %18d\n  bDescriptorType %10d\n",
+        return String.format("  bLength %18d%n  bDescriptorType %10d%n",
             this.bLength, this.bDescriptorType);
     }
 }

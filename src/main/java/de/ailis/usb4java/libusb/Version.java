@@ -11,13 +11,27 @@
 
 package de.ailis.usb4java.libusb;
 
+import org.apache.commons.lang3.builder.CompareToBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * Structure providing the version of the libusbx runtime.
  */
 public final class Version implements Comparable<Version>
 {
     /** The native pointer to the version structure. */
-    long pointer;
+    private long pointer;
+
+    /**
+     * Returns the native pointer.
+     * 
+     * @return The native pointer.
+     */
+    public long getPointer()
+    {
+        return this.pointer;
+    }
 
     /**
      * Returns the library major version.
@@ -25,27 +39,27 @@ public final class Version implements Comparable<Version>
      * @return The library major version.
      */
     public native int major();
-    
+
     /**
      * Returns the library minor version.
      * 
      * @return The library minor version.
      */
     public native int minor();
-    
+
     /**
      * Returns the library micro version.
      * 
      * @return The library micro version.
      */
     public native int micro();
-    
+
     /**
      * Returns the release candidate suffix string, e.g. "-rc4".
      * 
      * @return The release candidate suffix string.
      */
-    public native String rc();   
+    public native String rc();
 
     @Override
     public String toString()
@@ -53,48 +67,35 @@ public final class Version implements Comparable<Version>
         return major() + "." + minor() + "." + micro() + rc();
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode()
     {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + major();
-        result = prime * result + minor();
-        result = prime * result + micro();
-        result =
-            prime * result + ((rc() == null) ? 0 : rc().hashCode());
-        return result;
+        return new HashCodeBuilder().append(this.pointer).toHashCode();
     }
 
     @Override
-    public boolean equals(Object o)
+    public boolean equals(final Object obj)
     {
-        if (o == null) return false;
-        if (o == this) return true;
-        if (o.getClass() != getClass()) return false;
-        final Version other = (Version) o;
-        if (rc() == null && other.rc() != null) return false;
-        else if (!rc().equals(other.rc())) return false;
-        return major() == other.major()
-            && minor() == other.minor()
-            && micro() == other.micro()
-            && rc() == other.rc();
+        if (obj == null) return false;
+        if (obj == this) return true;
+        if (obj.getClass() != getClass()) return false;
+        final Version other = (Version) obj;
+        return new EqualsBuilder()
+            .append(major(), other.major())
+            .append(minor(), other.minor())
+            .append(micro(), other.micro())
+            .append(rc(), other.rc())
+            .isEquals();
     }
 
     @Override
-    public int compareTo(Version o)
+    public int compareTo(final Version other)
     {
-        if (major() > o.major()) return 1;
-        if (major() < o.major()) return -1;
-        if (minor() > o.minor()) return 1;
-        if (minor() < o.minor()) return -1;
-        if (micro() > o.micro()) return 1;
-        if (micro() < o.micro()) return -1;
-        if (rc() != null && o.rc() == null) return 1;
-        if (rc() == null && o.rc() != null) return -1;
-        return rc().compareTo(o.rc());
+        return new CompareToBuilder()
+            .append(major(), other.major())
+            .append(minor(), other.minor())
+            .append(micro(), other.micro())
+            .append(rc(), other.rc())
+            .toComparison();
     }
 }

@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.usb.UsbClaimException;
 import javax.usb.UsbDisconnectedException;
 import javax.usb.UsbException;
 import javax.usb.UsbInterface;
@@ -69,7 +68,7 @@ public final class Usb4JavaInterface implements UsbInterface
      * @throws UsbNotActiveException
      *             When the setting or the configuration is not active.
      */
-    private void checkActive() throws UsbNotActiveException
+    private void checkActive()
     {
         if (!this.configuration.isActive())
             throw new UsbNotActiveException("Configuration is not active");
@@ -83,7 +82,7 @@ public final class Usb4JavaInterface implements UsbInterface
      * @throws UsbDisconnectedException
      *             When device has been disconnected.
      */
-    private void checkConnected() throws UsbDisconnectedException
+    private void checkConnected()
     {
         this.configuration.getUsbDevice().checkConnected();
     }
@@ -92,8 +91,7 @@ public final class Usb4JavaInterface implements UsbInterface
      * @see UsbInterface#claim()
      */
     @Override
-    public void claim() throws UsbException, UsbClaimException,
-        UsbNotActiveException, UsbDisconnectedException
+    public void claim() throws UsbException
     {
         claim(null);
     }
@@ -102,8 +100,7 @@ public final class Usb4JavaInterface implements UsbInterface
      * @see UsbInterface#claim(UsbInterfacePolicy)
      */
     @Override
-    public void claim(final UsbInterfacePolicy policy) throws UsbException,
-        UsbClaimException, UsbNotActiveException, UsbDisconnectedException
+    public void claim(final UsbInterfacePolicy policy) throws UsbException
     {
         checkActive();
         checkConnected();
@@ -118,8 +115,7 @@ public final class Usb4JavaInterface implements UsbInterface
      * @see UsbInterface#release()
      */
     @Override
-    public void release() throws UsbClaimException, UsbException,
-        UsbNotActiveException, UsbDisconnectedException
+    public void release() throws UsbException
     {
         checkActive();
         checkConnected();
@@ -161,7 +157,7 @@ public final class Usb4JavaInterface implements UsbInterface
      * @see UsbInterface#getActiveSettingNumber()
      */
     @Override
-    public byte getActiveSettingNumber() throws UsbNotActiveException
+    public byte getActiveSettingNumber()
     {
         checkActive();
         return this.configuration
@@ -173,7 +169,7 @@ public final class Usb4JavaInterface implements UsbInterface
      * @see UsbInterface#getActiveSetting()
      */
     @Override
-    public Usb4JavaInterface getActiveSetting() throws UsbNotActiveException
+    public Usb4JavaInterface getActiveSetting()
     {
         checkActive();
         return this.configuration.getUsbInterface(this.descriptor
@@ -262,7 +258,7 @@ public final class Usb4JavaInterface implements UsbInterface
      */
     @Override
     public String getInterfaceString() throws UsbException,
-        UnsupportedEncodingException, UsbDisconnectedException
+        UnsupportedEncodingException
     {
         checkConnected();
         final byte iInterface = this.descriptor.iInterface();

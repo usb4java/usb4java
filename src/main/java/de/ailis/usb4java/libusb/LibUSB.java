@@ -20,6 +20,9 @@ import java.nio.IntBuffer;
  */
 public final class LibUSB
 {
+    /** The maximum size of a string (Unicode). */
+    private static final int MAX_STRING_SIZE = 126;
+    
     // Log message levels.
 
     /** No messages ever printed by the library (default). */
@@ -153,16 +156,16 @@ public final class LibUSB
     // Request type bits of the bmRequestType field in control transfers.
 
     /** Standard. */
-    public static final int REQUEST_TYPE_STANDARD = 0x00 << 5;
+    public static final int REQUEST_TYPE_STANDARD = 0;
 
     /** Class. */
-    public static final int REQUEST_TYPE_CLASS = 0x01 << 5;
+    public static final int REQUEST_TYPE_CLASS = 32;
 
     /** Vendor. */
-    public static final int REQUEST_TYPE_VENDOR = 0x02 << 5;
+    public static final int REQUEST_TYPE_VENDOR = 64;
 
     /** Reserved. */
-    public static final int REQUEST_TYPE_RESERVED = 0x03 << 5;
+    public static final int REQUEST_TYPE_RESERVED = 96;
 
     // Recipient bits of the bmRequestType field in control transfers.
     // Values 4 through 31 are reserved.
@@ -382,7 +385,7 @@ public final class LibUSB
     public static final int ISO_USAGE_TYPE_IMPLICIT = 2;
 
     /** Report short frames as errors. */
-    public static final int TRANSFER_SHORT_NOT_OK = 1 << 0;
+    public static final int TRANSFER_SHORT_NOT_OK = 1;
 
     // Transfer flags
 
@@ -390,7 +393,7 @@ public final class LibUSB
      * Automatically free transfer buffer during {@link #freeTransfer(Transfer)}
      * TODO Not sure how to do this memory management between Java and C.
      */
-    public static final int TRANSFER_FREE_BUFFER = 1 << 1;
+    public static final int TRANSFER_FREE_BUFFER = 2;
 
     /**
      * Automatically call {@link #freeTransfer(Transfer)} after callback
@@ -400,7 +403,7 @@ public final class LibUSB
      * {@link #freeTransfer(Transfer)} from your transfer callback, as this will
      * result in a double-free when this flag is acted upon.
      */
-    public static final int TRANSFER_FREE_TRANSFER = 1 << 2;
+    public static final int TRANSFER_FREE_TRANSFER = 4;
 
     /**
      * Terminate transfers that are a multiple of the endpoint's wMaxPacketSize
@@ -424,7 +427,7 @@ public final class LibUSB
      * libusb_submit_transfer() will return {@link #ERROR_NOT_SUPPORTED} for
      * every transfer where this flag is set.
      */
-    public static final int TRANSFER_ADD_ZERO_PACKET = 1 << 3;
+    public static final int TRANSFER_ADD_ZERO_PACKET = 8;
 
     // Transfer status codes
 
@@ -432,28 +435,28 @@ public final class LibUSB
      * Transfer completed without error. Note that this does not indicate that
      * the entire amount of requested data was transferred.
      */
-    public static int TRANSFER_COMPLETED = 0;
+    public static final int TRANSFER_COMPLETED = 0;
 
     /** Transfer failed. */
-    public static int TRANSFER_ERROR = 1;
+    public static final int TRANSFER_ERROR = 1;
 
     /** Transfer timed out. */
-    public static int TRANSFER_TIMED_OUT = 2;
+    public static final int TRANSFER_TIMED_OUT = 2;
 
     /** Transfer was cancelled. */
-    public static int TRANSFER_CANCELLED = 3;
+    public static final int TRANSFER_CANCELLED = 3;
 
     /**
      * For bulk/interrupt endpoints: halt condition detected (endpoint stalled).
      * For control endpoints: control request not supported.
      */
-    public static int TRANSFER_STALL = 4;
+    public static final int TRANSFER_STALL = 4;
 
     /** Device was disconnected. */
-    public static int TRANSFER_NO_DEVICE = 5;
+    public static final int TRANSFER_NO_DEVICE = 5;
 
     /** Device sent more data than requested. */
-    public static int TRANSFER_OVERFLOW = 6;
+    public static final int TRANSFER_OVERFLOW = 6;
 
     /** The currently set pollfd listener. */
     private static PollfdListener pollfdListener;
@@ -1138,7 +1141,7 @@ public final class LibUSB
     /**
      * A simple wrapper around
      * {@link #getStringDescriptorAscii(DeviceHandle, int, StringBuffer, int)}
-     * Simply returns the string (Maximum length of 256) if possible. If not
+     * Simply returns the string (Maximum length of 126) if possible. If not
      * possible (NULL handle or 0-index specified or error occured) then null is
      * returned.
      * 
@@ -1155,8 +1158,11 @@ public final class LibUSB
     {
         if (handle == null || index == 0) return null;
         StringBuffer buffer = new StringBuffer();
-        if (getStringDescriptorAscii(handle, index, buffer, 256) >= 0)
+        if (getStringDescriptorAscii(handle, index, buffer, MAX_STRING_SIZE) 
+            >= 0)
+        {
             return buffer.toString();
+        }
         return null;
     }
 

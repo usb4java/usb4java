@@ -5,7 +5,6 @@
 
 package de.ailis.usb4java.topology;
 
-import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -32,6 +31,7 @@ import javax.usb.util.DefaultUsbControlIrp;
 import de.ailis.usb4java.Services;
 import de.ailis.usb4java.descriptors.SimpleUsbStringDescriptor;
 import de.ailis.usb4java.exceptions.Usb4JavaException;
+import de.ailis.usb4java.exceptions.Usb4JavaRuntimeException;
 import de.ailis.usb4java.libusb.ConfigDescriptor;
 import de.ailis.usb4java.libusb.Device;
 import de.ailis.usb4java.libusb.DeviceHandle;
@@ -44,11 +44,8 @@ import de.ailis.usb4java.support.UsbDeviceListenerList;
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
-public class Usb4JavaDevice implements Serializable, UsbDevice
+public class Usb4JavaDevice implements UsbDevice
 {
-    /** The serial versionUID. */
-    private static final long serialVersionUID = 1L;
-
     /** The USB device manager. */
     private final UsbDeviceManager manager;
 
@@ -210,7 +207,7 @@ public class Usb4JavaDevice implements Serializable, UsbDevice
      * @throws UsbDisconnectedException
      *             When device is disconnected.
      */
-    final void checkConnected() throws UsbDisconnectedException
+    final void checkConnected()
     {
         if (this.port == null) throw new UsbDisconnectedException();
     }
@@ -263,7 +260,7 @@ public class Usb4JavaDevice implements Serializable, UsbDevice
      * @see UsbDevice#getParentUsbPort()
      */
     @Override
-    public UsbPort getParentUsbPort() throws UsbDisconnectedException
+    public UsbPort getParentUsbPort()
     {
         checkConnected();
         return this.port;
@@ -288,7 +285,9 @@ public class Usb4JavaDevice implements Serializable, UsbDevice
         {
             final Usb4JavaHub hub = (Usb4JavaHub) this;
             for (final Usb4JavaDevice device: hub.getAttachedUsbDevices())
+            {
                 hub.disconnectUsbDevice(device);
+            }
         }
 
         this.port = port;
@@ -302,7 +301,7 @@ public class Usb4JavaDevice implements Serializable, UsbDevice
         {
             // Can't happen. When we got here then USB services are already
             // loaded
-            throw new RuntimeException(e.toString(), e);
+            throw new Usb4JavaRuntimeException(e.toString(), e);
         }
 
         if (port == null)
@@ -321,7 +320,7 @@ public class Usb4JavaDevice implements Serializable, UsbDevice
      */
     @Override
     public String getManufacturerString() throws UsbException,
-        UnsupportedEncodingException, UsbDisconnectedException
+        UnsupportedEncodingException
     {
         checkConnected();
         final byte index = getUsbDeviceDescriptor().iManufacturer();
@@ -334,7 +333,7 @@ public class Usb4JavaDevice implements Serializable, UsbDevice
      */
     @Override
     public String getSerialNumberString() throws UsbException,
-        UnsupportedEncodingException, UsbDisconnectedException
+        UnsupportedEncodingException
     {
         checkConnected();
         final byte index = getUsbDeviceDescriptor().iSerialNumber();
@@ -347,7 +346,7 @@ public class Usb4JavaDevice implements Serializable, UsbDevice
      */
     @Override
     public String getProductString() throws UsbException,
-        UnsupportedEncodingException, UsbDisconnectedException
+        UnsupportedEncodingException
     {
         checkConnected();
         final byte index = getUsbDeviceDescriptor().iProduct();
@@ -446,7 +445,7 @@ public class Usb4JavaDevice implements Serializable, UsbDevice
      *             When an interface is already claimed.
      */
     final void claimInterface(final byte number, final boolean force)
-        throws UsbException, UsbClaimException
+        throws UsbException
     {
         if (this.claimedInterfaceNumber != null)
             throw new UsbClaimException("An interface is already claimed");
@@ -487,8 +486,7 @@ public class Usb4JavaDevice implements Serializable, UsbDevice
      * @throws UsbException
      *             When interface could not be claimed.
      */
-    final void releaseInterface(final byte number) throws UsbException,
-        UsbClaimException
+    final void releaseInterface(final byte number) throws UsbException
     {
         if (this.claimedInterfaceNumber == null)
             throw new UsbClaimException("No interface is claimed");
@@ -554,7 +552,7 @@ public class Usb4JavaDevice implements Serializable, UsbDevice
      */
     @Override
     public UsbStringDescriptor getUsbStringDescriptor(byte index)
-        throws UsbException, UsbDisconnectedException
+        throws UsbException
     {
         checkConnected();
         final short[] languages = getLanguages();
@@ -574,7 +572,7 @@ public class Usb4JavaDevice implements Serializable, UsbDevice
      */
     @Override
     public String getString(byte index) throws UsbException,
-        UnsupportedEncodingException, UsbDisconnectedException
+        UnsupportedEncodingException
     {
         return getUsbStringDescriptor(index).getString();
     }
@@ -609,8 +607,7 @@ public class Usb4JavaDevice implements Serializable, UsbDevice
      * @see UsbDevice#syncSubmit(javax.usb.UsbControlIrp)
      */
     @Override
-    public void syncSubmit(UsbControlIrp irp) throws UsbException,
-        IllegalArgumentException, UsbDisconnectedException
+    public void syncSubmit(UsbControlIrp irp) throws UsbException
     {
         if (irp == null)
             throw new IllegalArgumentException("irp must not be null");
@@ -624,8 +621,7 @@ public class Usb4JavaDevice implements Serializable, UsbDevice
      * @see UsbDevice#asyncSubmit(javax.usb.UsbControlIrp)
      */
     @Override
-    public void asyncSubmit(UsbControlIrp irp) throws
-        IllegalArgumentException, UsbDisconnectedException
+    public void asyncSubmit(UsbControlIrp irp)
     {
         if (irp == null)
             throw new IllegalArgumentException("irp must not be null");
@@ -637,8 +633,7 @@ public class Usb4JavaDevice implements Serializable, UsbDevice
      * @see UsbDevice#syncSubmit(java.util.List)
      */
     @Override
-    public void syncSubmit(List list) throws UsbException,
-        IllegalArgumentException, UsbDisconnectedException
+    public void syncSubmit(List list) throws UsbException
     {
         if (list == null)
             throw new IllegalArgumentException("list must not be null");
@@ -656,8 +651,7 @@ public class Usb4JavaDevice implements Serializable, UsbDevice
      * @see UsbDevice#asyncSubmit(java.util.List)
      */
     @Override
-    public void asyncSubmit(List list) throws IllegalArgumentException,
-        UsbDisconnectedException
+    public void asyncSubmit(List list)
     {
         if (list == null)
             throw new IllegalArgumentException("list must not be null");

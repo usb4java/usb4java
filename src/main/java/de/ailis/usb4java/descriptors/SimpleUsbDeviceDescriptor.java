@@ -7,6 +7,9 @@ package de.ailis.usb4java.descriptors;
 
 import javax.usb.UsbDeviceDescriptor;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * Simple USB device descriptor.
  * 
@@ -208,61 +211,61 @@ public final class SimpleUsbDeviceDescriptor extends SimpleUsbDescriptor
     @Override
     public int hashCode()
     {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + this.bDeviceClass;
-        result = prime * result + this.bDeviceProtocol;
-        result = prime * result + this.bDeviceSubClass;
-        result = prime * result + this.bMaxPacketSize0;
-        result = prime * result + this.bNumConfigurations;
-        result = prime * result + this.bcdDevice;
-        result = prime * result + this.bcdUSB;
-        result = prime * result + this.iManufacturer;
-        result = prime * result + this.iProduct;
-        result = prime * result + this.iSerialNumber;
-        result = prime * result + this.idProduct;
-        result = prime * result + this.idVendor;
-        return result;
+        return new HashCodeBuilder()
+            .appendSuper(super.hashCode())
+            .append(this.bDeviceClass)
+            .append(this.bDeviceProtocol)
+            .append(this.bDeviceSubClass)
+            .append(this.bMaxPacketSize0)
+            .append(this.bNumConfigurations)
+            .append(this.bcdDevice)
+            .append(this.bcdUSB)
+            .append(this.iManufacturer)
+            .append(this.iProduct)
+            .append(this.iSerialNumber)
+            .append(this.idProduct)
+            .append(this.idVendor)
+            .toHashCode();
     }
 
     @Override
-    public boolean equals(Object obj)
+    public boolean equals(final Object obj)
     {
         if (this == obj) return true;
         if (!super.equals(obj)) return false;
-        if (getClass() != obj.getClass()) return false;
-        SimpleUsbDeviceDescriptor other = (SimpleUsbDeviceDescriptor) obj;
-        if (this.bDeviceClass != other.bDeviceClass) return false;
-        if (this.bDeviceProtocol != other.bDeviceProtocol) return false;
-        if (this.bDeviceSubClass != other.bDeviceSubClass) return false;
-        if (this.bMaxPacketSize0 != other.bMaxPacketSize0) return false;
-        if (this.bNumConfigurations != other.bNumConfigurations) return false;
-        if (this.bcdDevice != other.bcdDevice) return false;
-        if (this.bcdUSB != other.bcdUSB) return false;
-        if (this.iManufacturer != other.iManufacturer) return false;
-        if (this.iProduct != other.iProduct) return false;
-        if (this.iSerialNumber != other.iSerialNumber) return false;
-        if (this.idProduct != other.idProduct) return false;
-        if (this.idVendor != other.idVendor) return false;
-        return true;
+        final SimpleUsbDeviceDescriptor other = (SimpleUsbDeviceDescriptor) obj;
+        return new EqualsBuilder()
+            .append(this.bDeviceClass, other.bDeviceClass)
+            .append(this.bDeviceProtocol, other.bDeviceProtocol)
+            .append(this.bDeviceSubClass, other.bDeviceSubClass)
+            .append(this.bMaxPacketSize0, other.bMaxPacketSize0)
+            .append(this.bNumConfigurations, other.bNumConfigurations)
+            .append(this.bcdDevice, other.bcdDevice)
+            .append(this.bcdUSB, other.bcdUSB)
+            .append(this.iManufacturer, other.iManufacturer)
+            .append(this.iProduct, other.iProduct)
+            .append(this.iSerialNumber, other.iSerialNumber)
+            .append(this.idProduct, other.idProduct)
+            .append(this.idVendor, other.idVendor)
+            .isEquals();
     }
 
     @Override
     public String toString()
     {
-        return String.format("Device Descriptor:\n%s"
-            + "  bcdDevice %13x.%02x\n"
-            + "  bDeviceClass %13d\n"
-            + "  bDeviceSubClass %10d\n"
-            + "  bDeviceProtocol %10d\n"
-            + "  bMaxPacketSize0 %10d\n"
-            + "  idVendor %17s\n"
-            + "  idProduct %16s\n"
-            + "  bcdDevice %13x.%02x\n"
-            + "  iManufacturer %12d\n"
-            + "  iProduct %17d\n"
-            + "  iSerial %18d\n"
-            + "  bNumConfigurations %7d\n",
+        return String.format("Device Descriptor:%n%s"
+            + "  bcdDevice %13x.%02x%n"
+            + "  bDeviceClass %13d%n"
+            + "  bDeviceSubClass %10d%n"
+            + "  bDeviceProtocol %10d%n"
+            + "  bMaxPacketSize0 %10d%n"
+            + "  idVendor %17s%n"
+            + "  idProduct %16s%n"
+            + "  bcdDevice %13x.%02x%n"
+            + "  iManufacturer %12d%n"
+            + "  iProduct %17d%n"
+            + "  iSerial %18d%n"
+            + "  bNumConfigurations %7d%n",
             super.toString(),
             (this.bcdUSB & 0xff00) >> 8, this.bcdUSB & 0xff,
             this.bDeviceClass & 0xff,

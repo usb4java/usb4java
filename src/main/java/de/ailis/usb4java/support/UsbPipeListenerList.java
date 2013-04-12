@@ -11,11 +11,11 @@ import javax.usb.event.UsbPipeListener;
 
 /**
  * USB pipe listener list.
- *
+ * 
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class UsbPipeListenerList extends
-        EventListenerList<UsbPipeListener> implements UsbPipeListener
+    EventListenerList<UsbPipeListener> implements UsbPipeListener
 {
     /**
      * @see EventListenerList#toArray()
@@ -24,7 +24,7 @@ public final class UsbPipeListenerList extends
     public UsbPipeListener[] toArray()
     {
         return this.listeners.toArray(new UsbPipeListener[this.listeners
-                .size()]);
+            .size()]);
     }
 
     /**
@@ -33,8 +33,10 @@ public final class UsbPipeListenerList extends
     @Override
     public void errorEventOccurred(final UsbPipeErrorEvent event)
     {
-        for (final UsbPipeListener listener : toArray())
+        for (final UsbPipeListener listener: toArray())
+        {
             listener.errorEventOccurred(event);
+        }
     }
 
     /**
@@ -43,7 +45,9 @@ public final class UsbPipeListenerList extends
     @Override
     public void dataEventOccurred(final UsbPipeDataEvent event)
     {
-        for (final UsbPipeListener listener : toArray())
+        for (final UsbPipeListener listener: toArray())
+        {
             listener.dataEventOccurred(event);
+        }
     }
 }

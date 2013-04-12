@@ -15,6 +15,11 @@ import java.nio.ByteBuffer;
 
 import javax.usb.UsbEndpointDescriptor;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import de.ailis.usb4java.utils.DumpUtils;
+
 /**
  * A structure representing the standard USB endpoint descriptor.
  * 
@@ -24,7 +29,17 @@ import javax.usb.UsbEndpointDescriptor;
 public final class EndpointDescriptor implements UsbEndpointDescriptor
 {
     /** The native pointer to the descriptor structure. */
-    long pointer;
+    private long pointer;
+
+    /**
+     * Returns the native pointer.
+     * 
+     * @return The native pointer.
+     */
+    public long getPointer()
+    {
+        return this.pointer;
+    }
 
     @Override
     public native byte bLength();
@@ -78,7 +93,7 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
 
     /**
      * Returns a dump of this descriptor.
-     *
+     * 
      * @return The descriptor dump.
      */
     public String dump()
@@ -98,47 +113,43 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
             DumpUtils.toHexDump(extra()).replaceAll("(?m)^", "    "));
     }
 
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
-    public boolean equals(final Object o)
+    public boolean equals(final Object obj)
     {
-        if (o == null) return false;
-        if (o == this) return true;
-        if (o.getClass() != getClass()) return false;
-        final EndpointDescriptor other = (EndpointDescriptor) o;
-        return bDescriptorType() == other.bDescriptorType()
-            && bLength() == other.bLength()
-            && bEndpointAddress() == other.bEndpointAddress()
-            && bmAttributes() == other.bmAttributes()
-            && bInterval() == other.bInterval()
-            && bSynchAddress() == other.bSynchAddress()
-            && wMaxPacketSize() == other.wMaxPacketSize()
-            && extraLength() == other.extraLength()
-            && extra().equals(other.extra());
+        if (obj == null) return false;
+        if (obj == this) return true;
+        if (obj.getClass() != getClass()) return false;
+        final EndpointDescriptor other = (EndpointDescriptor) obj;
+        return new EqualsBuilder()
+            .append(bDescriptorType(), other.bDescriptorType())
+            .append(bLength(), other.bLength())
+            .append(bEndpointAddress(), other.bEndpointAddress())
+            .append(bmAttributes(), other.bmAttributes())
+            .append(bInterval(), other.bInterval())
+            .append(bSynchAddress(), other.bSynchAddress())
+            .append(wMaxPacketSize(), other.wMaxPacketSize())
+            .append(extraLength(), other.extraLength())
+            .append(extra(), other.extra())
+            .isEquals();
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode()
     {
-        int result = 17;
-        result = 37 * result + bLength();
-        result = 37 * result + bDescriptorType();
-        result = 37 * result + bEndpointAddress();
-        result = 37 * result + bmAttributes();
-        result = 37 * result + wMaxPacketSize();
-        result = 37 * result + bInterval();
-        result = 37 * result + bRefresh();
-        result = 37 * result + bSynchAddress();
-        result = 37 * result + extra().hashCode();
-        result = 37 * result + extraLength();
-        return result;
+        return new HashCodeBuilder()
+            .append(bLength())
+            .append(bDescriptorType())
+            .append(bEndpointAddress())
+            .append(bmAttributes())
+            .append(wMaxPacketSize())
+            .append(bInterval())
+            .append(bRefresh())
+            .append(bSynchAddress())
+            .append(extra())
+            .append(extraLength())
+            .toHashCode();
     }
-    
+
     @Override
     public String toString()
     {

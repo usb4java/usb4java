@@ -12,6 +12,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 
+import java.lang.reflect.Field;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -65,6 +67,28 @@ public class TransferTest
     }
 
     /**
+     * Sets the device handle pointer via reflection.
+     * 
+     * @param handle
+     *            The device handle pointer.
+     * @param pointer
+     *            The pointer to set.
+     */
+    private void setPointer(DeviceHandle handle, long pointer)
+    {
+        try
+        {
+            Field field = DeviceHandle.class.getDeclaredField("pointer");
+            field.setAccessible(true);
+            field.set(handle, pointer);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e.toString(), e);
+        }
+    }
+
+    /**
      * Tests the {@link Transfer#setDevHandle(DeviceHandle)} and
      * {@link Transfer#getDevHandle()} methods.
      */
@@ -74,9 +98,9 @@ public class TransferTest
         assumeUsbTestsEnabled();
         Transfer transfer = LibUSB.allocTransfer(0);
         DeviceHandle handle = new DeviceHandle();
-        handle.pointer = 1;
+        setPointer(handle, 1);
         DeviceHandle handle2 = new DeviceHandle();
-        handle2.pointer = 2;
+        setPointer(handle, 2);
         assertNull(transfer.getDevHandle());
         transfer.setDevHandle(handle);
         assertNotNull(transfer.getDevHandle());
@@ -123,8 +147,8 @@ public class TransferTest
     }
 
     /**
-     * Tests the {@link Transfer#setType(int)} and
-     * {@link Transfer#getType()} methods.
+     * Tests the {@link Transfer#setType(int)} and {@link Transfer#getType()}
+     * methods.
      */
     @Test
     public void testType()
@@ -155,7 +179,7 @@ public class TransferTest
         assertEquals(0, transfer.getTimeout());
         LibUSB.freeTransfer(transfer);
     }
-    
+
     /**
      * Tests the {@link Transfer#getStatus()} methods.
      */
@@ -166,5 +190,5 @@ public class TransferTest
         Transfer transfer = LibUSB.allocTransfer(0);
         assertEquals(0, transfer.getStatus());
         LibUSB.freeTransfer(transfer);
-    }    
+    }
 }

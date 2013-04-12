@@ -15,6 +15,11 @@ import java.nio.ByteBuffer;
 
 import javax.usb.UsbDeviceDescriptor;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import de.ailis.usb4java.utils.DumpUtils;
+
 /**
  * A structure representing the standard USB device descriptor.
  * 
@@ -24,8 +29,18 @@ import javax.usb.UsbDeviceDescriptor;
 public final class DeviceDescriptor implements UsbDeviceDescriptor
 {
     /** The native data of the descriptor structure. */
-    ByteBuffer data;
-    
+    private ByteBuffer data;
+
+    /**
+     * Returns the native data of the descriptor structure.
+     * 
+     * @return The native data.
+     */
+    public ByteBuffer getData()
+    {
+        return this.data;
+    }
+
     @Override
     public native byte bLength();
 
@@ -70,14 +85,14 @@ public final class DeviceDescriptor implements UsbDeviceDescriptor
 
     /**
      * Returns a dump of this descriptor.
-     *
+     * 
      * @return The descriptor dump.
      */
     public String dump()
     {
         return dump(null);
     }
-    
+
     /**
      * Returns a dump of this descriptor.
      * 
@@ -123,58 +138,52 @@ public final class DeviceDescriptor implements UsbDeviceDescriptor
             bNumConfigurations());
     }
 
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
-    public boolean equals(final Object o)
+    public boolean equals(final Object obj)
     {
-        if (o == null) return false;
-        if (o == this) return true;
-        if (o.getClass() != getClass()) return false;
-        final DeviceDescriptor other = (DeviceDescriptor) o;
-        return bDescriptorType() == other.bDescriptorType()
-            && bLength() == other.bLength()
-            && idProduct() == other.idProduct()
-            && idVendor() == other.idVendor()
-            && bcdDevice() == other.bcdDevice()
-            && bcdUSB() == other.bcdUSB()
-            && bDescriptorType() == other.bDescriptorType()
-            && bDeviceClass() == other.bDeviceClass()
-            && bDeviceProtocol() == other.bDeviceProtocol()
-            && bDeviceSubClass() == other.bDeviceSubClass()
-            && bLength() == other.bLength()
-            && bMaxPacketSize0() == other.bMaxPacketSize0()
-            && bNumConfigurations() == other.bNumConfigurations()
-            && iManufacturer() == other.iManufacturer()
-            && iProduct() == other.iProduct()
-            && iSerialNumber() == other.iSerialNumber();
+        if (obj == null) return false;
+        if (obj == this) return true;
+        if (obj.getClass() != getClass()) return false;
+        final DeviceDescriptor other = (DeviceDescriptor) obj;
+        return new EqualsBuilder()
+            .append(bDescriptorType(), other.bDescriptorType())
+            .append(bLength(), other.bLength())
+            .append(idProduct(), other.idProduct())
+            .append(idVendor(), other.idVendor())
+            .append(bcdDevice(), other.bcdDevice())
+            .append(bcdUSB(), other.bcdUSB())
+            .append(bDescriptorType(), other.bDescriptorType())
+            .append(bDeviceClass(), other.bDeviceClass())
+            .append(bDeviceProtocol(), other.bDeviceProtocol())
+            .append(bDeviceSubClass(), other.bDeviceSubClass())
+            .append(bLength(), other.bLength())
+            .append(bMaxPacketSize0(), other.bMaxPacketSize0())
+            .append(bNumConfigurations(), other.bNumConfigurations())
+            .append(iManufacturer(), other.iManufacturer())
+            .append(iProduct(), other.iProduct())
+            .append(iSerialNumber(), other.iSerialNumber()).isEquals();
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode()
     {
-        int result = 17;
-        result = 37 * result + bLength();
-        result = 37 * result + bDescriptorType();
-        result = 37 * result + bcdUSB();
-        result = 37 * result + bDeviceClass();
-        result = 37 * result + bDeviceSubClass();
-        result = 37 * result + bDeviceProtocol();
-        result = 37 * result + bMaxPacketSize0();
-        result = 37 * result + idVendor();
-        result = 37 * result + idProduct();
-        result = 37 * result + bcdDevice();
-        result = 37 * result + iManufacturer();
-        result = 37 * result + iProduct();
-        result = 37 * result + iSerialNumber();
-        result = 37 * result + bNumConfigurations();
-        return result;
+        return new HashCodeBuilder()
+            .append(bLength())
+            .append(bDescriptorType())
+            .append(bcdUSB())
+            .append(bDeviceClass())
+            .append(bDeviceSubClass())
+            .append(bDeviceProtocol())
+            .append(bMaxPacketSize0())
+            .append(idVendor())
+            .append(idProduct())
+            .append(bcdDevice())
+            .append(iManufacturer())
+            .append(iProduct())
+            .append(iSerialNumber())
+            .append(bNumConfigurations()).toHashCode();
     }
-    
+
     @Override
     public String toString()
     {

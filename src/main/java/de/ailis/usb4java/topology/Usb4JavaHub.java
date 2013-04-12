@@ -20,9 +20,6 @@ import de.ailis.usb4java.libusb.Device;
 public final class Usb4JavaHub extends Usb4JavaDevice implements UsbHub,
     UsbPorts<Usb4JavaPort, Usb4JavaDevice>
 {
-    /** The serial version UID. */
-    private static final long serialVersionUID = 1L;
-
     /** The hub ports. */
     private final Usb4JavaPorts ports = new Usb4JavaPorts(this);
 
@@ -122,4 +119,16 @@ public final class Usb4JavaHub extends Usb4JavaDevice implements UsbHub,
     {
         return true;
     }
+    
+    @Override
+    public int hashCode()
+    {
+        return super.hashCode();
+    }    
+    
+    @Override
+    public boolean equals(Object obj)
+    {
+        return super.equals(obj);
+    }    
 }

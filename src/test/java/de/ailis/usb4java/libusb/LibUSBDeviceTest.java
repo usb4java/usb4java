@@ -643,7 +643,7 @@ public class LibUSBDeviceTest
         desc.bDeviceClass();
         desc.bDeviceProtocol();
         desc.bDeviceSubClass();
-        assertEquals(desc.data.limit(), desc.bLength());
+        assertEquals(desc.getData().limit(), desc.bLength());
         desc.bMaxPacketSize0();
         desc.bNumConfigurations();
     }

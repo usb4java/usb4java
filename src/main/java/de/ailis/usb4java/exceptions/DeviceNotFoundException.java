@@ -28,7 +28,7 @@ public final class DeviceNotFoundException extends RuntimeException
      */
     public DeviceNotFoundException(final DeviceId id)
     {
-        super("USB Device " + id + " not found");
+        super("USB Device not found: " + id);
         this.id = id;
     }
 

@@ -7,6 +7,9 @@ package de.ailis.usb4java.descriptors;
 
 import javax.usb.UsbEndpointDescriptor;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * Simple USB endpoint descriptor.
  * 
@@ -101,37 +104,38 @@ public final class SimpleUsbEndpointDescriptor extends SimpleUsbDescriptor
     @Override
     public int hashCode()
     {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + this.bEndpointAddress;
-        result = prime * result + this.bInterval;
-        result = prime * result + this.bmAttributes;
-        result = prime * result + this.wMaxPacketSize;
-        return result;
+        return new HashCodeBuilder()
+            .appendSuper(super.hashCode())
+            .append(this.bEndpointAddress)
+            .append(this.bInterval)
+            .append(this.bmAttributes)
+            .append(this.wMaxPacketSize)
+            .toHashCode();
     }
 
     @Override
-    public boolean equals(Object obj)
+    public boolean equals(final Object obj)
     {
         if (this == obj) return true;
         if (!super.equals(obj)) return false;
-        if (getClass() != obj.getClass()) return false;
-        SimpleUsbEndpointDescriptor other = (SimpleUsbEndpointDescriptor) obj;
-        if (this.bEndpointAddress != other.bEndpointAddress) return false;
-        if (this.bInterval != other.bInterval) return false;
-        if (this.bmAttributes != other.bmAttributes) return false;
-        if (this.wMaxPacketSize != other.wMaxPacketSize) return false;
-        return true;
+        final SimpleUsbEndpointDescriptor other =
+            (SimpleUsbEndpointDescriptor) obj;
+        return new EqualsBuilder()
+            .append(this.bEndpointAddress, other.bEndpointAddress)
+            .append(this.bInterval, other.bInterval)
+            .append(this.bmAttributes, other.bmAttributes)
+            .append(this.wMaxPacketSize, other.wMaxPacketSize)
+            .isEquals();
     }
-   
+
     @Override
     public String toString()
     {
-        return String.format("Endpoint Descriptor:\n%s"
-            + "  bEndpointAddress %9s\n"
-            + "  bmAttributes %13d\n"
-            + "  wMaxPacketSize %11d\n"
-            + "  bInterval %16d\n",
+        return String.format("Endpoint Descriptor:%n%s"
+            + "  bEndpointAddress %9s%n"
+            + "  bmAttributes %13d%n"
+            + "  wMaxPacketSize %11d%n"
+            + "  bInterval %16d%n",
             super.toString(),
             String.format("0x%02x", this.bEndpointAddress & 0xff),
             this.bmAttributes & 0xff,

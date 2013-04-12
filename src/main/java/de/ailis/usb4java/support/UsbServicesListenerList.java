@@ -10,11 +10,11 @@ import javax.usb.event.UsbServicesListener;
 
 /**
  * USB services listener list.
- *
+ * 
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class UsbServicesListenerList extends
-        EventListenerList<UsbServicesListener> implements UsbServicesListener
+    EventListenerList<UsbServicesListener> implements UsbServicesListener
 {
     /**
      * @see EventListenerList#toArray()
@@ -23,7 +23,7 @@ public final class UsbServicesListenerList extends
     public UsbServicesListener[] toArray()
     {
         return this.listeners.toArray(new UsbServicesListener[this.listeners
-                .size()]);
+            .size()]);
     }
 
     /**
@@ -32,8 +32,10 @@ public final class UsbServicesListenerList extends
     @Override
     public void usbDeviceAttached(final UsbServicesEvent event)
     {
-        for (final UsbServicesListener listener : toArray())
+        for (final UsbServicesListener listener: toArray())
+        {
             listener.usbDeviceAttached(event);
+        }
     }
 
     /**
@@ -42,7 +44,9 @@ public final class UsbServicesListenerList extends
     @Override
     public void usbDeviceDetached(final UsbServicesEvent event)
     {
-        for (final UsbServicesListener listener : toArray())
+        for (final UsbServicesListener listener: toArray())
+        {
             listener.usbDeviceDetached(event);
+        }
     }
 }

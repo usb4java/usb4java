@@ -36,7 +36,7 @@ public final class UsbDeviceManager
     private static final int DEFAULT_SCAN_INTERVAL = 500;
 
     /** The logger. */
-    private static final Logger log = Logger.getLogger(UsbDeviceManager.class
+    private static final Logger LOG = Logger.getLogger(UsbDeviceManager.class
         .getName());
 
     /** The virtual USB root hub. */
@@ -99,7 +99,7 @@ public final class UsbDeviceManager
         int result = LibUSB.getDeviceDescriptor(device, deviceDescriptor);
         if (result < 0)
         {
-            log.warning("Unable to get device descriptor for device " +
+            LOG.warning("Unable to get device descriptor for device " +
                 addressNumber + " at bus " + busNumber + ": " +
                 LibUSB.errorName(result));
             return null;
@@ -149,7 +149,7 @@ public final class UsbDeviceManager
             }
             catch (UsbException e)
             {
-                throw new Usb4JavaRuntimeException(e.getMessage());
+                throw new Usb4JavaRuntimeException(e.toString(), e);
             }
         }
         finally
@@ -207,8 +207,6 @@ public final class UsbDeviceManager
      *             When the device was not found.
      */
     public Device getLibUsbDevice(final DeviceId id)
-        throws Usb4JavaRuntimeException,
-        DeviceNotFoundException
     {
         if (id == null) throw new IllegalArgumentException("id must be set");
 

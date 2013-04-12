@@ -23,8 +23,18 @@ import java.nio.ByteBuffer;
 public final class Transfer
 {
     /** The native pointer to the transfer structure. */
-    long pointer;
+    private long pointer;
 
+    /**
+     * Returns the native pointer.
+     * 
+     * @return The native pointer.
+     */
+    public long getPointer()
+    {
+        return this.pointer;
+    }
+        
     /**
      * Returns the handle of the device that this transfer will be submitted to.
      * 

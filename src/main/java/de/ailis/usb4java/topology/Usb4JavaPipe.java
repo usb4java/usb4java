@@ -73,7 +73,7 @@ public final class Usb4JavaPipe implements UsbPipe
      * @throws UsbNotActiveException
      *             When pipe is not active
      */
-    private void checkActive() throws UsbNotActiveException
+    private void checkActive()
     {
         if (!isActive())
             throw new UsbNotActiveException("Pipe is not active.");
@@ -85,7 +85,7 @@ public final class Usb4JavaPipe implements UsbPipe
      * @throws UsbNotClaimedException
      *             When interface is not claimed.
      */
-    private void checkClaimed() throws UsbNotClaimedException
+    private void checkClaimed()
     {
         if (!this.endpoint.getUsbInterface().isClaimed())
             throw new UsbNotClaimedException("Interface is not claimed.");
@@ -97,7 +97,7 @@ public final class Usb4JavaPipe implements UsbPipe
      * @throws UsbDisconnectedException
      *             When device has been disconnected.
      */
-    private void checkConnected() throws UsbDisconnectedException
+    private void checkConnected()
     {
         getDevice().checkConnected();
     }
@@ -108,7 +108,7 @@ public final class Usb4JavaPipe implements UsbPipe
      * @throws UsbNotOpenException
      *             When pipe is not open.
      */
-    private void checkOpen() throws UsbNotOpenException
+    private void checkOpen()
     {
         if (!isOpen())
             throw new UsbNotOpenException("Pipe is not open.");
@@ -118,8 +118,7 @@ public final class Usb4JavaPipe implements UsbPipe
      * @see UsbPipe#open()
      */
     @Override
-    public void open() throws UsbException, UsbNotActiveException,
-        UsbNotClaimedException, UsbDisconnectedException
+    public void open() throws UsbException
     {
         checkActive();
         checkClaimed();
@@ -132,8 +131,7 @@ public final class Usb4JavaPipe implements UsbPipe
      * @see UsbPipe#close()
      */
     @Override
-    public void close() throws UsbException, UsbNotActiveException,
-        UsbNotOpenException, UsbDisconnectedException
+    public void close() throws UsbException
     {
         checkActive();
         checkClaimed();
@@ -177,9 +175,7 @@ public final class Usb4JavaPipe implements UsbPipe
      * @see UsbPipe#syncSubmit(byte[])
      */
     @Override
-    public int syncSubmit(final byte[] data) throws UsbException,
-        UsbNotActiveException, UsbNotOpenException, IllegalArgumentException,
-        UsbDisconnectedException
+    public int syncSubmit(final byte[] data) throws UsbException
     {
         final UsbIrp irp = asyncSubmit(data);
         irp.waitUntilComplete();
@@ -191,9 +187,7 @@ public final class Usb4JavaPipe implements UsbPipe
      * @see UsbPipe#asyncSubmit(byte[])
      */
     @Override
-    public UsbIrp asyncSubmit(final byte[] data) throws
-        UsbNotActiveException, UsbNotOpenException, IllegalArgumentException,
-        UsbDisconnectedException
+    public UsbIrp asyncSubmit(final byte[] data)
     {
         if (data == null)
             throw new IllegalArgumentException("data must not be null");
@@ -208,9 +202,7 @@ public final class Usb4JavaPipe implements UsbPipe
      * @see UsbPipe#syncSubmit(javax.usb.UsbIrp)
      */
     @Override
-    public void syncSubmit(final UsbIrp irp) throws UsbException,
-        UsbNotActiveException, UsbNotOpenException, IllegalArgumentException,
-        UsbDisconnectedException
+    public void syncSubmit(final UsbIrp irp) throws UsbException
     {
         if (irp == null)
             throw new IllegalArgumentException("irp must not be null");
@@ -223,9 +215,7 @@ public final class Usb4JavaPipe implements UsbPipe
      * @see UsbPipe#asyncSubmit(javax.usb.UsbIrp)
      */
     @Override
-    public void asyncSubmit(final UsbIrp irp) throws
-        UsbNotActiveException, UsbNotOpenException, IllegalArgumentException,
-        UsbDisconnectedException
+    public void asyncSubmit(final UsbIrp irp)
     {
         if (irp == null)
             throw new IllegalArgumentException("irp must not be null");
@@ -239,9 +229,7 @@ public final class Usb4JavaPipe implements UsbPipe
      * @see UsbPipe#syncSubmit(java.util.List)
      */
     @Override
-    public void syncSubmit(final List list)
-        throws UsbException, UsbNotActiveException, UsbNotOpenException,
-        IllegalArgumentException, UsbDisconnectedException
+    public void syncSubmit(final List list) throws UsbException
     {
         for (final Object item : list)
         {
@@ -255,8 +243,6 @@ public final class Usb4JavaPipe implements UsbPipe
      */
     @Override
     public void asyncSubmit(final List list)
-        throws UsbNotActiveException, UsbNotOpenException,
-        IllegalArgumentException, UsbDisconnectedException
     {
         for (final Object item : list)
         {
@@ -269,8 +255,7 @@ public final class Usb4JavaPipe implements UsbPipe
      * @see UsbPipe#abortAllSubmissions()
      */
     @Override
-    public void abortAllSubmissions() throws UsbNotActiveException,
-        UsbNotOpenException, UsbDisconnectedException
+    public void abortAllSubmissions()
     {
         checkActive();
         checkConnected();

@@ -15,6 +15,11 @@ import java.nio.ByteBuffer;
 
 import javax.usb.UsbInterfaceDescriptor;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import de.ailis.usb4java.utils.DumpUtils;
+
 /**
  * A structure representing the standard USB interface descriptor.
  * 
@@ -24,7 +29,17 @@ import javax.usb.UsbInterfaceDescriptor;
 public final class InterfaceDescriptor implements UsbInterfaceDescriptor
 {
     /** The native pointer to the descriptor structure. */
-    long pointer;
+    private long pointer;
+
+    /**
+     * Returns the native pointer.
+     * 
+     * @return The native pointer.
+     */
+    public long getPointer()
+    {
+        return this.pointer;
+    }
 
     @Override
     public native byte bLength();
@@ -55,11 +70,11 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
 
     /**
      * Returns the array with endpoints.
-     *
+     * 
      * @return The array with endpoints.
      */
     public native EndpointDescriptor[] endpoint();
-    
+
     /**
      * Extra descriptors.
      * 
@@ -79,7 +94,7 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
 
     /**
      * Returns a dump of this descriptor.
-     *
+     * 
      * @return The descriptor dump.
      */
     public String dump()
@@ -89,7 +104,7 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
 
     /**
      * Returns a dump of this descriptor.
-     *
+     * 
      * @param handle
      *            The USB device handle for resolving string descriptors. If
      *            null then no strings are resolved.
@@ -120,7 +135,7 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
             bInterfaceProtocol(), iInterface(), sInterface, extraLength(),
             DumpUtils.toHexDump(extra()).replaceAll("(?m)^", "    ")));
         if (extraLength() != 0) return builder.toString();
-        for (final EndpointDescriptor edesc : endpoint())
+        for (final EndpointDescriptor edesc: endpoint())
         {
             builder.append(edesc.dump().replaceAll("(?m)^", "  "));
         }
@@ -128,43 +143,45 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
     }
 
     @Override
-    public boolean equals(final Object o)
+    public boolean equals(final Object obj)
     {
-        if (o == null) return false;
-        if (o == this) return true;
-        if (o.getClass() != getClass()) return false;
-        final InterfaceDescriptor other = (InterfaceDescriptor) o;
-        return bDescriptorType() == other.bDescriptorType()
-            && bLength() == other.bLength()
-            && bAlternateSetting() == other.bAlternateSetting()
-            && bInterfaceClass() == other.bInterfaceClass()
-            && bInterfaceNumber() == other.bInterfaceNumber()
-            && bInterfaceProtocol() == other.bInterfaceProtocol()
-            && bInterfaceSubClass() == other.bInterfaceSubClass()
-            && bNumEndpoints() == other.bNumEndpoints()
-            && iInterface() == other.iInterface()
-            && extraLength() == other.extraLength()
-            && extra().equals(other.extra());
+        if (obj == null) return false;
+        if (obj == this) return true;
+        if (obj.getClass() != getClass()) return false;
+        final InterfaceDescriptor other = (InterfaceDescriptor) obj;
+        return new EqualsBuilder()
+            .append(bDescriptorType(), other.bDescriptorType())
+            .append(bLength(), other.bLength())
+            .append(bAlternateSetting(), other.bAlternateSetting())
+            .append(bInterfaceClass(), other.bInterfaceClass())
+            .append(bInterfaceNumber(), other.bInterfaceNumber())
+            .append(bInterfaceProtocol(), other.bInterfaceProtocol())
+            .append(bInterfaceSubClass(), other.bInterfaceSubClass())
+            .append(bNumEndpoints(), other.bNumEndpoints())
+            .append(iInterface(), other.iInterface())
+            .append(extraLength(), other.extraLength())
+            .append(extra(), other.extra())
+            .isEquals();
     }
 
     @Override
     public int hashCode()
     {
-        int result = 17;
-        result = 37 * result + bLength();
-        result = 37 * result + bDescriptorType();
-        result = 37 * result + bInterfaceNumber();
-        result = 37 * result + bAlternateSetting();
-        result = 37 * result + bNumEndpoints();
-        result = 37 * result + bInterfaceClass();
-        result = 37 * result + bInterfaceSubClass();
-        result = 37 * result + bInterfaceProtocol();
-        result = 37 * result + iInterface();
-        result = 37 * result + extra().hashCode();
-        result = 37 * result + extraLength();
-        return result;
+        return new HashCodeBuilder()
+            .append(bLength())
+            .append(bDescriptorType())
+            .append(bInterfaceNumber())
+            .append(bAlternateSetting())
+            .append(bNumEndpoints())
+            .append(bInterfaceClass())
+            .append(bInterfaceSubClass())
+            .append(bInterfaceProtocol())
+            .append(iInterface())
+            .append(extra())
+            .append(extraLength())
+            .toHashCode();
     }
-    
+
     @Override
     public String toString()
     {

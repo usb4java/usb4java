@@ -92,7 +92,6 @@ public final class Usb4JavaConfiguration implements UsbConfiguration
 
                 // Add the interface to the settings list
                 settings.put(settingNumber, usbInterface);
-
             }
         }
     }
@@ -103,7 +102,7 @@ public final class Usb4JavaConfiguration implements UsbConfiguration
      * @throws UsbDisconnectedException
      *             When device has been disconnected.
      */
-    private void checkConnected() throws UsbDisconnectedException
+    private void checkConnected()
     {
         this.device.checkConnected();
     }
@@ -218,7 +217,7 @@ public final class Usb4JavaConfiguration implements UsbConfiguration
      */
     @Override
     public String getConfigurationString() throws UsbException,
-        UnsupportedEncodingException, UsbDisconnectedException
+        UnsupportedEncodingException
     {
         checkConnected();
         final byte iConfiguration = this.descriptor.iConfiguration();
