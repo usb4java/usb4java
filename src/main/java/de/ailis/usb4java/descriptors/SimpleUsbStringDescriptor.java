@@ -38,7 +38,7 @@ public final class SimpleUsbStringDescriptor extends SimpleUsbDescriptor
         super(data.get(0), data.get(1));
 
         data.position(2);
-        this.bString = new byte[(bLength() - 2)];
+        this.bString = new byte[bLength() - 2];
         data.get(this.bString);
     }
 
