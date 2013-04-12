@@ -3,7 +3,7 @@
  * See LICENSE.txt for licensing information.
  */
 
-package de.ailis.usb4java.topology;
+package de.ailis.usb4java;
 
 import java.util.List;
 
@@ -23,7 +23,6 @@ import javax.usb.event.UsbPipeListener;
 import javax.usb.util.DefaultUsbControlIrp;
 import javax.usb.util.DefaultUsbIrp;
 
-import de.ailis.usb4java.support.IrpQueue;
 import de.ailis.usb4java.support.UsbPipeListenerList;
 
 /**

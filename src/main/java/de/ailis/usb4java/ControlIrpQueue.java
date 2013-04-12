@@ -3,7 +3,7 @@
  * See LICENSE.txt for licensing information.
  */
 
-package de.ailis.usb4java.support;
+package de.ailis.usb4java;
 
 import java.nio.ByteBuffer;
 
@@ -16,7 +16,7 @@ import javax.usb.event.UsbDeviceDataEvent;
 import de.ailis.usb4java.libusb.DeviceHandle;
 import de.ailis.usb4java.libusb.LibUSB;
 import de.ailis.usb4java.libusb.LibUsbException;
-import de.ailis.usb4java.topology.Usb4JavaDevice;
+import de.ailis.usb4java.support.UsbDeviceListenerList;
 
 /**
  * A queue for USB control I/O request packets.

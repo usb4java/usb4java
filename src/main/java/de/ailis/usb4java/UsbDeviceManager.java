@@ -3,7 +3,7 @@
  * See LICENSE.txt for licensing information.
  */
 
-package de.ailis.usb4java.topology;
+package de.ailis.usb4java;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,8 +16,6 @@ import java.util.logging.Logger;
 import javax.usb.UsbException;
 
 import de.ailis.usb4java.descriptors.SimpleUsbDeviceDescriptor;
-import de.ailis.usb4java.exceptions.DeviceNotFoundException;
-import de.ailis.usb4java.exceptions.Usb4JavaRuntimeException;
 import de.ailis.usb4java.libusb.Context;
 import de.ailis.usb4java.libusb.Device;
 import de.ailis.usb4java.libusb.DeviceDescriptor;

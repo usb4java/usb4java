@@ -3,7 +3,7 @@
  * See LICENSE.txt for licensing information.
  */
 
-package de.ailis.usb4java.topology;
+package de.ailis.usb4java;
 
 import java.io.Serializable;
 

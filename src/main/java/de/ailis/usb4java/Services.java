@@ -17,8 +17,6 @@ import de.ailis.usb4java.libusb.Loader;
 import de.ailis.usb4java.libusb.LoaderException;
 import de.ailis.usb4java.support.Config;
 import de.ailis.usb4java.support.UsbServicesListenerList;
-import de.ailis.usb4java.topology.UsbDeviceManager;
-import de.ailis.usb4java.topology.VirtualRootHub;
 
 /**
  * usb4java implementation of JSR-80 UsbServices.

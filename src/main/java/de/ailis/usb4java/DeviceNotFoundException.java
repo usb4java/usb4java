@@ -3,9 +3,8 @@
  * See LICENSE.txt for licensing information.
  */
 
-package de.ailis.usb4java.exceptions;
+package de.ailis.usb4java;
 
-import de.ailis.usb4java.topology.DeviceId;
 
 /**
  * Thrown when a USB device was not found by id.

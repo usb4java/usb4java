@@ -3,7 +3,7 @@
  * See LICENSE.txt for licensing information.
  */
 
-package de.ailis.usb4java.support;
+package de.ailis.usb4java;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -12,9 +12,7 @@ import javax.usb.UsbException;
 import javax.usb.UsbHostManager;
 import javax.usb.UsbIrp;
 
-import de.ailis.usb4java.Services;
-import de.ailis.usb4java.exceptions.Usb4JavaRuntimeException;
-import de.ailis.usb4java.topology.Usb4JavaDevice;
+import de.ailis.usb4java.support.Config;
 
 /**
  * Abstract base class for IRP queues.
