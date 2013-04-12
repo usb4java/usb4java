@@ -9,8 +9,6 @@ import java.io.Serializable;
 
 import javax.usb.UsbDescriptor;
 
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 /**
  * Base class for all simple USB descriptors.
  * 
@@ -52,34 +50,5 @@ public abstract class SimpleUsbDescriptor implements UsbDescriptor,
     public final byte bDescriptorType()
     {
         return this.bDescriptorType;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return new HashCodeBuilder()
-            .appendSuper(super.hashCode())
-            .append(this.bDescriptorType)
-            .append(this.bLength)
-            .toHashCode();
-    }
-
-    @Override
-    public boolean equals(final Object obj)
-    {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
-        final SimpleUsbDescriptor other = (SimpleUsbDescriptor) obj;
-        if (this.bDescriptorType != other.bDescriptorType) return false;
-        if (this.bLength != other.bLength) return false;
-        return true;
-    }
-
-    @Override
-    public String toString()
-    {
-        return String.format("  bLength %18d%n  bDescriptorType %10d%n",
-            this.bLength, this.bDescriptorType);
     }
 }

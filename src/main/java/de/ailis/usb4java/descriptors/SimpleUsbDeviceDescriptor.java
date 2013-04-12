@@ -212,7 +212,8 @@ public final class SimpleUsbDeviceDescriptor extends SimpleUsbDescriptor
     public int hashCode()
     {
         return new HashCodeBuilder()
-            .appendSuper(super.hashCode())
+            .append(bDescriptorType())
+            .append(bLength())
             .append(this.bDeviceClass)
             .append(this.bDeviceProtocol)
             .append(this.bDeviceSubClass)
@@ -232,9 +233,12 @@ public final class SimpleUsbDeviceDescriptor extends SimpleUsbDescriptor
     public boolean equals(final Object obj)
     {
         if (this == obj) return true;
-        if (!super.equals(obj)) return false;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
         final SimpleUsbDeviceDescriptor other = (SimpleUsbDeviceDescriptor) obj;
         return new EqualsBuilder()
+            .append(bLength(), other.bLength())
+            .append(bDescriptorType(), other.bDescriptorType())
             .append(this.bDeviceClass, other.bDeviceClass)
             .append(this.bDeviceProtocol, other.bDeviceProtocol)
             .append(this.bDeviceSubClass, other.bDeviceSubClass)
@@ -253,7 +257,9 @@ public final class SimpleUsbDeviceDescriptor extends SimpleUsbDescriptor
     @Override
     public String toString()
     {
-        return String.format("Device Descriptor:%n%s"
+        return String.format("Device Descriptor:%n"
+            + "  bLength %18d%n"
+            + "  bDescriptorType %10d%n"
             + "  bcdDevice %13x.%02x%n"
             + "  bDeviceClass %13d%n"
             + "  bDeviceSubClass %10d%n"
@@ -266,7 +272,8 @@ public final class SimpleUsbDeviceDescriptor extends SimpleUsbDescriptor
             + "  iProduct %17d%n"
             + "  iSerial %18d%n"
             + "  bNumConfigurations %7d%n",
-            super.toString(),
+            bLength(),
+            bDescriptorType(),
             (this.bcdUSB & 0xff00) >> 8, this.bcdUSB & 0xff,
             this.bDeviceClass & 0xff,
             this.bDeviceSubClass & 0xff,

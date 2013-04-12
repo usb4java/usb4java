@@ -145,7 +145,8 @@ public final class SimpleUsbInterfaceDescriptor extends SimpleUsbDescriptor
     public int hashCode()
     {
         return new HashCodeBuilder()
-            .appendSuper(super.hashCode())
+            .append(bDescriptorType())
+            .append(bLength())
             .append(this.bAlternateSetting)
             .append(this.bInterfaceClass)
             .append(this.bInterfaceNumber)
@@ -160,10 +161,13 @@ public final class SimpleUsbInterfaceDescriptor extends SimpleUsbDescriptor
     public boolean equals(final Object obj)
     {
         if (this == obj) return true;
-        if (!super.equals(obj)) return false;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
         final SimpleUsbInterfaceDescriptor other =
             (SimpleUsbInterfaceDescriptor) obj;
         return new EqualsBuilder()
+            .append(bLength(), other.bLength())
+            .append(bDescriptorType(), other.bDescriptorType())
             .append(this.bAlternateSetting, other.bAlternateSetting)
             .append(this.bInterfaceClass, other.bInterfaceClass)
             .append(this.bInterfaceNumber, other.bInterfaceNumber)
@@ -177,7 +181,9 @@ public final class SimpleUsbInterfaceDescriptor extends SimpleUsbDescriptor
     @Override
     public String toString()
     {
-        return String.format("Interface Descriptor:%n%s"
+        return String.format("Interface Descriptor:%n"
+            + "  bLength %18d%n"
+            + "  bDescriptorType %10d%n"
             + "  bInterfaceNumber %9d%n"
             + "  bAlternateSetting %8d%n"
             + "  bNumEndpoints %12d%n"
@@ -185,7 +191,8 @@ public final class SimpleUsbInterfaceDescriptor extends SimpleUsbDescriptor
             + "  bInterfaceSubClass %7d%n"
             + "  bInterfaceProtocol %7d%n"
             + "  iInterface %15d%n",
-            super.toString(),
+            bLength(),
+            bDescriptorType(),
             this.bInterfaceNumber & 0xff,
             this.bAlternateSetting & 0xff,
             this.bNumEndpoints & 0xff,

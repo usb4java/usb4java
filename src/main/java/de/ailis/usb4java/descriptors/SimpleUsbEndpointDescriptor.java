@@ -105,7 +105,8 @@ public final class SimpleUsbEndpointDescriptor extends SimpleUsbDescriptor
     public int hashCode()
     {
         return new HashCodeBuilder()
-            .appendSuper(super.hashCode())
+            .append(bDescriptorType())
+            .append(bLength())
             .append(this.bEndpointAddress)
             .append(this.bInterval)
             .append(this.bmAttributes)
@@ -117,10 +118,13 @@ public final class SimpleUsbEndpointDescriptor extends SimpleUsbDescriptor
     public boolean equals(final Object obj)
     {
         if (this == obj) return true;
-        if (!super.equals(obj)) return false;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
         final SimpleUsbEndpointDescriptor other =
             (SimpleUsbEndpointDescriptor) obj;
         return new EqualsBuilder()
+            .append(bLength(), other.bLength())
+            .append(bDescriptorType(), other.bDescriptorType())
             .append(this.bEndpointAddress, other.bEndpointAddress)
             .append(this.bInterval, other.bInterval)
             .append(this.bmAttributes, other.bmAttributes)
@@ -131,12 +135,15 @@ public final class SimpleUsbEndpointDescriptor extends SimpleUsbDescriptor
     @Override
     public String toString()
     {
-        return String.format("Endpoint Descriptor:%n%s"
+        return String.format("Endpoint Descriptor:%n"
+            + "  bLength %18d%n"
+            + "  bDescriptorType %10d%n"
             + "  bEndpointAddress %9s%n"
             + "  bmAttributes %13d%n"
             + "  wMaxPacketSize %11d%n"
             + "  bInterval %16d%n",
-            super.toString(),
+            bLength(),
+            bDescriptorType(),
             String.format("0x%02x", this.bEndpointAddress & 0xff),
             this.bmAttributes & 0xff,
             this.wMaxPacketSize & 0xffff,

@@ -133,7 +133,8 @@ public final class SimpleUsbConfigurationDescriptor extends SimpleUsbDescriptor
     public int hashCode()
     {
         return new HashCodeBuilder()
-            .appendSuper(super.hashCode())
+            .append(bDescriptorType())
+            .append(bLength())
             .append(this.bConfigurationValue)
             .append(this.bMaxPower)
             .append(this.bNumInterfaces)
@@ -147,10 +148,13 @@ public final class SimpleUsbConfigurationDescriptor extends SimpleUsbDescriptor
     public boolean equals(final Object obj)
     {
         if (this == obj) return true;
-        if (!super.equals(obj)) return false; 
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
         final SimpleUsbConfigurationDescriptor other =
             (SimpleUsbConfigurationDescriptor) obj;
         return new EqualsBuilder()
+            .append(bLength(), other.bLength())
+            .append(bDescriptorType(), other.bDescriptorType())
             .append(this.bConfigurationValue, other.bConfigurationValue)
             .append(this.bMaxPower, other.bMaxPower)
             .append(this.bNumInterfaces, other.bNumInterfaces)
@@ -163,14 +167,17 @@ public final class SimpleUsbConfigurationDescriptor extends SimpleUsbDescriptor
     @Override
     public String toString()
     {
-        return String.format("Configuration Descriptor:%n%s"
+        return String.format("Configuration Descriptor:%n"
+            + "  bLength %18d%n"
+            + "  bDescriptorType %10d%n"
             + "  wTotalLength %13d%n"
             + "  bNumInterfaces %11d%n"
             + "  bConfigurationValue %6d%n"
             + "  iConfiguration %11d%n"
             + "  bmAttributes %13s%n"
             + "  bMaxPower %16smA%n",
-            super.toString(),
+            bLength(),
+            bDescriptorType(),
             this.wTotalLength & 0xffff,
             this.bNumInterfaces & 0xff,
             this.bConfigurationValue & 0xff,
