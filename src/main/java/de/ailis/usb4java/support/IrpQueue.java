@@ -113,7 +113,7 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
             ByteBuffer.allocateDirect(irp.getLength());
         buffer.put(irp.getData(), irp.getOffset(), irp.getLength());
         buffer.rewind();
-        final DeviceHandle handle = this.device.open();
+        final DeviceHandle handle = getDevice().open();
         final int len = LibUSB.controlTransfer(handle, irp.bmRequestType(),
                 irp.bRequest(), irp.wValue(), irp.wIndex(), buffer,
                 getConfig().getTimeout());
@@ -145,7 +145,7 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
     {
         final UsbEndpointDescriptor descriptor = getEndpointDescriptor();
         final byte type = this.pipe.getUsbEndpoint().getType();
-        final DeviceHandle handle = this.device.open();
+        final DeviceHandle handle = getDevice().open();
         int read = 0;
         while (read < len)
         {
@@ -200,7 +200,7 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
     {
         final UsbEndpointDescriptor descriptor = getEndpointDescriptor();
         final byte type = this.pipe.getUsbEndpoint().getType();
-        final DeviceHandle handle = this.device.open();
+        final DeviceHandle handle = getDevice().open();
         int written = 0;
         while (written < len)
         {

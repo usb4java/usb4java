@@ -53,7 +53,7 @@ public final class ControlIrpQueue extends AbstractIrpQueue<UsbControlIrp>
             ByteBuffer.allocateDirect(irp.getLength());
         buffer.put(irp.getData(), irp.getOffset(), irp.getLength());
         buffer.rewind();
-        final DeviceHandle handle = this.device.open();
+        final DeviceHandle handle = getDevice().open();
         final int len = LibUSB.controlTransfer(handle, irp.bmRequestType(),
             irp.bRequest(), irp.wValue(), irp.wIndex(), buffer,
             getConfig().getTimeout());
@@ -74,6 +74,6 @@ public final class ControlIrpQueue extends AbstractIrpQueue<UsbControlIrp>
     protected void finishIrp(final UsbIrp irp)
     {
         this.listeners.dataEventOccurred(new UsbDeviceDataEvent( 
-            this.device, (UsbControlIrp) irp));
+            getDevice(), (UsbControlIrp) irp));
     }
 }

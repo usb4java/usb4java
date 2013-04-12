@@ -58,7 +58,7 @@ public final class Services implements UsbServices
      * @throws LoaderException
      *             When native libraries could not be loaded.
      */
-    public Services() throws UsbException, LoaderException
+    public Services() throws UsbException
     {
         this.config = new Config(UsbHostManager.getProperties());
         Loader.load();

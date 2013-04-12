@@ -20,7 +20,7 @@ import java.util.List;
 public abstract class EventListenerList<T extends EventListener>
 {
     /** The list with registered listeners. */
-    protected final List<T> listeners = Collections
+    private final List<T> listeners = Collections
             .synchronizedList(new ArrayList<T>());
 
     /**
@@ -61,4 +61,14 @@ public abstract class EventListenerList<T extends EventListener>
      * @return Array with registered listeners.
      */
     public abstract T[] toArray();
+    
+    /**
+     * Returns the listeners list.
+     * 
+     * @return The listeners list.
+     */
+    protected List<T> getListeners()
+    {
+        return this.listeners;
+    }
 }

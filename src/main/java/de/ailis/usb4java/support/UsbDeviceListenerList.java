@@ -24,8 +24,8 @@ public final class UsbDeviceListenerList extends
     @Override
     public UsbDeviceListener[] toArray()
     {
-        return this.listeners.toArray(new UsbDeviceListener[this.listeners
-            .size()]);
+        return getListeners().toArray(
+            new UsbDeviceListener[getListeners().size()]);
     }
 
     /**

@@ -123,12 +123,16 @@ public final class Usb4JavaHub extends Usb4JavaDevice implements UsbHub,
     @Override
     public int hashCode()
     {
-        return super.hashCode();
+        return getId().hashCode();
     }    
     
     @Override
     public boolean equals(Object obj)
     {
-        return super.equals(obj);
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        Usb4JavaDevice other = (Usb4JavaDevice) obj;
+        return getId().equals(other.getId());
     }    
 }

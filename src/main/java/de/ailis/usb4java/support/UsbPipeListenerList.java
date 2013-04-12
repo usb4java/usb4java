@@ -23,8 +23,8 @@ public final class UsbPipeListenerList extends
     @Override
     public UsbPipeListener[] toArray()
     {
-        return this.listeners.toArray(new UsbPipeListener[this.listeners
-            .size()]);
+        return getListeners().toArray(
+            new UsbPipeListener[getListeners().size()]);
     }
 
     /**

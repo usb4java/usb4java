@@ -22,8 +22,8 @@ public final class UsbServicesListenerList extends
     @Override
     public UsbServicesListener[] toArray()
     {
-        return this.listeners.toArray(new UsbServicesListener[this.listeners
-            .size()]);
+        return getListeners().toArray(
+            new UsbServicesListener[getListeners().size()]);
     }
 
     /**

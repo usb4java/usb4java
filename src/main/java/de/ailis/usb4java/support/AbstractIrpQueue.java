@@ -13,11 +13,12 @@ import javax.usb.UsbHostManager;
 import javax.usb.UsbIrp;
 
 import de.ailis.usb4java.Services;
+import de.ailis.usb4java.exceptions.Usb4JavaRuntimeException;
 import de.ailis.usb4java.topology.Usb4JavaDevice;
 
 /**
  * Abstract base class for IRP queues.
- *
+ * 
  * @author Klaus Reimer (k@ailis.de)
  * @param <T>
  *            The type of IRPs this queue holds.
@@ -31,22 +32,24 @@ public abstract class AbstractIrpQueue<T extends UsbIrp>
     private Thread processor;
 
     /** The USB device. */
-    protected final Usb4JavaDevice device;
+    private final Usb4JavaDevice device;
 
     /**
      * Constructor.
-     *
+     * 
      * @param device
-     *            The USB device.
+     *            The USB device. Must not be null.
      */
     public AbstractIrpQueue(final Usb4JavaDevice device)
     {
+        if (device == null)
+            throw new IllegalArgumentException("device must be set");
         this.device = device;
     }
 
     /**
      * Queues the specified control IRP for processing.
-     *
+     * 
      * @param irp
      *            The control IRP to queue.
      */
@@ -96,20 +99,20 @@ public abstract class AbstractIrpQueue<T extends UsbIrp>
             {
                 irp.setUsbException(e);
             }
-        
+
             // Get next IRP and mark the thread as closing before sending the
             // events for the previous IRP
             T nextIrp = this.irps.poll();
             if (nextIrp == null) this.processor = null;
-            
+
             // Finish the previous IRP
             irp.complete();
             finishIrp(irp);
-            
+
             // Process next IRP (if present)
             irp = nextIrp;
         }
-        
+
         // No more IRPs are present in the queue so terminate the thread.
         this.processor = null;
         synchronized (this.irps)
@@ -120,7 +123,7 @@ public abstract class AbstractIrpQueue<T extends UsbIrp>
 
     /**
      * Processes the IRP.
-     *
+     * 
      * @param irp
      *            The IRP to process.
      * @throws UsbException
@@ -131,7 +134,7 @@ public abstract class AbstractIrpQueue<T extends UsbIrp>
     /**
      * Called after IRP has finished. This can be implemented to send events for
      * example.
-     *
+     * 
      * @param irp
      *            The IRP which has been finished.
      */
@@ -164,7 +167,7 @@ public abstract class AbstractIrpQueue<T extends UsbIrp>
     /**
      * Checks if queue is busy. A busy queue is a queue which is currently
      * processing IRPs or which still has IRPs in the queue.
-     *
+     * 
      * @return True if queue is busy, false if not.
      */
     public final boolean isBusy()
@@ -174,7 +177,7 @@ public abstract class AbstractIrpQueue<T extends UsbIrp>
 
     /**
      * Returns the configuration.
-     *
+     * 
      * @return The configuration.
      */
     protected Config getConfig()
@@ -187,7 +190,17 @@ public abstract class AbstractIrpQueue<T extends UsbIrp>
         {
             // Can't happen because we can't get to this point when USB
             // services are not available.
-            throw new RuntimeException(e.toString(), e);
+            throw new Usb4JavaRuntimeException(e.toString(), e);
         }
+    }
+
+    /**
+     * Returns the USB device.
+     * 
+     * @return The USB device. Never null.
+     */
+    protected Usb4JavaDevice getDevice()
+    {
+        return this.device;
     }
 }
