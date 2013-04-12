@@ -80,7 +80,7 @@ public final class LibUSB
     /** Pipe error. */
     public static final int ERROR_PIPE = -9;
 
-    /** System call interrupted (perhaps due to signal) */
+    /** System call interrupted (perhaps due to signal). */
     public static final int ERROR_INTERRUPTED = -10;
 
     /** Insufficient memory. */

@@ -17,7 +17,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * List of devices as returned by
- * {@link LibUSB#getDeviceList(Context, DeviceList)}
+ * {@link LibUSB#getDeviceList(Context, DeviceList)}.
  */
 public final class DeviceList implements Iterable<Device>
 {
