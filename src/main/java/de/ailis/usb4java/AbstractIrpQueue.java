@@ -170,7 +170,7 @@ public abstract class AbstractIrpQueue<T extends UsbIrp>
      * 
      * @return The configuration.
      */
-    protected Config getConfig()
+    protected final Config getConfig()
     {
         try
         {
@@ -189,7 +189,7 @@ public abstract class AbstractIrpQueue<T extends UsbIrp>
      * 
      * @return The USB device. Never null.
      */
-    protected Usb4JavaDevice getDevice()
+    protected final Usb4JavaDevice getDevice()
     {
         return this.device;
     }
