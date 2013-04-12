@@ -108,7 +108,7 @@ public final class Usb4JavaHub extends Usb4JavaDevice implements UsbHub,
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
-        Usb4JavaDevice other = (Usb4JavaDevice) obj;
+        final Usb4JavaDevice other = (Usb4JavaDevice) obj;
         return getId().equals(other.getId());
     }    
 }
