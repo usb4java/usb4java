@@ -408,8 +408,6 @@ public class Usb4JavaDevice implements UsbDevice
      *            If claim should be forces if possible.
      * @throws UsbException
      *             When interface could not be claimed.
-     * @throws UsbClaimException
-     *             When an interface is already claimed.
      */
     final void claimInterface(final byte number, final boolean force)
         throws UsbException
@@ -448,8 +446,6 @@ public class Usb4JavaDevice implements UsbDevice
      * 
      * @param number
      *            The number of the interface to release.
-     * @throws UsbClaimException
-     *             When the interface is not claimed.
      * @throws UsbException
      *             When interface could not be claimed.
      */
