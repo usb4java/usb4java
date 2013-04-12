@@ -67,7 +67,7 @@ public abstract class EventListenerList<T extends EventListener>
      * 
      * @return The listeners list.
      */
-    protected List<T> getListeners()
+    protected final List<T> getListeners()
     {
         return this.listeners;
     }
