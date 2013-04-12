@@ -107,9 +107,6 @@ public final class Usb4JavaConfiguration implements UsbConfiguration
         this.device.checkConnected();
     }
 
-    /**
-     * @see UsbConfiguration#isActive()
-     */
     @Override
     public boolean isActive()
     {
@@ -117,9 +114,6 @@ public final class Usb4JavaConfiguration implements UsbConfiguration
             .bConfigurationValue();
     }
 
-    /**
-     * @see UsbConfiguration#getUsbInterfaces()
-     */
     @Override
     public List<Usb4JavaInterface> getUsbInterfaces()
     {
@@ -151,9 +145,6 @@ public final class Usb4JavaConfiguration implements UsbConfiguration
         return this.interfaces.get(number & 0xff).size();
     }
 
-    /**
-     * @see UsbConfiguration#getUsbInterface(byte)
-     */
     @Override
     public Usb4JavaInterface getUsbInterface(byte number)
     {
@@ -185,36 +176,24 @@ public final class Usb4JavaConfiguration implements UsbConfiguration
         }
     }
     
-    /**
-     * @see UsbConfiguration#containsUsbInterface(byte)
-     */
     @Override
     public boolean containsUsbInterface(byte number)
     {
         return this.activeSettings.containsKey(number & 0xff);
     }
 
-    /**
-     * @see UsbConfiguration#getUsbDevice()
-     */
     @Override
     public Usb4JavaDevice getUsbDevice()
     {
         return this.device;
     }
 
-    /**
-     * @see UsbConfiguration#getUsbConfigurationDescriptor()
-     */
     @Override
     public UsbConfigurationDescriptor getUsbConfigurationDescriptor()
     {
         return this.descriptor;
     }
 
-    /**
-     * @see UsbConfiguration#getConfigurationString()
-     */
     @Override
     public String getConfigurationString() throws UsbException,
         UnsupportedEncodingException
@@ -225,9 +204,6 @@ public final class Usb4JavaConfiguration implements UsbConfiguration
         return this.device.getString(iConfiguration);
     }
 
-    /**
-     * @see Object#toString()
-     */
     @Override
     public String toString()
     {

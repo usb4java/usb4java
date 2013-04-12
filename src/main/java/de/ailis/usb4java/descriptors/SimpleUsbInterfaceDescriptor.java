@@ -141,9 +141,6 @@ public final class SimpleUsbInterfaceDescriptor extends SimpleUsbDescriptor
         return this.iInterface;
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode()
     {
@@ -159,9 +156,6 @@ public final class SimpleUsbInterfaceDescriptor extends SimpleUsbDescriptor
             .toHashCode();
     }
 
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(final Object obj)
     {

@@ -18,9 +18,6 @@ import javax.usb.event.UsbDeviceListener;
 public final class UsbDeviceListenerList extends
     EventListenerList<UsbDeviceListener> implements UsbDeviceListener
 {
-    /**
-     * @see EventListenerList#toArray()
-     */
     @Override
     public UsbDeviceListener[] toArray()
     {
@@ -28,9 +25,6 @@ public final class UsbDeviceListenerList extends
             new UsbDeviceListener[getListeners().size()]);
     }
 
-    /**
-     * @see UsbDeviceListener#usbDeviceDetached(UsbDeviceEvent)
-     */
     @Override
     public void usbDeviceDetached(final UsbDeviceEvent event)
     {
@@ -40,9 +34,6 @@ public final class UsbDeviceListenerList extends
         }
     }
 
-    /**
-     * @see UsbDeviceListener#errorEventOccurred(UsbDeviceErrorEvent)
-     */
     @Override
     public void errorEventOccurred(final UsbDeviceErrorEvent event)
     {
@@ -52,9 +43,6 @@ public final class UsbDeviceListenerList extends
         }
     }
 
-    /**
-     * @see UsbDeviceListener#dataEventOccurred(UsbDeviceDataEvent)
-     */
     @Override
     public void dataEventOccurred(final UsbDeviceDataEvent event)
     {

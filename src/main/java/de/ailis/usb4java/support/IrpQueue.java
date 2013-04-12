@@ -43,18 +43,12 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
         this.pipe = pipe;
     }
 
-    /**
-     * @see AbstractIrpQueue#finishIrp(UsbIrp)
-     */
     @Override
     protected void finishIrp(final UsbIrp irp)
     {
         this.pipe.sendEvent(irp);
     }
 
-    /**
-     * @see AbstractIrpQueue#processIrp(javax.usb.UsbIrp)
-     */
     @Override
     protected void processIrp(final UsbIrp irp) throws UsbException
     {

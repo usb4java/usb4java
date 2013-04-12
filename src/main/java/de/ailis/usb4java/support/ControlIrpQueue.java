@@ -43,9 +43,6 @@ public final class ControlIrpQueue extends AbstractIrpQueue<UsbControlIrp>
         this.listeners = listeners;
     }
 
-    /**
-     * @see AbstractIrpQueue#processIrp(javax.usb.UsbIrp)
-     */
     @Override
     protected void processIrp(final UsbControlIrp irp) throws UsbException
     {
@@ -69,9 +66,6 @@ public final class ControlIrpQueue extends AbstractIrpQueue<UsbControlIrp>
             throw new UsbShortPacketException();
     }
 
-    /**
-     * @see AbstractIrpQueue#finishIrp(javax.usb.UsbIrp)
-     */
     @Override
     protected void finishIrp(final UsbIrp irp)
     {

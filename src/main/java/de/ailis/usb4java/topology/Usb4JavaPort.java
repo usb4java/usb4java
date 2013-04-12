@@ -38,36 +38,24 @@ public final class Usb4JavaPort implements UsbPort
         this.portNumber = portNumber;
     }
 
-    /**
-     * @see UsbPort#getPortNumber()
-     */
     @Override
     public byte getPortNumber()
     {
         return this.portNumber;
     }
 
-    /**
-     * @see UsbPort#getUsbHub()
-     */
     @Override
     public UsbHub getUsbHub()
     {
         return this.hub;
     }
 
-    /**
-     * @see UsbPort#getUsbDevice()
-     */
     @Override
     public Usb4JavaDevice getUsbDevice()
     {
         return this.device;
     }
 
-    /**
-     * @see UsbPort#isUsbDeviceAttached()
-     */
     @Override
     public boolean isUsbDeviceAttached()
     {

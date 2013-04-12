@@ -87,18 +87,12 @@ public final class Usb4JavaInterface implements UsbInterface
         this.configuration.getUsbDevice().checkConnected();
     }
 
-    /**
-     * @see UsbInterface#claim()
-     */
     @Override
     public void claim() throws UsbException
     {
         claim(null);
     }
 
-    /**
-     * @see UsbInterface#claim(UsbInterfacePolicy)
-     */
     @Override
     public void claim(final UsbInterfacePolicy policy) throws UsbException
     {
@@ -111,9 +105,6 @@ public final class Usb4JavaInterface implements UsbInterface
             this.descriptor.bInterfaceNumber(), this);
     }
 
-    /**
-     * @see UsbInterface#release()
-     */
     @Override
     public void release() throws UsbException
     {
@@ -123,9 +114,6 @@ public final class Usb4JavaInterface implements UsbInterface
             this.descriptor.bInterfaceNumber());
     }
 
-    /**
-     * @see UsbInterface#isClaimed()
-     */
     @Override
     public boolean isClaimed()
     {
@@ -133,9 +121,6 @@ public final class Usb4JavaInterface implements UsbInterface
             this.descriptor.bInterfaceNumber());
     }
 
-    /**
-     * @see UsbInterface#isActive()
-     */
     @Override
     public boolean isActive()
     {
@@ -143,9 +128,6 @@ public final class Usb4JavaInterface implements UsbInterface
             .bInterfaceNumber()) == this;
     }
 
-    /**
-     * @see UsbInterface#getNumSettings()
-     */
     @Override
     public int getNumSettings()
     {
@@ -153,9 +135,6 @@ public final class Usb4JavaInterface implements UsbInterface
             .bInterfaceNumber());
     }
 
-    /**
-     * @see UsbInterface#getActiveSettingNumber()
-     */
     @Override
     public byte getActiveSettingNumber()
     {
@@ -165,9 +144,6 @@ public final class Usb4JavaInterface implements UsbInterface
             .getUsbInterfaceDescriptor().bAlternateSetting();
     }
 
-    /**
-     * @see UsbInterface#getActiveSetting()
-     */
     @Override
     public Usb4JavaInterface getActiveSetting()
     {
@@ -176,9 +152,6 @@ public final class Usb4JavaInterface implements UsbInterface
                 .bInterfaceNumber());
     }
 
-    /**
-     * @see UsbInterface#getSetting(byte)
-     */
     @Override
     public Usb4JavaInterface getSetting(final byte number)
     {
@@ -186,9 +159,6 @@ public final class Usb4JavaInterface implements UsbInterface
             this.descriptor.bInterfaceNumber()).get(number & 0xff);
     }
 
-    /**
-     * @see UsbInterface#containsSetting(byte)
-     */
     @Override
     public boolean containsSetting(final byte number)
     {
@@ -196,9 +166,6 @@ public final class Usb4JavaInterface implements UsbInterface
             this.descriptor.bInterfaceNumber()).containsKey(number & 0xff);
     }
 
-    /**
-     * @see UsbInterface#getSettings()
-     */
     @Override
     public List<Usb4JavaInterface> getSettings()
     {
@@ -207,9 +174,6 @@ public final class Usb4JavaInterface implements UsbInterface
                 this.descriptor.bInterfaceNumber()).values()));
     }
 
-    /**
-     * @see UsbInterface#getUsbEndpoints()
-     */
     @Override
     public List<Usb4JavaEndpoint> getUsbEndpoints()
     {
@@ -217,45 +181,30 @@ public final class Usb4JavaInterface implements UsbInterface
             this.endpoints.values()));
     }
 
-    /**
-     * @see UsbInterface#getUsbEndpoint(byte)
-     */
     @Override
     public Usb4JavaEndpoint getUsbEndpoint(final byte address)
     {
         return this.endpoints.get(address);
     }
 
-    /**
-     * @see UsbInterface#containsUsbEndpoint(byte)
-     */
     @Override
     public boolean containsUsbEndpoint(final byte address)
     {
         return this.endpoints.containsKey(address);
     }
 
-    /**
-     * @see UsbInterface#getUsbConfiguration()
-     */
     @Override
     public Usb4JavaConfiguration getUsbConfiguration()
     {
         return this.configuration;
     }
 
-    /**
-     * @see UsbInterface#getUsbInterfaceDescriptor()
-     */
     @Override
     public UsbInterfaceDescriptor getUsbInterfaceDescriptor()
     {
         return this.descriptor;
     }
 
-    /**
-     * @see UsbInterface#getInterfaceString()
-     */
     @Override
     public String getInterfaceString() throws UsbException,
         UnsupportedEncodingException
@@ -266,9 +215,6 @@ public final class Usb4JavaInterface implements UsbInterface
         return this.configuration.getUsbDevice().getString(iInterface);
     }
         
-    /**
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString()
     {

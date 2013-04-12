@@ -114,9 +114,6 @@ public final class Usb4JavaPipe implements UsbPipe
             throw new UsbNotOpenException("Pipe is not open.");
     }
 
-    /**
-     * @see UsbPipe#open()
-     */
     @Override
     public void open() throws UsbException
     {
@@ -127,9 +124,6 @@ public final class Usb4JavaPipe implements UsbPipe
         this.opened = true;
     }
 
-    /**
-     * @see UsbPipe#close()
-     */
     @Override
     public void close() throws UsbException
     {
@@ -142,9 +136,6 @@ public final class Usb4JavaPipe implements UsbPipe
         this.opened = false;
     }
 
-    /**
-     * @see UsbPipe#isActive()
-     */
     @Override
     public boolean isActive()
     {
@@ -153,27 +144,18 @@ public final class Usb4JavaPipe implements UsbPipe
         return iface.isActive() && config.isActive();
     }
 
-    /**
-     * @see UsbPipe#isOpen()
-     */
     @Override
     public boolean isOpen()
     {
         return this.opened;
     }
 
-    /**
-     * @see UsbPipe#getUsbEndpoint()
-     */
     @Override
     public Usb4JavaEndpoint getUsbEndpoint()
     {
         return this.endpoint;
     }
 
-    /**
-     * @see UsbPipe#syncSubmit(byte[])
-     */
     @Override
     public int syncSubmit(final byte[] data) throws UsbException
     {
@@ -183,9 +165,6 @@ public final class Usb4JavaPipe implements UsbPipe
         return irp.getActualLength();
     }
 
-    /**
-     * @see UsbPipe#asyncSubmit(byte[])
-     */
     @Override
     public UsbIrp asyncSubmit(final byte[] data)
     {
@@ -198,9 +177,6 @@ public final class Usb4JavaPipe implements UsbPipe
         return irp;
     }
 
-    /**
-     * @see UsbPipe#syncSubmit(javax.usb.UsbIrp)
-     */
     @Override
     public void syncSubmit(final UsbIrp irp) throws UsbException
     {
@@ -211,9 +187,6 @@ public final class Usb4JavaPipe implements UsbPipe
         if (irp.isUsbException()) throw irp.getUsbException();
     }
 
-    /**
-     * @see UsbPipe#asyncSubmit(javax.usb.UsbIrp)
-     */
     @Override
     public void asyncSubmit(final UsbIrp irp)
     {
@@ -225,9 +198,6 @@ public final class Usb4JavaPipe implements UsbPipe
         this.queue.add(irp);
     }
 
-    /**
-     * @see UsbPipe#syncSubmit(java.util.List)
-     */
     @Override
     public void syncSubmit(final List list) throws UsbException
     {
@@ -238,9 +208,6 @@ public final class Usb4JavaPipe implements UsbPipe
         }
     }
 
-    /**
-     * @see UsbPipe#asyncSubmit(java.util.List)
-     */
     @Override
     public void asyncSubmit(final List list)
     {
@@ -251,9 +218,6 @@ public final class Usb4JavaPipe implements UsbPipe
         }
     }
 
-    /**
-     * @see UsbPipe#abortAllSubmissions()
-     */
     @Override
     public void abortAllSubmissions()
     {
@@ -263,18 +227,12 @@ public final class Usb4JavaPipe implements UsbPipe
         this.queue.abort();
     }
 
-    /**
-     * @see UsbPipe#createUsbIrp()
-     */
     @Override
     public UsbIrp createUsbIrp()
     {
         return new DefaultUsbIrp();
     }
 
-    /**
-     * @see UsbPipe#createUsbControlIrp(byte, byte, short, short)
-     */
     @Override
     public UsbControlIrp createUsbControlIrp(final byte bmRequestType,
         final byte bRequest,
@@ -284,18 +242,12 @@ public final class Usb4JavaPipe implements UsbPipe
             wIndex);
     }
 
-    /**
-     * @see UsbPipe#addUsbPipeListener(UsbPipeListener)
-     */
     @Override
     public void addUsbPipeListener(final UsbPipeListener listener)
     {
         this.listeners.add(listener);
     }
 
-    /**
-     * @see UsbPipe#removeUsbPipeListener(UsbPipeListener)
-     */
     @Override
     public void removeUsbPipeListener(final UsbPipeListener listener)
     {
@@ -320,9 +272,6 @@ public final class Usb4JavaPipe implements UsbPipe
         }
     }
     
-    /**
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString()
     {

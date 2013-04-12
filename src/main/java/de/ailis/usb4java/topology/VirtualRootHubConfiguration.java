@@ -55,27 +55,18 @@ public final class VirtualRootHubConfiguration implements UsbConfiguration
         this.interfaces.add(new VirtualRootHubInterface(this));
     }
 
-    /**
-     * @see UsbConfiguration#isActive()
-     */
     @Override
     public boolean isActive()
     {
         return true;
     }
 
-    /**
-     * @see UsbConfiguration#getUsbInterfaces()
-     */
     @Override
     public List<UsbInterface> getUsbInterfaces()
     {
         return this.interfaces;
     }
 
-    /**
-     * @see UsbConfiguration#getUsbInterface(byte)
-     */
     @Override
     public UsbInterface getUsbInterface(final byte number)
     {
@@ -83,36 +74,24 @@ public final class VirtualRootHubConfiguration implements UsbConfiguration
         return this.interfaces.get(0);
     }
 
-    /**
-     * @see UsbConfiguration#containsUsbInterface(byte)
-     */
     @Override
     public boolean containsUsbInterface(final byte number)
     {
         return number == 0;
     }
 
-    /**
-     * @see javax.usb.UsbConfiguration#getUsbDevice()
-     */
     @Override
     public UsbDevice getUsbDevice()
     {
         return this.device;
     }
 
-    /**
-     * @see javax.usb.UsbConfiguration#getUsbConfigurationDescriptor()
-     */
     @Override
     public UsbConfigurationDescriptor getUsbConfigurationDescriptor()
     {
         return this.descriptor;
     }
 
-    /**
-     * @see javax.usb.UsbConfiguration#getConfigurationString()
-     */
     @Override
     public String getConfigurationString()
     {

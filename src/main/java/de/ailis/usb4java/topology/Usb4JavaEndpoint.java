@@ -45,27 +45,18 @@ public final class Usb4JavaEndpoint implements UsbEndpoint
         this.pipe = new Usb4JavaPipe(this);
     }
 
-    /**
-     * @see javax.usb.UsbEndpoint#getUsbInterface()
-     */
     @Override
     public Usb4JavaInterface getUsbInterface()
     {
         return this.iface;
     }
 
-    /**
-     * @see javax.usb.UsbEndpoint#getUsbEndpointDescriptor()
-     */
     @Override
     public UsbEndpointDescriptor getUsbEndpointDescriptor()
     {
         return this.descriptor;
     }
 
-    /**
-     * @see javax.usb.UsbEndpoint#getDirection()
-     */
     @Override
     public byte getDirection()
     {
@@ -73,9 +64,6 @@ public final class Usb4JavaEndpoint implements UsbEndpoint
         return (byte) (address & UsbConst.ENDPOINT_DIRECTION_MASK);
     }
 
-    /**
-     * @see javax.usb.UsbEndpoint#getType()
-     */
     @Override
     public byte getType()
     {
@@ -83,9 +71,6 @@ public final class Usb4JavaEndpoint implements UsbEndpoint
         return (byte) (attribs & UsbConst.ENDPOINT_TYPE_MASK);
     }
 
-    /**
-     * @see javax.usb.UsbEndpoint#getUsbPipe()
-     */
     @Override
     public UsbPipe getUsbPipe()
     {

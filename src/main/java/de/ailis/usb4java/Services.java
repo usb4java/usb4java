@@ -67,9 +67,6 @@ public final class Services implements UsbServices
         this.deviceScanner.start();
     }
 
-    /**
-     * @see UsbServices#getRootUsbHub()
-     */
     @Override
     public UsbHub getRootUsbHub()
     {
@@ -77,45 +74,30 @@ public final class Services implements UsbServices
         return this.rootHub;
     }
 
-    /**
-     * @see UsbServices#addUsbServicesListener(UsbServicesListener)
-     */
     @Override
     public void addUsbServicesListener(final UsbServicesListener listener)
     {
         this.listeners.add(listener);
     }
 
-    /**
-     * @see UsbServices#removeUsbServicesListener(UsbServicesListener)
-     */
     @Override
     public void removeUsbServicesListener(final UsbServicesListener listener)
     {
         this.listeners.remove(listener);
     }
 
-    /**
-     * @see UsbServices#getApiVersion()
-     */
     @Override
     public String getApiVersion()
     {
         return API_VERSION;
     }
 
-    /**
-     * @see UsbServices#getImpVersion()
-     */
     @Override
     public String getImpVersion()
     {
         return IMP_VERSION;
     }
 
-    /**
-     * @see UsbServices#getImpDescription()
-     */
     @Override
     public String getImpDescription()
     {

@@ -75,72 +75,48 @@ public final class VirtualRootHub implements UsbHub,
         this.configurations.add(new VirtualRootHubConfiguration(this));
     }
 
-    /**
-     * @see UsbHub#getParentUsbPort()
-     */
     @Override
     public UsbPort getParentUsbPort()
     {
         return null;
     }
 
-    /**
-     * @see UsbHub#isUsbHub()
-     */
     @Override
     public boolean isUsbHub()
     {
         return true;
     }
 
-    /**
-     * @see UsbHub#getManufacturerString()
-     */
     @Override
     public String getManufacturerString()
     {
         return MANUFACTURER;
     }
 
-    /**
-     * @see UsbHub#getSerialNumberString()
-     */
     @Override
     public String getSerialNumberString()
     {
         return SERIAL_NUMBER;
     }
 
-    /**
-     * @see UsbHub#getProductString()
-     */
     @Override
     public String getProductString()
     {
         return PRODUCT;
     }
 
-    /**
-     * @see UsbHub#getSpeed()
-     */
     @Override
     public Object getSpeed()
     {
         return UsbConst.DEVICE_SPEED_UNKNOWN;
     }
 
-    /**
-     * @see UsbHub#getUsbConfigurations()
-     */
     @Override
     public List<UsbConfiguration> getUsbConfigurations()
     {
         return this.configurations;
     }
 
-    /**
-     * @see UsbHub#getUsbConfiguration(byte)
-     */
     @Override
     public UsbConfiguration getUsbConfiguration(final byte number)
     {
@@ -148,54 +124,36 @@ public final class VirtualRootHub implements UsbHub,
         return this.configurations.get(0);
     }
 
-    /**
-     * @see UsbHub#containsUsbConfiguration(byte)
-     */
     @Override
     public boolean containsUsbConfiguration(final byte number)
     {
         return number == 1;
     }
 
-    /**
-     * @see UsbHub#getActiveUsbConfigurationNumber()
-     */
     @Override
     public byte getActiveUsbConfigurationNumber()
     {
         return 1;
     }
 
-    /**
-     * @see UsbHub#getActiveUsbConfiguration()
-     */
     @Override
     public UsbConfiguration getActiveUsbConfiguration()
     {
         return this.configurations.get(0);
     }
 
-    /**
-     * @see UsbHub#isConfigured()
-     */
     @Override
     public boolean isConfigured()
     {
         return true;
     }
 
-    /**
-     * @see UsbHub#getUsbDeviceDescriptor()
-     */
     @Override
     public UsbDeviceDescriptor getUsbDeviceDescriptor()
     {
         return this.descriptor;
     }
 
-    /**
-     * @see UsbHub#getUsbStringDescriptor(byte)
-     */
     @Override
     public UsbStringDescriptor getUsbStringDescriptor(final byte index)
         throws UsbException
@@ -204,54 +162,36 @@ public final class VirtualRootHub implements UsbHub,
             "Can't get USB string descriptor from virtual device");
     }
 
-    /**
-     * @see UsbHub#getString(byte)
-     */
     @Override
     public String getString(final byte index) throws UsbException
     {
         throw new UsbException("Can't get string from virtual device");
     }
 
-    /**
-     * @see UsbHub#syncSubmit(javax.usb.UsbControlIrp)
-     */
     @Override
     public void syncSubmit(final UsbControlIrp irp) throws UsbException
     {
         throw new UsbException("Can't syncSubmit on virtual device");
     }
 
-    /**
-     * @see UsbHub#asyncSubmit(javax.usb.UsbControlIrp)
-     */
     @Override
     public void asyncSubmit(final UsbControlIrp irp) throws UsbException
     {
         throw new UsbException("Can't asyncSubmit on virtual device");
     }
 
-    /**
-     * @see UsbHub#syncSubmit(java.util.List)
-     */
     @Override
     public void syncSubmit(final List list) throws UsbException
     {
         throw new UsbException("Can't syncSubmit on virtual device");
     }
 
-    /**
-     * @see UsbHub#asyncSubmit(java.util.List)
-     */
     @Override
     public void asyncSubmit(final List list) throws UsbException
     {
         throw new UsbException("Can't asyncSubmit on virtual device");
     }
 
-    /**
-     * @see UsbHub#createUsbControlIrp(byte, byte, short, short)
-     */
     @Override
     public UsbControlIrp createUsbControlIrp(final byte bmRequestType,
         final byte bRequest,
@@ -261,90 +201,60 @@ public final class VirtualRootHub implements UsbHub,
             wIndex);
     }
 
-    /**
-     * @see UsbHub#addUsbDeviceListener(javax.usb.event.UsbDeviceListener)
-     */
     @Override
     public void addUsbDeviceListener(final UsbDeviceListener listener)
     {
         this.listeners.add(listener);
     }
 
-    /**
-     * @see UsbHub#removeUsbDeviceListener(javax.usb.event.UsbDeviceListener)
-     */
     @Override
     public void removeUsbDeviceListener(final UsbDeviceListener listener)
     {
         this.listeners.remove(listener);
     }
 
-    /**
-     * @see javax.usb.UsbHub#getNumberOfPorts()
-     */
     @Override
     public byte getNumberOfPorts()
     {
         return this.ports.getNumberOfPorts();
     }
 
-    /**
-     * @see javax.usb.UsbHub#getUsbPorts()
-     */
     @Override
     public List<Usb4JavaPort> getUsbPorts()
     {
         return this.ports.getUsbPorts();
     }
 
-    /**
-     * @see javax.usb.UsbHub#getUsbPort(byte)
-     */
     @Override
     public Usb4JavaPort getUsbPort(final byte number)
     {
         return this.ports.getUsbPort(number);
     }
 
-    /**
-     * @see javax.usb.UsbHub#getAttachedUsbDevices()
-     */
     @Override
     public List<Usb4JavaDevice> getAttachedUsbDevices()
     {
         return this.ports.getAttachedUsbDevices();
     }
 
-    /**
-     * @see javax.usb.UsbHub#isRootUsbHub()
-     */
     @Override
     public boolean isRootUsbHub()
     {
         return true;
     }
 
-    /**
-     * @see UsbPorts#connectUsbDevice(javax.usb.UsbDevice)
-     */
     @Override
     public void connectUsbDevice(final Usb4JavaDevice device)
     {
         this.ports.connectUsbDevice(device);
     }
 
-    /**
-     * @see UsbPorts#disconnectUsbDevice(javax.usb.UsbDevice)
-     */
     @Override
     public void disconnectUsbDevice(final Usb4JavaDevice device)
     {
         this.ports.disconnectUsbDevice(device);
     }
 
-    /**
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString()
     {

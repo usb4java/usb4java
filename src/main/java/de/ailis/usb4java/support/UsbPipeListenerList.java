@@ -17,9 +17,6 @@ import javax.usb.event.UsbPipeListener;
 public final class UsbPipeListenerList extends
     EventListenerList<UsbPipeListener> implements UsbPipeListener
 {
-    /**
-     * @see EventListenerList#toArray()
-     */
     @Override
     public UsbPipeListener[] toArray()
     {
@@ -27,9 +24,6 @@ public final class UsbPipeListenerList extends
             new UsbPipeListener[getListeners().size()]);
     }
 
-    /**
-     * @see UsbPipeListener#errorEventOccurred(UsbPipeErrorEvent)
-     */
     @Override
     public void errorEventOccurred(final UsbPipeErrorEvent event)
     {
@@ -39,9 +33,6 @@ public final class UsbPipeListenerList extends
         }
     }
 
-    /**
-     * @see UsbPipeListener#dataEventOccurred(UsbPipeDataEvent)
-     */
     @Override
     public void dataEventOccurred(final UsbPipeDataEvent event)
     {

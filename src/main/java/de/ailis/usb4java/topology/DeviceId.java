@@ -56,9 +56,6 @@ public class DeviceId implements Serializable
         this.deviceDescriptor = deviceDescriptor;
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode()
     {
@@ -72,9 +69,6 @@ public class DeviceId implements Serializable
         return result;
     }
 
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(Object obj)
     {
@@ -134,9 +128,6 @@ public class DeviceId implements Serializable
         return this.deviceDescriptor;
     }
     
-    /**
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString()
     {

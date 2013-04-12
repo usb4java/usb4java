@@ -58,153 +58,102 @@ public final class VirtualRootHubInterface implements UsbInterface
         this.configuration = configuration;
     }
 
-    /**
-     * @see UsbInterface#claim()
-     */
     @Override
     public void claim() throws UsbException
     {
         throw new UsbException("Virtual interfaces can't be claimed");
     }
 
-    /**
-     * @see UsbInterface#claim(UsbInterfacePolicy)
-     */
     @Override
     public void claim(final UsbInterfacePolicy policy) throws UsbException
     {
         throw new UsbException("Virtual interfaces can't be claimed");
     }
 
-    /**
-     * @see UsbInterface#release()
-     */
     @Override
     public void release() throws UsbException
     {
         throw new UsbException("Virtual interfaces can't be released");
     }
 
-    /**
-     * @see UsbInterface#isClaimed()
-     */
     @Override
     public boolean isClaimed()
     {
         return true;
     }
 
-    /**
-     * @see UsbInterface#isActive()
-     */
     @Override
     public boolean isActive()
     {
         return true;
     }
 
-    /**
-     * @see UsbInterface#getNumSettings()
-     */
     @Override
     public int getNumSettings()
     {
         return 0;
     }
 
-    /**
-     * @see UsbInterface#getActiveSettingNumber()
-     */
     @Override
     public byte getActiveSettingNumber()
     {
         return 0;
     }
 
-    /**
-     * @see UsbInterface#getActiveSetting()
-     */
     @Override
     public UsbInterface getActiveSetting()
     {
         return this;
     }
 
-    /**
-     * @see UsbInterface#getSetting(byte)
-     */
     @Override
     public UsbInterface getSetting(final byte number)
     {
         return this;
     }
 
-    /**
-     * @see UsbInterface#containsSetting(byte)
-     */
     @Override
     public boolean containsSetting(final byte number)
     {
         return false;
     }
 
-    /**
-     * @see UsbInterface#getSettings()
-     */
     @Override
     public List<UsbInterface> getSettings()
     {
         return this.settings;
     }
 
-    /**
-     * @see UsbInterface#getUsbEndpoints()
-     */
     @Override
     public List<UsbEndpoint> getUsbEndpoints()
     {
         return this.endpoints;
     }
 
-    /**
-     * @see UsbInterface#getUsbEndpoint(byte)
-     */
     @Override
     public UsbEndpoint getUsbEndpoint(final byte address)
     {
         return null;
     }
 
-    /**
-     * @see UsbInterface#containsUsbEndpoint(byte)
-     */
     @Override
     public boolean containsUsbEndpoint(final byte address)
     {
         return false;
     }
 
-    /**
-     * @see UsbInterface#getUsbConfiguration()
-     */
     @Override
     public UsbConfiguration getUsbConfiguration()
     {
         return this.configuration;
     }
 
-    /**
-     * @see UsbInterface#getUsbInterfaceDescriptor()
-     */
     @Override
     public UsbInterfaceDescriptor getUsbInterfaceDescriptor()
     {
         return this.descriptor;
     }
 
-    /**
-     * @see UsbInterface#getInterfaceString()
-     */
     @Override
     public String getInterfaceString()
     {
