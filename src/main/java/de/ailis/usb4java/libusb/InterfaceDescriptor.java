@@ -25,6 +25,8 @@ import de.ailis.usb4java.utils.DumpUtils;
  * 
  * This descriptor is documented in section 9.6.5 of the USB 3.0 specification.
  * All multiple-byte fields are represented in host-endian format.
+ * 
+ * @author Klaus Reimer (k@ailis.de)
  */
 public final class InterfaceDescriptor implements UsbInterfaceDescriptor
 {

@@ -5,7 +5,6 @@
 
 package de.ailis.usb4java.libusb;
 
-
 /**
  * Thrown when JNI library could not be loaded.
  * 

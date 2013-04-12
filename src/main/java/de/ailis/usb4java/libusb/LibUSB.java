@@ -17,6 +17,8 @@ import java.nio.IntBuffer;
 
 /**
  * Static class providing the constants and functions of libusbx.
+ * 
+ * @author Klaus Reimer (k@ailis.de)
  */
 public final class LibUSB
 {

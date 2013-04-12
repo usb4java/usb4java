@@ -30,6 +30,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * 
  * For more information, see <a
  * href="http://libusbx.sourceforge.net/api-1.0/contexts.html">Contexts</a>.
+ * 
+ * @author Klaus Reimer (k@ailis.de)
  */
 public final class Context
 {

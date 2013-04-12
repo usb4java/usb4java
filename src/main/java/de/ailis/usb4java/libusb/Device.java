@@ -31,6 +31,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * decrease the reference count on all devices in the list.
  * {@link LibUSB#open(Device, DeviceHandle)} adds another reference which is
  * later destroyed by {@link LibUSB#close(DeviceHandle)}.
+ * 
+ * @author Klaus Reimer (k@ailis.de)
  */
 public final class Device
 {

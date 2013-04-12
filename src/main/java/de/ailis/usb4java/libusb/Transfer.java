@@ -19,6 +19,8 @@ import java.nio.ByteBuffer;
  * The user populates this structure and then submits it in order to request a
  * transfer. After the transfer has completed, the library populates the
  * transfer with the results and passes it back to the user.
+ *
+ * @author Klaus Reimer (k@ailis.de)
  */
 public final class Transfer
 {

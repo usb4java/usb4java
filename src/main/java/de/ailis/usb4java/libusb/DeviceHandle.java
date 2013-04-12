@@ -21,6 +21,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * 
  * A device handle is used to perform I/O and other operations. When finished
  * with a device handle, you should call {@link LibUSB#close(DeviceHandle)}.
+ * 
+ * @author Klaus Reimer (k@ailis.de)
  */
 public final class DeviceHandle
 {

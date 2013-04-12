@@ -17,6 +17,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * Structure providing the version of the libusbx runtime.
+ * 
+ * @author Klaus Reimer (k@ailis.de)
  */
 public final class Version implements Comparable<Version>
 {

@@ -15,6 +15,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * A collection of alternate settings for a particular USB interface.
+ * 
+ * @author Klaus Reimer (k@ailis.de)
  */
 public final class Interface
 {
