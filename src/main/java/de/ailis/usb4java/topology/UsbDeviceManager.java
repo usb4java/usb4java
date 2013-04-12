@@ -109,17 +109,18 @@ public final class UsbDeviceManager
     }
 
     /**
-     * Scans the USB busses for new or removed devices.
+     * Returns all currently connected devices.
+     * 
+     * @return The connected devices.
      */
-    public void scan()
+    private Set<Usb4JavaDevice> getConnectedDevices()
     {
-        Set<Usb4JavaDevice> found = new HashSet<Usb4JavaDevice>();
-
         final DeviceList devices = new DeviceList();
-        int result = LibUSB.getDeviceList(this.context, devices);
+        final int result = LibUSB.getDeviceList(this.context, devices);
         if (result < 0)
             throw new Usb4JavaRuntimeException("Unable to get USB device list",
                 result);
+        final Set<Usb4JavaDevice> found = new HashSet<Usb4JavaDevice>();
         try
         {
             try
@@ -156,13 +157,25 @@ public final class UsbDeviceManager
         {
             LibUSB.freeDeviceList(devices, true);
         }
+        return found;
+    }
 
-        // Check for removed devices
+    /**
+     * Checks if the global device list contains any devices which are not in
+     * the specified set of currently connected devices. These devices are
+     * disconnected from their parent and then removed from the global device
+     * list.
+     * 
+     * @param current
+     *            The currently connected devices.
+     */
+    private void processRemovedDevices(final Set<Usb4JavaDevice> current)
+    {
         Iterator<Usb4JavaDevice> it = this.devices.values().iterator();
         while (it.hasNext())
         {
             Usb4JavaDevice device = it.next();
-            if (!found.contains(device))
+            if (!current.contains(device))
             {
                 Usb4JavaDevice parent = this.devices.get(device.getId());
                 if (parent == null)
@@ -172,9 +185,19 @@ public final class UsbDeviceManager
                 it.remove();
             }
         }
+    }
 
-        // Check for newly connected devices
-        for (Usb4JavaDevice device: found)
+    /**
+     * Checks for newly found devices which are not yet in the global list of
+     * devices. These devices are added to their parent device and then added to
+     * the global list of devices.
+     * 
+     * @param current
+     *            The currently connected devices.
+     */
+    private void processNewDevices(final Set<Usb4JavaDevice> current)
+    {
+        for (Usb4JavaDevice device: current)
         {
             if (!this.devices.containsValue(device))
             {
@@ -192,6 +215,16 @@ public final class UsbDeviceManager
                 this.devices.put(device.getId(), device);
             }
         }
+    }
+
+    /**
+     * Scans the USB busses for new or removed devices.
+     */
+    public void scan()
+    {
+        final Set<Usb4JavaDevice> found = getConnectedDevices();
+        processRemovedDevices(found);
+        processNewDevices(found);
     }
 
     /**
