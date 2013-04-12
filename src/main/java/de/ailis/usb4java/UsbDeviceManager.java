@@ -137,11 +137,15 @@ public final class UsbDeviceManager
                         final boolean isHub = id.getDeviceDescriptor()
                             .bDeviceClass() == LibUSB.CLASS_HUB;
                         if (isHub)
+                        {
                             device = new Usb4JavaHub(this, id, parentId,
                                 speed, libUsbDevice);
+                        }
                         else
-                            device = new Usb4JavaDevice(this, id, parentId,
-                                speed, libUsbDevice);
+                        {
+                            device = new Usb4JavaNonHub(this, id, 
+                                parentId, speed, libUsbDevice);
+                        }
                     }
                     found.add(device);
                 }

@@ -24,7 +24,7 @@ public final class Usb4JavaHub extends Usb4JavaDevice implements UsbHub,
     private final Usb4JavaPorts ports = new Usb4JavaPorts(this);
 
     /**
-     * Constructor.
+     * Constructs a new USB hub device.
      * 
      * @param manager
      *            The USB device manager which is responsible for this device.
@@ -89,12 +89,6 @@ public final class Usb4JavaHub extends Usb4JavaDevice implements UsbHub,
     {
         this.ports.disconnectUsbDevice(device);
     }
-
-    @Override
-    public boolean isUsbHub()
-    {
-        return true;
-    }
     
     @Override
     public int hashCode()
@@ -111,4 +105,10 @@ public final class Usb4JavaHub extends Usb4JavaDevice implements UsbHub,
         final Usb4JavaDevice other = (Usb4JavaDevice) obj;
         return getId().equals(other.getId());
     }    
+
+    @Override
+    public boolean isUsbHub()
+    {
+        return true;
+    }
 }

@@ -41,7 +41,7 @@ import de.ailis.usb4java.support.UsbDeviceListenerList;
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
-public class Usb4JavaDevice implements UsbDevice
+abstract class Usb4JavaDevice implements UsbDevice
 {
     /** The USB device manager. */
     private final UsbDeviceManager manager;
@@ -157,28 +157,12 @@ public class Usb4JavaDevice implements UsbDevice
         LibUSB.freeConfigDescriptor(configDescriptor);
     }
 
-    @Override
-    public int hashCode()
-    {
-        return this.id.hashCode();
-    }
-
-    @Override
-    public boolean equals(final Object obj)
-    {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
-        final Usb4JavaDevice other = (Usb4JavaDevice) obj;
-        return this.id.equals(other.id);
-    }
-
     /**
      * Returns the device id.
      * 
      * @return The device id.
      */
-    public DeviceId getId()
+    public final DeviceId getId()
     {
         return this.id;
     }
@@ -188,7 +172,7 @@ public class Usb4JavaDevice implements UsbDevice
      * 
      * @return The parent device id or null of there is no parent.
      */
-    public DeviceId getParentId()
+    public final DeviceId getParentId()
     {
         return this.parentId;
     }
@@ -249,7 +233,7 @@ public class Usb4JavaDevice implements UsbDevice
     }
 
     @Override
-    public UsbPort getParentUsbPort()
+    public final UsbPort getParentUsbPort()
     {
         checkConnected();
         return this.port;
@@ -305,7 +289,7 @@ public class Usb4JavaDevice implements UsbDevice
     }
 
     @Override
-    public String getManufacturerString() throws UsbException,
+    public final String getManufacturerString() throws UsbException,
         UnsupportedEncodingException
     {
         checkConnected();
@@ -315,7 +299,7 @@ public class Usb4JavaDevice implements UsbDevice
     }
 
     @Override
-    public String getSerialNumberString() throws UsbException,
+    public final String getSerialNumberString() throws UsbException,
         UnsupportedEncodingException
     {
         checkConnected();
@@ -325,7 +309,7 @@ public class Usb4JavaDevice implements UsbDevice
     }
 
     @Override
-    public String getProductString() throws UsbException,
+    public final String getProductString() throws UsbException,
         UnsupportedEncodingException
     {
         checkConnected();
@@ -335,7 +319,7 @@ public class Usb4JavaDevice implements UsbDevice
     }
 
     @Override
-    public Object getSpeed()
+    public final Object getSpeed()
     {
         switch (this.speed)
         {
@@ -349,25 +333,25 @@ public class Usb4JavaDevice implements UsbDevice
     }
 
     @Override
-    public List<Usb4JavaConfiguration> getUsbConfigurations()
+    public final List<Usb4JavaConfiguration> getUsbConfigurations()
     {
         return this.configurations;
     }
 
     @Override
-    public Usb4JavaConfiguration getUsbConfiguration(final byte number)
+    public final Usb4JavaConfiguration getUsbConfiguration(final byte number)
     {
         return this.configMapping.get(number);
     }
 
     @Override
-    public boolean containsUsbConfiguration(final byte number)
+    public final boolean containsUsbConfiguration(final byte number)
     {
         return this.configMapping.containsKey(number);
     }
 
     @Override
-    public byte getActiveUsbConfigurationNumber()
+    public final byte getActiveUsbConfigurationNumber()
     {
         return this.activeConfigurationNumber;
     }
@@ -482,25 +466,25 @@ public class Usb4JavaDevice implements UsbDevice
     }
 
     @Override
-    public Usb4JavaConfiguration getActiveUsbConfiguration()
+    public final Usb4JavaConfiguration getActiveUsbConfiguration()
     {
         return getUsbConfiguration(getActiveUsbConfigurationNumber());
     }
 
     @Override
-    public boolean isConfigured()
+    public final boolean isConfigured()
     {
         return getActiveUsbConfigurationNumber() != 0;
     }
 
     @Override
-    public UsbDeviceDescriptor getUsbDeviceDescriptor()
+    public final UsbDeviceDescriptor getUsbDeviceDescriptor()
     {
         return this.id.getDeviceDescriptor();
     }
 
     @Override
-    public UsbStringDescriptor getUsbStringDescriptor(final byte index)
+    public final UsbStringDescriptor getUsbStringDescriptor(final byte index)
         throws UsbException
     {
         checkConnected();
@@ -517,7 +501,7 @@ public class Usb4JavaDevice implements UsbDevice
     }
 
     @Override
-    public String getString(final byte index) throws UsbException,
+    public final String getString(final byte index) throws UsbException,
         UnsupportedEncodingException
     {
         return getUsbStringDescriptor(index).getString();
@@ -550,7 +534,7 @@ public class Usb4JavaDevice implements UsbDevice
     }
 
     @Override
-    public void syncSubmit(final UsbControlIrp irp) throws UsbException
+    public final void syncSubmit(final UsbControlIrp irp) throws UsbException
     {
         if (irp == null)
             throw new IllegalArgumentException("irp must not be null");
@@ -561,7 +545,7 @@ public class Usb4JavaDevice implements UsbDevice
     }
 
     @Override
-    public void asyncSubmit(final UsbControlIrp irp)
+    public final void asyncSubmit(final UsbControlIrp irp)
     {
         if (irp == null)
             throw new IllegalArgumentException("irp must not be null");
@@ -570,7 +554,7 @@ public class Usb4JavaDevice implements UsbDevice
     }
 
     @Override
-    public void syncSubmit(final List list) throws UsbException
+    public final void syncSubmit(final List list) throws UsbException
     {
         if (list == null)
             throw new IllegalArgumentException("list must not be null");
@@ -585,7 +569,7 @@ public class Usb4JavaDevice implements UsbDevice
     }
 
     @Override
-    public void asyncSubmit(final List list)
+    public final void asyncSubmit(final List list)
     {
         if (list == null)
             throw new IllegalArgumentException("list must not be null");
@@ -600,7 +584,7 @@ public class Usb4JavaDevice implements UsbDevice
     }
 
     @Override
-    public UsbControlIrp createUsbControlIrp(final byte bmRequestType, 
+    public final UsbControlIrp createUsbControlIrp(final byte bmRequestType, 
         final byte bRequest, final short wValue, final short wIndex)
     {
         return new DefaultUsbControlIrp(bmRequestType, bRequest, wValue,
@@ -608,13 +592,13 @@ public class Usb4JavaDevice implements UsbDevice
     }
 
     @Override
-    public void addUsbDeviceListener(final UsbDeviceListener listener)
+    public final void addUsbDeviceListener(final UsbDeviceListener listener)
     {
         this.listeners.add(listener);
     }
 
     @Override
-    public void removeUsbDeviceListener(final UsbDeviceListener listener)
+    public final void removeUsbDeviceListener(final UsbDeviceListener listener)
     {
         this.listeners.remove(listener);
     }
@@ -623,11 +607,5 @@ public class Usb4JavaDevice implements UsbDevice
     public final String toString()
     {
         return this.id.toString();
-    }
-
-    @Override
-    public boolean isUsbHub()
-    {
-        return false;
     }
 }
