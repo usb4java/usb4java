@@ -7,6 +7,9 @@ package de.ailis.usb4java;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import de.ailis.usb4java.descriptors.SimpleUsbDeviceDescriptor;
 
 /**
@@ -59,14 +62,12 @@ public final class DeviceId implements Serializable
     @Override
     public int hashCode()
     {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + this.busNumber;
-        result = prime * result + this.deviceAddress;
-        result = prime * result + this.portNumber;
-        result = prime * result + ((this.deviceDescriptor == null) ? 0 :
-            this.deviceDescriptor.hashCode());
-        return result;
+        return new HashCodeBuilder()
+            .append(this.busNumber)
+            .append(this.deviceAddress)
+            .append(this.portNumber)
+            .append(this.deviceDescriptor)
+            .toHashCode();
     }
 
     @Override
@@ -75,17 +76,13 @@ public final class DeviceId implements Serializable
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
-        DeviceId other = (DeviceId) obj;
-        if (this.busNumber != other.busNumber) return false;
-        if (this.deviceAddress != other.deviceAddress) return false;
-        if (this.portNumber != other.portNumber) return false;
-        if (this.deviceDescriptor == null)
-        {
-            if (other.deviceDescriptor != null) return false;
-        }
-        else if (!this.deviceDescriptor.equals(other.deviceDescriptor))
-            return false;
-        return true;
+        final DeviceId other = (DeviceId) obj;
+        return new EqualsBuilder()
+            .append(this.busNumber, other.busNumber)
+            .append(this.deviceAddress, other.deviceAddress)
+            .append(this.portNumber, other.portNumber)
+            .append(this.deviceDescriptor, other.deviceDescriptor)
+            .isEquals();
     }
 
     /**
@@ -127,12 +124,12 @@ public final class DeviceId implements Serializable
     {
         return this.deviceDescriptor;
     }
-    
+
     @Override
     public String toString()
     {
         return String.format("Bus %03d Device %03d: ID %04x:%04x",
-            this.busNumber, this.deviceAddress, 
+            this.busNumber, this.deviceAddress,
             this.deviceDescriptor.idVendor(),
             this.deviceDescriptor.idProduct());
     }

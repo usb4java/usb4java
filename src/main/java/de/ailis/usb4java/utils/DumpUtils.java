@@ -86,7 +86,7 @@ public final class DumpUtils
      */
     public static String toHexDump(final ByteBuffer bytes)
     {
-        int columns = 16;
+        final int columns = 16;
         bytes.rewind();
         if (!bytes.hasRemaining()) return "";
         final StringBuilder builder = new StringBuilder();

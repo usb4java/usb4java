@@ -453,7 +453,7 @@ public final class LibUSB
 
     /** Device sent more data than requested. */
     public static final int TRANSFER_OVERFLOW = 6;
-    
+
     /** The maximum size of a string (Unicode). */
     private static final int MAX_STRING_SIZE = 126;
 
@@ -670,7 +670,7 @@ public final class LibUSB
      * @return the wMaxPacketSize value {@link #ERROR_NOT_FOUND} if the endpoint
      *         does not exist {@link #ERROR_OTHER} on other failure
      */
-    public static native int getMaxPacketSize(final Device device, 
+    public static native int getMaxPacketSize(final Device device,
         int endpoint);
 
     /**
@@ -745,7 +745,7 @@ public final class LibUSB
      *         {@link #ERROR_NO_DEVICE} if the device has been disconnected
      *         another error on other failure
      */
-    public static native int open(final Device device, 
+    public static native int open(final Device device,
         final DeviceHandle handle);
 
     /**
@@ -1157,9 +1157,9 @@ public final class LibUSB
         final int index)
     {
         if (handle == null || index == 0) return null;
-        StringBuffer buffer = new StringBuffer();
-        if (getStringDescriptorAscii(handle, index, buffer, MAX_STRING_SIZE)
-        >= 0)
+        final StringBuffer buffer = new StringBuffer();
+        if (getStringDescriptorAscii(handle, index, buffer,
+            MAX_STRING_SIZE) >= 0)
         {
             return buffer.toString();
         }

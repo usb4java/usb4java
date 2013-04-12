@@ -122,17 +122,18 @@ public class Usb4JavaDevice implements UsbDevice
             new ArrayList<Usb4JavaConfiguration>(numConfigurations);
         for (int i = 0; i < numConfigurations; i += 1)
         {
-            ConfigDescriptor configDescriptor = new ConfigDescriptor();
-            int result =
-                LibUSB.getConfigDescriptor(device, i, configDescriptor);
+            final ConfigDescriptor configDescriptor = new ConfigDescriptor();
+            final int result = LibUSB.getConfigDescriptor(device, i, 
+                configDescriptor);
             if (result < 0)
+            {
                 throw new LibUsbException("Unable to get configuation " + i
                     + " for device " + id, result);
+            }
             try
             {
-                Usb4JavaConfiguration config =
-                    new Usb4JavaConfiguration(this,
-                        configDescriptor);
+                final Usb4JavaConfiguration config = new Usb4JavaConfiguration(
+                    this, configDescriptor);
                 configurations.add(config);
                 this.configMapping.put(configDescriptor.bConfigurationValue(),
                     config);
@@ -168,7 +169,7 @@ public class Usb4JavaDevice implements UsbDevice
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
-        Usb4JavaDevice other = (Usb4JavaDevice) obj;
+        final Usb4JavaDevice other = (Usb4JavaDevice) obj;
         return this.id.equals(other.id);
     }
 
@@ -218,8 +219,8 @@ public class Usb4JavaDevice implements UsbDevice
             final Device device = this.manager.getLibUsbDevice(this.id);
             try
             {
-                DeviceHandle handle = new DeviceHandle();
-                int result = LibUSB.open(device, handle);
+                final DeviceHandle handle = new DeviceHandle();
+                final int result = LibUSB.open(device, handle);
                 if (result < 0)
                 {
                     throw new LibUsbException("Can't open device "

@@ -64,7 +64,7 @@ public final class UsbDeviceManager
             throw new IllegalArgumentException("rootHub must be set");
         this.rootHub = rootHub;
         this.context = new Context();
-        int result = LibUSB.init(this.context);
+        final int result = LibUSB.init(this.context);
         if (result != 0)
             throw new LibUsbException("Unable to initialize libusb", result);
     }
@@ -94,7 +94,7 @@ public final class UsbDeviceManager
         final int addressNumber = LibUSB.getDeviceAddress(device);
         final int portNumber = LibUSB.getPortNumber(device);
         final DeviceDescriptor deviceDescriptor = new DeviceDescriptor();
-        int result = LibUSB.getDeviceDescriptor(device, deviceDescriptor);
+        final int result = LibUSB.getDeviceDescriptor(device, deviceDescriptor);
         if (result < 0)
         {
             LOG.warning("Unable to get device descriptor for device " +
@@ -169,13 +169,13 @@ public final class UsbDeviceManager
      */
     private void processRemovedDevices(final Set<Usb4JavaDevice> current)
     {
-        Iterator<Usb4JavaDevice> it = this.devices.values().iterator();
+        final Iterator<Usb4JavaDevice> it = this.devices.values().iterator();
         while (it.hasNext())
         {
-            Usb4JavaDevice device = it.next();
+            final Usb4JavaDevice device = it.next();
             if (!current.contains(device))
             {
-                Usb4JavaDevice parent = this.devices.get(device.getId());
+                final Usb4JavaDevice parent = this.devices.get(device.getId());
                 if (parent == null)
                     this.rootHub.disconnectUsbDevice(device);
                 else if (parent.isUsbHub())
@@ -199,12 +199,12 @@ public final class UsbDeviceManager
         {
             if (!this.devices.containsValue(device))
             {
-                DeviceId parentId = device.getParentId();
+                final DeviceId parentId = device.getParentId();
                 if (parentId == null)
                     this.rootHub.connectUsbDevice(device);
                 else
                 {
-                    Usb4JavaDevice parent = this.devices.get(parentId);
+                    final Usb4JavaDevice parent = this.devices.get(parentId);
                     if (parent != null && parent.isUsbHub())
                     {
                         ((Usb4JavaHub) parent).connectUsbDevice(device);
@@ -242,7 +242,7 @@ public final class UsbDeviceManager
         if (id == null) throw new IllegalArgumentException("id must be set");
 
         final DeviceList devices = new DeviceList();
-        int result = LibUSB.getDeviceList(this.context, devices);
+        final int result = LibUSB.getDeviceList(this.context, devices);
         if (result < 0)
             throw new Usb4JavaRuntimeException("Unable to get USB device list",
                 result);
