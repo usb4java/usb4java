@@ -42,13 +42,13 @@ final class Usb4JavaNonHub extends Usb4JavaDevice
     }
 
     @Override
-    public final int hashCode()
+    public int hashCode()
     {
         return getId().hashCode();
     }
 
     @Override
-    public final boolean equals(final Object obj)
+    public boolean equals(final Object obj)
     {
         if (this == obj) return true;
         if (obj == null) return false;
@@ -58,7 +58,7 @@ final class Usb4JavaNonHub extends Usb4JavaDevice
     }
 
     @Override
-    public final boolean isUsbHub()
+    public boolean isUsbHub()
     {
         return false;
     }
