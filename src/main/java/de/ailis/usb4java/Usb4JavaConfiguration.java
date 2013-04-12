@@ -146,7 +146,7 @@ public final class Usb4JavaConfiguration implements UsbConfiguration
     }
 
     @Override
-    public Usb4JavaInterface getUsbInterface(byte number)
+    public Usb4JavaInterface getUsbInterface(final byte number)
     {
         return this.activeSettings.get(number & 0xff);
     }
@@ -177,7 +177,7 @@ public final class Usb4JavaConfiguration implements UsbConfiguration
     }
     
     @Override
-    public boolean containsUsbInterface(byte number)
+    public boolean containsUsbInterface(final byte number)
     {
         return this.activeSettings.containsKey(number & 0xff);
     }

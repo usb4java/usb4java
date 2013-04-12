@@ -581,7 +581,7 @@ public final class LibUSB
      *            Whether to unref the devices in the list.
      */
     public static native void freeDeviceList(final DeviceList list,
-        boolean unrefDevices);
+        final boolean unrefDevices);
 
     /**
      * Get the number of the bus that a device is connected to.
@@ -615,7 +615,7 @@ public final class LibUSB
      *         array is too small
      */
     public static native int getPortPath(final Context context,
-        final Device device, byte[] path);
+        final Device device, final byte[] path);
 
     /**
      * Get the the parent from the specified device [EXPERIMENTAL].
@@ -671,7 +671,7 @@ public final class LibUSB
      *         does not exist {@link #ERROR_OTHER} on other failure
      */
     public static native int getMaxPacketSize(final Device device,
-        int endpoint);
+        final int endpoint);
 
     /**
      * Calculate the maximum packet size which a specific endpoint is capable
@@ -702,7 +702,7 @@ public final class LibUSB
      *         {@link #ERROR_OTHER} on other failure.
      */
     public static native int getMaxIsoPacketSize(final Device device,
-        int endpoint);
+        final int endpoint);
 
     /**
      * Increment the reference count of a device.
@@ -940,7 +940,7 @@ public final class LibUSB
      *         another ERROR code on other failure
      */
     public static native int setInterfaceAltSetting(final DeviceHandle handle,
-        int interfaceNumber, int alternateSetting);
+        final int interfaceNumber, final int alternateSetting);
 
     /**
      * Clear the halt/stall condition for an endpoint.
@@ -961,7 +961,8 @@ public final class LibUSB
      *         exist, {@link #ERROR_NO_DEVICE} if the device has been
      *         disconnected, another ERROR code on other failure.
      */
-    public static native int clearHalt(final DeviceHandle handle, int endpoint);
+    public static native int clearHalt(final DeviceHandle handle,
+        final int endpoint);
 
     /**
      * Perform a USB port reset to reinitialize a device.
@@ -1323,7 +1324,7 @@ public final class LibUSB
      */
     public static native int controlTransfer(final DeviceHandle handle,
         final int bmRequestType, final int bRequest, final int wValue,
-        int wIndex, final ByteBuffer data, final int timeout);
+        final int wIndex, final ByteBuffer data, final int timeout);
 
     /**
      * Perform a USB bulk transfer.

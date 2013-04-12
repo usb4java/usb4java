@@ -48,8 +48,7 @@ public final class DeviceId implements Serializable
      *            The device descriptor. Must not be null.
      */
     public DeviceId(final int busNumber, final int deviceAddress,
-        int portNumber,
-        final SimpleUsbDeviceDescriptor deviceDescriptor)
+        final int portNumber, final SimpleUsbDeviceDescriptor deviceDescriptor)
     {
         if (deviceDescriptor == null)
             throw new IllegalArgumentException("deviceDescriptor must be set");
@@ -71,7 +70,7 @@ public final class DeviceId implements Serializable
     }
 
     @Override
-    public boolean equals(Object obj)
+    public boolean equals(final Object obj)
     {
         if (this == obj) return true;
         if (obj == null) return false;

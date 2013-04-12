@@ -270,7 +270,7 @@ public final class UsbDeviceManager
      * @param device
      *            The device to release. Must not be null.
      */
-    public void releaseDevice(Device device)
+    public void releaseDevice(final Device device)
     {
         if (device == null)
             throw new IllegalArgumentException("device must be set");

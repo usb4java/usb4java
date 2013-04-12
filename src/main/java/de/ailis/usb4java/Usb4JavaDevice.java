@@ -164,7 +164,7 @@ public class Usb4JavaDevice implements UsbDevice
     }
 
     @Override
-    public boolean equals(Object obj)
+    public boolean equals(final Object obj)
     {
         if (this == obj) return true;
         if (obj == null) return false;
@@ -355,13 +355,13 @@ public class Usb4JavaDevice implements UsbDevice
     }
 
     @Override
-    public Usb4JavaConfiguration getUsbConfiguration(byte number)
+    public Usb4JavaConfiguration getUsbConfiguration(final byte number)
     {
         return this.configMapping.get(number);
     }
 
     @Override
-    public boolean containsUsbConfiguration(byte number)
+    public boolean containsUsbConfiguration(final byte number)
     {
         return this.configMapping.containsKey(number);
     }
@@ -500,7 +500,7 @@ public class Usb4JavaDevice implements UsbDevice
     }
 
     @Override
-    public UsbStringDescriptor getUsbStringDescriptor(byte index)
+    public UsbStringDescriptor getUsbStringDescriptor(final byte index)
         throws UsbException
     {
         checkConnected();
@@ -517,7 +517,7 @@ public class Usb4JavaDevice implements UsbDevice
     }
 
     @Override
-    public String getString(byte index) throws UsbException,
+    public String getString(final byte index) throws UsbException,
         UnsupportedEncodingException
     {
         return getUsbStringDescriptor(index).getString();
@@ -550,7 +550,7 @@ public class Usb4JavaDevice implements UsbDevice
     }
 
     @Override
-    public void syncSubmit(UsbControlIrp irp) throws UsbException
+    public void syncSubmit(final UsbControlIrp irp) throws UsbException
     {
         if (irp == null)
             throw new IllegalArgumentException("irp must not be null");
@@ -561,7 +561,7 @@ public class Usb4JavaDevice implements UsbDevice
     }
 
     @Override
-    public void asyncSubmit(UsbControlIrp irp)
+    public void asyncSubmit(final UsbControlIrp irp)
     {
         if (irp == null)
             throw new IllegalArgumentException("irp must not be null");
@@ -570,7 +570,7 @@ public class Usb4JavaDevice implements UsbDevice
     }
 
     @Override
-    public void syncSubmit(List list) throws UsbException
+    public void syncSubmit(final List list) throws UsbException
     {
         if (list == null)
             throw new IllegalArgumentException("list must not be null");
@@ -585,7 +585,7 @@ public class Usb4JavaDevice implements UsbDevice
     }
 
     @Override
-    public void asyncSubmit(List list)
+    public void asyncSubmit(final List list)
     {
         if (list == null)
             throw new IllegalArgumentException("list must not be null");
@@ -600,21 +600,21 @@ public class Usb4JavaDevice implements UsbDevice
     }
 
     @Override
-    public UsbControlIrp createUsbControlIrp(byte bmRequestType, byte bRequest,
-        short wValue, short wIndex)
+    public UsbControlIrp createUsbControlIrp(final byte bmRequestType, 
+        final byte bRequest, final short wValue, final short wIndex)
     {
         return new DefaultUsbControlIrp(bmRequestType, bRequest, wValue,
             wIndex);
     }
 
     @Override
-    public void addUsbDeviceListener(UsbDeviceListener listener)
+    public void addUsbDeviceListener(final UsbDeviceListener listener)
     {
         this.listeners.add(listener);
     }
 
     @Override
-    public void removeUsbDeviceListener(UsbDeviceListener listener)
+    public void removeUsbDeviceListener(final UsbDeviceListener listener)
     {
         this.listeners.remove(listener);
     }
