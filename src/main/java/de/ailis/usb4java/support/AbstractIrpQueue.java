@@ -85,15 +85,7 @@ public abstract class AbstractIrpQueue<T extends UsbIrp>
             // Process the IRP
             try
             {
-                UsbLock.acquire();
-                try
-                {
-                    processIrp(irp);
-                }
-                finally
-                {
-                    UsbLock.release();
-                }
+                processIrp(irp);
             }
             catch (final UsbException e)
             {
