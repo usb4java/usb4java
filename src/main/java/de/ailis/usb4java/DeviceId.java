@@ -14,7 +14,7 @@ import de.ailis.usb4java.descriptors.SimpleUsbDeviceDescriptor;
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
-public class DeviceId implements Serializable
+public final class DeviceId implements Serializable
 {
     /** The serial versionUID. */
     private static final long serialVersionUID = 1L;
