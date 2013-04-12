@@ -40,31 +40,6 @@ public final class Usb4JavaRuntimeException extends RuntimeException
      * 
      * @param message
      *            The error message.
-     */
-    public Usb4JavaRuntimeException(final String message)
-    {
-        super("USB error: " + message);
-        this.errorCode = 0;
-    }
-
-    /**
-     * Constructor.
-     * 
-     * @param errorCode
-     *            The error code.
-     */
-    public Usb4JavaRuntimeException(final int errorCode)
-    {
-        super(String.format("USB error %d: %s", -errorCode,
-            LibUSB.errorName(errorCode)));
-        this.errorCode = errorCode;
-    }
-
-    /**
-     * Constructor.
-     * 
-     * @param message
-     *            The error message.
      * @param cause
      *            The root cause.
      */

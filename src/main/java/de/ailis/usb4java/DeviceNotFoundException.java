@@ -5,7 +5,6 @@
 
 package de.ailis.usb4java;
 
-
 /**
  * Thrown when a USB device was not found by id.
  *
