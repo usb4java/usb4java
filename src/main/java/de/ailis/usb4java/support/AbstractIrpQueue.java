@@ -154,7 +154,7 @@ public abstract class AbstractIrpQueue<T extends UsbIrp>
             {
                 synchronized (this.irps)
                 {
-                    this.irps.wait();
+                    if (isBusy()) this.irps.wait();
                 }
             }
             catch (final InterruptedException e)
