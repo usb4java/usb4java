@@ -166,12 +166,14 @@ public final class Usb4JavaConfiguration implements UsbConfiguration
     {
         if (this.activeSettings.get(number & 0xff) != iface)
         {
-            final int result = LibUSB.setInterfaceAltSetting(this.device.open(), 
-                number,
+            final int result = LibUSB.setInterfaceAltSetting(
+                this.device.open(), number,
                 iface.getUsbInterfaceDescriptor().bAlternateSetting());
             if (result < 0)
+            {
                 throw new LibUsbException(
                     "Unable to set alternate interface", result);
+            }
             this.activeSettings.put(number & 0xff, iface);
         }
     }

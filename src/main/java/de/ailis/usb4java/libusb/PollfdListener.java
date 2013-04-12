@@ -23,9 +23,7 @@ public interface PollfdListener
      * @param events
      *            events to monitor for.
      * @param userData
-     *            User data pointer specified in
-     *            {@link LibUSB#setPollfdNotifiers(Context, PollfdListener, Object)}
-     *            call.
+     *            User data pointer.
      */
     void pollfdAdded(FileDescriptor fd, int events, Object userData);
 
@@ -39,10 +37,7 @@ public interface PollfdListener
      * @param fd
      *            The file descriptor to stop monitoring.
      * @param userData
-     *            User data pointer specified in
-     *            {@link LibUSB#setPollfdNotifiers(Context, PollfdListener, Object)}
-     *            call
-     * 
+     *            User data pointer.
      */
     void pollfdRemoved(FileDescriptor fd, Object userData);
 }
