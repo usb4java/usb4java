@@ -34,7 +34,7 @@ public final class Transfer
     {
         return this.pointer;
     }
-        
+
     /**
      * Returns the handle of the device that this transfer will be submitted to.
      * 
@@ -125,17 +125,58 @@ public final class Transfer
      */
     public native int getStatus();
 
+    /**
+     * Returns the length of the data buffer.
+     * 
+     * @return The data buffer length.
+     */
     public native int getLength();
 
+    /**
+     * Sets the length of the data buffer.
+     * 
+     * @param length
+     *            The data buffer length to set.
+     */
     public native void setLength(final int length);
 
+    /**
+     * Returns the actual length of data that was transferred. Read-only, and
+     * only for use within transfer callback function. Not valid for isochronous
+     * endpoint transfers.
+     * 
+     * @return The actual length of the transferred data.
+     */
     public native int getActualLength();
 
+    /**
+     * Returns the data buffer.
+     * 
+     * @return The data buffer.
+     */
     public native ByteBuffer getBuffer();
 
+    /**
+     * Sets the data buffer.
+     * 
+     * @param buffer
+     *            The data buffer to set.
+     */
     public native void setBuffer(final ByteBuffer buffer);
 
+    /**
+     * Returns the number of isochronous packets. Only used for I/O with
+     * isochronous endpoints.
+     * 
+     * @return The number of isochronous packets.
+     */
     public native int getNumIsoPackets();
 
+    /**
+     * Sets the number of isochronous packets.
+     * 
+     * @param numIsoPackets
+     *            The number of isochronous packets to set.
+     */
     public native void setNumIsoPackets(final int numIsoPackets);
 }
