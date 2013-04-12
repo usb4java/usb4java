@@ -22,9 +22,6 @@ import java.nio.IntBuffer;
  */
 public final class LibUSB
 {
-    /** The maximum size of a string (Unicode). */
-    private static final int MAX_STRING_SIZE = 126;
-
     // Log message levels.
 
     /** No messages ever printed by the library (default). */
@@ -456,6 +453,9 @@ public final class LibUSB
 
     /** Device sent more data than requested. */
     public static final int TRANSFER_OVERFLOW = 6;
+    
+    /** The maximum size of a string (Unicode). */
+    private static final int MAX_STRING_SIZE = 126;
 
     /** The currently set pollfd listener. */
     private static PollfdListener pollfdListener;
