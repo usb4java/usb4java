@@ -9,8 +9,8 @@ import java.util.List;
 
 import javax.usb.UsbHub;
 
-import de.ailis.usb4java.exceptions.Usb4JavaException;
 import de.ailis.usb4java.libusb.Device;
+import de.ailis.usb4java.libusb.LibUsbException;
 
 /**
  * usb4java implementation of JSR-80 UsbHub.
@@ -38,12 +38,12 @@ public final class Usb4JavaHub extends Usb4JavaDevice implements UsbHub,
      *            The libusb device. This reference is only valid during the
      *            constructor execution, so don't store it in a property or
      *            something like that.
-     * @throws Usb4JavaException
+     * @throws LibUsbException
      *             When device configuration could not be read.
      */
     public Usb4JavaHub(final UsbDeviceManager manager, final DeviceId id,
         final DeviceId parentId, final int speed, final Device device)
-        throws Usb4JavaException
+        throws LibUsbException
     {
         super(manager, id, parentId, speed, device);
     }

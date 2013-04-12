@@ -30,12 +30,12 @@ import javax.usb.util.DefaultUsbControlIrp;
 
 import de.ailis.usb4java.Services;
 import de.ailis.usb4java.descriptors.SimpleUsbStringDescriptor;
-import de.ailis.usb4java.exceptions.Usb4JavaException;
 import de.ailis.usb4java.exceptions.Usb4JavaRuntimeException;
 import de.ailis.usb4java.libusb.ConfigDescriptor;
 import de.ailis.usb4java.libusb.Device;
 import de.ailis.usb4java.libusb.DeviceHandle;
 import de.ailis.usb4java.libusb.LibUSB;
+import de.ailis.usb4java.libusb.LibUsbException;
 import de.ailis.usb4java.support.ControlIrpQueue;
 import de.ailis.usb4java.support.UsbDeviceListenerList;
 
@@ -103,12 +103,12 @@ public class Usb4JavaDevice implements UsbDevice
      *            The libusb device. This reference is only valid during the
      *            constructor execution, so don't store it in a property or
      *            something like that.
-     * @throws Usb4JavaException
+     * @throws LibUsbException
      *             When device configuration could not be read.
      */
     Usb4JavaDevice(final UsbDeviceManager manager, final DeviceId id,
         final DeviceId parentId, final int speed, final Device device)
-        throws Usb4JavaException
+        throws LibUsbException
     {
         if (manager == null)
             throw new IllegalArgumentException("manager must be set");
@@ -129,8 +129,8 @@ public class Usb4JavaDevice implements UsbDevice
             int result =
                 LibUSB.getConfigDescriptor(device, i, configDescriptor);
             if (result < 0)
-                throw new Usb4JavaException("Unable to get configuation " + i
-                    + " for device " + id);
+                throw new LibUsbException("Unable to get configuation " + i
+                    + " for device " + id, result);
             try
             {
                 Usb4JavaConfiguration config =
@@ -152,7 +152,7 @@ public class Usb4JavaDevice implements UsbDevice
         final int result =
             LibUSB.getActiveConfigDescriptor(device, configDescriptor);
         if (result < 0)
-            throw new Usb4JavaException(
+            throw new LibUsbException(
                 "Unable to read active config descriptor from device " + id,
                 result);
         this.activeConfigurationNumber = configDescriptor.bConfigurationValue();
@@ -231,7 +231,7 @@ public class Usb4JavaDevice implements UsbDevice
                 int result = LibUSB.open(device, handle);
                 if (result < 0)
                 {
-                    throw new Usb4JavaException("Can't open device "
+                    throw new LibUsbException("Can't open device "
                         + this.id, result);
                 }
                 this.handle = handle;
@@ -426,7 +426,7 @@ public class Usb4JavaDevice implements UsbDevice
 
             final int result = LibUSB.setConfiguration(open(), number & 0xff);
             if (result < 0)
-                throw new Usb4JavaException("Unable to set configuration",
+                throw new LibUsbException("Unable to set configuration",
                     result);
             this.activeConfigurationNumber = number;
         }
@@ -463,7 +463,7 @@ public class Usb4JavaDevice implements UsbDevice
             {
                 result = LibUSB.detachKernelDriver(handle, number);
                 if (result < 0)
-                    throw new Usb4JavaException(
+                    throw new LibUsbException(
                         "Unable to detach kernel driver", result);
                 this.detachedKernelDriver = true;
             }
@@ -471,7 +471,7 @@ public class Usb4JavaDevice implements UsbDevice
 
         final int result = LibUSB.claimInterface(handle, number & 0xff);
         if (result < 0)
-            throw new Usb4JavaException("Unable to claim interface",
+            throw new LibUsbException("Unable to claim interface",
                 result);
         this.claimedInterfaceNumber = number;
     }
@@ -495,13 +495,13 @@ public class Usb4JavaDevice implements UsbDevice
 
         final DeviceHandle handle = open();
         int result = LibUSB.releaseInterface(handle, number & 0xff);
-        if (result < 0) throw new Usb4JavaException(
+        if (result < 0) throw new LibUsbException(
             "Unable to release interface", result);
 
         if (this.detachedKernelDriver)
         {
             result = LibUSB.attachKernelDriver(handle, number & 0xff);
-            if (result < 0) throw new Usb4JavaException(
+            if (result < 0) throw new LibUsbException(
                 "Uanble to re-attach kernel driver", result);
         }
 
@@ -562,7 +562,7 @@ public class Usb4JavaDevice implements UsbDevice
         final int result =
             LibUSB.getStringDescriptor(handle, index, langId, data);
         if (result < 0)
-            throw new Usb4JavaException("Unable to get string descriptor "
+            throw new LibUsbException("Unable to get string descriptor "
                 + index + " from device " + this, result);
         return new SimpleUsbStringDescriptor(data);
     }
@@ -591,7 +591,7 @@ public class Usb4JavaDevice implements UsbDevice
         final int result = LibUSB.getDescriptor(handle, LibUSB.DT_STRING, 0,
             buffer);
         if (result < 0)
-            throw new Usb4JavaException(
+            throw new LibUsbException(
                 "Unable to get string descriptor languages", result);
         if (result < 2)
             throw new UsbException("Received illegal descriptor length: "

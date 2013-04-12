@@ -13,9 +13,9 @@ import javax.usb.UsbIrp;
 import javax.usb.UsbShortPacketException;
 import javax.usb.event.UsbDeviceDataEvent;
 
-import de.ailis.usb4java.exceptions.Usb4JavaException;
 import de.ailis.usb4java.libusb.DeviceHandle;
 import de.ailis.usb4java.libusb.LibUSB;
+import de.ailis.usb4java.libusb.LibUsbException;
 import de.ailis.usb4java.topology.Usb4JavaDevice;
 
 /**
@@ -54,15 +54,17 @@ public final class ControlIrpQueue extends AbstractIrpQueue<UsbControlIrp>
         buffer.put(irp.getData(), irp.getOffset(), irp.getLength());
         buffer.rewind();
         final DeviceHandle handle = getDevice().open();
-        final int len = LibUSB.controlTransfer(handle, irp.bmRequestType(),
+        final int result = LibUSB.controlTransfer(handle, irp.bmRequestType(),
             irp.bRequest(), irp.wValue(), irp.wIndex(), buffer,
             getConfig().getTimeout());
-        if (len < 0)
-            throw new Usb4JavaException(
-                "Unable to submit control message", len);
+        if (result < 0)
+        {
+            throw new LibUsbException("Unable to submit control message", 
+                result);
+        }
         buffer.rewind();
-        buffer.get(irp.getData(), irp.getOffset(), len);
-        irp.setActualLength(len);
+        buffer.get(irp.getData(), irp.getOffset(), result);
+        irp.setActualLength(result);
         if (irp.getActualLength() != irp.getLength() && !irp.getAcceptShortPacket())
             throw new UsbShortPacketException();
     }

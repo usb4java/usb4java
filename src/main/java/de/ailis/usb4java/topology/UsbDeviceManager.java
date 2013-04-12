@@ -17,13 +17,13 @@ import javax.usb.UsbException;
 
 import de.ailis.usb4java.descriptors.SimpleUsbDeviceDescriptor;
 import de.ailis.usb4java.exceptions.DeviceNotFoundException;
-import de.ailis.usb4java.exceptions.Usb4JavaException;
 import de.ailis.usb4java.exceptions.Usb4JavaRuntimeException;
 import de.ailis.usb4java.libusb.Context;
 import de.ailis.usb4java.libusb.Device;
 import de.ailis.usb4java.libusb.DeviceDescriptor;
 import de.ailis.usb4java.libusb.DeviceList;
 import de.ailis.usb4java.libusb.LibUSB;
+import de.ailis.usb4java.libusb.LibUsbException;
 
 /**
  * Manages the USB devices.
@@ -68,7 +68,7 @@ public final class UsbDeviceManager
         this.context = new Context();
         int result = LibUSB.init(this.context);
         if (result != 0)
-            throw new Usb4JavaException("Unable to initialize libusb", result);
+            throw new LibUsbException("Unable to initialize libusb", result);
     }
 
     /**

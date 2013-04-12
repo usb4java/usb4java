@@ -18,11 +18,11 @@ import javax.usb.UsbDisconnectedException;
 import javax.usb.UsbException;
 
 import de.ailis.usb4java.descriptors.SimpleUsbConfigurationDescriptor;
-import de.ailis.usb4java.exceptions.Usb4JavaException;
 import de.ailis.usb4java.libusb.ConfigDescriptor;
 import de.ailis.usb4java.libusb.Interface;
 import de.ailis.usb4java.libusb.InterfaceDescriptor;
 import de.ailis.usb4java.libusb.LibUSB;
+import de.ailis.usb4java.libusb.LibUsbException;
 
 /**
  * usb4java implementation of JSR-80 UsbConfiguration.
@@ -179,7 +179,7 @@ public final class Usb4JavaConfiguration implements UsbConfiguration
                 number,
                 iface.getUsbInterfaceDescriptor().bAlternateSetting());
             if (result < 0)
-                throw new Usb4JavaException(
+                throw new LibUsbException(
                     "Unable to set alternate interface", result);
             this.activeSettings.put(number & 0xff, iface);
         }
