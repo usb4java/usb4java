@@ -20,14 +20,14 @@ import de.ailis.usb4java.support.UsbDeviceListenerList;
 
 /**
  * A queue for USB control I/O request packets.
- *
+ * 
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class ControlIrpQueue extends AbstractIrpQueue<UsbControlIrp>
 {
     /** The USB device listener list. */
     private final UsbDeviceListenerList listeners;
-    
+
     /**
      * Constructor.
      * 
@@ -36,7 +36,7 @@ public final class ControlIrpQueue extends AbstractIrpQueue<UsbControlIrp>
      * @param listeners
      *            The USB device listener list.
      */
-    public ControlIrpQueue(final Usb4JavaDevice device, 
+    public ControlIrpQueue(final Usb4JavaDevice device,
         final UsbDeviceListenerList listeners)
     {
         super(device);
@@ -56,20 +56,23 @@ public final class ControlIrpQueue extends AbstractIrpQueue<UsbControlIrp>
             getConfig().getTimeout());
         if (result < 0)
         {
-            throw new LibUsbException("Unable to submit control message", 
+            throw new LibUsbException("Unable to submit control message",
                 result);
         }
         buffer.rewind();
         buffer.get(irp.getData(), irp.getOffset(), result);
         irp.setActualLength(result);
-        if (irp.getActualLength() != irp.getLength() && !irp.getAcceptShortPacket())
+        if (irp.getActualLength() != irp.getLength()
+            && !irp.getAcceptShortPacket())
+        {
             throw new UsbShortPacketException();
+        }
     }
 
     @Override
     protected void finishIrp(final UsbIrp irp)
     {
-        this.listeners.dataEventOccurred(new UsbDeviceDataEvent( 
+        this.listeners.dataEventOccurred(new UsbDeviceDataEvent(
             getDevice(), (UsbControlIrp) irp));
     }
 }

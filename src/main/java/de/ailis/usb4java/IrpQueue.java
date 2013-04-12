@@ -22,7 +22,7 @@ import de.ailis.usb4java.libusb.LibUsbException;
 
 /**
  * A queue for USB I/O request packets.
- *
+ * 
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
@@ -59,32 +59,38 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
             processControlIrp((UsbControlIrp) irp);
             return;
         }
-        
+
         switch (direction)
         {
             case UsbConst.ENDPOINT_DIRECTION_OUT:
-                irp.setActualLength(write(irp.getData(),
-                    irp.getOffset(), irp.getLength()));
-                if (irp.getActualLength() < irp.getLength() && !irp.getAcceptShortPacket())
+                irp.setActualLength(write(irp.getData(), irp.getOffset(),
+                    irp.getLength()));
+                if (irp.getActualLength() < irp.getLength()
+                    && !irp.getAcceptShortPacket())
+                {
                     throw new UsbShortPacketException();
+                }
                 break;
 
             case UsbConst.ENDPOINT_DIRECTION_IN:
-                irp.setActualLength(read(irp.getData(),
-                    irp.getOffset(), irp.getLength()));
-                if (irp.getActualLength() < irp.getLength() && !irp.getAcceptShortPacket())
+                irp.setActualLength(read(irp.getData(), irp.getOffset(),
+                    irp.getLength()));
+                if (irp.getActualLength() < irp.getLength()
+                    && !irp.getAcceptShortPacket())
+                {
                     throw new UsbShortPacketException();
+                }
                 break;
 
             default:
                 throw new UsbException("Invalid direction: "
-                        + direction);
+                    + direction);
         }
     }
 
     /**
      * Returns the USB endpoint descriptor.
-     *
+     * 
      * @return The USB endpoint descriptor.
      */
     private UsbEndpointDescriptor getEndpointDescriptor()
@@ -94,7 +100,7 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
 
     /**
      * Processes the control IRP.
-     *
+     * 
      * @param irp
      *            The IRP to process.
      * @throws UsbException
@@ -108,21 +114,22 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
         buffer.rewind();
         final DeviceHandle handle = getDevice().open();
         final int result = LibUSB.controlTransfer(handle, irp.bmRequestType(),
-                irp.bRequest(), irp.wValue(), irp.wIndex(), buffer,
-                getConfig().getTimeout());
+            irp.bRequest(), irp.wValue(), irp.wIndex(), buffer,
+            getConfig().getTimeout());
         if (result < 0)
             throw new LibUsbException(
                 "Unable to submit control message", result);
         buffer.rewind();
         buffer.get(irp.getData(), irp.getOffset(), result);
         irp.setActualLength(result);
-        if (irp.getActualLength() != irp.getLength() && !irp.getAcceptShortPacket())
+        if (irp.getActualLength() != irp.getLength()
+            && !irp.getAcceptShortPacket())
             throw new UsbShortPacketException();
     }
-    
+
     /**
      * Reads bytes from an interrupt endpoint into the specified data array.
-     *
+     * 
      * @param data
      *            The data array to write the read bytes to.
      * @param offset
@@ -142,21 +149,26 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
         int read = 0;
         while (read < len)
         {
-            final int size = Math.min(len - read, descriptor.wMaxPacketSize() & 0xffff);
+            final int size =
+                Math.min(len - read, descriptor.wMaxPacketSize() & 0xffff);
             final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
             IntBuffer transferred = IntBuffer.allocate(1);
             int result;
             if (type == UsbConst.ENDPOINT_TYPE_BULK)
             {
-                result = LibUSB.bulkTransfer(handle,
-                    descriptor.bEndpointAddress(), buffer, transferred, getConfig().getTimeout());
+                result =
+                    LibUSB.bulkTransfer(handle,
+                        descriptor.bEndpointAddress(), buffer, transferred,
+                        getConfig().getTimeout());
                 if (result < 0) throw new LibUsbException(
                     "Unable to read from bulk endpoint", result);
             }
             else if (type == UsbConst.ENDPOINT_TYPE_INTERRUPT)
             {
-                result = LibUSB.interruptTransfer(handle,
-                    descriptor.bEndpointAddress(), buffer, transferred, getConfig().getTimeout());
+                result =
+                    LibUSB.interruptTransfer(handle,
+                        descriptor.bEndpointAddress(), buffer, transferred,
+                        getConfig().getTimeout());
                 if (result < 0) throw new LibUsbException(
                     "Unable to read from interrupt endpoint", result);
             }
@@ -168,7 +180,7 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
             buffer.rewind();
             buffer.get(data, offset + read, result);
             read += result;
-            
+
             // Short packet detected, aborting
             if (result < size) break;
         }
@@ -177,7 +189,7 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
 
     /**
      * Writes the specified bytes to a interrupt endpoint.
-     *
+     * 
      * @param data
      *            The data array with the bytes to write.
      * @param offset
@@ -188,7 +200,7 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
      *             When transfer fails.
      * @return The number of written bytes.
      */
-    private int write(final byte[] data, final int offset, final int len) 
+    private int write(final byte[] data, final int offset, final int len)
         throws UsbException
     {
         final UsbEndpointDescriptor descriptor = getEndpointDescriptor();
@@ -197,7 +209,8 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
         int written = 0;
         while (written < len)
         {
-            final int size = Math.min(len - written, descriptor.wMaxPacketSize() & 0xffff);
+            final int size =
+                Math.min(len - written, descriptor.wMaxPacketSize() & 0xffff);
             final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
             buffer.put(data, offset + written, size);
             buffer.rewind();

@@ -27,7 +27,7 @@ import de.ailis.usb4java.support.UsbPipeListenerList;
 
 /**
  * usb4java implementation of UsbPipe.
- *
+ * 
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class Usb4JavaPipe implements UsbPipe
@@ -46,7 +46,7 @@ public final class Usb4JavaPipe implements UsbPipe
 
     /**
      * Constructor.
-     *
+     * 
      * @param endpoint
      *            The endpoint this pipe belongs to.
      */
@@ -58,17 +58,18 @@ public final class Usb4JavaPipe implements UsbPipe
 
     /**
      * Returns the USB device.
-     *
+     * 
      * @return The USB device.
      */
     public Usb4JavaDevice getDevice()
     {
-        return this.endpoint.getUsbInterface().getUsbConfiguration().getUsbDevice();
+        return this.endpoint.getUsbInterface().getUsbConfiguration()
+            .getUsbDevice();
     }
 
     /**
      * Ensures the pipe is active.
-     *
+     * 
      * @throws UsbNotActiveException
      *             When pipe is not active
      */
@@ -80,7 +81,7 @@ public final class Usb4JavaPipe implements UsbPipe
 
     /**
      * Ensures the interface is active.
-     *
+     * 
      * @throws UsbNotClaimedException
      *             When interface is not claimed.
      */
@@ -92,7 +93,7 @@ public final class Usb4JavaPipe implements UsbPipe
 
     /**
      * Ensures the device is connected.
-     *
+     * 
      * @throws UsbDisconnectedException
      *             When device has been disconnected.
      */
@@ -103,7 +104,7 @@ public final class Usb4JavaPipe implements UsbPipe
 
     /**
      * Ensures the pipe is open.
-     *
+     * 
      * @throws UsbNotOpenException
      *             When pipe is not open.
      */
@@ -200,7 +201,7 @@ public final class Usb4JavaPipe implements UsbPipe
     @Override
     public void syncSubmit(final List list) throws UsbException
     {
-        for (final Object item : list)
+        for (final Object item: list)
         {
             final UsbIrp irp = (UsbIrp) item;
             syncSubmit(irp);
@@ -210,7 +211,7 @@ public final class Usb4JavaPipe implements UsbPipe
     @Override
     public void asyncSubmit(final List list)
     {
-        for (final Object item : list)
+        for (final Object item: list)
         {
             final UsbIrp irp = (UsbIrp) item;
             asyncSubmit(irp);
@@ -255,7 +256,7 @@ public final class Usb4JavaPipe implements UsbPipe
 
     /**
      * Sends event to all event listeners.
-     *
+     * 
      * @param irp
      *            Then request package
      */
@@ -270,7 +271,7 @@ public final class Usb4JavaPipe implements UsbPipe
             this.listeners.dataEventOccurred(new UsbPipeDataEvent(this, irp));
         }
     }
-    
+
     @Override
     public String toString()
     {

@@ -12,6 +12,8 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import de.ailis.usb4java.Usb4JavaRuntimeException;
+
 /**
  * Utility class to load native libraries from classpath.
  * 
@@ -21,7 +23,7 @@ public final class Loader
 {
     /** Buffer size used for copying data. */
     private static final int BUFFER_SIZE = 8192;
-    
+
     /** Constant for Mac OS X operating system. */
     private static final String OS_MACOSX = "macosx";
 
@@ -235,7 +237,8 @@ public final class Loader
      *            The library name to extract (For example "libusb0.dll")
      * @return The absolute path to the extracted library.
      */
-    private static String extractLibrary(final String platform, final String lib)
+    private static String extractLibrary(final String platform,
+        final String lib)
     {
         // Extract the usb4java library
         final String source = '/' +
@@ -249,7 +252,7 @@ public final class Loader
 
         // If native library was found in an already extracted form then
         // return this one without extracting it
-        if (url.getProtocol().equals("file"))
+        if ("file".equals(url.getProtocol()))
         {
             try
             {
@@ -260,6 +263,7 @@ public final class Loader
                 // Can't happen because we are not constructing the URI
                 // manually. But even when it happens then we fall back to
                 // extracting the library.
+                throw new Usb4JavaRuntimeException(e.toString(), e);
             }
         }
 

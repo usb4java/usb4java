@@ -29,7 +29,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * default context will be used.
  * 
  * For more information, see <a
- * href="http://libusbx.sourceforge.net/api-1.0/contexts.html">Contexts</a>.
+ * href="http://libusbx.sf.net/api-1.0/contexts.html">Contexts</a>.
  * 
  * @author Klaus Reimer (k@ailis.de)
  */

@@ -16,8 +16,8 @@ import javax.usb.UsbStringDescriptor;
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class SimpleUsbStringDescriptor extends SimpleUsbDescriptor implements
-    UsbStringDescriptor
+public final class SimpleUsbStringDescriptor extends SimpleUsbDescriptor
+    implements UsbStringDescriptor
 {
     /** The serial version UID. */
     private static final long serialVersionUID = 1L;
@@ -82,7 +82,7 @@ public final class SimpleUsbStringDescriptor extends SimpleUsbDescriptor impleme
         result = 37 * result + Arrays.hashCode(this.bString);
         return result;
     }
-    
+
     @Override
     public String toString()
     {

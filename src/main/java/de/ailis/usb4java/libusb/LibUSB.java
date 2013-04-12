@@ -24,7 +24,7 @@ public final class LibUSB
 {
     /** The maximum size of a string (Unicode). */
     private static final int MAX_STRING_SIZE = 126;
-    
+
     // Log message levels.
 
     /** No messages ever printed by the library (default). */
@@ -300,27 +300,26 @@ public final class LibUSB
 
     /** Hub descriptor. */
     public static final int DT_SUPERSPEED_HUB = 0x2a;
-    
-    
+
     // Descriptor sizes per descriptor type
-    
+
     /** Size of a device descriptor. */
     public static final int DT_DEVICE_SIZE = 18;
-    
+
     /** Size of a config descriptor. */
     public static final int DT_CONFIG_SIZE = 9;
-    
-    /** Size of an interface descriptor. */
-    public static final int DT_INTERFACE_SIZE = 9; 
 
     /** Size of an interface descriptor. */
-    public static final int DT_ENDPOINT_SIZE = 7; 
+    public static final int DT_INTERFACE_SIZE = 9;
 
     /** Size of an interface descriptor. */
-    public static final int DT_ENDPOINT_AUDIO_SIZE = 9; 
+    public static final int DT_ENDPOINT_SIZE = 7;
 
     /** Size of an interface descriptor. */
-    public static final int DT_HUB_NONVAR_SIZE = 7; 
+    public static final int DT_ENDPOINT_AUDIO_SIZE = 9;
+
+    /** Size of an interface descriptor. */
+    public static final int DT_HUB_NONVAR_SIZE = 7;
 
     // Endpoint direction. Values for bit 7 of the endpoint address scheme.
 
@@ -329,8 +328,7 @@ public final class LibUSB
 
     /** Out: host-to-device. */
     public static final int ENDPOINT_OUT = 0x00;
-    
-    
+
     // === Masks =============================================================
 
     /** Endpoint address mask. */
@@ -338,10 +336,9 @@ public final class LibUSB
 
     /** Endpoint direction mask. */
     public static final int ENDPOINT_DIR_MASK = 0x80;
-    
+
     /** Transfer type mask. */
     public static final int TRANSFER_TYPE_MASK = 0x03;
-        
 
     // Endpoint transfer type. Values for bits 0:1 of the endpoint attributes
     // field.
@@ -493,8 +490,7 @@ public final class LibUSB
      *            default context. Only valid on return code 0.
      * @return 0 on success or a error code on failure.
      * 
-     * @see <a
-     *      href="http://libusbx.sourceforge.net/api-1.0/contexts.html">Contexts</a>
+     * @see <a href="http://libusbx.sf.net/api-1.0/contexts.html">Contexts</a>
      */
     public static native int init(final Context context);
 
@@ -674,7 +670,8 @@ public final class LibUSB
      * @return the wMaxPacketSize value {@link #ERROR_NOT_FOUND} if the endpoint
      *         does not exist {@link #ERROR_OTHER} on other failure
      */
-    public static native int getMaxPacketSize(final Device device, int endpoint);
+    public static native int getMaxPacketSize(final Device device, 
+        int endpoint);
 
     /**
      * Calculate the maximum packet size which a specific endpoint is capable
@@ -748,7 +745,8 @@ public final class LibUSB
      *         {@link #ERROR_NO_DEVICE} if the device has been disconnected
      *         another error on other failure
      */
-    public static native int open(final Device device, final DeviceHandle handle);
+    public static native int open(final Device device, 
+        final DeviceHandle handle);
 
     /**
      * Convenience function for finding a device with a particular
@@ -1160,8 +1158,8 @@ public final class LibUSB
     {
         if (handle == null || index == 0) return null;
         StringBuffer buffer = new StringBuffer();
-        if (getStringDescriptorAscii(handle, index, buffer, MAX_STRING_SIZE) 
-            >= 0)
+        if (getStringDescriptorAscii(handle, index, buffer, MAX_STRING_SIZE)
+        >= 0)
         {
             return buffer.toString();
         }
