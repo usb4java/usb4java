@@ -12,8 +12,6 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import de.ailis.usb4java.Usb4JavaRuntimeException;
-
 /**
  * Utility class to load native libraries from classpath.
  * 
@@ -263,7 +261,7 @@ public final class Loader
                 // Can't happen because we are not constructing the URI
                 // manually. But even when it happens then we fall back to
                 // extracting the library.
-                throw new Usb4JavaRuntimeException(e.toString(), e);
+                throw new LoaderException(e.toString(), e);
             }
         }
 
