@@ -42,7 +42,7 @@ public class SimpleUsbEndpointDescriptorTest
     /** Value for {@link SimpleUsbEndpointDescriptor#bInterval()}. */
     private static final byte INTERVAL = 6;
 
-    /** A wrong short for equality test. */
+    /** A wrong value for equality test. */
     private static final byte WRONG = 0;
 
     /**

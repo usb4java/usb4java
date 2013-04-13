@@ -24,11 +24,12 @@ public final class SimpleUsbStringDescriptor extends SimpleUsbDescriptor
     /** The serial version UID. */
     private static final long serialVersionUID = 1L;
 
-    /** The string data in UTF-16 format. */
+    /** The string data in UTF-16LE encoding. */
     private final byte[] bString;
 
     /**
-     * Constructor.
+     * Constructs a new string descriptor by reading the descriptor data
+     * from the specified byte buffer.
      * 
      * @param data
      *            The descriptor data as a byte buffer.
@@ -40,6 +41,26 @@ public final class SimpleUsbStringDescriptor extends SimpleUsbDescriptor
         data.position(2);
         this.bString = new byte[bLength() - 2];
         data.get(this.bString);
+    }
+
+    /**
+     * Constructs a new string descriptor with the specified data.
+     * 
+     * @param bLength
+     *            The descriptor length.
+     * @param bDescriptorType
+     *            The descriptor type.
+     * @param string
+     *            The string.
+     * @throws UnsupportedEncodingException
+     *             When system does not support UTF-16LE encoding.
+     */
+    public SimpleUsbStringDescriptor(final byte bLength,
+        final byte bDescriptorType, final String string)
+        throws UnsupportedEncodingException
+    {
+        super(bLength, bDescriptorType);
+        this.bString = string.getBytes("UTF-16LE");
     }
 
     /**
