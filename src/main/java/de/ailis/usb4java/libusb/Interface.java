@@ -24,10 +24,10 @@ public final class Interface
     private long pointer;
 
     /**
-     * Private constructor to prevent manual instantiation. Interfaces 
-     * area always created by JNI.
+     * Package-private constructor to prevent manual instantiation. Interfaces 
+     * are always created by JNI.
      */
-    private Interface()
+    Interface()
     {
         // Empty
     }

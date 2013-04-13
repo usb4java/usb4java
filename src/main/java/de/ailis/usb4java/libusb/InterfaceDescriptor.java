@@ -34,10 +34,10 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
     private long pointer;
 
     /**
-     * Private constructor to prevent manual instantiation. Interface 
-     * descriptors area always created by JNI.
+     * Package-private constructor to prevent manual instantiation. Interface 
+     * descriptors are always created by JNI.
      */
-    private InterfaceDescriptor()
+    InterfaceDescriptor()
     {
         // Empty
     }

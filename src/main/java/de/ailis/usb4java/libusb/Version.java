@@ -26,10 +26,10 @@ public final class Version implements Comparable<Version>
     private long pointer;
     
     /**
-     * Private constructor to prevent manual instantiation. An instance
+     * Package-private constructor to prevent manual instantiation. An instance
      * is only returned by the JNI method {@link LibUSB#getVersion()}.
      */
-    private Version()
+    Version()
     {
         // Empty
     }

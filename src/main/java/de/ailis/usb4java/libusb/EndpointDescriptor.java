@@ -34,10 +34,10 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
     private long pointer;
 
     /**
-     * Private constructor to prevent manual instantiation. Endpoint 
-     * descriptors area always created by JNI.
+     * Package-private constructor to prevent manual instantiation. Endpoint 
+     * descriptors are always created by JNI.
      */
-    private EndpointDescriptor()
+    EndpointDescriptor()
     {
         // Empty
     }
