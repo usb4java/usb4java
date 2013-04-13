@@ -150,7 +150,8 @@ public final class Services implements UsbServices
         }
         catch (final UsbException e)
         {
-            throw new Error("Unable to create USB services: " + e, e);
+            throw new ServicesException("Unable to create USB services: "
+                + e, e);
         }
     }
 }
