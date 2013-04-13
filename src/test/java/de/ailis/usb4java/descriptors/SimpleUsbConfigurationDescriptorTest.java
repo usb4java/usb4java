@@ -50,11 +50,8 @@ public class SimpleUsbConfigurationDescriptorTest
     /** Value for {@link SimpleUsbConfigurationDescriptor#bMaxPower()}. */
     private static final byte MAX_POWER = 8;
 
-    /** A wrong byte for equality test. */
-    private static final byte WRONG_BYTE = 0;
-
-    /** A wrong short for equality test. */
-    private static final short WRONG_SHORT = 0;
+    /** A wrong value for equality test. */
+    private static final byte WRONG = 0;
 
     /**
      * Setup the test subject.
@@ -179,29 +176,29 @@ public class SimpleUsbConfigurationDescriptorTest
         assertTrue(descriptor.equals(new SimpleUsbConfigurationDescriptor(
             descriptor)));
         assertFalse(descriptor.equals(new SimpleUsbConfigurationDescriptor(
-            WRONG_BYTE, DESCRIPTOR_TYPE, TOTAL_LENGTH, NUM_INTERFACES,
+            WRONG, DESCRIPTOR_TYPE, TOTAL_LENGTH, NUM_INTERFACES,
             CONFIGURATION_VALUE, CONFIGURATION, ATTRIBUTES, MAX_POWER)));
         assertFalse(descriptor.equals(new SimpleUsbConfigurationDescriptor(
-            LENGTH, WRONG_BYTE, TOTAL_LENGTH, NUM_INTERFACES,
+            LENGTH, WRONG, TOTAL_LENGTH, NUM_INTERFACES,
             CONFIGURATION_VALUE, CONFIGURATION, ATTRIBUTES, MAX_POWER)));
         assertFalse(descriptor.equals(new SimpleUsbConfigurationDescriptor(
-            LENGTH, DESCRIPTOR_TYPE, WRONG_SHORT, NUM_INTERFACES,
+            LENGTH, DESCRIPTOR_TYPE, WRONG, NUM_INTERFACES,
             CONFIGURATION_VALUE, CONFIGURATION, ATTRIBUTES, MAX_POWER)));
         assertFalse(descriptor.equals(new SimpleUsbConfigurationDescriptor(
-            LENGTH, DESCRIPTOR_TYPE, TOTAL_LENGTH, WRONG_BYTE,
+            LENGTH, DESCRIPTOR_TYPE, TOTAL_LENGTH, WRONG,
             CONFIGURATION_VALUE, CONFIGURATION, ATTRIBUTES, MAX_POWER)));
         assertFalse(descriptor.equals(new SimpleUsbConfigurationDescriptor(
             LENGTH, DESCRIPTOR_TYPE, TOTAL_LENGTH, NUM_INTERFACES,
-            WRONG_BYTE, CONFIGURATION, ATTRIBUTES, MAX_POWER)));
+            WRONG, CONFIGURATION, ATTRIBUTES, MAX_POWER)));
         assertFalse(descriptor.equals(new SimpleUsbConfigurationDescriptor(
             LENGTH, DESCRIPTOR_TYPE, TOTAL_LENGTH, NUM_INTERFACES,
-            CONFIGURATION_VALUE, WRONG_BYTE, ATTRIBUTES, MAX_POWER)));
+            CONFIGURATION_VALUE, WRONG, ATTRIBUTES, MAX_POWER)));
         assertFalse(descriptor.equals(new SimpleUsbConfigurationDescriptor(
             LENGTH, DESCRIPTOR_TYPE, TOTAL_LENGTH, NUM_INTERFACES,
-            CONFIGURATION_VALUE, CONFIGURATION, WRONG_BYTE, MAX_POWER)));
+            CONFIGURATION_VALUE, CONFIGURATION, WRONG, MAX_POWER)));
         assertFalse(descriptor.equals(new SimpleUsbConfigurationDescriptor(
             LENGTH, DESCRIPTOR_TYPE, TOTAL_LENGTH, NUM_INTERFACES,
-            CONFIGURATION_VALUE, CONFIGURATION, ATTRIBUTES, WRONG_BYTE)));
+            CONFIGURATION_VALUE, CONFIGURATION, ATTRIBUTES, WRONG)));
     }
 
     /**
@@ -215,42 +212,42 @@ public class SimpleUsbConfigurationDescriptorTest
             new SimpleUsbConfigurationDescriptor(descriptor).toString());
         assertNotEquals(descriptor.toString(),
             new SimpleUsbConfigurationDescriptor(
-                WRONG_BYTE, DESCRIPTOR_TYPE, TOTAL_LENGTH, NUM_INTERFACES,
+                WRONG, DESCRIPTOR_TYPE, TOTAL_LENGTH, NUM_INTERFACES,
                 CONFIGURATION_VALUE, CONFIGURATION, ATTRIBUTES, MAX_POWER)
                 .toString());
         assertNotEquals(descriptor.toString(),
             new SimpleUsbConfigurationDescriptor(
-                LENGTH, WRONG_BYTE, TOTAL_LENGTH, NUM_INTERFACES,
+                LENGTH, WRONG, TOTAL_LENGTH, NUM_INTERFACES,
                 CONFIGURATION_VALUE, CONFIGURATION, ATTRIBUTES, MAX_POWER)
                 .toString());
         assertNotEquals(descriptor.toString(),
             new SimpleUsbConfigurationDescriptor(
-                LENGTH, DESCRIPTOR_TYPE, WRONG_SHORT, NUM_INTERFACES,
+                LENGTH, DESCRIPTOR_TYPE, WRONG, NUM_INTERFACES,
                 CONFIGURATION_VALUE, CONFIGURATION, ATTRIBUTES, MAX_POWER)
                 .toString());
         assertNotEquals(descriptor.toString(),
             new SimpleUsbConfigurationDescriptor(
-                LENGTH, DESCRIPTOR_TYPE, TOTAL_LENGTH, WRONG_BYTE,
+                LENGTH, DESCRIPTOR_TYPE, TOTAL_LENGTH, WRONG,
                 CONFIGURATION_VALUE, CONFIGURATION, ATTRIBUTES, MAX_POWER)
                 .toString());
         assertNotEquals(descriptor.toString(),
             new SimpleUsbConfigurationDescriptor(
                 LENGTH, DESCRIPTOR_TYPE, TOTAL_LENGTH, NUM_INTERFACES,
-                WRONG_BYTE, CONFIGURATION, ATTRIBUTES, MAX_POWER).toString());
+                WRONG, CONFIGURATION, ATTRIBUTES, MAX_POWER).toString());
         assertNotEquals(descriptor.toString(),
             new SimpleUsbConfigurationDescriptor(
                 LENGTH, DESCRIPTOR_TYPE, TOTAL_LENGTH, NUM_INTERFACES,
-                CONFIGURATION_VALUE, WRONG_BYTE, ATTRIBUTES, MAX_POWER)
+                CONFIGURATION_VALUE, WRONG, ATTRIBUTES, MAX_POWER)
                 .toString());
         assertNotEquals(descriptor.toString(),
             new SimpleUsbConfigurationDescriptor(
                 LENGTH, DESCRIPTOR_TYPE, TOTAL_LENGTH, NUM_INTERFACES,
-                CONFIGURATION_VALUE, CONFIGURATION, WRONG_BYTE, MAX_POWER)
+                CONFIGURATION_VALUE, CONFIGURATION, WRONG, MAX_POWER)
                 .toString());
         assertNotEquals(descriptor.toString(),
             new SimpleUsbConfigurationDescriptor(
                 LENGTH, DESCRIPTOR_TYPE, TOTAL_LENGTH, NUM_INTERFACES,
-                CONFIGURATION_VALUE, CONFIGURATION, ATTRIBUTES, WRONG_BYTE)
+                CONFIGURATION_VALUE, CONFIGURATION, ATTRIBUTES, WRONG)
                 .toString());
     }
 }
