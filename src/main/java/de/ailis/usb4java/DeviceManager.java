@@ -110,49 +110,44 @@ final class DeviceManager
      * Returns all currently connected devices.
      * 
      * @return The connected devices.
+     * @throws LibUsbException
+     *             When libusb reports an error while enumerating the devices.
      */
-    private Set<AbstractDevice> getConnectedDevices()
+    private Set<AbstractDevice> getConnectedDevices() throws LibUsbException
     {
         final DeviceList devices = new DeviceList();
         final int result = LibUSB.getDeviceList(this.context, devices);
         if (result < 0)
-            throw new Usb4JavaRuntimeException("Unable to get USB device list",
+            throw new LibUsbException("Unable to get USB device list",
                 result);
         final Set<AbstractDevice> found = new HashSet<AbstractDevice>();
         try
         {
-            try
+            for (Device libUsbDevice: devices)
             {
-                for (Device libUsbDevice: devices)
-                {
-                    final DeviceId id = createId(libUsbDevice);
-                    if (id == null) continue;
+                final DeviceId id = createId(libUsbDevice);
+                if (id == null) continue;
 
-                    AbstractDevice device = this.devices.get(id);
-                    if (device == null)
+                AbstractDevice device = this.devices.get(id);
+                if (device == null)
+                {
+                    final Device parent = LibUSB.getParent(libUsbDevice);
+                    final DeviceId parentId = createId(parent);
+                    final int speed = LibUSB.getDeviceSpeed(libUsbDevice);
+                    final boolean isHub = id.getDeviceDescriptor()
+                        .bDeviceClass() == LibUSB.CLASS_HUB;
+                    if (isHub)
                     {
-                        final Device parent = LibUSB.getParent(libUsbDevice);
-                        final DeviceId parentId = createId(parent);
-                        final int speed = LibUSB.getDeviceSpeed(libUsbDevice);
-                        final boolean isHub = id.getDeviceDescriptor()
-                            .bDeviceClass() == LibUSB.CLASS_HUB;
-                        if (isHub)
-                        {
-                            device = new Hub(this, id, parentId,
-                                speed, libUsbDevice);
-                        }
-                        else
-                        {
-                            device = new NonHub(this, id, 
-                                parentId, speed, libUsbDevice);
-                        }
+                        device = new Hub(this, id, parentId,
+                            speed, libUsbDevice);
                     }
-                    found.add(device);
+                    else
+                    {
+                        device = new NonHub(this, id,
+                            parentId, speed, libUsbDevice);
+                    }
                 }
-            }
-            catch (UsbException e)
-            {
-                throw new Usb4JavaRuntimeException(e.toString(), e);
+                found.add(device);
             }
         }
         finally
@@ -224,9 +219,16 @@ final class DeviceManager
      */
     public void scan()
     {
-        final Set<AbstractDevice> found = getConnectedDevices();
-        processRemovedDevices(found);
-        processNewDevices(found);
+        try
+        {
+            final Set<AbstractDevice> found = getConnectedDevices();
+            processRemovedDevices(found);
+            processNewDevices(found);
+        }
+        catch (LibUsbException e)
+        {
+            throw new ScanException("Unable to scan USB devices: " + e, e);
+        }
     }
 
     /**
@@ -236,19 +238,19 @@ final class DeviceManager
      * @param id
      *            The id of the device to return. Must not be null.
      * @return device The libusb device. Never null.
-     * @throws Usb4JavaRuntimeException
-     *             When an error occurred while searching for the device.
      * @throws DeviceNotFoundException
      *             When the device was not found.
+     * @throws LibUsbException
+     *             When libusb reported an error while enumerating USB devices.
      */
-    public Device getLibUsbDevice(final DeviceId id)
+    public Device getLibUsbDevice(final DeviceId id) throws LibUsbException
     {
         if (id == null) throw new IllegalArgumentException("id must be set");
 
         final DeviceList devices = new DeviceList();
         final int result = LibUSB.getDeviceList(this.context, devices);
         if (result < 0)
-            throw new Usb4JavaRuntimeException("Unable to get USB device list",
+            throw new LibUsbException("Unable to get USB device list",
                 result);
         try
         {
@@ -265,7 +267,8 @@ final class DeviceManager
         {
             LibUSB.freeDeviceList(devices, true);
         }
-        return null;
+
+        throw new DeviceNotFoundException(id);
     }
 
     /**

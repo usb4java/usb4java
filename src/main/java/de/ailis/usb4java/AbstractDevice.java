@@ -21,7 +21,6 @@ import javax.usb.UsbDevice;
 import javax.usb.UsbDeviceDescriptor;
 import javax.usb.UsbDisconnectedException;
 import javax.usb.UsbException;
-import javax.usb.UsbHostManager;
 import javax.usb.UsbPort;
 import javax.usb.UsbStringDescriptor;
 import javax.usb.event.UsbDeviceEvent;
@@ -264,17 +263,7 @@ abstract class AbstractDevice implements UsbDevice
 
         this.port = port;
 
-        final Services services;
-        try
-        {
-            services = (Services) UsbHostManager.getUsbServices();
-        }
-        catch (final UsbException e)
-        {
-            // Can't happen. When we got here then USB services are already
-            // loaded
-            throw new Usb4JavaRuntimeException(e.toString(), e);
-        }
+        final Services services = Services.getInstance();
 
         if (port == null)
         {

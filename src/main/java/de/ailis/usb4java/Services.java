@@ -18,7 +18,7 @@ import de.ailis.usb4java.libusb.LoaderException;
 
 /**
  * usb4java implementation of JSR-80 UsbServices.
- *
+ * 
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class Services implements UsbServices
@@ -47,7 +47,7 @@ public final class Services implements UsbServices
 
     /**
      * Constructor.
-     *
+     * 
      * @throws UsbException
      *             When properties could not be loaded.
      * @throws LoaderException
@@ -101,7 +101,7 @@ public final class Services implements UsbServices
 
     /**
      * Informs listeners about a new attached device.
-     *
+     * 
      * @param device
      *            The new attached device.
      */
@@ -112,7 +112,7 @@ public final class Services implements UsbServices
 
     /**
      * Informs listeners about a detached device.
-     *
+     * 
      * @param device
      *            The detached device.
      */
@@ -123,11 +123,34 @@ public final class Services implements UsbServices
 
     /**
      * Returns the configuration.
-     *
+     * 
      * @return The configuration.
      */
     Config getConfig()
     {
         return this.config;
+    }
+
+    /**
+     * Returns the usb4java services.
+     * 
+     * @return The usb4java services.
+     */
+    static Services getInstance()
+    {
+        try
+        {
+            UsbServices services = UsbHostManager.getUsbServices();
+            return (Services) services;
+        }
+        catch (final ClassCastException e)
+        {
+            throw new ServicesException("Looks like usb4java is not the "
+                + "configured USB services implementation: " + e, e);
+        }
+        catch (final UsbException e)
+        {
+            throw new Error("Unable to create USB services: " + e, e);
+        }
     }
 }

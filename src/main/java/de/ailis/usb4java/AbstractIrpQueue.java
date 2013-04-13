@@ -9,7 +9,6 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.usb.UsbException;
-import javax.usb.UsbHostManager;
 import javax.usb.UsbIrp;
 
 
@@ -171,16 +170,7 @@ abstract class AbstractIrpQueue<T extends UsbIrp>
      */
     protected final Config getConfig()
     {
-        try
-        {
-            return ((Services) UsbHostManager.getUsbServices()).getConfig();
-        }
-        catch (final UsbException e)
-        {
-            // Can't happen because we can't get to this point when USB
-            // services are not available.
-            throw new Usb4JavaRuntimeException(e.toString(), e);
-        }
+        return Services.getInstance().getConfig();
     }
 
     /**
