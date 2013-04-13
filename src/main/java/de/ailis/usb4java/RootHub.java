@@ -63,8 +63,8 @@ final class RootHub implements UsbHub,
     /** The device listeners. */
     private final DeviceListenerList listeners = new DeviceListenerList();
 
-    /** The hub ports. */
-    private final Ports ports = new Ports(this);
+    /** The root hub ports. */
+    private final Ports rootPorts = new Ports(this);
 
     /**
      * Constructor.
@@ -215,25 +215,25 @@ final class RootHub implements UsbHub,
     @Override
     public byte getNumberOfPorts()
     {
-        return this.ports.getNumberOfPorts();
-    }
-    
-    @Override
-    public Port getUsbPort(final byte number)
-    {
-        return this.ports.getUsbPort(number);
+        return this.rootPorts.getNumberOfPorts();
     }
 
     @Override
     public List<Port> getUsbPorts()
     {
-        return this.ports.getUsbPorts();
+        return this.rootPorts.getUsbPorts();
+    }
+
+    @Override
+    public Port getUsbPort(final byte number)
+    {
+        return this.rootPorts.getUsbPort(number);
     }
 
     @Override
     public List<AbstractDevice> getAttachedUsbDevices()
     {
-        return this.ports.getAttachedUsbDevices();
+        return this.rootPorts.getAttachedUsbDevices();
     }
 
     @Override
@@ -245,13 +245,13 @@ final class RootHub implements UsbHub,
     @Override
     public void connectUsbDevice(final AbstractDevice device)
     {
-        this.ports.connectUsbDevice(device);
+        this.rootPorts.connectUsbDevice(device);
     }
 
     @Override
     public void disconnectUsbDevice(final AbstractDevice device)
     {
-        this.ports.disconnectUsbDevice(device);
+        this.rootPorts.disconnectUsbDevice(device);
     }
 
     @Override
