@@ -32,7 +32,16 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
 {
     /** The native pointer to the descriptor structure. */
     private long pointer;
-    
+
+    /**
+     * Constructs a new config descriptor which can be passed to the
+     * {@link LibUSB#getConfigDescriptor(Device, int, ConfigDescriptor)} method.
+     */
+    public ConfigDescriptor()
+    {
+        // Empty
+    }
+
     /**
      * Returns the native pointer.
      * 
@@ -125,15 +134,15 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
                 + "  extralen         %10d%n"
                 + "  extra:%n"
                 + "%s",
-                bLength() & 0xff, 
-                bDescriptorType() & 0xff, 
-                wTotalLength() & 0xffff, 
+                bLength() & 0xff,
+                bDescriptorType() & 0xff,
+                wTotalLength() & 0xffff,
                 bNumInterfaces() & 0xff,
-                bConfigurationValue() & 0xff, 
-                iConfiguration() & 0xff, 
+                bConfigurationValue() & 0xff,
+                iConfiguration() & 0xff,
                 bmAttributes() & 0xff,
-                (bMaxPower() & 0xff) * 2, 
-                extraLength(), 
+                (bMaxPower() & 0xff) * 2,
+                extraLength(),
                 DumpUtils.toHexDump(extra()).replaceAll("(?m)^", "    ")));
         for (final Interface descriptor: iface())
         {

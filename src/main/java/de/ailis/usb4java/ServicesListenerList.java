@@ -16,6 +16,14 @@ import javax.usb.event.UsbServicesListener;
 final class ServicesListenerList extends
     EventListenerList<UsbServicesListener> implements UsbServicesListener
 {
+    /**
+     * Constructs a new USB services listener list.
+     */
+    ServicesListenerList()
+    {
+        // Empty
+    }
+
     @Override
     public UsbServicesListener[] toArray()
     {

@@ -17,6 +17,14 @@ import javax.usb.event.UsbPipeListener;
 final class PipeListenerList extends
     EventListenerList<UsbPipeListener> implements UsbPipeListener
 {
+    /**
+     * Constructs a new USB pipe listener list.
+     */
+    PipeListenerList()
+    {
+        // Empty
+    }
+    
     @Override
     public UsbPipeListener[] toArray()
     {
