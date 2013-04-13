@@ -3,7 +3,7 @@
  * See LICENSE.txt for licensing information.
  */
 
-package de.ailis.usb4java.support;
+package de.ailis.usb4java;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -15,7 +15,7 @@ import java.util.Set;
  *
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class Config
+final class Config
 {
     /** Base key name for properties. */
     private static final String KEY_BASE = "de.ailis.usb4java.";
@@ -50,7 +50,7 @@ public final class Config
      * @param properties
      *            The properties to read the configuration from.
      */
-    public Config(final Properties properties)
+    Config(final Properties properties)
     {
         // Read scanHierarchy property. If not set then hierarchy scan is
         // disabled on Mac OS X (because libusb always returns a null root_dev

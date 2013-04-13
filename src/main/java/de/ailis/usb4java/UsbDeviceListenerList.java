@@ -3,7 +3,7 @@
  * See LICENSE.txt for licensing information.
  */
 
-package de.ailis.usb4java.support;
+package de.ailis.usb4java;
 
 import javax.usb.event.UsbDeviceDataEvent;
 import javax.usb.event.UsbDeviceErrorEvent;
@@ -15,7 +15,7 @@ import javax.usb.event.UsbDeviceListener;
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class UsbDeviceListenerList extends
+final class UsbDeviceListenerList extends
     EventListenerList<UsbDeviceListener> implements UsbDeviceListener
 {
     @Override

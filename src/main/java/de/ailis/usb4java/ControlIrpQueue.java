@@ -16,7 +16,6 @@ import javax.usb.event.UsbDeviceDataEvent;
 import de.ailis.usb4java.libusb.DeviceHandle;
 import de.ailis.usb4java.libusb.LibUSB;
 import de.ailis.usb4java.libusb.LibUsbException;
-import de.ailis.usb4java.support.UsbDeviceListenerList;
 
 /**
  * A queue for USB control I/O request packets.

@@ -3,7 +3,7 @@
  * See LICENSE.txt for licensing information.
  */
 
-package de.ailis.usb4java.support;
+package de.ailis.usb4java;
 
 import javax.usb.event.UsbPipeDataEvent;
 import javax.usb.event.UsbPipeErrorEvent;
@@ -14,7 +14,7 @@ import javax.usb.event.UsbPipeListener;
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class UsbPipeListenerList extends
+final class UsbPipeListenerList extends
     EventListenerList<UsbPipeListener> implements UsbPipeListener
 {
     @Override

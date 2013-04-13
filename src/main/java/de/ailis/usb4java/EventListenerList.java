@@ -3,7 +3,7 @@
  * See LICENSE.txt for licensing information.
  */
 
-package de.ailis.usb4java.support;
+package de.ailis.usb4java;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,7 +17,7 @@ import java.util.List;
  * @param <T>
  *            The event listener type.
  */
-public abstract class EventListenerList<T extends EventListener>
+abstract class EventListenerList<T extends EventListener>
 {
     /** The list with registered listeners. */
     private final List<T> listeners = Collections

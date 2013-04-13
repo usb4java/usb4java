@@ -34,7 +34,6 @@ import de.ailis.usb4java.libusb.Device;
 import de.ailis.usb4java.libusb.DeviceHandle;
 import de.ailis.usb4java.libusb.LibUSB;
 import de.ailis.usb4java.libusb.LibUsbException;
-import de.ailis.usb4java.support.UsbDeviceListenerList;
 
 /**
  * A Usb device.

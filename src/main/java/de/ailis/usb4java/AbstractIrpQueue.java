@@ -12,7 +12,6 @@ import javax.usb.UsbException;
 import javax.usb.UsbHostManager;
 import javax.usb.UsbIrp;
 
-import de.ailis.usb4java.support.Config;
 
 /**
  * Abstract base class for IRP queues.

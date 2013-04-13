@@ -20,7 +20,6 @@ import javax.usb.event.UsbDeviceListener;
 import javax.usb.util.DefaultUsbControlIrp;
 
 import de.ailis.usb4java.descriptors.SimpleUsbDeviceDescriptor;
-import de.ailis.usb4java.support.UsbDeviceListenerList;
 
 /**
  * The virtual USB root hub.

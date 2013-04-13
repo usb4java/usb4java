@@ -23,7 +23,6 @@ import javax.usb.event.UsbPipeListener;
 import javax.usb.util.DefaultUsbControlIrp;
 import javax.usb.util.DefaultUsbIrp;
 
-import de.ailis.usb4java.support.UsbPipeListenerList;
 
 /**
  * usb4java implementation of UsbPipe.
