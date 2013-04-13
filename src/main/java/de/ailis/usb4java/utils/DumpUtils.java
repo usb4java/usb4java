@@ -105,4 +105,28 @@ public final class DumpUtils
         if (i % columns != 0) builder.append(String.format("%n"));
         return builder.toString();
     }
+
+    /**
+     * Returns the name for the specified speed number.
+     * 
+     * @param speed
+     *            The speed number.
+     * @return The speed name.
+     */
+    public static String getSpeedName(int speed)
+    {
+        switch (speed)
+        {
+            case LibUSB.SPEED_SUPER:
+                return "Super";
+            case LibUSB.SPEED_FULL:
+                return "Full";
+            case LibUSB.SPEED_HIGH:
+                return "High";
+            case LibUSB.SPEED_LOW:
+                return "Low";
+            default:
+                return "Unknown";
+        }
+    }
 }
