@@ -10,6 +10,8 @@ import javax.usb.UsbDeviceDescriptor;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import de.ailis.usb4java.utils.DumpUtils;
+
 /**
  * Simple USB device descriptor.
  * 
@@ -256,34 +258,6 @@ public final class SimpleUsbDeviceDescriptor extends SimpleUsbDescriptor
     @Override
     public String toString()
     {
-        return String.format("Device Descriptor:%n"
-            + "  bLength %18d%n"
-            + "  bDescriptorType %10d%n"
-            + "  bcdDevice %13x.%02x%n"
-            + "  bDeviceClass %13d%n"
-            + "  bDeviceSubClass %10d%n"
-            + "  bDeviceProtocol %10d%n"
-            + "  bMaxPacketSize0 %10d%n"
-            + "  idVendor %17s%n"
-            + "  idProduct %16s%n"
-            + "  bcdDevice %13x.%02x%n"
-            + "  iManufacturer %12d%n"
-            + "  iProduct %17d%n"
-            + "  iSerial %18d%n"
-            + "  bNumConfigurations %7d%n",
-            bLength(),
-            bDescriptorType(),
-            (this.bcdUSB & 0xff00) >> 8, this.bcdUSB & 0xff,
-            this.bDeviceClass & 0xff,
-            this.bDeviceSubClass & 0xff,
-            this.bDeviceProtocol & 0xff,
-            this.bMaxPacketSize0 & 0xff,
-            String.format("0x%04x", this.idVendor & 0xffff),
-            String.format("0x%04x", this.idProduct & 0xffff),
-            (this.bcdDevice & 0xff00) >> 8, this.bcdDevice & 0xff,
-            this.iManufacturer & 0xff,
-            this.iProduct & 0xff,
-            this.iSerialNumber & 0xff,
-            this.bNumConfigurations & 0xff);
+        return DumpUtils.dump(this);
     }
 }

@@ -10,6 +10,8 @@ import javax.usb.UsbEndpointDescriptor;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import de.ailis.usb4java.utils.DumpUtils;
+
 /**
  * Simple USB endpoint descriptor.
  * 
@@ -134,18 +136,6 @@ public final class SimpleUsbEndpointDescriptor extends SimpleUsbDescriptor
     @Override
     public String toString()
     {
-        return String.format("Endpoint Descriptor:%n"
-            + "  bLength %18d%n"
-            + "  bDescriptorType %10d%n"
-            + "  bEndpointAddress %9s%n"
-            + "  bmAttributes %13d%n"
-            + "  wMaxPacketSize %11d%n"
-            + "  bInterval %16d%n",
-            bLength(),
-            bDescriptorType(),
-            String.format("0x%02x", this.bEndpointAddress & 0xff),
-            this.bmAttributes & 0xff,
-            this.wMaxPacketSize & 0xffff,
-            this.bInterval & 0xff);
+        return DumpUtils.dump(this);
     }
 }

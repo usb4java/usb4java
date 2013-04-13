@@ -10,6 +10,8 @@ import javax.usb.UsbInterfaceDescriptor;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import de.ailis.usb4java.utils.DumpUtils;
+
 /**
  * Simple USB interface descriptor.
  * 
@@ -180,24 +182,6 @@ public final class SimpleUsbInterfaceDescriptor extends SimpleUsbDescriptor
     @Override
     public String toString()
     {
-        return String.format("Interface Descriptor:%n"
-            + "  bLength %18d%n"
-            + "  bDescriptorType %10d%n"
-            + "  bInterfaceNumber %9d%n"
-            + "  bAlternateSetting %8d%n"
-            + "  bNumEndpoints %12d%n"
-            + "  bInterfaceClass %10d%n"
-            + "  bInterfaceSubClass %7d%n"
-            + "  bInterfaceProtocol %7d%n"
-            + "  iInterface %15d%n",
-            bLength(),
-            bDescriptorType(),
-            this.bInterfaceNumber & 0xff,
-            this.bAlternateSetting & 0xff,
-            this.bNumEndpoints & 0xff,
-            this.bInterfaceClass & 0xff,
-            this.bInterfaceSubClass & 0xff,
-            this.bInterfaceProtocol & 0xff,
-            this.iInterface & 0xff);
+        return DumpUtils.dump(this);
     }
 }

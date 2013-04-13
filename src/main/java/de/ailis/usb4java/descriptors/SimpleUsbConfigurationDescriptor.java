@@ -10,6 +10,8 @@ import javax.usb.UsbConfigurationDescriptor;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import de.ailis.usb4java.utils.DumpUtils;
+
 /**
  * Simple USB configuration descriptor.
  * 
@@ -166,22 +168,6 @@ public final class SimpleUsbConfigurationDescriptor extends SimpleUsbDescriptor
     @Override
     public String toString()
     {
-        return String.format("Configuration Descriptor:%n"
-            + "  bLength %18d%n"
-            + "  bDescriptorType %10d%n"
-            + "  wTotalLength %13d%n"
-            + "  bNumInterfaces %11d%n"
-            + "  bConfigurationValue %6d%n"
-            + "  iConfiguration %11d%n"
-            + "  bmAttributes %13s%n"
-            + "  bMaxPower %16smA%n",
-            bLength(),
-            bDescriptorType(),
-            this.wTotalLength & 0xffff,
-            this.bNumInterfaces & 0xff,
-            this.bConfigurationValue & 0xff,
-            this.iConfiguration & 0xff,
-            String.format("0x%02x", this.bmAttributes & 0xff),
-            (this.bMaxPower & 0xff) * 2);
+        return DumpUtils.dump(this);
     }
 }

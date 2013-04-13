@@ -9,6 +9,11 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.usb.UsbConfigurationDescriptor;
+import javax.usb.UsbDeviceDescriptor;
+import javax.usb.UsbEndpointDescriptor;
+import javax.usb.UsbInterfaceDescriptor;
+
 import de.ailis.usb4java.libusb.LibUSB;
 
 /**
@@ -77,7 +82,7 @@ public final class DumpUtils
      */
     public static String decodeBCD(final int bcd)
     {
-        return String.format("%x.%02x", bcd >> Byte.SIZE, bcd & 0xff);
+        return String.format("%x.%02x", (bcd & 0xff00) >> 8, bcd & 0xff);
     }
 
     /**
@@ -104,6 +109,132 @@ public final class DumpUtils
         }
         if (i % columns != 0) builder.append(String.format("%n"));
         return builder.toString();
+    }
+    
+    /**
+     * Dumps the specified USB device descriptor into a string and
+     * returns it.
+     * 
+     * @param descriptor
+     *            The USB device descriptor to dump.
+     * @return The descriptor dump.
+     */
+    public static String dump(final UsbDeviceDescriptor descriptor)
+    {
+        return String.format("Device Descriptor:%n"
+            + "  bLength %18d%n"
+            + "  bDescriptorType %10d%n"
+            + "  bcdDevice %16s%n"
+            + "  bDeviceClass %13d%n"
+            + "  bDeviceSubClass %10d%n"
+            + "  bDeviceProtocol %10d%n"
+            + "  bMaxPacketSize0 %10d%n"
+            + "  idVendor %17s%n"
+            + "  idProduct %16s%n"
+            + "  bcdDevice %16s%n"
+            + "  iManufacturer %12d%n"
+            + "  iProduct %17d%n"
+            + "  iSerial %18d%n"
+            + "  bNumConfigurations %7d",
+            descriptor.bLength(),
+            descriptor.bDescriptorType(),
+            decodeBCD(descriptor.bcdUSB()),
+            descriptor.bDeviceClass() & 0xff,
+            descriptor.bDeviceSubClass() & 0xff,
+            descriptor.bDeviceProtocol() & 0xff,
+            descriptor.bMaxPacketSize0() & 0xff,
+            String.format("0x%04x", descriptor.idVendor() & 0xffff),
+            String.format("0x%04x", descriptor.idProduct() & 0xffff),
+            decodeBCD(descriptor.bcdDevice()),
+            descriptor.iManufacturer() & 0xff,
+            descriptor.iProduct() & 0xff,
+            descriptor.iSerialNumber() & 0xff,
+            descriptor.bNumConfigurations() & 0xff);
+    }
+        
+    /**
+     * Dumps the specified USB configuration descriptor into a string and
+     * returns it.
+     * 
+     * @param descriptor
+     *            The USB configuration descriptor to dump.
+     * @return The descriptor dump.
+     */
+    public static String dump(final UsbConfigurationDescriptor descriptor)
+    {
+        return String.format("Configuration Descriptor:%n"
+            + "  bLength %18d%n"
+            + "  bDescriptorType %10d%n"
+            + "  wTotalLength %13d%n"
+            + "  bNumInterfaces %11d%n"
+            + "  bConfigurationValue %6d%n"
+            + "  iConfiguration %11d%n"
+            + "  bmAttributes %13s%n"
+            + "  bMaxPower %16smA",
+            descriptor.bLength(),
+            descriptor.bDescriptorType(),
+            descriptor.wTotalLength() & 0xffff,
+            descriptor.bNumInterfaces() & 0xff,
+            descriptor.bConfigurationValue() & 0xff,
+            descriptor.iConfiguration() & 0xff,
+            String.format("0x%02x", descriptor.bmAttributes() & 0xff),
+            (descriptor.bMaxPower() & 0xff) * 2);
+    }
+    
+    /**
+     * Dumps the specified USB interface descriptor into a string and
+     * returns it.
+     * 
+     * @param descriptor
+     *            The USB interface descriptor to dump.
+     * @return The descriptor dump.
+     */
+    public static String dump(final UsbInterfaceDescriptor descriptor)
+    {
+        return String.format("Interface Descriptor:%n"
+            + "  bLength %18d%n"
+            + "  bDescriptorType %10d%n"
+            + "  bInterfaceNumber %9d%n"
+            + "  bAlternateSetting %8d%n"
+            + "  bNumEndpoints %12d%n"
+            + "  bInterfaceClass %10d%n"
+            + "  bInterfaceSubClass %7d%n"
+            + "  bInterfaceProtocol %7d%n"
+            + "  iInterface %15d%n",
+            descriptor.bLength(),
+            descriptor.bDescriptorType(),
+            descriptor.bInterfaceNumber() & 0xff,
+            descriptor.bAlternateSetting() & 0xff,
+            descriptor.bNumEndpoints() & 0xff,
+            descriptor.bInterfaceClass() & 0xff,
+            descriptor.bInterfaceSubClass() & 0xff,
+            descriptor.bInterfaceProtocol() & 0xff,
+            descriptor.iInterface() & 0xff);
+    }
+    
+    /**
+     * Dumps the specified USB endpoint descriptor into a string and
+     * returns it.
+     * 
+     * @param descriptor
+     *            The USB endpoint descriptor to dump.
+     * @return The descriptor dump.
+     */
+    public static String dump(final UsbEndpointDescriptor descriptor)
+    {
+        return String.format("Endpoint Descriptor:%n"
+            + "  bLength %18d%n"
+            + "  bDescriptorType %10d%n"
+            + "  bEndpointAddress %9s%n"
+            + "  bmAttributes %13d%n"
+            + "  wMaxPacketSize %11d%n"
+            + "  bInterval %16d%n",
+            descriptor.bLength(),
+            descriptor.bDescriptorType(),
+            String.format("0x%02x", descriptor.bEndpointAddress() & 0xff),
+            descriptor.bmAttributes() & 0xff,
+            descriptor.wMaxPacketSize() & 0xffff,
+            descriptor.bInterval() & 0xff);
     }
 
     /**
