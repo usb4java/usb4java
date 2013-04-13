@@ -113,7 +113,7 @@ public final class DumpUtils
      *            The speed number.
      * @return The speed name.
      */
-    public static String getSpeedName(int speed)
+    public static String getSpeedName(final int speed)
     {
         switch (speed)
         {
