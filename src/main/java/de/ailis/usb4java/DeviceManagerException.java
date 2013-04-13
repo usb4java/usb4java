@@ -5,7 +5,7 @@
 
 package de.ailis.usb4java;
 
-import de.ailis.usb4java.libusb.LibUSB;
+import de.ailis.usb4java.libusb.LibUsb;
 
 /**
  * libusb-specific USB runtime exception.
@@ -31,7 +31,7 @@ final class DeviceManagerException extends RuntimeException
     DeviceManagerException(final String message, final int errorCode)
     {
         super(String.format("USB error %d: %s: %s", -errorCode, message,
-            LibUSB.errorName(errorCode)));
+            LibUsb.errorName(errorCode)));
         this.errorCode = errorCode;
     }
 

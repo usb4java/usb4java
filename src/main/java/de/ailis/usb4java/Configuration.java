@@ -20,7 +20,7 @@ import javax.usb.UsbException;
 import de.ailis.usb4java.descriptors.SimpleUsbConfigurationDescriptor;
 import de.ailis.usb4java.libusb.ConfigDescriptor;
 import de.ailis.usb4java.libusb.InterfaceDescriptor;
-import de.ailis.usb4java.libusb.LibUSB;
+import de.ailis.usb4java.libusb.LibUsb;
 import de.ailis.usb4java.libusb.LibUsbException;
 
 /**
@@ -165,7 +165,7 @@ final class Configuration implements UsbConfiguration
     {
         if (this.activeSettings.get(number & 0xff) != iface)
         {
-            final int result = LibUSB.setInterfaceAltSetting(
+            final int result = LibUsb.setInterfaceAltSetting(
                 this.device.open(), number,
                 iface.getUsbInterfaceDescriptor().bAlternateSetting());
             if (result < 0)

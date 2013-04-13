@@ -20,7 +20,7 @@ import de.ailis.usb4java.libusb.Context;
 import de.ailis.usb4java.libusb.Device;
 import de.ailis.usb4java.libusb.DeviceDescriptor;
 import de.ailis.usb4java.libusb.DeviceList;
-import de.ailis.usb4java.libusb.LibUSB;
+import de.ailis.usb4java.libusb.LibUsb;
 import de.ailis.usb4java.libusb.LibUsbException;
 
 /**
@@ -64,7 +64,7 @@ final class DeviceManager
             throw new IllegalArgumentException("rootHub must be set");
         this.rootHub = rootHub;
         this.context = new Context();
-        final int result = LibUSB.init(this.context);
+        final int result = LibUsb.init(this.context);
         if (result != 0)
             throw new LibUsbException("Unable to initialize libusb", result);
     }
@@ -75,7 +75,7 @@ final class DeviceManager
      */
     public void dispose()
     {
-        LibUSB.exit(this.context);
+        LibUsb.exit(this.context);
     }
 
     /**
@@ -90,16 +90,16 @@ final class DeviceManager
     private DeviceId createId(final Device device)
     {
         if (device == null) return null;
-        final int busNumber = LibUSB.getBusNumber(device);
-        final int addressNumber = LibUSB.getDeviceAddress(device);
-        final int portNumber = LibUSB.getPortNumber(device);
+        final int busNumber = LibUsb.getBusNumber(device);
+        final int addressNumber = LibUsb.getDeviceAddress(device);
+        final int portNumber = LibUsb.getPortNumber(device);
         final DeviceDescriptor deviceDescriptor = new DeviceDescriptor();
-        final int result = LibUSB.getDeviceDescriptor(device, deviceDescriptor);
+        final int result = LibUsb.getDeviceDescriptor(device, deviceDescriptor);
         if (result < 0)
         {
             LOG.warning("Unable to get device descriptor for device " +
                 addressNumber + " at bus " + busNumber + ": " +
-                LibUSB.errorName(result));
+                LibUsb.errorName(result));
             return null;
         }
         return new DeviceId(busNumber, addressNumber, portNumber,
@@ -116,7 +116,7 @@ final class DeviceManager
     private Set<AbstractDevice> getConnectedDevices() throws LibUsbException
     {
         final DeviceList devices = new DeviceList();
-        final int result = LibUSB.getDeviceList(this.context, devices);
+        final int result = LibUsb.getDeviceList(this.context, devices);
         if (result < 0)
             throw new LibUsbException("Unable to get USB device list",
                 result);
@@ -131,11 +131,11 @@ final class DeviceManager
                 AbstractDevice device = this.devices.get(id);
                 if (device == null)
                 {
-                    final Device parent = LibUSB.getParent(libUsbDevice);
+                    final Device parent = LibUsb.getParent(libUsbDevice);
                     final DeviceId parentId = createId(parent);
-                    final int speed = LibUSB.getDeviceSpeed(libUsbDevice);
+                    final int speed = LibUsb.getDeviceSpeed(libUsbDevice);
                     final boolean isHub = id.getDeviceDescriptor()
-                        .bDeviceClass() == LibUSB.CLASS_HUB;
+                        .bDeviceClass() == LibUsb.CLASS_HUB;
                     if (isHub)
                     {
                         device = new Hub(this, id, parentId,
@@ -152,7 +152,7 @@ final class DeviceManager
         }
         finally
         {
-            LibUSB.freeDeviceList(devices, true);
+            LibUsb.freeDeviceList(devices, true);
         }
         return found;
     }
@@ -248,7 +248,7 @@ final class DeviceManager
         if (id == null) throw new IllegalArgumentException("id must be set");
 
         final DeviceList devices = new DeviceList();
-        final int result = LibUSB.getDeviceList(this.context, devices);
+        final int result = LibUsb.getDeviceList(this.context, devices);
         if (result < 0)
             throw new LibUsbException("Unable to get USB device list",
                 result);
@@ -258,14 +258,14 @@ final class DeviceManager
             {
                 if (id.equals(createId(device)))
                 {
-                    LibUSB.refDevice(device);
+                    LibUsb.refDevice(device);
                     return device;
                 }
             }
         }
         finally
         {
-            LibUSB.freeDeviceList(devices, true);
+            LibUsb.freeDeviceList(devices, true);
         }
 
         throw new DeviceNotFoundException(id);
@@ -281,7 +281,7 @@ final class DeviceManager
     {
         if (device == null)
             throw new IllegalArgumentException("device must be set");
-        LibUSB.unrefDevice(device);
+        LibUsb.unrefDevice(device);
     }
 
     /**

@@ -31,7 +31,7 @@ import de.ailis.usb4java.descriptors.SimpleUsbStringDescriptor;
 import de.ailis.usb4java.libusb.ConfigDescriptor;
 import de.ailis.usb4java.libusb.Device;
 import de.ailis.usb4java.libusb.DeviceHandle;
-import de.ailis.usb4java.libusb.LibUSB;
+import de.ailis.usb4java.libusb.LibUsb;
 import de.ailis.usb4java.libusb.LibUsbException;
 
 /**
@@ -121,7 +121,7 @@ abstract class AbstractDevice implements UsbDevice
         for (int i = 0; i < numConfigurations; i += 1)
         {
             final ConfigDescriptor configDescriptor = new ConfigDescriptor();
-            final int result = LibUSB.getConfigDescriptor(device, i, 
+            final int result = LibUsb.getConfigDescriptor(device, i, 
                 configDescriptor);
             if (result < 0)
             {
@@ -138,7 +138,7 @@ abstract class AbstractDevice implements UsbDevice
             }
             finally
             {
-                LibUSB.freeConfigDescriptor(configDescriptor);
+                LibUsb.freeConfigDescriptor(configDescriptor);
             }
         }
         this.configurations = Collections.unmodifiableList(configurations);
@@ -146,13 +146,13 @@ abstract class AbstractDevice implements UsbDevice
         // Determine the active configuration number
         final ConfigDescriptor configDescriptor = new ConfigDescriptor();
         final int result =
-            LibUSB.getActiveConfigDescriptor(device, configDescriptor);
+            LibUsb.getActiveConfigDescriptor(device, configDescriptor);
         if (result < 0)
             throw new LibUsbException(
                 "Unable to read active config descriptor from device " + id,
                 result);
         this.activeConfigurationNumber = configDescriptor.bConfigurationValue();
-        LibUSB.freeConfigDescriptor(configDescriptor);
+        LibUsb.freeConfigDescriptor(configDescriptor);
     }
 
     /**
@@ -202,7 +202,7 @@ abstract class AbstractDevice implements UsbDevice
             try
             {
                 final DeviceHandle handle = new DeviceHandle();
-                final int result = LibUSB.open(device, handle);
+                final int result = LibUsb.open(device, handle);
                 if (result < 0)
                 {
                     throw new LibUsbException("Can't open device "
@@ -225,7 +225,7 @@ abstract class AbstractDevice implements UsbDevice
     {
         if (this.handle != null)
         {
-            LibUSB.close(this.handle);
+            LibUsb.close(this.handle);
             this.handle = null;
         }
     }
@@ -311,9 +311,9 @@ abstract class AbstractDevice implements UsbDevice
     {
         switch (this.speed)
         {
-            case LibUSB.SPEED_FULL:
+            case LibUsb.SPEED_FULL:
                 return UsbConst.DEVICE_SPEED_FULL;
-            case LibUSB.SPEED_LOW:
+            case LibUsb.SPEED_LOW:
                 return UsbConst.DEVICE_SPEED_LOW;
             default:
                 return UsbConst.DEVICE_SPEED_UNKNOWN;
@@ -361,7 +361,7 @@ abstract class AbstractDevice implements UsbDevice
                 throw new UsbException("Can't change configuration while an "
                     + "interface is still claimed");
 
-            final int result = LibUSB.setConfiguration(open(), number & 0xff);
+            final int result = LibUsb.setConfiguration(open(), number & 0xff);
             if (result < 0)
                 throw new LibUsbException("Unable to set configuration",
                     result);
@@ -391,12 +391,12 @@ abstract class AbstractDevice implements UsbDevice
         // libusb supports it.
         if (force)
         {
-            int result = LibUSB.kernelDriverActive(handle, number);
-            if (result == LibUSB.ERROR_NO_DEVICE)
+            int result = LibUsb.kernelDriverActive(handle, number);
+            if (result == LibUsb.ERROR_NO_DEVICE)
                 throw new UsbDisconnectedException();
             if (result == 1)
             {
-                result = LibUSB.detachKernelDriver(handle, number);
+                result = LibUsb.detachKernelDriver(handle, number);
                 if (result < 0)
                     throw new LibUsbException(
                         "Unable to detach kernel driver", result);
@@ -404,7 +404,7 @@ abstract class AbstractDevice implements UsbDevice
             }
         }
 
-        final int result = LibUSB.claimInterface(handle, number & 0xff);
+        final int result = LibUsb.claimInterface(handle, number & 0xff);
         if (result < 0)
             throw new LibUsbException("Unable to claim interface",
                 result);
@@ -427,13 +427,13 @@ abstract class AbstractDevice implements UsbDevice
             throw new UsbClaimException("Interface not claimed");
 
         final DeviceHandle handle = open();
-        int result = LibUSB.releaseInterface(handle, number & 0xff);
+        int result = LibUsb.releaseInterface(handle, number & 0xff);
         if (result < 0) throw new LibUsbException(
             "Unable to release interface", result);
 
         if (this.detachedKernelDriver)
         {
-            result = LibUSB.attachKernelDriver(handle, number & 0xff);
+            result = LibUsb.attachKernelDriver(handle, number & 0xff);
             if (result < 0) throw new LibUsbException(
                 "Uanble to re-attach kernel driver", result);
         }
@@ -481,7 +481,7 @@ abstract class AbstractDevice implements UsbDevice
         final short langId = languages.length == 0 ? 0 : languages[0];
         final ByteBuffer data = ByteBuffer.allocateDirect(256);
         final int result =
-            LibUSB.getStringDescriptor(handle, index, langId, data);
+            LibUsb.getStringDescriptor(handle, index, langId, data);
         if (result < 0)
             throw new LibUsbException("Unable to get string descriptor "
                 + index + " from device " + this, result);
@@ -506,7 +506,7 @@ abstract class AbstractDevice implements UsbDevice
     {
         final DeviceHandle handle = open();
         final ByteBuffer buffer = ByteBuffer.allocateDirect(256);
-        final int result = LibUSB.getDescriptor(handle, LibUSB.DT_STRING, 0,
+        final int result = LibUsb.getDescriptor(handle, LibUsb.DT_STRING, 0,
             buffer);
         if (result < 0)
             throw new LibUsbException(

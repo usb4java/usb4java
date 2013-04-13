@@ -4,9 +4,9 @@
  */
 
 /**
- * @name LibUSB
+ * @name LibUsb
  *
- * Native methods for the LibUSB class.
+ * Native methods for the LibUsb class.
  *
  * @author Klaus Reimer <k@ailis.de>
  */
@@ -28,7 +28,7 @@ static JavaVM *jvm;
 /**
  * Version getVersion()
  */
-JNIEXPORT jobject JNICALL METHOD_NAME(LibUSB, getVersion)
+JNIEXPORT jobject JNICALL METHOD_NAME(LibUsb, getVersion)
 (
     JNIEnv *env, jclass class
 )
@@ -39,7 +39,7 @@ JNIEXPORT jobject JNICALL METHOD_NAME(LibUSB, getVersion)
 /**
  * int init()
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, init)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, init)
 (
     JNIEnv *env, jclass class, jobject context
 )
@@ -60,7 +60,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, init)
 /**
  * void exit()
  */
-JNIEXPORT void JNICALL METHOD_NAME(LibUSB, exit)
+JNIEXPORT void JNICALL METHOD_NAME(LibUsb, exit)
 (
     JNIEnv *env, jclass class, jobject context
 )
@@ -71,7 +71,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUSB, exit)
 /**
  * void setDebug(Context, int)
  */
-JNIEXPORT void JNICALL METHOD_NAME(LibUSB, setDebug)
+JNIEXPORT void JNICALL METHOD_NAME(LibUsb, setDebug)
 (
     JNIEnv *env, jclass class, jobject context, jint level
 )
@@ -82,7 +82,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUSB, setDebug)
 /**
  * int getDeviceList(Context, DeviceList)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getDeviceList)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getDeviceList)
 (
     JNIEnv *env, jclass class, jobject context, jobject deviceList
 )
@@ -98,7 +98,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getDeviceList)
 /**
  * void freeDeviceList(DeviceList, boolean)
  */
-JNIEXPORT void JNICALL METHOD_NAME(LibUSB, freeDeviceList)
+JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeDeviceList)
 (
     JNIEnv *env, jclass class, jobject deviceList, jboolean unrefDevices
 )
@@ -110,7 +110,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUSB, freeDeviceList)
 /**
  * int getBusNumber(Device)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getBusNumber)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getBusNumber)
 (
     JNIEnv *env, jclass class, jobject device
 )
@@ -122,7 +122,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getBusNumber)
 /**
  * int getPortNumber(Device)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getPortNumber)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getPortNumber)
 (
     JNIEnv *env, jclass class, jobject device
 )
@@ -134,7 +134,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getPortNumber)
 /**
  * int getPortPath(Context, Device, byte[])
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getPortPath)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getPortPath)
 (
     JNIEnv *env, jclass class, jobject context, jobject device, jbyteArray path
 )
@@ -152,7 +152,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getPortPath)
 /**
  * int getPortNumber(Device)
  */
-JNIEXPORT jobject JNICALL METHOD_NAME(LibUSB, getParent)
+JNIEXPORT jobject JNICALL METHOD_NAME(LibUsb, getParent)
 (
     JNIEnv *env, jclass class, jobject device
 )
@@ -164,7 +164,7 @@ JNIEXPORT jobject JNICALL METHOD_NAME(LibUSB, getParent)
 /**
  * int getDeviceAddress(Device)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getDeviceAddress)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getDeviceAddress)
 (
     JNIEnv *env, jclass class, jobject device
 )
@@ -176,7 +176,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getDeviceAddress)
 /**
  * int getDeviceSpeed(Device)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getDeviceSpeed)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getDeviceSpeed)
 (
     JNIEnv *env, jclass class, jobject device
 )
@@ -188,7 +188,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getDeviceSpeed)
 /**
  * int getMaxPacketSize(Device, int)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getMaxPacketSize)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getMaxPacketSize)
 (
     JNIEnv *env, jclass class, jobject device, jint endpoint
 )
@@ -200,7 +200,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getMaxPacketSize)
 /**
  * int getMaxIsoPacketSize(Device, int)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getMaxIsoPacketSize)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getMaxIsoPacketSize)
 (
     JNIEnv *env, jclass class, jobject device, jint endpoint
 )
@@ -212,7 +212,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getMaxIsoPacketSize)
 /**
  * Device refDevice(Device)
  */
-JNIEXPORT jobject JNICALL METHOD_NAME(LibUSB, refDevice)
+JNIEXPORT jobject JNICALL METHOD_NAME(LibUsb, refDevice)
 (
     JNIEnv *env, jclass class, jobject device
 )
@@ -225,7 +225,7 @@ JNIEXPORT jobject JNICALL METHOD_NAME(LibUSB, refDevice)
 /**
  * void unrefDevice(Device)
  */
-JNIEXPORT void JNICALL METHOD_NAME(LibUSB, unrefDevice)
+JNIEXPORT void JNICALL METHOD_NAME(LibUsb, unrefDevice)
 (
     JNIEnv *env, jclass class, jobject device
 )
@@ -237,7 +237,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUSB, unrefDevice)
 /**
  * int open(Device, DeviceHandle)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, open)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, open)
 (
     JNIEnv *env, jclass class, jobject device, jobject handle
 )
@@ -253,7 +253,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, open)
 /**
  * DeviceHandle open(Context, int, int)
  */
-JNIEXPORT jobject JNICALL METHOD_NAME(LibUSB, openDeviceWithVidPid)
+JNIEXPORT jobject JNICALL METHOD_NAME(LibUsb, openDeviceWithVidPid)
 (
     JNIEnv *env, jclass class, jobject context, jint vendorId,
     jint productId
@@ -266,7 +266,7 @@ JNIEXPORT jobject JNICALL METHOD_NAME(LibUSB, openDeviceWithVidPid)
 /**
  * void close(DeviceHandle)
  */
-JNIEXPORT void JNICALL METHOD_NAME(LibUSB, close)
+JNIEXPORT void JNICALL METHOD_NAME(LibUsb, close)
 (
     JNIEnv *env, jclass class, jobject handle
 )
@@ -278,7 +278,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUSB, close)
 /**
  * Device getDevice(DeviceHandle)
  */
-JNIEXPORT jobject JNICALL METHOD_NAME(LibUSB, getDevice)
+JNIEXPORT jobject JNICALL METHOD_NAME(LibUsb, getDevice)
 (
     JNIEnv *env, jclass class, jobject handle
 )
@@ -290,7 +290,7 @@ JNIEXPORT jobject JNICALL METHOD_NAME(LibUSB, getDevice)
 /**
  * int getConfiguration(DeviceHandle, IntBuffer)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getConfiguration)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getConfiguration)
 (
     JNIEnv *env, jclass class, jobject handle, jobject buffer
 )
@@ -312,7 +312,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getConfiguration)
 /**
  * int setConfiguration(DeviceHandle, int)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, setConfiguration)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, setConfiguration)
 (
     JNIEnv *env, jclass class, jobject handle, jint config
 )
@@ -324,7 +324,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, setConfiguration)
 /**
  * int claimInterface(DeviceHandle, int)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, claimInterface)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, claimInterface)
 (
     JNIEnv *env, jclass class, jobject handle, jint iface
 )
@@ -336,7 +336,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, claimInterface)
 /**
  * int releaseInterface(DeviceHandle, int)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, releaseInterface)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, releaseInterface)
 (
     JNIEnv *env, jclass class, jobject handle, jint iface
 )
@@ -348,7 +348,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, releaseInterface)
 /**
  * int setInterfaceAltSetting(DeviceHandle, int, int)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, setInterfaceAltSetting)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, setInterfaceAltSetting)
 (
     JNIEnv *env, jclass class, jobject handle, jint iface, jint setting
 )
@@ -361,7 +361,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, setInterfaceAltSetting)
 /**
  * int clearHalt(DeviceHandle, int)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, clearHalt)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, clearHalt)
 (
     JNIEnv *env, jclass class, jobject handle, jint endpoint
 )
@@ -373,7 +373,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, clearHalt)
 /**
  * int resetDevice(DeviceHandle)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, resetDevice)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, resetDevice)
 (
     JNIEnv *env, jclass class, jobject handle
 )
@@ -385,7 +385,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, resetDevice)
 /**
  * int kernelDriverActive(DeviceHandle, int)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, kernelDriverActive)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, kernelDriverActive)
 (
     JNIEnv *env, jclass class, jobject handle, jint iface
 )
@@ -397,7 +397,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, kernelDriverActive)
 /**
  * int detachKernelDriver(DeviceHandle, int)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, detachKernelDriver)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, detachKernelDriver)
 (
     JNIEnv *env, jclass class, jobject handle, jint iface
 )
@@ -409,7 +409,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, detachKernelDriver)
 /**
  * int attachKernelDriver(DeviceHandle, int)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, attachKernelDriver)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, attachKernelDriver)
 (
     JNIEnv *env, jclass class, jobject handle, jint iface
 )
@@ -421,7 +421,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, attachKernelDriver)
 /**
  * boolean hasCapability(int)
  */
-JNIEXPORT jboolean JNICALL METHOD_NAME(LibUSB, hasCapability)
+JNIEXPORT jboolean JNICALL METHOD_NAME(LibUsb, hasCapability)
 (
     JNIEnv *env, jclass class, jint capability
 )
@@ -432,7 +432,7 @@ JNIEXPORT jboolean JNICALL METHOD_NAME(LibUSB, hasCapability)
 /**
  * string errorName(int)
  */
-JNIEXPORT jstring JNICALL METHOD_NAME(LibUSB, errorName)
+JNIEXPORT jstring JNICALL METHOD_NAME(LibUsb, errorName)
 (
     JNIEnv *env, jobject this, jint code
 )
@@ -443,7 +443,7 @@ JNIEXPORT jstring JNICALL METHOD_NAME(LibUSB, errorName)
 /**
  * int le16ToCpu(int)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, le16ToCpu)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, le16ToCpu)
 (
     JNIEnv *env, jobject this, jint x
 )
@@ -454,7 +454,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, le16ToCpu)
 /**
  * int cpuToLe16(int)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, cpuToLe16)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, cpuToLe16)
 (
     JNIEnv *env, jobject this, jint x
 )
@@ -465,7 +465,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, cpuToLe16)
 /**
  * int getDeviceDescriptor(Device, DeviceDescriptor)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getDeviceDescriptor)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getDeviceDescriptor)
 (
     JNIEnv *env, jclass class, jobject device, jobject descriptor
 )
@@ -481,7 +481,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getDeviceDescriptor)
 /**
  * int getStringDescriptorAscii(DeviceHandle, int, StringBuffer, int)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getStringDescriptorAscii)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getStringDescriptorAscii)
 (
     JNIEnv *env, jclass class, jobject handle, jint index, jobject string,
     jint length
@@ -507,7 +507,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getStringDescriptorAscii)
 /**
  * int getActiveConfigDescriptor(Device, ConfigDescriptor)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getActiveConfigDescriptor)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getActiveConfigDescriptor)
 (
     JNIEnv *env, jclass class, jobject device, jobject descriptor)
 {
@@ -523,7 +523,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getActiveConfigDescriptor)
 /**
  * int getConfigDescriptor(Device, int, ConfigDescriptor)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getConfigDescriptor)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getConfigDescriptor)
 (
     JNIEnv *env, jclass class, jobject device, jint index, jobject descriptor
 )
@@ -540,7 +540,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getConfigDescriptor)
 /**
  * int getConfigDescriptorByValue(Device, int, ConfigDescriptor)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getConfigDescriptorByValue)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getConfigDescriptorByValue)
 (
     JNIEnv *env, jclass class, jobject device, jint index, jobject descriptor
 )
@@ -557,7 +557,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getConfigDescriptorByValue)
 /**
  * void freeConfigDescriptor(ConfigDescriptor)
  */
-JNIEXPORT void JNICALL METHOD_NAME(LibUSB, freeConfigDescriptor)
+JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeConfigDescriptor)
 (
     JNIEnv *env, jclass class, jobject descriptor
 )
@@ -569,7 +569,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUSB, freeConfigDescriptor)
 /**
  * int getDescriptor(DeviceHandle, int, int, ByteBuffer)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getDescriptor)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getDescriptor)
 (
     JNIEnv *env, jclass class, jobject handle, jint type, jint index,
     jobject data
@@ -587,7 +587,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getDescriptor)
 /**
  * int getStringDescriptor(DeviceHandle, int, int, ByteBuffer)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getStringDescriptor)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getStringDescriptor)
 (
     JNIEnv *env, jclass class, jobject handle, jint index, jint langId,
     jobject data
@@ -605,7 +605,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getStringDescriptor)
 /**
  * int controlTransfer(DeviceHandle, int, int, int, int, ByteBuffer, int)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, controlTransfer)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, controlTransfer)
 (
     JNIEnv *env, jclass class, jobject handle, jint bmRequestType,
     jint bRequest, jint wValue, jint wIndex, jobject data, jint timeout
@@ -623,7 +623,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, controlTransfer)
 /**
  * int bulkTransfer(DeviceHandle, int, int, int, int, ByteBuffer, int)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, bulkTransfer)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, bulkTransfer)
 (
     JNIEnv *env, jclass class, jobject handle, jint endpoint,
     jobject data, jobject transferred, jint timeout
@@ -651,7 +651,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, bulkTransfer)
 /**
  * int interruptTransfer(DeviceHandle, int, int, int, int, ByteBuffer, int)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, interruptTransfer)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, interruptTransfer)
 (
     JNIEnv *env, jclass class, jobject handle, jint endpoint,
     jobject data, jobject transferred, jint timeout
@@ -679,7 +679,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, interruptTransfer)
 /**
  * int tryLockEvents(Context)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, tryLockEvents)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, tryLockEvents)
 (
     JNIEnv *env, jclass class, jobject context
 )
@@ -690,7 +690,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, tryLockEvents)
 /**
  * void lockEvents(Context)
  */
-JNIEXPORT void JNICALL METHOD_NAME(LibUSB, lockEvents)
+JNIEXPORT void JNICALL METHOD_NAME(LibUsb, lockEvents)
 (
     JNIEnv *env, jclass class, jobject context
 )
@@ -701,7 +701,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUSB, lockEvents)
 /**
  * void unlockEvents(Context)
  */
-JNIEXPORT void JNICALL METHOD_NAME(LibUSB, unlockEvents)
+JNIEXPORT void JNICALL METHOD_NAME(LibUsb, unlockEvents)
 (
     JNIEnv *env, jclass class, jobject context
 )
@@ -712,7 +712,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUSB, unlockEvents)
 /**
  * int eventHandlingOk(Context)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, eventHandlingOk)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, eventHandlingOk)
 (
     JNIEnv *env, jclass class, jobject context
 )
@@ -723,7 +723,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, eventHandlingOk)
 /**
  * int eventHandlerActive(Context)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, eventHandlerActive)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, eventHandlerActive)
 (
     JNIEnv *env, jclass class, jobject context
 )
@@ -734,7 +734,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, eventHandlerActive)
 /**
  * void lockEventWaiters(Context)
  */
-JNIEXPORT void JNICALL METHOD_NAME(LibUSB, lockEventWaiters)
+JNIEXPORT void JNICALL METHOD_NAME(LibUsb, lockEventWaiters)
 (
     JNIEnv *env, jclass class, jobject context
 )
@@ -745,7 +745,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUSB, lockEventWaiters)
 /**
  * void unlockEventWaiters(Context)
  */
-JNIEXPORT void JNICALL METHOD_NAME(LibUSB, unlockEventWaiters)
+JNIEXPORT void JNICALL METHOD_NAME(LibUsb, unlockEventWaiters)
 (
     JNIEnv *env, jclass class, jobject context
 )
@@ -756,7 +756,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUSB, unlockEventWaiters)
 /**
  * int waitForEvent(Context, long)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, waitForEvent)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, waitForEvent)
 (
     JNIEnv *env, jclass class, jobject context, jlong timeout
 )
@@ -770,7 +770,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, waitForEvent)
 /**
  * int handleEventsTimeoutCompleted(Context, long, IntBuffer)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, handleEventsTimeoutCompleted)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, handleEventsTimeoutCompleted)
 (
     JNIEnv *env, jclass class, jobject context, jlong timeout,
     jobject completed
@@ -794,7 +794,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, handleEventsTimeoutCompleted)
 /**
  * int handleEventsTimeout(Context, long)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, handleEventsTimeout)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, handleEventsTimeout)
 (
     JNIEnv *env, jclass class, jobject context, jlong timeout
 )
@@ -808,7 +808,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, handleEventsTimeout)
 /**
  * int handleEvents(Context)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, handleEvents)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, handleEvents)
 (
     JNIEnv *env, jclass class, jobject context
 )
@@ -819,7 +819,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, handleEvents)
 /**
  * int handleEventsCompleted(Context, IntBuffer)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, handleEventsCompleted)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, handleEventsCompleted)
 (
     JNIEnv *env, jclass class, jobject context, jobject completed
 )
@@ -839,7 +839,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, handleEventsCompleted)
 /**
  * int handleEventsLocked(Context, long)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, handleEventsLocked)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, handleEventsLocked)
 (
     JNIEnv *env, jclass class, jobject context, jlong timeout
 )
@@ -853,7 +853,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, handleEventsLocked)
 /**
  * int pollfdsHandleTimeouts(Context)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, pollfdsHandleTimeouts)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, pollfdsHandleTimeouts)
 (
     JNIEnv *env, jclass class, jobject context
 )
@@ -864,7 +864,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, pollfdsHandleTimeouts)
 /**
  * int getNextTimeout(Context, LongBuffer)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUSB, getNextTimeout)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getNextTimeout)
 (
     JNIEnv *env, jclass class, jobject context, jobject timeout
 )
@@ -891,7 +891,7 @@ static void triggerPollfdAdded(int fd, short events, void *user_data)
     jmethodID constructor = (*env)->GetMethodID(env, fdcls, "<init>", "(I)V");
     jobject object = (*env)->NewObject(env, fdcls, constructor, fd);
 
-    jclass cls = (*env)->FindClass(env, PACKAGE_DIR"/LibUSB");
+    jclass cls = (*env)->FindClass(env, PACKAGE_DIR"/LibUsb");
     jmethodID method = (*env)->GetStaticMethodID(env, cls,
         "triggerPollfdAdded", "(Ljava/io/FileDescriptor;)V");
     (*env)->CallStaticVoidMethod(env, cls, method, object, events);
@@ -907,7 +907,7 @@ static void triggerPollfdRemoved(int fd, void *user_data)
     jmethodID constructor = (*env)->GetMethodID(env, fdcls, "<init>", "(I)V");
     jobject object = (*env)->NewObject(env, fdcls, constructor, fd);
 
-    jclass cls = (*env)->FindClass(env, PACKAGE_DIR"/LibUSB");
+    jclass cls = (*env)->FindClass(env, PACKAGE_DIR"/LibUsb");
     jmethodID method = (*env)->GetStaticMethodID(env, cls,
         "triggerPollfdRemoved", "(Ljava/io/FileDescriptor;)V");
     (*env)->CallStaticVoidMethod(env, cls, method, object);
@@ -918,7 +918,7 @@ static void triggerPollfdRemoved(int fd, void *user_data)
 /**
  * void setPollfdNotifiers(Context)
  */
-JNIEXPORT void JNICALL METHOD_NAME(LibUSB, setPollfdNotifiers)
+JNIEXPORT void JNICALL METHOD_NAME(LibUsb, setPollfdNotifiers)
 (
     JNIEnv *env, jclass class, jobject context
 )
@@ -931,7 +931,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUSB, setPollfdNotifiers)
 /**
  * void unsetPollfdNotifiers(Context)
  */
-JNIEXPORT void JNICALL METHOD_NAME(LibUSB, unsetPollfdNotifiers)
+JNIEXPORT void JNICALL METHOD_NAME(LibUsb, unsetPollfdNotifiers)
 (
     JNIEnv *env, jclass class, jobject context
 )
@@ -943,7 +943,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUSB, unsetPollfdNotifiers)
 /**
  * Transfer allocTransfer(int)
  */
-JNIEXPORT jobject JNICALL METHOD_NAME(LibUSB, allocTransfer)
+JNIEXPORT jobject JNICALL METHOD_NAME(LibUsb, allocTransfer)
 (
     JNIEnv *env, jclass class, jint isoPackets
 )
@@ -954,7 +954,7 @@ JNIEXPORT jobject JNICALL METHOD_NAME(LibUSB, allocTransfer)
 /**
  * void freeTransfer(Transfer)
  */
-JNIEXPORT void JNICALL METHOD_NAME(LibUSB, freeTransfer)
+JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeTransfer)
 (
     JNIEnv *env, jclass class, jobject transfer
 )

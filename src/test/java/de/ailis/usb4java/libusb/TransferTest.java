@@ -37,7 +37,7 @@ public class TransferTest
         this.context = new Context();
         try
         {
-            LibUSB.init(this.context);
+            LibUsb.init(this.context);
         }
         catch (Throwable e)
         {
@@ -51,7 +51,7 @@ public class TransferTest
     @After
     public void tearDown()
     {
-        if (this.context != null) LibUSB.exit(this.context);
+        if (this.context != null) LibUsb.exit(this.context);
     }
 
     /**
@@ -61,9 +61,9 @@ public class TransferTest
     public void testAllocAndFree()
     {
         assumeUsbTestsEnabled();
-        Transfer transfer = LibUSB.allocTransfer(0);
+        Transfer transfer = LibUsb.allocTransfer(0);
         assertNotNull(transfer);
-        LibUSB.freeTransfer(transfer);
+        LibUsb.freeTransfer(transfer);
     }
 
     /**
@@ -96,7 +96,7 @@ public class TransferTest
     public void testDevHandle()
     {
         assumeUsbTestsEnabled();
-        Transfer transfer = LibUSB.allocTransfer(0);
+        Transfer transfer = LibUsb.allocTransfer(0);
         DeviceHandle handle = new DeviceHandle();
         setPointer(handle, 1);
         DeviceHandle handle2 = new DeviceHandle();
@@ -109,7 +109,7 @@ public class TransferTest
         assertEquals(handle, transfer.getDevHandle());
         transfer.setDevHandle(null);
         assertNull(transfer.getDevHandle());
-        LibUSB.freeTransfer(transfer);
+        LibUsb.freeTransfer(transfer);
     }
 
     /**
@@ -120,13 +120,13 @@ public class TransferTest
     public void testFlags()
     {
         assumeUsbTestsEnabled();
-        Transfer transfer = LibUSB.allocTransfer(0);
+        Transfer transfer = LibUsb.allocTransfer(0);
         assertEquals(0, transfer.getFlags());
         transfer.setFlags(1);
         assertEquals(1, transfer.getFlags());
         transfer.setFlags(0);
         assertEquals(0, transfer.getFlags());
-        LibUSB.freeTransfer(transfer);
+        LibUsb.freeTransfer(transfer);
     }
 
     /**
@@ -137,13 +137,13 @@ public class TransferTest
     public void testEndpoint()
     {
         assumeUsbTestsEnabled();
-        Transfer transfer = LibUSB.allocTransfer(0);
+        Transfer transfer = LibUsb.allocTransfer(0);
         assertEquals(0, transfer.getEndpoint());
         transfer.setEndpoint(1);
         assertEquals(1, transfer.getEndpoint());
         transfer.setEndpoint(0);
         assertEquals(0, transfer.getEndpoint());
-        LibUSB.freeTransfer(transfer);
+        LibUsb.freeTransfer(transfer);
     }
 
     /**
@@ -154,13 +154,13 @@ public class TransferTest
     public void testType()
     {
         assumeUsbTestsEnabled();
-        Transfer transfer = LibUSB.allocTransfer(0);
+        Transfer transfer = LibUsb.allocTransfer(0);
         assertEquals(0, transfer.getType());
         transfer.setType(1);
         assertEquals(1, transfer.getType());
         transfer.setType(0);
         assertEquals(0, transfer.getType());
-        LibUSB.freeTransfer(transfer);
+        LibUsb.freeTransfer(transfer);
     }
 
     /**
@@ -171,13 +171,13 @@ public class TransferTest
     public void testTimeout()
     {
         assumeUsbTestsEnabled();
-        Transfer transfer = LibUSB.allocTransfer(0);
+        Transfer transfer = LibUsb.allocTransfer(0);
         assertEquals(0, transfer.getTimeout());
         transfer.setTimeout(1);
         assertEquals(1, transfer.getTimeout());
         transfer.setTimeout(0);
         assertEquals(0, transfer.getTimeout());
-        LibUSB.freeTransfer(transfer);
+        LibUsb.freeTransfer(transfer);
     }
 
     /**
@@ -187,8 +187,8 @@ public class TransferTest
     public void testGetStatus()
     {
         assumeUsbTestsEnabled();
-        Transfer transfer = LibUSB.allocTransfer(0);
+        Transfer transfer = LibUsb.allocTransfer(0);
         assertEquals(0, transfer.getStatus());
-        LibUSB.freeTransfer(transfer);
+        LibUsb.freeTransfer(transfer);
     }
 }

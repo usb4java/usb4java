@@ -27,7 +27,7 @@ public final class Version implements Comparable<Version>
     
     /**
      * Package-private constructor to prevent manual instantiation. An instance
-     * is only returned by the JNI method {@link LibUSB#getVersion()}.
+     * is only returned by the JNI method {@link LibUsb#getVersion()}.
      */
     Version()
     {

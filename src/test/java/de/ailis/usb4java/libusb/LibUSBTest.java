@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
- * Tests the {@link LibUSB} class.
+ * Tests the {@link LibUsb} class.
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
@@ -26,128 +26,128 @@ public class LibUSBTest
     public void testConstants()
     {
         // Log levels
-        assertEquals(0, LibUSB.LOG_LEVEL_NONE);
-        assertEquals(1, LibUSB.LOG_LEVEL_ERROR);
-        assertEquals(2, LibUSB.LOG_LEVEL_WARNING);
-        assertEquals(3, LibUSB.LOG_LEVEL_INFO);
-        assertEquals(4, LibUSB.LOG_LEVEL_DEBUG);
+        assertEquals(0, LibUsb.LOG_LEVEL_NONE);
+        assertEquals(1, LibUsb.LOG_LEVEL_ERROR);
+        assertEquals(2, LibUsb.LOG_LEVEL_WARNING);
+        assertEquals(3, LibUsb.LOG_LEVEL_INFO);
+        assertEquals(4, LibUsb.LOG_LEVEL_DEBUG);
 
         // Speed codes
-        assertEquals(0, LibUSB.SPEED_UNKNOWN);
-        assertEquals(1, LibUSB.SPEED_LOW);
-        assertEquals(2, LibUSB.SPEED_FULL);
-        assertEquals(3, LibUSB.SPEED_HIGH);
-        assertEquals(4, LibUSB.SPEED_SUPER);
+        assertEquals(0, LibUsb.SPEED_UNKNOWN);
+        assertEquals(1, LibUsb.SPEED_LOW);
+        assertEquals(2, LibUsb.SPEED_FULL);
+        assertEquals(3, LibUsb.SPEED_HIGH);
+        assertEquals(4, LibUsb.SPEED_SUPER);
 
         // Standard requests
-        assertEquals(0x00, LibUSB.REQUEST_GET_STATUS);
-        assertEquals(0x01, LibUSB.REQUEST_CLEAR_FEATURE);
-        assertEquals(0x03, LibUSB.REQUEST_SET_FEATURE);
-        assertEquals(0x05, LibUSB.REQUEST_SET_ADDRESS);
-        assertEquals(0x06, LibUSB.REQUEST_GET_DESCRIPTOR);
-        assertEquals(0x07, LibUSB.REQUEST_SET_DESCRIPTOR);
-        assertEquals(0x08, LibUSB.REQUEST_GET_CONFIGURATION);
-        assertEquals(0x09, LibUSB.REQUEST_SET_CONFIGURATION);
-        assertEquals(0x0a, LibUSB.REQUEST_GET_INTERFACE);
-        assertEquals(0x0b, LibUSB.REQUEST_SET_INTERFACE);
-        assertEquals(0x0c, LibUSB.REQUEST_SYNCH_FRAME);
-        assertEquals(0x30, LibUSB.REQUEST_SET_SEL);
-        assertEquals(0x31, LibUSB.SET_ISOCH_DELAY);
+        assertEquals(0x00, LibUsb.REQUEST_GET_STATUS);
+        assertEquals(0x01, LibUsb.REQUEST_CLEAR_FEATURE);
+        assertEquals(0x03, LibUsb.REQUEST_SET_FEATURE);
+        assertEquals(0x05, LibUsb.REQUEST_SET_ADDRESS);
+        assertEquals(0x06, LibUsb.REQUEST_GET_DESCRIPTOR);
+        assertEquals(0x07, LibUsb.REQUEST_SET_DESCRIPTOR);
+        assertEquals(0x08, LibUsb.REQUEST_GET_CONFIGURATION);
+        assertEquals(0x09, LibUsb.REQUEST_SET_CONFIGURATION);
+        assertEquals(0x0a, LibUsb.REQUEST_GET_INTERFACE);
+        assertEquals(0x0b, LibUsb.REQUEST_SET_INTERFACE);
+        assertEquals(0x0c, LibUsb.REQUEST_SYNCH_FRAME);
+        assertEquals(0x30, LibUsb.REQUEST_SET_SEL);
+        assertEquals(0x31, LibUsb.SET_ISOCH_DELAY);
 
         // Request type
-        assertEquals(0x00 << 5, LibUSB.REQUEST_TYPE_STANDARD);
-        assertEquals(0x01 << 5, LibUSB.REQUEST_TYPE_CLASS);
-        assertEquals(0x02 << 5, LibUSB.REQUEST_TYPE_VENDOR);
-        assertEquals(0x03 << 5, LibUSB.REQUEST_TYPE_RESERVED);
+        assertEquals(0x00 << 5, LibUsb.REQUEST_TYPE_STANDARD);
+        assertEquals(0x01 << 5, LibUsb.REQUEST_TYPE_CLASS);
+        assertEquals(0x02 << 5, LibUsb.REQUEST_TYPE_VENDOR);
+        assertEquals(0x03 << 5, LibUsb.REQUEST_TYPE_RESERVED);
 
         // Recipient bits
-        assertEquals(0x00, LibUSB.RECIPIENT_DEVICE);
-        assertEquals(0x01, LibUSB.RECIPIENT_INTERFACE);
-        assertEquals(0x02, LibUSB.RECIPIENT_ENDPOINT);
-        assertEquals(0x03, LibUSB.RECIPIENT_OTHER);
+        assertEquals(0x00, LibUsb.RECIPIENT_DEVICE);
+        assertEquals(0x01, LibUsb.RECIPIENT_INTERFACE);
+        assertEquals(0x02, LibUsb.RECIPIENT_ENDPOINT);
+        assertEquals(0x03, LibUsb.RECIPIENT_OTHER);
 
         // Error codes
-        assertEquals(0, LibUSB.SUCCESS);
-        assertEquals(-1, LibUSB.ERROR_IO);
-        assertEquals(-2, LibUSB.ERROR_INVALID_PARAM);
-        assertEquals(-3, LibUSB.ERROR_ACCESS);
-        assertEquals(-4, LibUSB.ERROR_NO_DEVICE);
-        assertEquals(-5, LibUSB.ERROR_NOT_FOUND);
-        assertEquals(-6, LibUSB.ERROR_BUSY);
-        assertEquals(-7, LibUSB.ERROR_TIMEOUT);
-        assertEquals(-8, LibUSB.ERROR_OVERFLOW);
-        assertEquals(-9, LibUSB.ERROR_PIPE);
-        assertEquals(-10, LibUSB.ERROR_INTERRUPTED);
-        assertEquals(-11, LibUSB.ERROR_NO_MEM);
-        assertEquals(-12, LibUSB.ERROR_NOT_SUPPORTED);
-        assertEquals(-99, LibUSB.ERROR_OTHER);
+        assertEquals(0, LibUsb.SUCCESS);
+        assertEquals(-1, LibUsb.ERROR_IO);
+        assertEquals(-2, LibUsb.ERROR_INVALID_PARAM);
+        assertEquals(-3, LibUsb.ERROR_ACCESS);
+        assertEquals(-4, LibUsb.ERROR_NO_DEVICE);
+        assertEquals(-5, LibUsb.ERROR_NOT_FOUND);
+        assertEquals(-6, LibUsb.ERROR_BUSY);
+        assertEquals(-7, LibUsb.ERROR_TIMEOUT);
+        assertEquals(-8, LibUsb.ERROR_OVERFLOW);
+        assertEquals(-9, LibUsb.ERROR_PIPE);
+        assertEquals(-10, LibUsb.ERROR_INTERRUPTED);
+        assertEquals(-11, LibUsb.ERROR_NO_MEM);
+        assertEquals(-12, LibUsb.ERROR_NOT_SUPPORTED);
+        assertEquals(-99, LibUsb.ERROR_OTHER);
 
         // Capabilities
-        assertEquals(0, LibUSB.CAP_HAS_CAPABILITY);
+        assertEquals(0, LibUsb.CAP_HAS_CAPABILITY);
 
         // Device and/or Interface class codes
-        assertEquals(0, LibUSB.CLASS_PER_INTERFACE);
-        assertEquals(1, LibUSB.CLASS_AUDIO);
-        assertEquals(2, LibUSB.CLASS_COMM);
-        assertEquals(3, LibUSB.CLASS_HID);
-        assertEquals(5, LibUSB.CLASS_PHYSICAL);
-        assertEquals(7, LibUSB.CLASS_PRINTER);
-        assertEquals(6, LibUSB.CLASS_PTP);
-        assertEquals(6, LibUSB.CLASS_IMAGE);
-        assertEquals(8, LibUSB.CLASS_MASS_STORAGE);
-        assertEquals(9, LibUSB.CLASS_HUB);
-        assertEquals(10, LibUSB.CLASS_DATA);
-        assertEquals(0x0b, LibUSB.CLASS_SMART_CARD);
-        assertEquals(0x0d, LibUSB.CLASS_CONTENT_SECURITY);
-        assertEquals(0x0e, LibUSB.CLASS_VIDEO);
-        assertEquals(0x0f, LibUSB.CLASS_PERSONAL_HEALTHCARE);
-        assertEquals(0xdc, LibUSB.CLASS_DIAGNOSTIC_DEVICE);
-        assertEquals(0xe0, LibUSB.CLASS_WIRELESS);
-        assertEquals(0xfe, LibUSB.CLASS_APPLICATION);
-        assertEquals(0xff, LibUSB.CLASS_VENDOR_SPEC);
+        assertEquals(0, LibUsb.CLASS_PER_INTERFACE);
+        assertEquals(1, LibUsb.CLASS_AUDIO);
+        assertEquals(2, LibUsb.CLASS_COMM);
+        assertEquals(3, LibUsb.CLASS_HID);
+        assertEquals(5, LibUsb.CLASS_PHYSICAL);
+        assertEquals(7, LibUsb.CLASS_PRINTER);
+        assertEquals(6, LibUsb.CLASS_PTP);
+        assertEquals(6, LibUsb.CLASS_IMAGE);
+        assertEquals(8, LibUsb.CLASS_MASS_STORAGE);
+        assertEquals(9, LibUsb.CLASS_HUB);
+        assertEquals(10, LibUsb.CLASS_DATA);
+        assertEquals(0x0b, LibUsb.CLASS_SMART_CARD);
+        assertEquals(0x0d, LibUsb.CLASS_CONTENT_SECURITY);
+        assertEquals(0x0e, LibUsb.CLASS_VIDEO);
+        assertEquals(0x0f, LibUsb.CLASS_PERSONAL_HEALTHCARE);
+        assertEquals(0xdc, LibUsb.CLASS_DIAGNOSTIC_DEVICE);
+        assertEquals(0xe0, LibUsb.CLASS_WIRELESS);
+        assertEquals(0xfe, LibUsb.CLASS_APPLICATION);
+        assertEquals(0xff, LibUsb.CLASS_VENDOR_SPEC);
 
         // Descriptor types
-        assertEquals(0x01, LibUSB.DT_DEVICE);
-        assertEquals(0x02, LibUSB.DT_CONFIG);
-        assertEquals(0x03, LibUSB.DT_STRING);
-        assertEquals(0x04, LibUSB.DT_INTERFACE);
-        assertEquals(0x05, LibUSB.DT_ENDPOINT);
-        assertEquals(0x21, LibUSB.DT_HID);
-        assertEquals(0x22, LibUSB.DT_REPORT);
-        assertEquals(0x23, LibUSB.DT_PHYSICAL);
-        assertEquals(0x29, LibUSB.DT_HUB);
-        assertEquals(0x2a, LibUSB.DT_SUPERSPEED_HUB);
+        assertEquals(0x01, LibUsb.DT_DEVICE);
+        assertEquals(0x02, LibUsb.DT_CONFIG);
+        assertEquals(0x03, LibUsb.DT_STRING);
+        assertEquals(0x04, LibUsb.DT_INTERFACE);
+        assertEquals(0x05, LibUsb.DT_ENDPOINT);
+        assertEquals(0x21, LibUsb.DT_HID);
+        assertEquals(0x22, LibUsb.DT_REPORT);
+        assertEquals(0x23, LibUsb.DT_PHYSICAL);
+        assertEquals(0x29, LibUsb.DT_HUB);
+        assertEquals(0x2a, LibUsb.DT_SUPERSPEED_HUB);
 
         // Endpoint direction
-        assertEquals(0x80, LibUSB.ENDPOINT_IN);
-        assertEquals(0x00, LibUSB.ENDPOINT_OUT);
+        assertEquals(0x80, LibUsb.ENDPOINT_IN);
+        assertEquals(0x00, LibUsb.ENDPOINT_OUT);
 
         // Transfer types
-        assertEquals(0, LibUSB.TRANSFER_TYPE_CONTROL);
-        assertEquals(1, LibUSB.TRANSFER_TYPE_ISOCHRONOUS);
-        assertEquals(2, LibUSB.TRANSFER_TYPE_BULK);
-        assertEquals(3, LibUSB.TRANSFER_TYPE_INTERRUPT);
+        assertEquals(0, LibUsb.TRANSFER_TYPE_CONTROL);
+        assertEquals(1, LibUsb.TRANSFER_TYPE_ISOCHRONOUS);
+        assertEquals(2, LibUsb.TRANSFER_TYPE_BULK);
+        assertEquals(3, LibUsb.TRANSFER_TYPE_INTERRUPT);
 
         // ISO Sync types
-        assertEquals(0, LibUSB.ISO_SYNC_TYPE_NONE);
-        assertEquals(1, LibUSB.ISO_SYNC_TYPE_ASYNC);
-        assertEquals(2, LibUSB.ISO_SYNC_TYPE_ADAPTIVE);
-        assertEquals(3, LibUSB.ISO_SYNC_TYPE_SYNC);
+        assertEquals(0, LibUsb.ISO_SYNC_TYPE_NONE);
+        assertEquals(1, LibUsb.ISO_SYNC_TYPE_ASYNC);
+        assertEquals(2, LibUsb.ISO_SYNC_TYPE_ADAPTIVE);
+        assertEquals(3, LibUsb.ISO_SYNC_TYPE_SYNC);
 
         // ISO usage types
-        assertEquals(0, LibUSB.ISO_USAGE_TYPE_DATA);
-        assertEquals(1, LibUSB.ISO_USAGE_TYPE_FEEDBACK);
-        assertEquals(2, LibUSB.ISO_USAGE_TYPE_IMPLICIT);
+        assertEquals(0, LibUsb.ISO_USAGE_TYPE_DATA);
+        assertEquals(1, LibUsb.ISO_USAGE_TYPE_FEEDBACK);
+        assertEquals(2, LibUsb.ISO_USAGE_TYPE_IMPLICIT);
     }
 
     /**
-     * Tests the {@link LibUSB#getVersion()} method.
+     * Tests the {@link LibUsb#getVersion()} method.
      */
     @Test
     public void testGetVersion()
     {
         assumeUsbTestsEnabled();
-        final Version version = LibUSB.getVersion();
+        final Version version = LibUsb.getVersion();
         assertNotNull(version);
         assertEquals(1, version.major());
         assertEquals(0, version.minor());
@@ -164,8 +164,8 @@ public class LibUSBTest
     public void testInitDeinitWithDefaultContext()
     {
         assumeUsbTestsEnabled();
-        assertEquals(LibUSB.SUCCESS, LibUSB.init(null));
-        LibUSB.exit(null);
+        assertEquals(LibUsb.SUCCESS, LibUsb.init(null));
+        LibUsb.exit(null);
     }
 
     /**
@@ -177,7 +177,7 @@ public class LibUSBTest
     {
         assumeUsbTestsEnabled();
         Context context = new Context();
-        assertEquals(LibUSB.SUCCESS, LibUSB.init(context));
-        LibUSB.exit(context);
+        assertEquals(LibUsb.SUCCESS, LibUsb.init(context));
+        LibUsb.exit(context);
     }
 }

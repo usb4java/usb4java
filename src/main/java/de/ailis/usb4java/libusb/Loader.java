@@ -299,7 +299,7 @@ public final class Loader
     /**
      * Loads the libusbx native wrapper library. Can be safely called multiple
      * times. Duplicate calls are ignored. This method is automatically called
-     * when the {@link LibUSB} class is loaded. When you need to do it earlier
+     * when the {@link LibUsb} class is loaded. When you need to do it earlier
      * (To catch exceptions for example) then simply call this method manually.
      * 
      * @throws LoaderException

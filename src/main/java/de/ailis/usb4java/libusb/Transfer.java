@@ -127,7 +127,7 @@ public final class Transfer
      * transfer callback function.
      * 
      * If this is an isochronous transfer, this field may read
-     * {@link LibUSB#TRANSFER_COMPLETED} even if there were errors in the
+     * {@link LibUsb#TRANSFER_COMPLETED} even if there were errors in the
      * frames. Use the status field in each packet to determine if errors
      * occurred.
      * 

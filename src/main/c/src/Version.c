@@ -7,12 +7,12 @@
 
 jobject wrapVersion(JNIEnv* env, const struct libusb_version* pointer)
 {
-    WRAP_POINTER(env, pointer, "Version");
+    WRAP_POINTER(env, pointer, "Version", "pointer");
 }
 
 const struct libusb_version* unwrapVersion(JNIEnv* env, jobject object)
 {
-    UNWRAP_POINTER(env, object, struct libusb_version*);
+    UNWRAP_POINTER(env, object, struct libusb_version*, "pointer");
 }
 
 /**

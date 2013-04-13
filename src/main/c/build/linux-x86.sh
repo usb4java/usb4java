@@ -2,10 +2,10 @@
 #
 # Builds libusb4java for 32 bit linux.
 #
-# If running on 32 bit linux you just need libusb-dev.
+# If running on 32 bit linux you just need libusb-1.0-0-dev.
 #
 # If running on 64 bit linux you need ia32-libs-dev and libc6-dev-i386
-# or gcc-multilib and libusb-0.1-4:i386 or something like that an newer 
+# or gcc-multilib and libusb-1.0-0:i386 or something like that on newer 
 # systems. Depending on your multilib installation it may be required to 
 # create a manual symlink libusb.so in /lib/i386-linux-gnu or otherwise
 # compilation will fail because the compiler can't find the 32 bit

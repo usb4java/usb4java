@@ -16,7 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests the global-scope methods of the {@link LibUSB} class which need a 
+ * Tests the global-scope methods of the {@link LibUsb} class which need a 
  * open USB context.
  * 
  * @author Klaus Reimer (k@ailis.de)
@@ -35,7 +35,7 @@ public class LibUSBGlobalTest
         this.context = new Context();
         try
         {
-            LibUSB.init(this.context);
+            LibUsb.init(this.context);
         }
         catch (Throwable e)
         {
@@ -49,21 +49,21 @@ public class LibUSBGlobalTest
     @After
     public void tearDown()
     {
-        if (this.context != null) LibUSB.exit(this.context);
+        if (this.context != null) LibUsb.exit(this.context);
     }
 
     /**
-     * Tests the {@link LibUSB#setDebug(Context, int)} method.
+     * Tests the {@link LibUsb#setDebug(Context, int)} method.
      */
     @Test
     public void testSetDebug()
     {
         assumeUsbTestsEnabled();
-        LibUSB.setDebug(this.context, LibUSB.LOG_LEVEL_DEBUG);
-        LibUSB.setDebug(this.context, LibUSB.LOG_LEVEL_INFO);
-        LibUSB.setDebug(this.context, LibUSB.LOG_LEVEL_WARNING);
-        LibUSB.setDebug(this.context, LibUSB.LOG_LEVEL_ERROR);
-        LibUSB.setDebug(this.context, LibUSB.LOG_LEVEL_NONE);
+        LibUsb.setDebug(this.context, LibUsb.LOG_LEVEL_DEBUG);
+        LibUsb.setDebug(this.context, LibUsb.LOG_LEVEL_INFO);
+        LibUsb.setDebug(this.context, LibUsb.LOG_LEVEL_WARNING);
+        LibUsb.setDebug(this.context, LibUsb.LOG_LEVEL_ERROR);
+        LibUsb.setDebug(this.context, LibUsb.LOG_LEVEL_NONE);
     }
 
     /**
@@ -74,7 +74,7 @@ public class LibUSBGlobalTest
     {
         assumeUsbTestsEnabled();
         final DeviceList list = new DeviceList();
-        final int result = LibUSB.getDeviceList(this.context, list);
+        final int result = LibUsb.getDeviceList(this.context, list);
         assertTrue(
             "At least one USB device must be present for the simple unit tests",
             result > 0);
@@ -87,50 +87,50 @@ public class LibUSBGlobalTest
             assertEquals(Device.class, device.getClass());
             i++;
         }
-        LibUSB.freeDeviceList(list, true);
+        LibUsb.freeDeviceList(list, true);
     }
 
     /**
-     * Test {@link LibUSB#getDeviceList(Context, DeviceList)} without specifying
+     * Test {@link LibUsb#getDeviceList(Context, DeviceList)} without specifying
      * a list container.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testGetDeviceListWithoutList()
     {
         assumeUsbTestsEnabled();
-        LibUSB.getDeviceList(this.context, null);
+        LibUsb.getDeviceList(this.context, null);
     }
 
     /**
-     * Checks the {@link LibUSB#le16ToCpu(int)} and
-     * {@link LibUSB#cpuToLe16(int)} methods.
+     * Checks the {@link LibUsb#le16ToCpu(int)} and
+     * {@link LibUsb#cpuToLe16(int)} methods.
      */
     @Test
     public void testEndianConversion()
     {
         assumeUsbTestsEnabled();
-        assertEquals(0x1234, LibUSB.le16ToCpu(LibUSB.cpuToLe16(0x1234)));
+        assertEquals(0x1234, LibUsb.le16ToCpu(LibUsb.cpuToLe16(0x1234)));
     }
 
     /**
-     * Tests the {@link LibUSB#hasCapability(int)} method.
+     * Tests the {@link LibUsb#hasCapability(int)} method.
      */
     @Test
     public void testHasCapability()
     {
         assumeUsbTestsEnabled();
-        assertTrue(LibUSB.hasCapability(LibUSB.CAP_HAS_CAPABILITY));
-        assertFalse(LibUSB.hasCapability(0x12345678));
+        assertTrue(LibUsb.hasCapability(LibUsb.CAP_HAS_CAPABILITY));
+        assertFalse(LibUsb.hasCapability(0x12345678));
     }
 
     /**
-     * Tests the {@link LibUSB#errorName(int)} method.
+     * Tests the {@link LibUsb#errorName(int)} method.
      */
     @Test
     public void testErrorName()
     {
         assumeUsbTestsEnabled();
-        assertEquals("LIBUSB_ERROR_IO", LibUSB.errorName(LibUSB.ERROR_IO));
-        assertEquals("**UNKNOWN**", LibUSB.errorName(0x1234));
+        assertEquals("LIBUSB_ERROR_IO", LibUsb.errorName(LibUsb.ERROR_IO));
+        assertEquals("**UNKNOWN**", LibUsb.errorName(0x1234));
     }
 }

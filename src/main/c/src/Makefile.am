@@ -5,7 +5,7 @@ libusb4java_la_LDFLAGS = -version-info 1:0:0 -no-undefined
 EXTRA_DIST = *.h
 libusb4java_la_SOURCES = \
     usb4java.c \
-    LibUSB.c \
+    LibUsb.c \
     Version.c \
     Context.c \
     Device.c \

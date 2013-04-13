@@ -8,18 +8,25 @@
 
 #include <jni.h>
 #include <libusb.h>
+#include "config.h"
 
 #define PACKAGE_DIR "de/ailis/usb4java/libusb"
 #define METHOD_NAME(CLASS_NAME, METHOD_NAME) Java_de_ailis_usb4java_libusb_##CLASS_NAME##_##METHOD_NAME
 
-#define SET_POINTER(ENV, PTR, OBJECT) \
+#if SIZEOF_VOID_P == 4
+#  define jptr jint
+#elif SIZEOF_VOID_P == 8
+#  define jptr jlong
+#endif
+
+#define SET_POINTER(ENV, PTR, OBJECT, FIELD) \
 { \
     jclass cls = (*ENV)->GetObjectClass(ENV, OBJECT); \
-    jfieldID field = (*ENV)->GetFieldID(ENV, cls, "pointer", "J"); \
-    (*ENV)->SetLongField(ENV, OBJECT, field, (jlong) PTR); \
+    jfieldID field = (*ENV)->GetFieldID(ENV, cls, FIELD, "J"); \
+    (*ENV)->SetLongField(ENV, OBJECT, field, (jptr) PTR); \
 }
 
-#define WRAP_POINTER(ENV, PTR, CLASS_NAME) \
+#define WRAP_POINTER(ENV, PTR, CLASS_NAME, FIELD) \
 { \
     if (!PTR) return NULL; \
     jclass cls = (*ENV)->FindClass(ENV, PACKAGE_DIR"/"CLASS_NAME); \
@@ -27,32 +34,32 @@
     jmethodID constructor = (*ENV)->GetMethodID(ENV, cls, "<init>", "()V"); \
     if (constructor == NULL) return NULL; \
     jobject object = (*ENV)->NewObject(ENV, cls, constructor); \
-    jfieldID field = (*ENV)->GetFieldID(ENV, cls, "pointer", "J"); \
-    (*ENV)->SetLongField(ENV, object, field, (jlong) PTR); \
+    jfieldID field = (*ENV)->GetFieldID(ENV, cls, FIELD, "J"); \
+    (*ENV)->SetLongField(ENV, object, field, (jptr) PTR); \
     return object; \
 }
 
-#define UNWRAP_POINTER(ENV, OBJECT, TYPE) \
+#define UNWRAP_POINTER(ENV, OBJECT, TYPE, FIELD) \
 { \
     if (!OBJECT) return NULL; \
     jclass cls = (*ENV)->GetObjectClass(ENV, OBJECT); \
-    jfieldID field = (*ENV)->GetFieldID(ENV, cls, "pointer", "J"); \
-    return (TYPE) (*ENV)->GetLongField(ENV, OBJECT, field); \
+    jfieldID field = (*ENV)->GetFieldID(ENV, cls, FIELD, "J"); \
+    return (TYPE) (jptr) (*ENV)->GetLongField(ENV, OBJECT, field); \
 }
 
-#define SET_DATA(ENV, PTR, SIZE, OBJECT) \
+#define SET_DATA(ENV, PTR, SIZE, OBJECT, FIELD) \
 { \
     jclass cls = (*ENV)->GetObjectClass(ENV, OBJECT); \
-    jfieldID field = (*ENV)->GetFieldID(ENV, cls, "data", \
+    jfieldID field = (*ENV)->GetFieldID(ENV, cls, FIELD, \
         "Ljava/nio/ByteBuffer;"); \
     jobject buffer = (*ENV)->NewDirectByteBuffer(env, PTR, SIZE); \
     (*ENV)->SetObjectField(ENV, OBJECT, field, buffer); \
 }
 
-#define UNWRAP_DATA(ENV, OBJECT, TYPE) \
+#define UNWRAP_DATA(ENV, OBJECT, TYPE, FIELD) \
 { \
     jclass cls = (*ENV)->GetObjectClass(ENV, OBJECT); \
-    jfieldID field = (*ENV)->GetFieldID(ENV, cls, "data", \
+    jfieldID field = (*ENV)->GetFieldID(ENV, cls, FIELD, \
         "Ljava/nio/ByteBuffer;"); \
     jobject buffer = (*ENV)->GetObjectField(ENV, OBJECT, field); \
     return (TYPE) (*ENV)->GetDirectBufferAddress(ENV, buffer); \

@@ -17,10 +17,10 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * Structure representing a handle on a USB device.
  * 
  * This is an opaque type for which you are only ever provided with a pointer,
- * usually originating from {@link LibUSB#open(Device, DeviceHandle)}.
+ * usually originating from {@link LibUsb#open(Device, DeviceHandle)}.
  * 
  * A device handle is used to perform I/O and other operations. When finished
- * with a device handle, you should call {@link LibUSB#close(DeviceHandle)}.
+ * with a device handle, you should call {@link LibUsb#close(DeviceHandle)}.
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
@@ -31,7 +31,7 @@ public final class DeviceHandle
 
     /**
      * Constructs a new device handle. Must be passed to
-     * {@link LibUSB#open(Device, DeviceHandle)} before passing it to any
+     * {@link LibUsb#open(Device, DeviceHandle)} before passing it to any
      * other method.
      */
     public DeviceHandle()

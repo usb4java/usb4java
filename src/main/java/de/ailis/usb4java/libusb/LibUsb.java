@@ -20,7 +20,7 @@ import java.nio.IntBuffer;
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class LibUSB
+public final class LibUsb
 {
     // Log message levels.
 
@@ -471,7 +471,7 @@ public final class LibUSB
     /**
      * Private constructor to prevent instantiation.
      */
-    private LibUSB()
+    private LibUsb()
     {
         // Empty
     }

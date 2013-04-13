@@ -17,20 +17,20 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * Structure representing a USB device detected on the system.
  * 
  * This is an opaque type for which you are only ever provided with a pointer,
- * usually originating from {@link LibUSB#getDeviceList(Context, DeviceList)}.
+ * usually originating from {@link LibUsb#getDeviceList(Context, DeviceList)}.
  * 
  * Certain operations can be performed on a device, but in order to do any I/O
  * you will have to first obtain a device handle using
- * {@link LibUSB#open(Device, DeviceHandle)}.
+ * {@link LibUsb#open(Device, DeviceHandle)}.
  * 
- * Devices are reference counted with {@link LibUSB#refDevice(Device)} and
- * {@link LibUSB#unrefDevice(Device)}, and are freed when the reference count
+ * Devices are reference counted with {@link LibUsb#refDevice(Device)} and
+ * {@link LibUsb#unrefDevice(Device)}, and are freed when the reference count
  * reaches 0. New devices presented by
- * {@link LibUSB#getDeviceList(Context, DeviceList)} have a reference count of
- * 1, and {@link LibUSB#freeDeviceList(DeviceList, boolean)} can optionally
+ * {@link LibUsb#getDeviceList(Context, DeviceList)} have a reference count of
+ * 1, and {@link LibUsb#freeDeviceList(DeviceList, boolean)} can optionally
  * decrease the reference count on all devices in the list.
- * {@link LibUSB#open(Device, DeviceHandle)} adds another reference which is
- * later destroyed by {@link LibUSB#close(DeviceHandle)}.
+ * {@link LibUsb#open(Device, DeviceHandle)} adds another reference which is
+ * later destroyed by {@link LibUsb#close(DeviceHandle)}.
  * 
  * @author Klaus Reimer (k@ailis.de)
  */

@@ -14,7 +14,7 @@ import javax.usb.UsbDeviceDescriptor;
 import javax.usb.UsbEndpointDescriptor;
 import javax.usb.UsbInterfaceDescriptor;
 
-import de.ailis.usb4java.libusb.LibUSB;
+import de.ailis.usb4java.libusb.LibUsb;
 
 /**
  * Utility methods used for descriptor dumps.
@@ -29,24 +29,24 @@ public final class DescriptorUtils
 
     static
     {
-        CLASS_NAMES.put(LibUSB.CLASS_PER_INTERFACE, "Per interface");
-        CLASS_NAMES.put(LibUSB.CLASS_AUDIO, "Audio");
-        CLASS_NAMES.put(LibUSB.CLASS_COMM, "Communications");
-        CLASS_NAMES.put(LibUSB.CLASS_HID, "HID");
-        CLASS_NAMES.put(LibUSB.CLASS_IMAGE, "Imaging");
-        CLASS_NAMES.put(LibUSB.CLASS_PRINTER, "Printer");
-        CLASS_NAMES.put(LibUSB.CLASS_MASS_STORAGE, "Mass Storage");
-        CLASS_NAMES.put(LibUSB.CLASS_HUB, "Hub");
-        CLASS_NAMES.put(LibUSB.CLASS_DATA, "Data");
-        CLASS_NAMES.put(LibUSB.CLASS_SMART_CARD, "Smart Card");
-        CLASS_NAMES.put(LibUSB.CLASS_CONTENT_SECURITY, "Content Security");
-        CLASS_NAMES.put(LibUSB.CLASS_VIDEO, "Video");
-        CLASS_NAMES.put(LibUSB.CLASS_VENDOR_SPEC, "Vendor-specific");
-        CLASS_NAMES.put(LibUSB.CLASS_APPLICATION, "Application");
-        CLASS_NAMES.put(LibUSB.CLASS_PERSONAL_HEALTHCARE,
+        CLASS_NAMES.put(LibUsb.CLASS_PER_INTERFACE, "Per interface");
+        CLASS_NAMES.put(LibUsb.CLASS_AUDIO, "Audio");
+        CLASS_NAMES.put(LibUsb.CLASS_COMM, "Communications");
+        CLASS_NAMES.put(LibUsb.CLASS_HID, "HID");
+        CLASS_NAMES.put(LibUsb.CLASS_IMAGE, "Imaging");
+        CLASS_NAMES.put(LibUsb.CLASS_PRINTER, "Printer");
+        CLASS_NAMES.put(LibUsb.CLASS_MASS_STORAGE, "Mass Storage");
+        CLASS_NAMES.put(LibUsb.CLASS_HUB, "Hub");
+        CLASS_NAMES.put(LibUsb.CLASS_DATA, "Data");
+        CLASS_NAMES.put(LibUsb.CLASS_SMART_CARD, "Smart Card");
+        CLASS_NAMES.put(LibUsb.CLASS_CONTENT_SECURITY, "Content Security");
+        CLASS_NAMES.put(LibUsb.CLASS_VIDEO, "Video");
+        CLASS_NAMES.put(LibUsb.CLASS_VENDOR_SPEC, "Vendor-specific");
+        CLASS_NAMES.put(LibUsb.CLASS_APPLICATION, "Application");
+        CLASS_NAMES.put(LibUsb.CLASS_PERSONAL_HEALTHCARE,
             "Personal Healthcare");
-        CLASS_NAMES.put(LibUSB.CLASS_DIAGNOSTIC_DEVICE, "Diagnostic Device");
-        CLASS_NAMES.put(LibUSB.CLASS_WIRELESS, "Wireless");
+        CLASS_NAMES.put(LibUsb.CLASS_DIAGNOSTIC_DEVICE, "Diagnostic Device");
+        CLASS_NAMES.put(LibUsb.CLASS_WIRELESS, "Wireless");
 
     }
 
@@ -248,13 +248,13 @@ public final class DescriptorUtils
     {
         switch (speed)
         {
-            case LibUSB.SPEED_SUPER:
+            case LibUsb.SPEED_SUPER:
                 return "Super";
-            case LibUSB.SPEED_FULL:
+            case LibUsb.SPEED_FULL:
                 return "Full";
-            case LibUSB.SPEED_HIGH:
+            case LibUsb.SPEED_HIGH:
                 return "High";
-            case LibUSB.SPEED_LOW:
+            case LibUsb.SPEED_LOW:
                 return "Low";
             default:
                 return "Unknown";

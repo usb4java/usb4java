@@ -1,7 +1,8 @@
 #!/bin/sh
 #
 # Builds libusb4java for 64 bit linux.
-# Must be executed on 64 bit linux machine and must have libusb-dev installed.
+# Must be executed on 64 bit linux machine and must have libusb-1.0-0-dev
+# installed.
 
 set -e
 cd $(dirname $0)/..

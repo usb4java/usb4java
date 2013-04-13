@@ -9,13 +9,13 @@
 void setConfigDescriptor(JNIEnv* env,
     struct libusb_config_descriptor* descriptor, jobject object)
 {
-    SET_POINTER(env, descriptor, object);
+    SET_POINTER(env, descriptor, object, "pointer");
 }
 
 struct libusb_config_descriptor* unwrapConfigDescriptor(JNIEnv* env,
     jobject descriptor)
 {
-    UNWRAP_POINTER(env, descriptor, struct libusb_config_descriptor*);
+    UNWRAP_POINTER(env, descriptor, struct libusb_config_descriptor*, "pointer");
 }
 
 /**

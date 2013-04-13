@@ -35,7 +35,7 @@ public final class DeviceDescriptor implements UsbDeviceDescriptor
     
     /**
      * Constructs a new device descriptor which can be passed to the
-     * {@link LibUSB#getDeviceDescriptor(Device, DeviceDescriptor)} method.
+     * {@link LibUsb#getDeviceDescriptor(Device, DeviceDescriptor)} method.
      */
     public DeviceDescriptor()
     {
@@ -116,14 +116,14 @@ public final class DeviceDescriptor implements UsbDeviceDescriptor
     {
         final int iManufacturer = iManufacturer();
         String sManufacturer =
-            LibUSB.getStringDescriptor(handle, iManufacturer);
+            LibUsb.getStringDescriptor(handle, iManufacturer);
         if (sManufacturer == null) sManufacturer = "";
         final int iProduct = iProduct();
-        String sProduct = LibUSB.getStringDescriptor(handle, iProduct);
+        String sProduct = LibUsb.getStringDescriptor(handle, iProduct);
         if (sProduct == null) sProduct = "";
         final int iSerialNumber = iSerialNumber();
         String sSerialNumber =
-            LibUSB.getStringDescriptor(handle, iSerialNumber);
+            LibUsb.getStringDescriptor(handle, iSerialNumber);
         if (sSerialNumber == null) sSerialNumber = "";
         return String.format("Device Descriptor:%n"
             + "  bLength               %5d%n"

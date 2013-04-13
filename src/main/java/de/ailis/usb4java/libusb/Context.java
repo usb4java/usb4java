@@ -18,12 +18,12 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * sessions allows for your program to use two libraries (or dynamically load
  * two modules) which both independently use libusb. This will prevent
  * interference between the individual libusbx users - for example
- * {@link LibUSB#setDebug(Context, int)} will not affect the other user of the
- * library, and {@link LibUSB#exit(Context)} will not destroy resources that the
+ * {@link LibUsb#setDebug(Context, int)} will not affect the other user of the
+ * library, and {@link LibUsb#exit(Context)} will not destroy resources that the
  * other user is still using.
  * 
- * Sessions are created by {@link LibUSB#init(Context)} and destroyed through
- * {@link LibUSB#exit(Context)}. If your application is guaranteed to only ever
+ * Sessions are created by {@link LibUsb#init(Context)} and destroyed through
+ * {@link LibUsb#exit(Context)}. If your application is guaranteed to only ever
  * include a single libusbx user (i.e. you), you do not have to worry about
  * contexts: pass NULL in every function call where a context is required. The
  * default context will be used.
@@ -40,7 +40,7 @@ public final class Context
     
     /**
      * Constructs a new libusb context. Must be passed to
-     * {@link LibUSB#init(Context)} before passing it to any other method.
+     * {@link LibUsb#init(Context)} before passing it to any other method.
      */
     public Context()
     {

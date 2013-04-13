@@ -7,10 +7,10 @@
 
 jobject wrapDevice(JNIEnv* env, libusb_device* device)
 {
-    WRAP_POINTER(env, device, "Device");
+    WRAP_POINTER(env, device, "Device", "devicePointer");
 }
 
 libusb_device* unwrapDevice(JNIEnv* env, jobject device)
 {
-    UNWRAP_POINTER(env, device, libusb_device*);
+    UNWRAP_POINTER(env, device, libusb_device*, "devicePointer");
 }

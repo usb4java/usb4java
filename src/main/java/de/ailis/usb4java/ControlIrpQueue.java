@@ -14,7 +14,7 @@ import javax.usb.UsbShortPacketException;
 import javax.usb.event.UsbDeviceDataEvent;
 
 import de.ailis.usb4java.libusb.DeviceHandle;
-import de.ailis.usb4java.libusb.LibUSB;
+import de.ailis.usb4java.libusb.LibUsb;
 import de.ailis.usb4java.libusb.LibUsbException;
 
 /**
@@ -50,7 +50,7 @@ final class ControlIrpQueue extends AbstractIrpQueue<UsbControlIrp>
         buffer.put(irp.getData(), irp.getOffset(), irp.getLength());
         buffer.rewind();
         final DeviceHandle handle = getDevice().open();
-        final int result = LibUSB.controlTransfer(handle, irp.bmRequestType(),
+        final int result = LibUsb.controlTransfer(handle, irp.bmRequestType(),
             irp.bRequest(), irp.wValue(), irp.wIndex(), buffer,
             getConfig().getTimeout());
         if (result < 0)

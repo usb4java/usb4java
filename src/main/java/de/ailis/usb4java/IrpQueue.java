@@ -17,7 +17,7 @@ import javax.usb.UsbIrp;
 import javax.usb.UsbShortPacketException;
 
 import de.ailis.usb4java.libusb.DeviceHandle;
-import de.ailis.usb4java.libusb.LibUSB;
+import de.ailis.usb4java.libusb.LibUsb;
 import de.ailis.usb4java.libusb.LibUsbException;
 
 /**
@@ -113,7 +113,7 @@ final class IrpQueue extends AbstractIrpQueue<UsbIrp>
         buffer.put(irp.getData(), irp.getOffset(), irp.getLength());
         buffer.rewind();
         final DeviceHandle handle = getDevice().open();
-        final int result = LibUSB.controlTransfer(handle, irp.bmRequestType(),
+        final int result = LibUsb.controlTransfer(handle, irp.bmRequestType(),
             irp.bRequest(), irp.wValue(), irp.wIndex(), buffer,
             getConfig().getTimeout());
         if (result < 0)
@@ -156,7 +156,7 @@ final class IrpQueue extends AbstractIrpQueue<UsbIrp>
             int result;
             if (type == UsbConst.ENDPOINT_TYPE_BULK)
             {
-                result = LibUSB.bulkTransfer(handle, 
+                result = LibUsb.bulkTransfer(handle, 
                     descriptor.bEndpointAddress(), buffer, transferred,
                     getConfig().getTimeout());
                 if (result < 0)
@@ -167,7 +167,7 @@ final class IrpQueue extends AbstractIrpQueue<UsbIrp>
             }
             else if (type == UsbConst.ENDPOINT_TYPE_INTERRUPT)
             {
-                result = LibUSB.interruptTransfer(handle,
+                result = LibUsb.interruptTransfer(handle,
                     descriptor.bEndpointAddress(), buffer, transferred,
                     getConfig().getTimeout());
                 if (result < 0)
@@ -222,7 +222,7 @@ final class IrpQueue extends AbstractIrpQueue<UsbIrp>
             int result;
             if (type == UsbConst.ENDPOINT_TYPE_BULK)
             {
-                result = LibUSB.bulkTransfer(handle,
+                result = LibUsb.bulkTransfer(handle,
                     descriptor.bEndpointAddress(), buffer, transferred,
                     getConfig().getTimeout());
                 if (result < 0) 
@@ -233,7 +233,7 @@ final class IrpQueue extends AbstractIrpQueue<UsbIrp>
             }
             else if (type == UsbConst.ENDPOINT_TYPE_INTERRUPT)
             {
-                result = LibUSB.interruptTransfer(handle,
+                result = LibUsb.interruptTransfer(handle,
                     descriptor.bEndpointAddress(), buffer, transferred,
                     getConfig().getTimeout());
                 if (result < 0) 
