@@ -22,7 +22,7 @@ final class PipeListenerList extends
      */
     PipeListenerList()
     {
-        // Empty
+        super();
     }
     
     @Override

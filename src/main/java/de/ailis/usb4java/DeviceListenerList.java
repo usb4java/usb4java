@@ -23,7 +23,7 @@ final class DeviceListenerList extends
      */
     DeviceListenerList()
     {
-        // Empty
+        super();
     }
     
     @Override

@@ -21,7 +21,7 @@ final class ServicesListenerList extends
      */
     ServicesListenerList()
     {
-        // Empty
+        super();
     }
 
     @Override
