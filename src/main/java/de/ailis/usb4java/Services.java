@@ -140,8 +140,7 @@ public final class Services implements UsbServices
     {
         try
         {
-            UsbServices services = UsbHostManager.getUsbServices();
-            return (Services) services;
+            return (Services) UsbHostManager.getUsbServices();
         }
         catch (final ClassCastException e)
         {
