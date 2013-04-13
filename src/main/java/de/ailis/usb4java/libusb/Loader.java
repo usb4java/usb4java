@@ -192,7 +192,7 @@ public final class Loader
     {
         final String os = getOS();
         if (os.equals(OS_LINUX)) return null;
-        if (os.equals(OS_WINDOWS)) return "libusb0." + EXT_DLL;
+        if (os.equals(OS_WINDOWS)) return "libusb-1.0." + EXT_DLL;
         if (os.equals(OS_MACOSX)) return "libusb." + EXT_DYLIB;
         return null;
     }

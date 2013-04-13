@@ -883,7 +883,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getNextTimeout)
     return result;
 }
 
-static void triggerPollfdAdded(int fd, short events, void *user_data)
+static void LIBUSB_CALL triggerPollfdAdded(int fd, short events, void *user_data)
 {
     THREAD_BEGIN(env)
 
@@ -899,7 +899,7 @@ static void triggerPollfdAdded(int fd, short events, void *user_data)
     THREAD_END
 }
 
-static void triggerPollfdRemoved(int fd, void *user_data)
+static void LIBUSB_CALL triggerPollfdRemoved(int fd, void *user_data)
 {
     THREAD_BEGIN(env)
 

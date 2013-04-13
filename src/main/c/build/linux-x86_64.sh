@@ -1,15 +1,6 @@
 #!/bin/sh
 #
-# Builds libusb4java for 32 bit linux.
-#
-# If running on 32 bit linux you just need libusb-1.0-0-dev.
-#
-# If running on 64 bit linux you need ia32-libs-dev and libc6-dev-i386
-# or gcc-multilib and libusb-1.0-0:i386 or something like that on newer 
-# systems. Depending on your multilib installation it may be required to 
-# create a manual symlink libusb.so in /lib/i386-linux-gnu or otherwise
-# compilation will fail because the compiler can't find the 32 bit
-# library.
+# Builds libusb4java for 64 bit linux on a 64 bit linux host.
 
 set -e
 cd "$(dirname $0)/.."
@@ -57,4 +48,4 @@ cp -faL "$TMPDIR/lib/libusb4java.so" "$DISTDIR/"
 chmod -x "$DISTDIR/libusb4java.so"
 
 # Cleanup
-rm -rf $TMPDIR
+rm -rf "$TMPDIR"
