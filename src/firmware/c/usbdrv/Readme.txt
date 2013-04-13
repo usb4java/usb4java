@@ -37,8 +37,8 @@ The driver consists of the following files:
   usbdrvasm.asm .......... Compatibility stub for IAR-C-compiler. Use this
                            module instead of usbdrvasm.S when you assembler
                            with IAR's tools.
-  License.txt ............ Open Source license for this driver.
-  CommercialLicense.txt .. Optional commercial license for this driver.
+  LICENSE.md ............ Open Source license for this driver.
+  CommercialLICENSE.md .. Optional commercial license for this driver.
   USB-ID-FAQ.txt ......... General infos about USB Product- and Vendor-IDs.
   USB-IDs-for-free.txt ... List and terms of use for free shared PIDs.
 
@@ -168,5 +168,5 @@ COMMERCIAL LICENSES FOR V-USB
 If you don't want to publish your source code under the terms of the GPL,
 you can simply pay money for V-USB. As an additional benefit you get
 USB PIDs for free, reserved exclusively to you. See the file
-"CommercialLicense.txt" for details.
+"CommercialLICENSE.md" for details.
 

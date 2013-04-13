@@ -26,7 +26,7 @@ Scroll down to the bottom to see the most recent changes.
 
 2006-01-02:
   - Added (free) default Vendor- and Product-IDs bought from voti.nl.
-  - Added USBID-License.txt file which defines the rules for using the free
+  - Added USBID-LICENSE.md file which defines the rules for using the free
     shared VID/PID pair.
   - Added Readme.txt to the usbdrv directory which clarifies administrative
     issues.
@@ -271,14 +271,14 @@ Scroll down to the bottom to see the most recent changes.
 
   - Hid-mouse example used settings from hid-data example, fixed that.
   - Renamed project to V-USB due to a trademark issue with Atmel(r).
-  - Changed CommercialLicense.txt and USBID-License.txt to make the
+  - Changed CommercialLICENSE.md and USBID-LICENSE.md to make the
     background of USB ID registration clearer.
 
 * Release 2009-04-15
 
-  - Changed CommercialLicense.txt to reflect the new range of PIDs from
+  - Changed CommercialLICENSE.md to reflect the new range of PIDs from
     Jason Kotzin.
-  - Removed USBID-License.txt in favor of USB-IDs-for-free.txt and
+  - Removed USBID-LICENSE.md in favor of USB-IDs-for-free.txt and
     USB-ID-FAQ.txt
   - Fixed a bug in the 12.8 MHz module: End Of Packet decection was made in
     the center between bit 0 and 1 of each byte. This is where the data lines

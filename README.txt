@@ -1,6 +1,6 @@
 usb4java - USB library for Java based on libusb 1.0
 Copyright (C) 2011 Klaus Reimer <k@ailis.de>
-See LICENSE.txt for licensing information.
+See LICENSE.md for licensing information.
 ==============================================================================
 
 This library can be used to access USB devices in Java. It is based on the 

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2013 Klaus Reimer <k@ailis.de>
- * See LICENSE.txt file for licensing information.
+ * See LICENSE.md file for licensing information.
  */
 
 #include <stdlib.h>
