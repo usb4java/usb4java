@@ -233,8 +233,7 @@ public final class SimpleUsbDeviceDescriptor extends SimpleUsbDescriptor
     public boolean equals(final Object obj)
     {
         if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
+        if (obj == null || getClass() != obj.getClass()) return false;
         final SimpleUsbDeviceDescriptor other = (SimpleUsbDeviceDescriptor) obj;
         return new EqualsBuilder()
             .append(bLength(), other.bLength())

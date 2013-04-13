@@ -68,8 +68,7 @@ public final class Device
     public boolean equals(final Object obj)
     {
         if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
+        if (obj == null || getClass() != obj.getClass()) return false;
         final Device other = (Device) obj;
         return this.pointer == other.pointer;
     }

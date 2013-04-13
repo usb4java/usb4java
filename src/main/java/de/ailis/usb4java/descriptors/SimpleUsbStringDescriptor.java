@@ -70,8 +70,7 @@ public final class SimpleUsbStringDescriptor extends SimpleUsbDescriptor
     public boolean equals(final Object obj)
     {
         if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
+        if (obj == null || getClass() != obj.getClass()) return false;
         final SimpleUsbStringDescriptor other = (SimpleUsbStringDescriptor) obj;
         return new EqualsBuilder()
             .append(bLength(), other.bLength())

@@ -118,8 +118,7 @@ public final class SimpleUsbEndpointDescriptor extends SimpleUsbDescriptor
     public boolean equals(final Object obj)
     {
         if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
+        if (obj == null || getClass() != obj.getClass()) return false;
         final SimpleUsbEndpointDescriptor other =
             (SimpleUsbEndpointDescriptor) obj;
         return new EqualsBuilder()
