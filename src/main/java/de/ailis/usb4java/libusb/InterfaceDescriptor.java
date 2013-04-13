@@ -18,7 +18,7 @@ import javax.usb.UsbInterfaceDescriptor;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import de.ailis.usb4java.utils.DumpUtils;
+import de.ailis.usb4java.utils.DescriptorUtils;
 
 /**
  * A structure representing the standard USB interface descriptor.
@@ -146,12 +146,12 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
             bAlternateSetting() & 0xff, 
             bNumEndpoints() & 0xff, 
             bInterfaceClass() & 0xff, 
-            DumpUtils.getUSBClassName(bInterfaceClass()), 
+            DescriptorUtils.getUSBClassName(bInterfaceClass()), 
             bInterfaceSubClass() & 0xff,
             bInterfaceProtocol() & 0xff, 
             iInterface() & 0xff, sInterface, 
             extraLength(),
-            DumpUtils.toHexDump(extra()).replaceAll("(?m)^", "    ")));
+            DescriptorUtils.dump(extra()).replaceAll("(?m)^", "    ")));
         if (extraLength() != 0) return builder.toString();
         for (final EndpointDescriptor edesc: endpoint())
         {

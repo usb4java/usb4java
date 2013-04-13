@@ -18,7 +18,7 @@ import javax.usb.UsbConfigurationDescriptor;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import de.ailis.usb4java.utils.DumpUtils;
+import de.ailis.usb4java.utils.DescriptorUtils;
 
 /**
  * A structure representing the standard USB configuration descriptor.
@@ -143,7 +143,7 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
                 bmAttributes() & 0xff,
                 (bMaxPower() & 0xff) * 2,
                 extraLength(),
-                DumpUtils.toHexDump(extra()).replaceAll("(?m)^", "    ")));
+                DescriptorUtils.dump(extra()).replaceAll("(?m)^", "    ")));
         for (final Interface descriptor: iface())
         {
             builder.append(descriptor.dump(handle)

@@ -18,7 +18,7 @@ import javax.usb.UsbDeviceDescriptor;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import de.ailis.usb4java.utils.DumpUtils;
+import de.ailis.usb4java.utils.DescriptorUtils;
 
 /**
  * A structure representing the standard USB device descriptor.
@@ -142,14 +142,14 @@ public final class DeviceDescriptor implements UsbDeviceDescriptor
             + "  bNumConfigurations    %5d",
             bLength() & 0xff, 
             bDescriptorType() % 0xff, 
-            DumpUtils.decodeBCD(bcdUSB()),
-            bDeviceClass() & 0xff, DumpUtils.getUSBClassName(bDeviceClass()),
+            DescriptorUtils.decodeBCD(bcdUSB()),
+            bDeviceClass() & 0xff, DescriptorUtils.getUSBClassName(bDeviceClass()),
             bDeviceSubClass() & 0xff, 
             bDeviceProtocol() & 0xff,
             bMaxPacketSize0() & 0xff, 
             idVendor() & 0xffff, 
             idProduct() & 0xffff,
-            DumpUtils.decodeBCD(bcdDevice()), 
+            DescriptorUtils.decodeBCD(bcdDevice()), 
             iManufacturer & 0xff, sManufacturer,
             iProduct & 0xff, sProduct, 
             iSerialNumber & 0xff, sSerialNumber,

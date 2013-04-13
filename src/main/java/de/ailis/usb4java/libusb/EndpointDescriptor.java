@@ -18,7 +18,7 @@ import javax.usb.UsbEndpointDescriptor;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import de.ailis.usb4java.utils.DumpUtils;
+import de.ailis.usb4java.utils.DescriptorUtils;
 
 /**
  * A structure representing the standard USB endpoint descriptor.
@@ -126,7 +126,7 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
             wMaxPacketSize() & 0xffff, 
             bInterval() & 0xff, 
             extraLength(),
-            DumpUtils.toHexDump(extra()).replaceAll("(?m)^", "    "));
+            DescriptorUtils.dump(extra()).replaceAll("(?m)^", "    "));
     }
 
     @Override

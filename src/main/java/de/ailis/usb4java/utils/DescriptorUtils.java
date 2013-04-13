@@ -17,11 +17,11 @@ import javax.usb.UsbInterfaceDescriptor;
 import de.ailis.usb4java.libusb.LibUSB;
 
 /**
- * Utility functions used for descriptor dumps.
+ * Utility methods used for descriptor dumps.
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class DumpUtils
+public final class DescriptorUtils
 {
     /** Mapping from USB class id to USB class name. */
     private static final Map<Integer, String> CLASS_NAMES =
@@ -53,7 +53,7 @@ public final class DumpUtils
     /**
      * Private constructor to prevent instantiation.
      */
-    private DumpUtils()
+    private DescriptorUtils()
     {
         // Empty
     }
@@ -86,13 +86,13 @@ public final class DumpUtils
     }
 
     /**
-     * Returns a hex dump of the specified byte buffer.
+     * Dumps the specified byte buffer into a hex string and returns it.
      * 
      * @param bytes
      *            The bytes to dump.
      * @return The hex dump.
      */
-    public static String toHexDump(final ByteBuffer bytes)
+    public static String dump(final ByteBuffer bytes)
     {
         final int columns = 16;
         bytes.rewind();
