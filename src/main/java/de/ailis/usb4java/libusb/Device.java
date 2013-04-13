@@ -37,7 +37,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public final class Device
 {
     /** The native pointer to the device structure. */
-    private long pointer;
+    private long devicePointer;
 
     /**
      * Package-private constructor to prevent manual instantiation. Devices are
@@ -55,13 +55,13 @@ public final class Device
      */
     public long getPointer()
     {
-        return this.pointer;
+        return this.devicePointer;
     }
         
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.pointer).toHashCode();
+        return new HashCodeBuilder().append(this.devicePointer).toHashCode();
     }
 
     @Override
@@ -70,12 +70,12 @@ public final class Device
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         final Device other = (Device) obj;
-        return this.pointer == other.pointer;
+        return this.devicePointer == other.devicePointer;
     }
 
     @Override
     public String toString()
     {
-        return String.format("libusb device 0x%x", this.pointer);
+        return String.format("libusb device 0x%x", this.devicePointer);
     }
 }

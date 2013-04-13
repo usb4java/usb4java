@@ -27,7 +27,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public final class DeviceHandle
 {
     /** The native pointer to the device handle structure. */
-    private long pointer;
+    private long handlePointer;
 
     /**
      * Constructs a new device handle. Must be passed to
@@ -46,13 +46,13 @@ public final class DeviceHandle
      */
     public long getPointer()
     {
-        return this.pointer;
+        return this.handlePointer;
     }
 
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.pointer).toHashCode();
+        return new HashCodeBuilder().append(this.handlePointer).toHashCode();
     }
 
     @Override
@@ -61,12 +61,12 @@ public final class DeviceHandle
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         final DeviceHandle other = (DeviceHandle) obj;
-        return this.pointer != other.pointer;
+        return this.handlePointer != other.handlePointer;
     }
 
     @Override
     public String toString()
     {
-        return String.format("libusb handle 0x%x", this.pointer);
+        return String.format("libusb handle 0x%x", this.handlePointer);
     }
 }

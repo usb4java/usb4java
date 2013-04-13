@@ -36,7 +36,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public final class Context
 {
     /** The native pointer to the context structure. */
-    private long pointer;
+    private long contextPointer;
     
     /**
      * Constructs a new libusb context. Must be passed to
@@ -54,13 +54,13 @@ public final class Context
      */
     public long getPointer()
     {
-        return this.pointer;
+        return this.contextPointer;
     }
         
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.pointer).toHashCode();
+        return new HashCodeBuilder().append(this.contextPointer).toHashCode();
     }
     
     @Override
@@ -69,6 +69,6 @@ public final class Context
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         final Context other = (Context) obj;
-        return this.pointer == other.pointer;
+        return this.contextPointer == other.contextPointer;
     }    
 }
