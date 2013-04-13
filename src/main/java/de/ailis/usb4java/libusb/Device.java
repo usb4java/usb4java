@@ -49,9 +49,9 @@ public final class Device
     }
     
     /**
-     * Returns the native pointer.
+     * Returns the native pointer to the device structure.
      * 
-     * @return The native pointer.
+     * @return The native pointer to the device structure.
      */
     public long getPointer()
     {

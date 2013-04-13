@@ -40,9 +40,9 @@ public final class DeviceHandle
     }
 
     /**
-     * Returns the native pointer.
+     * Returns the native pointer to the device handle structure.
      * 
-     * @return The native pointer.
+     * @return The native pointer to the device handle structure.
      */
     public long getPointer()
     {

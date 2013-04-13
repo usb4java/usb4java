@@ -48,9 +48,9 @@ public final class Context
     }
 
     /**
-     * Returns the native pointer.
+     * Returns the native pointer to the context structure.
      * 
-     * @return The native pointer.
+     * @return The native pointer to the context structure.
      */
     public long getPointer()
     {
