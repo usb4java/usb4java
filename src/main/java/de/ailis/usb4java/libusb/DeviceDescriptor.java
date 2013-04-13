@@ -32,7 +32,16 @@ public final class DeviceDescriptor implements UsbDeviceDescriptor
 {
     /** The native data of the descriptor structure. */
     private ByteBuffer data;
-
+    
+    /**
+     * Constructs a new device descriptor which can be passed to the
+     * {@link LibUSB#getDeviceDescriptor(Device, DeviceDescriptor)} method.
+     */
+    public DeviceDescriptor()
+    {
+        // Empty 
+    }
+    
     /**
      * Returns the native data of the descriptor structure.
      * 
@@ -130,14 +139,21 @@ public final class DeviceDescriptor implements UsbDeviceDescriptor
             + "  iManufacturer         %5d %s%n"
             + "  iProduct              %5d %s%n"
             + "  iSerialNumber         %5d %s%n"
-            + "  bNumConfigurations    %5d%n",
-            bLength(), bDescriptorType(), DumpUtils.decodeBCD(bcdUSB()),
-            bDeviceClass(), DumpUtils.getUSBClassName(bDeviceClass()),
-            bDeviceSubClass(), bDeviceProtocol(),
-            bMaxPacketSize0(), idVendor(), idProduct(),
-            DumpUtils.decodeBCD(bcdDevice()), iManufacturer, sManufacturer,
-            iProduct, sProduct, iSerialNumber, sSerialNumber,
-            bNumConfigurations());
+            + "  bNumConfigurations    %5d",
+            bLength() & 0xff, 
+            bDescriptorType() % 0xff, 
+            DumpUtils.decodeBCD(bcdUSB()),
+            bDeviceClass() & 0xff, DumpUtils.getUSBClassName(bDeviceClass()),
+            bDeviceSubClass() & 0xff, 
+            bDeviceProtocol() & 0xff,
+            bMaxPacketSize0() & 0xff, 
+            idVendor() & 0xffff, 
+            idProduct() & 0xffff,
+            DumpUtils.decodeBCD(bcdDevice()), 
+            iManufacturer & 0xff, sManufacturer,
+            iProduct & 0xff, sProduct, 
+            iSerialNumber & 0xff, sSerialNumber,
+            bNumConfigurations() & 0xff);
     }
 
     @Override

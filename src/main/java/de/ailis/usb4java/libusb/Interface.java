@@ -24,6 +24,15 @@ public final class Interface
     private long pointer;
 
     /**
+     * Private constructor to prevent manual instantiation. Interfaces 
+     * area always created by JNI.
+     */
+    private Interface()
+    {
+        // Empty
+    }
+    
+    /**
      * Returns the native pointer.
      * 
      * @return The native pointer.

@@ -28,6 +28,14 @@ public final class Transfer
     private long pointer;
 
     /**
+     * Constructs a new transfer structure.
+     */
+    public Transfer()
+    {
+        // Empty
+    }
+
+    /**
      * Returns the native pointer.
      * 
      * @return The native pointer.

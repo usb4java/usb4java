@@ -37,6 +37,15 @@ public final class Context
 {
     /** The native pointer to the context structure. */
     private long pointer;
+    
+    /**
+     * Constructs a new libusb context. Must be passed to
+     * {@link LibUSB#init(Context)} before passing it to any other method.
+     */
+    public Context()
+    {
+        // Empty 
+    }
 
     /**
      * Returns the native pointer.

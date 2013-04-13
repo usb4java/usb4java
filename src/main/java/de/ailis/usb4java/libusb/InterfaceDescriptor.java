@@ -34,6 +34,15 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
     private long pointer;
 
     /**
+     * Private constructor to prevent manual instantiation. Interface 
+     * descriptors area always created by JNI.
+     */
+    private InterfaceDescriptor()
+    {
+        // Empty
+    }
+    
+    /**
      * Returns the native pointer.
      * 
      * @return The native pointer.
@@ -131,10 +140,16 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
             + "  extralen       %10d%n"
             + "  extra:%n"
             + "%s",
-            bLength(), bDescriptorType(), bInterfaceNumber(),
-            bAlternateSetting(), bNumEndpoints(), bInterfaceClass(),
-            DumpUtils.getUSBClassName(bInterfaceClass()), bInterfaceSubClass(),
-            bInterfaceProtocol(), iInterface(), sInterface, extraLength(),
+            bLength() & 0xff, 
+            bDescriptorType() & 0xff, 
+            bInterfaceNumber() & 0xff,
+            bAlternateSetting() & 0xff, 
+            bNumEndpoints() & 0xff, 
+            bInterfaceClass() & 0xff, DumpUtils.getUSBClassName(bInterfaceClass()), 
+            bInterfaceSubClass() & 0xff,
+            bInterfaceProtocol() & 0xff, 
+            iInterface() & 0xff, sInterface, 
+            extraLength(),
             DumpUtils.toHexDump(extra()).replaceAll("(?m)^", "    ")));
         if (extraLength() != 0) return builder.toString();
         for (final EndpointDescriptor edesc: endpoint())

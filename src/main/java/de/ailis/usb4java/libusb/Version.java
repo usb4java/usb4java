@@ -24,6 +24,15 @@ public final class Version implements Comparable<Version>
 {
     /** The native pointer to the version structure. */
     private long pointer;
+    
+    /**
+     * Private constructor to prevent manual instantiation. An instance
+     * is only returned by the JNI method {@link LibUSB#getVersion()}.
+     */
+    private Version()
+    {
+        // Empty
+    }
 
     /**
      * Returns the native pointer.

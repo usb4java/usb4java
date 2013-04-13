@@ -40,6 +40,15 @@ public final class Device
     private long pointer;
 
     /**
+     * Private constructor to prevent manual instantiation. Devices are
+     * always created by JNI.
+     */
+    private Device()
+    {
+        // Empty
+    }
+    
+    /**
      * Returns the native pointer.
      * 
      * @return The native pointer.

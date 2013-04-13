@@ -30,6 +30,15 @@ public final class DeviceList implements Iterable<Device>
     private int size;
 
     /**
+     * Constructs a new device list. Must be passed to
+     * {@link LibUSB#getDeviceList(Context, DeviceList)} before using it.
+     */
+    public DeviceList()
+    {
+        // Empty
+    }       
+
+    /**
      * Returns the native pointer.
      * 
      * @return The native pointer.

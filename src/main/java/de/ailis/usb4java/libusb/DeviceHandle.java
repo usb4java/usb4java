@@ -30,6 +30,16 @@ public final class DeviceHandle
     private long pointer;
 
     /**
+     * Constructs a new device handle. Must be passed to
+     * {@link LibUSB#open(Device, DeviceHandle)} before passing it to any
+     * other method.
+     */
+    public DeviceHandle()
+    {
+        // Empty
+    }
+
+    /**
      * Returns the native pointer.
      * 
      * @return The native pointer.
@@ -38,7 +48,7 @@ public final class DeviceHandle
     {
         return this.pointer;
     }
-        
+
     @Override
     public int hashCode()
     {
@@ -54,7 +64,7 @@ public final class DeviceHandle
         final DeviceHandle other = (DeviceHandle) obj;
         return this.pointer != other.pointer;
     }
-    
+
     @Override
     public String toString()
     {

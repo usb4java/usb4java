@@ -34,6 +34,15 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
     private long pointer;
 
     /**
+     * Private constructor to prevent manual instantiation. Endpoint 
+     * descriptors area always created by JNI.
+     */
+    private EndpointDescriptor()
+    {
+        // Empty
+    }
+    
+    /**
      * Returns the native pointer.
      * 
      * @return The native pointer.
@@ -110,8 +119,13 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
             + "  extralen     %10d%n"
             + "  extra:%n"
             + "%s",
-            bLength(), bDescriptorType(), bEndpointAddress(), bmAttributes(),
-            wMaxPacketSize(), bInterval(), extraLength(),
+            bLength() & 0xff, 
+            bDescriptorType() & 0xff, 
+            bEndpointAddress() & 0xff, 
+            bmAttributes() & 0xff,
+            wMaxPacketSize() & 0xffff, 
+            bInterval() & 0xff, 
+            extraLength(),
             DumpUtils.toHexDump(extra()).replaceAll("(?m)^", "    "));
     }
 
