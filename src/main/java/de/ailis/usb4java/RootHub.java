@@ -217,17 +217,17 @@ final class RootHub implements UsbHub,
     {
         return this.ports.getNumberOfPorts();
     }
+    
+    @Override
+    public Port getUsbPort(final byte number)
+    {
+        return this.ports.getUsbPort(number);
+    }
 
     @Override
     public List<Port> getUsbPorts()
     {
         return this.ports.getUsbPorts();
-    }
-
-    @Override
-    public Port getUsbPort(final byte number)
-    {
-        return this.ports.getUsbPort(number);
     }
 
     @Override
