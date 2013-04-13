@@ -26,11 +26,10 @@ import de.ailis.usb4java.support.UsbServicesListenerList;
 public final class Services implements UsbServices
 {
     /** The implementation description. */
-    private static final String IMP_DESCRIPTION =
-        "usb4java JSR-80 implementation";
+    private static final String IMP_DESCRIPTION = "usb4java";
 
     /** The implementation version. */
-    private static final String IMP_VERSION = "0.5.1";
+    private static final String IMP_VERSION = "1.0.0";
 
     /** The API version. */
     private static final String API_VERSION = "1.0.2";
@@ -40,10 +39,10 @@ public final class Services implements UsbServices
         new UsbServicesListenerList();
 
     /** The virtual USB root hub. */
-    private final VirtualRootHub rootHub;
+    private final RootHub rootHub;
 
     /** The USB device scanner. */
-    private final UsbDeviceManager deviceScanner;
+    private final DeviceManager deviceScanner;
 
     /** If devices should be scanned by hierarchy. */
     private final Config config;
@@ -60,8 +59,8 @@ public final class Services implements UsbServices
     {
         this.config = new Config(UsbHostManager.getProperties());
         Loader.load();
-        this.rootHub = new VirtualRootHub();
-        this.deviceScanner = new UsbDeviceManager(this.rootHub);
+        this.rootHub = new RootHub();
+        this.deviceScanner = new DeviceManager(this.rootHub);
         this.deviceScanner.start();
     }
 
@@ -108,7 +107,7 @@ public final class Services implements UsbServices
      * @param device
      *            The new attached device.
      */
-    public void usbDeviceAttached(final UsbDevice device)
+    void usbDeviceAttached(final UsbDevice device)
     {
         this.listeners.usbDeviceAttached(new UsbServicesEvent(this, device));
     }
@@ -119,7 +118,7 @@ public final class Services implements UsbServices
      * @param device
      *            The detached device.
      */
-    public void usbDeviceDetached(final UsbDevice device)
+    void usbDeviceDetached(final UsbDevice device)
     {
         this.listeners.usbDeviceDetached(new UsbServicesEvent(this, device));
     }
@@ -129,7 +128,7 @@ public final class Services implements UsbServices
      *
      * @return The configuration.
      */
-    public Config getConfig()
+    Config getConfig()
     {
         return this.config;
     }

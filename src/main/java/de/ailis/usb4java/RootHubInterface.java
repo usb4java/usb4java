@@ -23,7 +23,7 @@ import de.ailis.usb4java.descriptors.SimpleUsbInterfaceDescriptor;
  *
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class VirtualRootHubInterface implements UsbInterface
+final class RootHubInterface implements UsbInterface
 {
     /** The list of endpoints. */
     private final List<UsbEndpoint> endpoints = new ArrayList<UsbEndpoint>(0);
@@ -53,7 +53,7 @@ public final class VirtualRootHubInterface implements UsbInterface
      * @param configuration
      *            The USB configuration.
      */
-    public VirtualRootHubInterface(final UsbConfiguration configuration)
+    RootHubInterface(final UsbConfiguration configuration)
     {
         this.configuration = configuration;
     }

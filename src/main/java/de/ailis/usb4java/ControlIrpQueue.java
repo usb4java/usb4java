@@ -23,7 +23,7 @@ import de.ailis.usb4java.support.UsbDeviceListenerList;
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class ControlIrpQueue extends AbstractIrpQueue<UsbControlIrp>
+final class ControlIrpQueue extends AbstractIrpQueue<UsbControlIrp>
 {
     /** The USB device listener list. */
     private final UsbDeviceListenerList listeners;
@@ -36,7 +36,7 @@ public final class ControlIrpQueue extends AbstractIrpQueue<UsbControlIrp>
      * @param listeners
      *            The USB device listener list.
      */
-    public ControlIrpQueue(final Usb4JavaDevice device,
+    ControlIrpQueue(final AbstractDevice device,
         final UsbDeviceListenerList listeners)
     {
         super(device);

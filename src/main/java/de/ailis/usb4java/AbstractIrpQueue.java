@@ -21,7 +21,7 @@ import de.ailis.usb4java.support.Config;
  * @param <T>
  *            The type of IRPs this queue holds.
  */
-public abstract class AbstractIrpQueue<T extends UsbIrp>
+abstract class AbstractIrpQueue<T extends UsbIrp>
 {
     /** The queued packets. */
     private final Queue<T> irps = new ConcurrentLinkedQueue<T>();
@@ -30,7 +30,7 @@ public abstract class AbstractIrpQueue<T extends UsbIrp>
     private Thread processor;
 
     /** The USB device. */
-    private final Usb4JavaDevice device;
+    private final AbstractDevice device;
 
     /**
      * Constructor.
@@ -38,7 +38,7 @@ public abstract class AbstractIrpQueue<T extends UsbIrp>
      * @param device
      *            The USB device. Must not be null.
      */
-    public AbstractIrpQueue(final Usb4JavaDevice device)
+    AbstractIrpQueue(final AbstractDevice device)
     {
         if (device == null)
             throw new IllegalArgumentException("device must be set");
@@ -189,7 +189,7 @@ public abstract class AbstractIrpQueue<T extends UsbIrp>
      * 
      * @return The USB device. Never null.
      */
-    protected final Usb4JavaDevice getDevice()
+    protected final AbstractDevice getDevice()
     {
         return this.device;
     }

@@ -19,7 +19,7 @@ import javax.usb.UsbPort;
  * @param <D>
  *            The USB device type.
  */
-public interface UsbPorts<P extends UsbPort, D extends UsbDevice>
+interface UsbPorts<P extends UsbPort, D extends UsbDevice>
 {
     /**
      * Returns the number of ports.

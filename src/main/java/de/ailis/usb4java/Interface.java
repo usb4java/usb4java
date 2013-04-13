@@ -28,17 +28,17 @@ import de.ailis.usb4java.libusb.InterfaceDescriptor;
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class Usb4JavaInterface implements UsbInterface
+final class Interface implements UsbInterface
 {
     /** The configuration this interface belongs to. */
-    private final Usb4JavaConfiguration configuration;
+    private final Configuration configuration;
 
     /** The interface descriptor. */
     private final UsbInterfaceDescriptor descriptor;
 
     /** The endpoints of this interface. */
-    private final Map<Byte, Usb4JavaEndpoint> endpoints =
-        new HashMap<Byte, Usb4JavaEndpoint>();
+    private final Map<Byte, Endpoint> endpoints =
+        new HashMap<Byte, Endpoint>();
 
     /**
      * Constructor.
@@ -48,15 +48,15 @@ public final class Usb4JavaInterface implements UsbInterface
      * @param descriptor
      *            The libusb interface descriptor.
      */
-    Usb4JavaInterface(final Usb4JavaConfiguration configuration,
+    Interface(final Configuration configuration,
         final InterfaceDescriptor descriptor)
     {
         this.configuration = configuration;
         this.descriptor = new SimpleUsbInterfaceDescriptor(descriptor);
         for (EndpointDescriptor endpointDescriptor: descriptor.endpoint())
         {
-            final Usb4JavaEndpoint endpoint =
-                new Usb4JavaEndpoint(this, endpointDescriptor);
+            final Endpoint endpoint =
+                new Endpoint(this, endpointDescriptor);
             this.endpoints.put(endpointDescriptor.bEndpointAddress(), endpoint);
         }
     }
@@ -98,7 +98,7 @@ public final class Usb4JavaInterface implements UsbInterface
     {
         checkActive();
         checkConnected();
-        final Usb4JavaDevice device = this.configuration.getUsbDevice();
+        final AbstractDevice device = this.configuration.getUsbDevice();
         device.claimInterface(this.descriptor.bInterfaceNumber(),
             policy != null && policy.forceClaim(this));
         this.configuration.setUsbInterface(
@@ -145,7 +145,7 @@ public final class Usb4JavaInterface implements UsbInterface
     }
 
     @Override
-    public Usb4JavaInterface getActiveSetting()
+    public Interface getActiveSetting()
     {
         checkActive();
         return this.configuration.getUsbInterface(this.descriptor
@@ -153,7 +153,7 @@ public final class Usb4JavaInterface implements UsbInterface
     }
 
     @Override
-    public Usb4JavaInterface getSetting(final byte number)
+    public Interface getSetting(final byte number)
     {
         return (this.configuration).getSettings(
             this.descriptor.bInterfaceNumber()).get(number & 0xff);
@@ -167,22 +167,22 @@ public final class Usb4JavaInterface implements UsbInterface
     }
 
     @Override
-    public List<Usb4JavaInterface> getSettings()
+    public List<Interface> getSettings()
     {
-        return Collections.unmodifiableList(new ArrayList<Usb4JavaInterface>(
+        return Collections.unmodifiableList(new ArrayList<Interface>(
             this.configuration.getSettings(
                 this.descriptor.bInterfaceNumber()).values()));
     }
 
     @Override
-    public List<Usb4JavaEndpoint> getUsbEndpoints()
+    public List<Endpoint> getUsbEndpoints()
     {
-        return Collections.unmodifiableList(new ArrayList<Usb4JavaEndpoint>(
+        return Collections.unmodifiableList(new ArrayList<Endpoint>(
             this.endpoints.values()));
     }
 
     @Override
-    public Usb4JavaEndpoint getUsbEndpoint(final byte address)
+    public Endpoint getUsbEndpoint(final byte address)
     {
         return this.endpoints.get(address);
     }
@@ -194,7 +194,7 @@ public final class Usb4JavaInterface implements UsbInterface
     }
 
     @Override
-    public Usb4JavaConfiguration getUsbConfiguration()
+    public Configuration getUsbConfiguration()
     {
         return this.configuration;
     }

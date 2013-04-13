@@ -21,7 +21,7 @@ import de.ailis.usb4java.descriptors.SimpleUsbConfigurationDescriptor;
  *
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class VirtualRootHubConfiguration implements UsbConfiguration
+final class RootHubConfiguration implements UsbConfiguration
 {
     /** The virtual interfaces. */
     private final List<UsbInterface> interfaces =
@@ -49,10 +49,10 @@ public final class VirtualRootHubConfiguration implements UsbConfiguration
      * @param device
      *            The device this configuration belongs to.
      */
-    VirtualRootHubConfiguration(final UsbDevice device)
+    RootHubConfiguration(final UsbDevice device)
     {
         this.device = device;
-        this.interfaces.add(new VirtualRootHubInterface(this));
+        this.interfaces.add(new RootHubInterface(this));
     }
 
     @Override

@@ -18,16 +18,16 @@ import de.ailis.usb4java.libusb.EndpointDescriptor;
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class Usb4JavaEndpoint implements UsbEndpoint
+final class Endpoint implements UsbEndpoint
 {
     /** The interface this endpoint belongs to. */
-    private final Usb4JavaInterface iface;
+    private final Interface iface;
 
     /** The endpoint descriptor. */
     private final UsbEndpointDescriptor descriptor;
 
     /** The USB pipe for this endpoint. */
-    private final Usb4JavaPipe pipe;
+    private final Pipe pipe;
     
     /**
      * Constructor.
@@ -37,16 +37,16 @@ public final class Usb4JavaEndpoint implements UsbEndpoint
      * @param descriptor
      *            The libusb endpoint descriptor.
      */
-    Usb4JavaEndpoint(final Usb4JavaInterface iface,
+    Endpoint(final Interface iface,
         final EndpointDescriptor descriptor)
     {
         this.iface = iface;
         this.descriptor = new SimpleUsbEndpointDescriptor(descriptor);
-        this.pipe = new Usb4JavaPipe(this);
+        this.pipe = new Pipe(this);
     }
 
     @Override
-    public Usb4JavaInterface getUsbInterface()
+    public Interface getUsbInterface()
     {
         return this.iface;
     }

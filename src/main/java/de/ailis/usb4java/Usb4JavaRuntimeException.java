@@ -12,7 +12,7 @@ import de.ailis.usb4java.libusb.LibUSB;
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class Usb4JavaRuntimeException extends RuntimeException
+final class Usb4JavaRuntimeException extends RuntimeException
 {
     /** Serial version UID. */
     private static final long serialVersionUID = 1L;
@@ -28,7 +28,7 @@ public final class Usb4JavaRuntimeException extends RuntimeException
      * @param errorCode
      *            The error code.
      */
-    public Usb4JavaRuntimeException(final String message, final int errorCode)
+    Usb4JavaRuntimeException(final String message, final int errorCode)
     {
         super(String.format("USB error %d: %s: %s", -errorCode, message,
             LibUSB.errorName(errorCode)));
@@ -43,7 +43,7 @@ public final class Usb4JavaRuntimeException extends RuntimeException
      * @param cause
      *            The root cause.
      */
-    public Usb4JavaRuntimeException(final String message, final Throwable cause)
+    Usb4JavaRuntimeException(final String message, final Throwable cause)
     {
         super("USB error: " + message, cause);
         this.errorCode = 0;

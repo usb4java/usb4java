@@ -25,10 +25,10 @@ import de.ailis.usb4java.libusb.LibUsbException;
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
+final class IrpQueue extends AbstractIrpQueue<UsbIrp>
 {
     /** The USB pipe. */
-    private final Usb4JavaPipe pipe;
+    private final Pipe pipe;
 
     /**
      * Constructor.
@@ -36,7 +36,7 @@ public final class IrpQueue extends AbstractIrpQueue<UsbIrp>
      * @param pipe
      *            The USB pipe
      */
-    public IrpQueue(final Usb4JavaPipe pipe)
+    IrpQueue(final Pipe pipe)
     {
         super(pipe.getDevice());
         this.pipe = pipe;

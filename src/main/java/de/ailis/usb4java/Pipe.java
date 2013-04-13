@@ -30,10 +30,10 @@ import de.ailis.usb4java.support.UsbPipeListenerList;
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class Usb4JavaPipe implements UsbPipe
+final class Pipe implements UsbPipe
 {
     /** The endpoint this pipe belongs to. */
-    private final Usb4JavaEndpoint endpoint;
+    private final Endpoint endpoint;
 
     /** The USB pipe listeners. */
     private final UsbPipeListenerList listeners = new UsbPipeListenerList();
@@ -50,7 +50,7 @@ public final class Usb4JavaPipe implements UsbPipe
      * @param endpoint
      *            The endpoint this pipe belongs to.
      */
-    Usb4JavaPipe(final Usb4JavaEndpoint endpoint)
+    Pipe(final Endpoint endpoint)
     {
         this.endpoint = endpoint;
         this.queue = new IrpQueue(this);
@@ -61,7 +61,7 @@ public final class Usb4JavaPipe implements UsbPipe
      * 
      * @return The USB device.
      */
-    public Usb4JavaDevice getDevice()
+    public AbstractDevice getDevice()
     {
         return this.endpoint.getUsbInterface().getUsbConfiguration()
             .getUsbDevice();
@@ -151,7 +151,7 @@ public final class Usb4JavaPipe implements UsbPipe
     }
 
     @Override
-    public Usb4JavaEndpoint getUsbEndpoint()
+    public Endpoint getUsbEndpoint()
     {
         return this.endpoint;
     }

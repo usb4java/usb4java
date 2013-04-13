@@ -27,14 +27,14 @@ import de.ailis.usb4java.support.UsbDeviceListenerList;
  *
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class VirtualRootHub implements UsbHub,
-    UsbPorts<Usb4JavaPort, Usb4JavaDevice>
+final class RootHub implements UsbHub,
+    UsbPorts<Port, AbstractDevice>
 {
     /** The manufacturer string. */
     private static final String MANUFACTURER = "usb4java";
 
     /** The manufacturer string. */
-    private static final String PRODUCT = "virtual root hub";
+    private static final String PRODUCT = "root hub";
 
     /** The serial number. */
     private static final String SERIAL_NUMBER = "1.0.0";
@@ -65,14 +65,14 @@ public final class VirtualRootHub implements UsbHub,
     private final UsbDeviceListenerList listeners = new UsbDeviceListenerList();
 
     /** The hub ports. */
-    private final Usb4JavaPorts ports = new Usb4JavaPorts(this);
+    private final Ports ports = new Ports(this);
 
     /**
      * Constructor.
      */
-    public VirtualRootHub()
+    RootHub()
     {
-        this.configurations.add(new VirtualRootHubConfiguration(this));
+        this.configurations.add(new RootHubConfiguration(this));
     }
 
     @Override
@@ -220,19 +220,19 @@ public final class VirtualRootHub implements UsbHub,
     }
 
     @Override
-    public List<Usb4JavaPort> getUsbPorts()
+    public List<Port> getUsbPorts()
     {
         return this.ports.getUsbPorts();
     }
 
     @Override
-    public Usb4JavaPort getUsbPort(final byte number)
+    public Port getUsbPort(final byte number)
     {
         return this.ports.getUsbPort(number);
     }
 
     @Override
-    public List<Usb4JavaDevice> getAttachedUsbDevices()
+    public List<AbstractDevice> getAttachedUsbDevices()
     {
         return this.ports.getAttachedUsbDevices();
     }
@@ -244,13 +244,13 @@ public final class VirtualRootHub implements UsbHub,
     }
 
     @Override
-    public void connectUsbDevice(final Usb4JavaDevice device)
+    public void connectUsbDevice(final AbstractDevice device)
     {
         this.ports.connectUsbDevice(device);
     }
 
     @Override
-    public void disconnectUsbDevice(final Usb4JavaDevice device)
+    public void disconnectUsbDevice(final AbstractDevice device)
     {
         this.ports.disconnectUsbDevice(device);
     }

@@ -13,7 +13,7 @@ import de.ailis.usb4java.libusb.LibUsbException;
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
-final class Usb4JavaNonHub extends Usb4JavaDevice
+class NonHub extends AbstractDevice
 {
     /**
      * Constructs a new non-hub USB device.
@@ -34,7 +34,7 @@ final class Usb4JavaNonHub extends Usb4JavaDevice
      * @throws LibUsbException
      *             When device configuration could not be read.
      */
-    Usb4JavaNonHub(final UsbDeviceManager manager, final DeviceId id,
+    NonHub(final DeviceManager manager, final DeviceId id,
         final DeviceId parentId, final int speed, final Device device)
         throws LibUsbException
     {
@@ -53,7 +53,7 @@ final class Usb4JavaNonHub extends Usb4JavaDevice
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
-        final Usb4JavaNonHub other = (Usb4JavaNonHub) obj;
+        final NonHub other = (NonHub) obj;
         return getId().equals(other.getId());
     }
 

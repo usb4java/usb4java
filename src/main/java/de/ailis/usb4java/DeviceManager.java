@@ -28,17 +28,17 @@ import de.ailis.usb4java.libusb.LibUsbException;
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class UsbDeviceManager
+final class DeviceManager
 {
     /** The scan interval in milliseconds. */
     private static final int DEFAULT_SCAN_INTERVAL = 500;
 
     /** The logger. */
-    private static final Logger LOG = Logger.getLogger(UsbDeviceManager.class
+    private static final Logger LOG = Logger.getLogger(DeviceManager.class
         .getName());
 
     /** The virtual USB root hub. */
-    private final VirtualRootHub rootHub;
+    private final RootHub rootHub;
 
     /** The libusb context. */
     private final Context context;
@@ -47,8 +47,8 @@ public final class UsbDeviceManager
     private boolean scanned = false;
 
     /** The currently connected devices. */
-    private final Map<DeviceId, Usb4JavaDevice> devices = Collections
-        .synchronizedMap(new HashMap<DeviceId, Usb4JavaDevice>());
+    private final Map<DeviceId, AbstractDevice> devices = Collections
+        .synchronizedMap(new HashMap<DeviceId, AbstractDevice>());
 
     /**
      * Constructs a new device manager.
@@ -58,7 +58,7 @@ public final class UsbDeviceManager
      * @throws UsbException
      *             When USB initialization fails.
      */
-    public UsbDeviceManager(final VirtualRootHub rootHub) throws UsbException
+    DeviceManager(final RootHub rootHub) throws UsbException
     {
         if (rootHub == null)
             throw new IllegalArgumentException("rootHub must be set");
@@ -111,14 +111,14 @@ public final class UsbDeviceManager
      * 
      * @return The connected devices.
      */
-    private Set<Usb4JavaDevice> getConnectedDevices()
+    private Set<AbstractDevice> getConnectedDevices()
     {
         final DeviceList devices = new DeviceList();
         final int result = LibUSB.getDeviceList(this.context, devices);
         if (result < 0)
             throw new Usb4JavaRuntimeException("Unable to get USB device list",
                 result);
-        final Set<Usb4JavaDevice> found = new HashSet<Usb4JavaDevice>();
+        final Set<AbstractDevice> found = new HashSet<AbstractDevice>();
         try
         {
             try
@@ -128,7 +128,7 @@ public final class UsbDeviceManager
                     final DeviceId id = createId(libUsbDevice);
                     if (id == null) continue;
 
-                    Usb4JavaDevice device = this.devices.get(id);
+                    AbstractDevice device = this.devices.get(id);
                     if (device == null)
                     {
                         final Device parent = LibUSB.getParent(libUsbDevice);
@@ -138,12 +138,12 @@ public final class UsbDeviceManager
                             .bDeviceClass() == LibUSB.CLASS_HUB;
                         if (isHub)
                         {
-                            device = new Usb4JavaHub(this, id, parentId,
+                            device = new Hub(this, id, parentId,
                                 speed, libUsbDevice);
                         }
                         else
                         {
-                            device = new Usb4JavaNonHub(this, id, 
+                            device = new NonHub(this, id, 
                                 parentId, speed, libUsbDevice);
                         }
                     }
@@ -171,19 +171,19 @@ public final class UsbDeviceManager
      * @param current
      *            The currently connected devices.
      */
-    private void processRemovedDevices(final Set<Usb4JavaDevice> current)
+    private void processRemovedDevices(final Set<AbstractDevice> current)
     {
-        final Iterator<Usb4JavaDevice> it = this.devices.values().iterator();
+        final Iterator<AbstractDevice> it = this.devices.values().iterator();
         while (it.hasNext())
         {
-            final Usb4JavaDevice device = it.next();
+            final AbstractDevice device = it.next();
             if (!current.contains(device))
             {
-                final Usb4JavaDevice parent = this.devices.get(device.getId());
+                final AbstractDevice parent = this.devices.get(device.getId());
                 if (parent == null)
                     this.rootHub.disconnectUsbDevice(device);
                 else if (parent.isUsbHub())
-                    ((Usb4JavaHub) parent).disconnectUsbDevice(device);
+                    ((Hub) parent).disconnectUsbDevice(device);
                 it.remove();
             }
         }
@@ -197,9 +197,9 @@ public final class UsbDeviceManager
      * @param current
      *            The currently connected devices.
      */
-    private void processNewDevices(final Set<Usb4JavaDevice> current)
+    private void processNewDevices(final Set<AbstractDevice> current)
     {
-        for (Usb4JavaDevice device: current)
+        for (AbstractDevice device: current)
         {
             if (!this.devices.containsValue(device))
             {
@@ -208,10 +208,10 @@ public final class UsbDeviceManager
                     this.rootHub.connectUsbDevice(device);
                 else
                 {
-                    final Usb4JavaDevice parent = this.devices.get(parentId);
+                    final AbstractDevice parent = this.devices.get(parentId);
                     if (parent != null && parent.isUsbHub())
                     {
-                        ((Usb4JavaHub) parent).connectUsbDevice(device);
+                        ((Hub) parent).connectUsbDevice(device);
                     }
                 }
                 this.devices.put(device.getId(), device);
@@ -224,7 +224,7 @@ public final class UsbDeviceManager
      */
     public void scan()
     {
-        final Set<Usb4JavaDevice> found = getConnectedDevices();
+        final Set<AbstractDevice> found = getConnectedDevices();
         processRemovedDevices(found);
         processNewDevices(found);
     }

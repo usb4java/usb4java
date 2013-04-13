@@ -41,10 +41,10 @@ import de.ailis.usb4java.support.UsbDeviceListenerList;
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
-abstract class Usb4JavaDevice implements UsbDevice
+abstract class AbstractDevice implements UsbDevice
 {
     /** The USB device manager. */
-    private final UsbDeviceManager manager;
+    private final DeviceManager manager;
 
     /** The device id. */
     private final DeviceId id;
@@ -56,11 +56,11 @@ abstract class Usb4JavaDevice implements UsbDevice
     private final int speed;
 
     /** The device configurations. */
-    private List<Usb4JavaConfiguration> configurations;
+    private List<Configuration> configurations;
 
     /** Mapping from configuration value to configuration. */
-    private Map<Byte, Usb4JavaConfiguration> configMapping =
-        new HashMap<Byte, Usb4JavaConfiguration>();
+    private Map<Byte, Configuration> configMapping =
+        new HashMap<Byte, Configuration>();
 
     /** The USB device listener list. */
     private final UsbDeviceListenerList listeners = new UsbDeviceListenerList();
@@ -103,7 +103,7 @@ abstract class Usb4JavaDevice implements UsbDevice
      * @throws LibUsbException
      *             When device configuration could not be read.
      */
-    Usb4JavaDevice(final UsbDeviceManager manager, final DeviceId id,
+    AbstractDevice(final DeviceManager manager, final DeviceId id,
         final DeviceId parentId, final int speed, final Device device)
         throws LibUsbException
     {
@@ -118,8 +118,8 @@ abstract class Usb4JavaDevice implements UsbDevice
         // Read device configurations
         final int numConfigurations =
             id.getDeviceDescriptor().bNumConfigurations() & 0xff;
-        final List<Usb4JavaConfiguration> configurations =
-            new ArrayList<Usb4JavaConfiguration>(numConfigurations);
+        final List<Configuration> configurations =
+            new ArrayList<Configuration>(numConfigurations);
         for (int i = 0; i < numConfigurations; i += 1)
         {
             final ConfigDescriptor configDescriptor = new ConfigDescriptor();
@@ -132,7 +132,7 @@ abstract class Usb4JavaDevice implements UsbDevice
             }
             try
             {
-                final Usb4JavaConfiguration config = new Usb4JavaConfiguration(
+                final Configuration config = new Configuration(
                     this, configDescriptor);
                 configurations.add(config);
                 this.configMapping.put(configDescriptor.bConfigurationValue(),
@@ -256,8 +256,8 @@ abstract class Usb4JavaDevice implements UsbDevice
         // Disconnect client devices
         if (port == null && isUsbHub())
         {
-            final Usb4JavaHub hub = (Usb4JavaHub) this;
-            for (final Usb4JavaDevice device: hub.getAttachedUsbDevices())
+            final Hub hub = (Hub) this;
+            for (final AbstractDevice device: hub.getAttachedUsbDevices())
             {
                 hub.disconnectUsbDevice(device);
             }
@@ -333,13 +333,13 @@ abstract class Usb4JavaDevice implements UsbDevice
     }
 
     @Override
-    public final List<Usb4JavaConfiguration> getUsbConfigurations()
+    public final List<Configuration> getUsbConfigurations()
     {
         return this.configurations;
     }
 
     @Override
-    public final Usb4JavaConfiguration getUsbConfiguration(final byte number)
+    public final Configuration getUsbConfiguration(final byte number)
     {
         return this.configMapping.get(number);
     }
@@ -466,7 +466,7 @@ abstract class Usb4JavaDevice implements UsbDevice
     }
 
     @Override
-    public final Usb4JavaConfiguration getActiveUsbConfiguration()
+    public final Configuration getActiveUsbConfiguration()
     {
         return getUsbConfiguration(getActiveUsbConfigurationNumber());
     }

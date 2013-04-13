@@ -17,11 +17,11 @@ import de.ailis.usb4java.libusb.LibUsbException;
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class Usb4JavaHub extends Usb4JavaDevice implements UsbHub,
-    UsbPorts<Usb4JavaPort, Usb4JavaDevice>
+final class Hub extends AbstractDevice implements UsbHub,
+    UsbPorts<Port, AbstractDevice>
 {
     /** The hub ports. */
-    private final Usb4JavaPorts ports = new Usb4JavaPorts(this);
+    private final Ports ports = new Ports(this);
 
     /**
      * Constructs a new USB hub device.
@@ -41,7 +41,7 @@ public final class Usb4JavaHub extends Usb4JavaDevice implements UsbHub,
      * @throws LibUsbException
      *             When device configuration could not be read.
      */
-    public Usb4JavaHub(final UsbDeviceManager manager, final DeviceId id,
+    Hub(final DeviceManager manager, final DeviceId id,
         final DeviceId parentId, final int speed, final Device device)
         throws LibUsbException
     {
@@ -55,19 +55,19 @@ public final class Usb4JavaHub extends Usb4JavaDevice implements UsbHub,
     }
 
     @Override
-    public List<Usb4JavaPort> getUsbPorts()
+    public List<Port> getUsbPorts()
     {
         return this.ports.getUsbPorts();
     }
 
     @Override
-    public Usb4JavaPort getUsbPort(final byte number)
+    public Port getUsbPort(final byte number)
     {
         return this.ports.getUsbPort(number);
     }
 
     @Override
-    public List<Usb4JavaDevice> getAttachedUsbDevices()
+    public List<AbstractDevice> getAttachedUsbDevices()
     {
         return this.ports.getAttachedUsbDevices();
     }
@@ -79,13 +79,13 @@ public final class Usb4JavaHub extends Usb4JavaDevice implements UsbHub,
     }
 
     @Override
-    public void connectUsbDevice(final Usb4JavaDevice device)
+    public void connectUsbDevice(final AbstractDevice device)
     {
         this.ports.connectUsbDevice(device);
     }
 
     @Override
-    public void disconnectUsbDevice(final Usb4JavaDevice device)
+    public void disconnectUsbDevice(final AbstractDevice device)
     {
         this.ports.disconnectUsbDevice(device);
     }
@@ -102,7 +102,7 @@ public final class Usb4JavaHub extends Usb4JavaDevice implements UsbHub,
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
-        final Usb4JavaDevice other = (Usb4JavaDevice) obj;
+        final AbstractDevice other = (AbstractDevice) obj;
         return getId().equals(other.getId());
     }    
 

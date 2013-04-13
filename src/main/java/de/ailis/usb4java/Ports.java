@@ -16,11 +16,11 @@ import javax.usb.UsbHub;
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class Usb4JavaPorts
-    implements UsbPorts<Usb4JavaPort, Usb4JavaDevice>
+final class Ports
+    implements UsbPorts<Port, AbstractDevice>
 {
     /** The hub ports. */
-    private final List<Usb4JavaPort> ports = new ArrayList<Usb4JavaPort>();
+    private final List<Port> ports = new ArrayList<Port>();
 
     /** The hub these ports belong to. */
     private final UsbHub hub;
@@ -31,7 +31,7 @@ public final class Usb4JavaPorts
      * @param hub
      *            The hub the port belongs to.
      */
-    public Usb4JavaPorts(final UsbHub hub)
+    Ports(final UsbHub hub)
     {
         this.hub = hub;
         addPort();
@@ -42,10 +42,10 @@ public final class Usb4JavaPorts
      * 
      * @return The added port.
      */
-    private Usb4JavaPort addPort()
+    private Port addPort()
     {
         final byte portNo = (byte) (this.ports.size() + 1);
-        final Usb4JavaPort port = new Usb4JavaPort(this.hub, portNo);
+        final Port port = new Port(this.hub, portNo);
         this.ports.add(port);
         return port;
     }
@@ -55,9 +55,9 @@ public final class Usb4JavaPorts
      * 
      * @return The first free port.
      */
-    private Usb4JavaPort getFreePort()
+    private Port getFreePort()
     {
-        for (final Usb4JavaPort port: this.ports)
+        for (final Port port: this.ports)
         {
             if (!port.isUsbDeviceAttached()) return port;
         }
@@ -81,7 +81,7 @@ public final class Usb4JavaPorts
      * @return The ports.
      */
     @Override
-    public List<Usb4JavaPort> getUsbPorts()
+    public List<Port> getUsbPorts()
     {
         return Collections.unmodifiableList(this.ports);
     }
@@ -94,7 +94,7 @@ public final class Usb4JavaPorts
      * @return The USB port or null if no such port.
      */
     @Override
-    public Usb4JavaPort getUsbPort(final byte number)
+    public Port getUsbPort(final byte number)
     {
         final int index = (number & 0xff) - 1;
         if (index < 0 || index >= this.ports.size()) return null;
@@ -107,12 +107,12 @@ public final class Usb4JavaPorts
      * @return The attached USB devices.
      */
     @Override
-    public List<Usb4JavaDevice> getAttachedUsbDevices()
+    public List<AbstractDevice> getAttachedUsbDevices()
     {
-        final List<Usb4JavaDevice> devices = new ArrayList<Usb4JavaDevice>();
+        final List<AbstractDevice> devices = new ArrayList<AbstractDevice>();
         synchronized (this.ports)
         {
-            for (final Usb4JavaPort port: this.ports)
+            for (final Port port: this.ports)
             {
                 if (port.isUsbDeviceAttached())
                 {
@@ -130,11 +130,11 @@ public final class Usb4JavaPorts
      *            The device to add to this hub.
      */
     @Override
-    public void connectUsbDevice(final Usb4JavaDevice device)
+    public void connectUsbDevice(final AbstractDevice device)
     {
         synchronized (this.ports)
         {
-            final Usb4JavaPort port = getFreePort();
+            final Port port = getFreePort();
             port.connectUsbDevice(device);
         }
     }
@@ -146,11 +146,11 @@ public final class Usb4JavaPorts
      *            The device to disconnected from the hub.
      */
     @Override
-    public void disconnectUsbDevice(final Usb4JavaDevice device)
+    public void disconnectUsbDevice(final AbstractDevice device)
     {
         synchronized (this.ports)
         {
-            for (final Usb4JavaPort port: this.ports)
+            for (final Port port: this.ports)
             {
                 if (device.equals(port.getUsbDevice()))
                 {
