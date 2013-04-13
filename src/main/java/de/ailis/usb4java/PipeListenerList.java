@@ -14,7 +14,7 @@ import javax.usb.event.UsbPipeListener;
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
-final class UsbPipeListenerList extends
+final class PipeListenerList extends
     EventListenerList<UsbPipeListener> implements UsbPipeListener
 {
     @Override

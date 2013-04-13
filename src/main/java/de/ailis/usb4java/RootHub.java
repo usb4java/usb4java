@@ -61,7 +61,7 @@ final class RootHub implements UsbHub,
             (byte) 1);
 
     /** The device listeners. */
-    private final UsbDeviceListenerList listeners = new UsbDeviceListenerList();
+    private final DeviceListenerList listeners = new DeviceListenerList();
 
     /** The hub ports. */
     private final Ports ports = new Ports(this);

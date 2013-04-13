@@ -35,7 +35,7 @@ final class Pipe implements UsbPipe
     private final Endpoint endpoint;
 
     /** The USB pipe listeners. */
-    private final UsbPipeListenerList listeners = new UsbPipeListenerList();
+    private final PipeListenerList listeners = new PipeListenerList();
 
     /** If pipe is open or not. */
     private boolean opened;

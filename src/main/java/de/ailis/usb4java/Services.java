@@ -33,8 +33,8 @@ public final class Services implements UsbServices
     private static final String API_VERSION = "1.0.2";
 
     /** The USB services listeners. */
-    private final UsbServicesListenerList listeners =
-        new UsbServicesListenerList();
+    private final ServicesListenerList listeners =
+        new ServicesListenerList();
 
     /** The virtual USB root hub. */
     private final RootHub rootHub;

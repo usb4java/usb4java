@@ -15,7 +15,7 @@ import javax.usb.event.UsbDeviceListener;
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
-final class UsbDeviceListenerList extends
+final class DeviceListenerList extends
     EventListenerList<UsbDeviceListener> implements UsbDeviceListener
 {
     @Override

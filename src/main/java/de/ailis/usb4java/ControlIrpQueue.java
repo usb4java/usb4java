@@ -25,7 +25,7 @@ import de.ailis.usb4java.libusb.LibUsbException;
 final class ControlIrpQueue extends AbstractIrpQueue<UsbControlIrp>
 {
     /** The USB device listener list. */
-    private final UsbDeviceListenerList listeners;
+    private final DeviceListenerList listeners;
 
     /**
      * Constructor.
@@ -36,7 +36,7 @@ final class ControlIrpQueue extends AbstractIrpQueue<UsbControlIrp>
      *            The USB device listener list.
      */
     ControlIrpQueue(final AbstractDevice device,
-        final UsbDeviceListenerList listeners)
+        final DeviceListenerList listeners)
     {
         super(device);
         this.listeners = listeners;

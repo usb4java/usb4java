@@ -62,7 +62,7 @@ abstract class AbstractDevice implements UsbDevice
         new HashMap<Byte, Configuration>();
 
     /** The USB device listener list. */
-    private final UsbDeviceListenerList listeners = new UsbDeviceListenerList();
+    private final DeviceListenerList listeners = new DeviceListenerList();
 
     /** The device handle. Null if not open. */
     private DeviceHandle handle;

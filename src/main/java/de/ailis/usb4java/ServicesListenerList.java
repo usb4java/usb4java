@@ -13,7 +13,7 @@ import javax.usb.event.UsbServicesListener;
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
-final class UsbServicesListenerList extends
+final class ServicesListenerList extends
     EventListenerList<UsbServicesListener> implements UsbServicesListener
 {
     @Override
