@@ -49,9 +49,6 @@ public final class Loader
     /** Constant for amd64 architecture. */
     private static final String ARCH_AMD64 = "amd64";
 
-    /** Constant for universal architecture. */
-    private static final String ARCH_UNIVERSAL = "universal";
-
     /** Constant for so file extension. */
     private static final String EXT_SO = "so";
 
@@ -100,8 +97,6 @@ public final class Loader
      */
     private static String getArch()
     {
-        final String os = getOS();
-        if (os.equals(OS_MACOSX)) return ARCH_UNIVERSAL;
         final String arch = System.getProperty("os.arch");
         if (arch.equals(ARCH_I386)) return ARCH_X86;
         if (arch.equals(ARCH_AMD64)) return ARCH_X86_64;
