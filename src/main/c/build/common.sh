@@ -19,7 +19,7 @@ build()
     mkdir -p "$DOWNLOADS"
     if [ ! -e "$LIBUSBX_FILE" ]
     then
-        wget -O "$LIBUSBX_FILE" "$LIBUSBX_URL"
+       curl -L -o "$LIBUSBX_FILE" "$LIBUSBX_URL"
     fi
 
     # Unpack and compile libusbx
@@ -55,6 +55,9 @@ build()
     cp -faL 2>/dev/null \
         "$TMPDIR/bin/libusb4java-1.dll" \
         "$DISTDIR/libusb4java.dll" || true
+    cp -faL 2>/dev/null \
+        "$TMPDIR/lib/libusb4java.dylib" \
+        "$DISTDIR/libusb4java.dylib" || true
 
     # Remove executable flag from dist files
     chmod -x "$DISTDIR/"*
