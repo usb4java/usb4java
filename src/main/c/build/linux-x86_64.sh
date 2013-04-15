@@ -10,7 +10,7 @@ OS="linux"
 ARCH="x86_64"
 HOST="$ARCH-$OS-gnu"
 CFLAGS="-m64"
-LIBUSBX_CONFIG="--disable-shared"
+LIBUSB_CONFIG="--disable-shared"
 USB4JAVA_LIBS="-lrt"
 
 build

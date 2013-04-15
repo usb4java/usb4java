@@ -2,33 +2,45 @@ cd "$(dirname $0)"
 SRCDIR="$(pwd)/.."
 TMPDIR="$SRCDIR/tmp"
 DOWNLOADS="$SRCDIR/downloads"
-LIBUSBX_VERSION="1.0.14"
-LIBUSBX_ARCHIVE="libusbx-$LIBUSBX_VERSION.tar.bz2"
-LIBUSBX_FILE="$DOWNLOADS/$LIBUSBX_ARCHIVE"
-LIBUSBX_URL="http://downloads.sf.net/project/libusbx/releases/$LIBUSBX_VERSION/source/$LIBUSBX_ARCHIVE"
+LIBUSB="libusbx"
+LIBUSB_VERSION="1.0.16"
+LIBUSB_RC="-rc6"
+LIBUSBX_VERSION="1.0.15"
+LIBUSBX_RC="-rc3"
 
 build()
 {
+    if [ "$LIBUSB" = "libusbx" ]
+    then
+        LIBUSB_NAME="libusbx-$LIBUSBX_VERSION$LIBUSBX_RC"
+        LIBUSB_ARCHIVE="$LIBUSB_NAME.tar.bz2"
+        LIBUSB_URL="http://downloads.sf.net/project/libusbx/releases/$LIBUSBX_VERSION/source/$LIBUSB_ARCHIVE"
+    else
+        LIBUSB_NAME="libusb-$LIBUSB_VERSION$LIBUSB_RC"
+        LIBUSB_ARCHIVE="$LIBUSB_NAME.tar.bz2"
+        LIBUSB_URL="http://downloads.sf.net/project/libusb/libusb-1.0/libusb-$LIBUSB_VERSION$LIBUSB_RC/$LIBUSB_ARCHIVE"
+    fi
+
     DISTDIR="$SRCDIR/../resources/de/ailis/usb4java/libusb/$OS-$ARCH"
     
     # Clean up
     rm -rf "$TMPDIR"
     rm -rf "$DISTDIR"
 
-    # Download libusbx if necessary
+    # Download libusb if necessary
     mkdir -p "$DOWNLOADS"
-    if [ ! -e "$LIBUSBX_FILE" ]
+    if [ ! -e "$DOWNLOADS/$LIBUSB_ARCHIVE" ]
     then
-       curl -L -o "$LIBUSBX_FILE" "$LIBUSBX_URL"
+       curl -L -o "$DOWNLOADS/$LIBUSB_ARCHIVE" "$LIBUSB_URL"
     fi
 
-    # Unpack and compile libusbx
+    # Unpack and compile libusb
     mkdir -p "$TMPDIR"
     cd "$TMPDIR"
-    tar xfj "$DOWNLOADS/$LIBUSBX_ARCHIVE"
-    cd "libusbx-$LIBUSBX_VERSION"
-    CFLAGS="$CFLAGS $LIBUSBX_CFLAGS" \
-    ./configure --prefix="$TMPDIR" --host="$HOST" --with-pic $LIBUSBX_CONFIG
+    tar xfj "$DOWNLOADS/$LIBUSB_ARCHIVE"
+    cd "$LIBUSB_NAME"
+    CFLAGS="$CFLAGS $LIBUSB_CFLAGS" \
+    ./configure --prefix="$TMPDIR" --host="$HOST" --with-pic $LIBUSB_CONFIG
     make
     make install-strip
 

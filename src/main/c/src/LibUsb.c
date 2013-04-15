@@ -128,7 +128,11 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getPortNumber)
 )
 {
     NOT_NULL(env, device, return 0);
-    return libusb_get_port_number(unwrapDevice(env, device));
+    #if defined(LIBUSBX_API_VERSION)
+        return libusb_get_port_number(unwrapDevice(env, device));
+    #else
+        return 0;
+    #endif
 }
 
 /**
@@ -143,8 +147,12 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getPortPath)
     NOT_NULL(env, path, return 0);
     jsize size = (*env)->GetArrayLength(env, path);
     unsigned char buffer[size];
-    int result = libusb_get_port_path(unwrapContext(env, context),
-        unwrapDevice(env, device), buffer, size);
+    #if defined(LIBUSBX_API_VERSION)
+        int result = libusb_get_port_path(unwrapContext(env, context),
+            unwrapDevice(env, device), buffer, size);
+    #else
+        int result = 0;
+    #endif
     if (result > 0) (*env)->SetByteArrayRegion(env, path, 0, result, (jbyte *) buffer);
     return result;
 }
@@ -158,7 +166,11 @@ JNIEXPORT jobject JNICALL METHOD_NAME(LibUsb, getParent)
 )
 {
     NOT_NULL(env, device, return NULL);
-    return wrapDevice(env, libusb_get_parent(unwrapDevice(env, device)));
+    #if defined(LIBUSBX_API_VERSION)
+        return wrapDevice(env, libusb_get_parent(unwrapDevice(env, device)));
+    #else
+        return NULL;
+    #endif
 }
 
 /**
