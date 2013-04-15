@@ -131,4 +131,21 @@ final class DeviceId implements Serializable
             this.deviceDescriptor.idVendor(),
             this.deviceDescriptor.idProduct());
     }
+
+    /**
+     * Checks if the specified two device IDs are equal. They are also equal if
+     * they are both null.
+     * 
+     * @param a
+     *            The first device ID.
+     * @param b
+     *            The second device ID.
+     * @return True if the device IDs are equal, false if not.
+     */
+    public static boolean equals(final DeviceId a, final DeviceId b)
+    {
+        if (a == b) return true;
+        if (a == null) return false;
+        return a.equals(b);
+    }
 }
