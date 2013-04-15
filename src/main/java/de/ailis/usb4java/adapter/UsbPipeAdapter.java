@@ -19,13 +19,13 @@ import javax.usb.event.UsbPipeListener;
 public abstract class UsbPipeAdapter implements UsbPipeListener
 {
     @Override
-    public void errorEventOccurred(UsbPipeErrorEvent event)
+    public void errorEventOccurred(final UsbPipeErrorEvent event)
     {
         // Empty
     }
 
     @Override
-    public void dataEventOccurred(UsbPipeDataEvent event)
+    public void dataEventOccurred(final UsbPipeDataEvent event)
     {
         // Empty
     }
