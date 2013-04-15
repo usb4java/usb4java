@@ -64,35 +64,18 @@ final class Ports
         return addPort();
     }
 
-    /**
-     * Returns the number of ports.
-     * 
-     * @return The number of ports.
-     */
     @Override
     public byte getNumberOfPorts()
     {
         return (byte) this.ports.size();
     }
 
-    /**
-     * Returns the ports.
-     * 
-     * @return The ports.
-     */
     @Override
     public List<Port> getUsbPorts()
     {
         return Collections.unmodifiableList(this.ports);
     }
 
-    /**
-     * Returns the USB port with the specified port number.
-     * 
-     * @param number
-     *            The USB port number.
-     * @return The USB port or null if no such port.
-     */
     @Override
     public Port getUsbPort(final byte number)
     {
@@ -101,11 +84,6 @@ final class Ports
         return this.ports.get(index);
     }
 
-    /**
-     * Returns the attached USB devices.
-     * 
-     * @return The attached USB devices.
-     */
     @Override
     public List<AbstractDevice> getAttachedUsbDevices()
     {
@@ -122,13 +100,20 @@ final class Ports
         }
         return Collections.unmodifiableList(devices);
     }
+    
+    @Override
+    public boolean isUsbDeviceAttached(final AbstractDevice device)
+    {
+        synchronized (this.ports)
+        {
+            for (final Port port: this.ports)
+            {
+                if (device.equals(port.getUsbDevice())) return true;
+            }            
+        }
+        return false;
+    }
 
-    /**
-     * Connects a new device to this hub.
-     * 
-     * @param device
-     *            The device to add to this hub.
-     */
     @Override
     public void connectUsbDevice(final AbstractDevice device)
     {

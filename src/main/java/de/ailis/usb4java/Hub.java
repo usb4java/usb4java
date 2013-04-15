@@ -71,6 +71,12 @@ final class Hub extends AbstractDevice implements UsbHub,
     {
         return this.ports.getAttachedUsbDevices();
     }
+    
+    @Override
+    public boolean isUsbDeviceAttached(final AbstractDevice device)
+    {
+        return this.ports.isUsbDeviceAttached(device);
+    }
 
     @Override
     public boolean isRootUsbHub()

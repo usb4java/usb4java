@@ -237,6 +237,12 @@ final class RootHub implements UsbHub,
     }
 
     @Override
+    public boolean isUsbDeviceAttached(final AbstractDevice device)
+    {
+        return this.rootPorts.isUsbDeviceAttached(device);
+    }
+
+    @Override
     public boolean isRootUsbHub()
     {
         return true;

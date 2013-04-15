@@ -5,15 +5,15 @@
 
 package de.ailis.usb4java;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.usb.UsbException;
+import javax.usb.UsbHub;
 
 import de.ailis.usb4java.descriptors.SimpleUsbDeviceDescriptor;
 import de.ailis.usb4java.libusb.Context;
@@ -107,27 +107,113 @@ final class DeviceManager
     }
 
     /**
-     * Returns all currently connected devices.
+     * Scans the specified ports for removed devices. 
      * 
-     * @return The connected devices.
-     * @throws LibUsbException
-     *             When libusb reports an error while enumerating the devices.
+     * @param ports
+     *            The ports to scan for removals.
      */
-    private Set<AbstractDevice> getConnectedDevices() throws LibUsbException
+    private void scanRemovedDevices(final UsbPorts<Port, AbstractDevice> ports)
     {
+        for (AbstractDevice device: ports.getAttachedUsbDevices())
+        {
+            // Scan for removed child devices if current device is a hub
+            if (device.isUsbHub()) scanRemovedDevices((Hub) device);
+            
+            // If device is no longer present then remove it
+            if (!this.devices.containsKey(device.getId()))
+                ports.disconnectUsbDevice(device);                    
+        }
+    }
+    
+    /**
+     * Scans the specified ports for new devices. 
+     * 
+     * @param ports
+     *            The ports to scan for new devices.
+     * @param hubId
+     *            The hub ID. Null if scanned hub is the root hub.
+     */
+    private void scanNewDevices(final UsbPorts<Port, AbstractDevice> ports,
+        final DeviceId hubId)
+    {
+        for (AbstractDevice device: this.devices.values())
+        {
+            if (DeviceId.equals(device.getParentId(), hubId))
+            {
+                if (!ports.isUsbDeviceAttached(device))
+                {
+                    // Connect new devices to the ports of the current hub.
+                    ports.connectUsbDevice(device);
+                }
+
+                // Scan for removed child devices if current device is a hub
+                if (device.isUsbHub()) scanNewDevices((Hub) device,
+                    device.getId());
+            }
+        }
+        
+    }
+
+    /**
+     * Scans the specified hub for changes.
+     * 
+     * @param hub
+     *            The hub to scan.
+     */
+    public void scan(final UsbHub hub)
+    {
+        try
+        {
+            updateDeviceList();
+        }
+        catch (LibUsbException e)
+        {
+            throw new ScanException("Unable to scan for USB devices: " + e, e);
+        }
+        
+        if (hub.isRootUsbHub())
+        {
+            RootHub rootHub = (RootHub) hub;
+            scanRemovedDevices(rootHub);
+            scanNewDevices(rootHub, null);
+        }
+        else
+        {
+            final Hub nonRootHub = (Hub) hub;
+            scanRemovedDevices(nonRootHub);
+            scanNewDevices(nonRootHub, nonRootHub.getId());
+        }
+    }
+
+    /**
+     * Updates the device list by adding newly connected devices to it and by
+     * removing no longer connected devices.
+     * 
+     * @throws LibUsbException
+     *             When libusb reported an error which we can't ignore during
+     *             scan.
+     */
+    private void updateDeviceList() throws LibUsbException
+    {
+        final List<DeviceId> current = new ArrayList<DeviceId>();
+        
+        // Get device list from libusb and abort if it failed
         final DeviceList devices = new DeviceList();
         final int result = LibUsb.getDeviceList(this.context, devices);
         if (result < 0)
             throw new LibUsbException("Unable to get USB device list",
                 result);
-        final Set<AbstractDevice> found = new HashSet<AbstractDevice>();
+
         try
         {
-            for (Device libUsbDevice: devices)
+            // Iterate over all currently connected devices
+            for (final Device libUsbDevice: devices)
             {
+                // Create device ID. Ignore device if this fails.
                 final DeviceId id = createId(libUsbDevice);
                 if (id == null) continue;
-
+                
+                // Create new device if not already in device list
                 AbstractDevice device = this.devices.get(id);
                 if (device == null)
                 {
@@ -146,89 +232,30 @@ final class DeviceManager
                         device = new NonHub(this, id,
                             parentId, speed, libUsbDevice);
                     }
+                   
+                    // Add new device to global device list.
+                    this.devices.put(id, device);
                 }
-                found.add(device);
+                
+                // Remember current device as "current"
+                current.add(id);            
             }
+            
+            this.devices.keySet().retainAll(current);
         }
         finally
         {
             LibUsb.freeDeviceList(devices, true);
         }
-        return found;
     }
-
-    /**
-     * Checks if the global device list contains any devices which are not in
-     * the specified set of currently connected devices. These devices are
-     * disconnected from their parent and then removed from the global device
-     * list.
-     * 
-     * @param current
-     *            The currently connected devices.
-     */
-    private void processRemovedDevices(final Set<AbstractDevice> current)
-    {
-        final Iterator<AbstractDevice> it = this.devices.values().iterator();
-        while (it.hasNext())
-        {
-            final AbstractDevice device = it.next();
-            if (!current.contains(device))
-            {
-                final AbstractDevice parent = this.devices.get(device.getId());
-                if (parent == null)
-                    this.rootHub.disconnectUsbDevice(device);
-                else if (parent.isUsbHub())
-                    ((Hub) parent).disconnectUsbDevice(device);
-                it.remove();
-            }
-        }
-    }
-
-    /**
-     * Checks for newly found devices which are not yet in the global list of
-     * devices. These devices are added to their parent device and then added to
-     * the global list of devices.
-     * 
-     * @param current
-     *            The currently connected devices.
-     */
-    private void processNewDevices(final Set<AbstractDevice> current)
-    {
-        for (AbstractDevice device: current)
-        {
-            if (!this.devices.containsValue(device))
-            {
-                final DeviceId parentId = device.getParentId();
-                if (parentId == null)
-                    this.rootHub.connectUsbDevice(device);
-                else
-                {
-                    final AbstractDevice parent = this.devices.get(parentId);
-                    if (parent != null && parent.isUsbHub())
-                    {
-                        ((Hub) parent).connectUsbDevice(device);
-                    }
-                }
-                this.devices.put(device.getId(), device);
-            }
-        }
-    }
-
+    
     /**
      * Scans the USB busses for new or removed devices.
      */
     public void scan()
     {
-        try
-        {
-            final Set<AbstractDevice> found = getConnectedDevices();
-            processRemovedDevices(found);
-            processNewDevices(found);
-        }
-        catch (LibUsbException e)
-        {
-            throw new ScanException("Unable to scan USB devices: " + e, e);
-        }
+        scan(this.rootHub);
+        this.scanned = true;
     }
 
     /**
