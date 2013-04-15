@@ -179,7 +179,7 @@ final class DeviceManager
         
         if (hub.isRootUsbHub())
         {
-            RootHub rootHub = (RootHub) hub;
+            final RootHub rootHub = (RootHub) hub;
             scanRemovedDevices(rootHub);
             scanNewDevices(rootHub, null);
         }
