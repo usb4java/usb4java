@@ -138,7 +138,13 @@ final class DeviceManager
     {
         for (AbstractDevice device: this.devices.values())
         {
-            if (DeviceId.equals(device.getParentId(), hubId))
+            // Get parent ID from device and reset it to null if we don't
+            // know this parent device (This happens on Windows because some
+            // devices/hubs can't be fully enumerated.)
+            DeviceId parentId = device.getParentId();
+            if (!this.devices.containsKey(parentId)) parentId = null;
+            
+            if (DeviceId.equals(parentId, hubId))
             {
                 if (!ports.isUsbDeviceAttached(device))
                 {
@@ -214,27 +220,35 @@ final class DeviceManager
                 if (id == null) continue;
                 
                 // Create new device if not already in device list
-                AbstractDevice device = this.devices.get(id);
-                if (device == null)
+                try
                 {
-                    final Device parent = LibUsb.getParent(libUsbDevice);
-                    final DeviceId parentId = createId(parent);
-                    final int speed = LibUsb.getDeviceSpeed(libUsbDevice);
-                    final boolean isHub = id.getDeviceDescriptor()
-                        .bDeviceClass() == LibUsb.CLASS_HUB;
-                    if (isHub)
+                    AbstractDevice device = this.devices.get(id);
+                    if (device == null)
                     {
-                        device = new Hub(this, id, parentId,
-                            speed, libUsbDevice);
+                        final Device parent = LibUsb.getParent(libUsbDevice);
+                        final DeviceId parentId = createId(parent);
+                        final int speed = LibUsb.getDeviceSpeed(libUsbDevice);
+                        final boolean isHub = id.getDeviceDescriptor()
+                            .bDeviceClass() == LibUsb.CLASS_HUB;
+                        if (isHub)
+                        {
+                            device = new Hub(this, id, parentId,
+                                speed, libUsbDevice);
+                        }
+                        else
+                        {
+                            device = new NonHub(this, id,
+                                parentId, speed, libUsbDevice);
+                        }
+                       
+                        // Add new device to global device list.
+                        this.devices.put(id, device);
                     }
-                    else
-                    {
-                        device = new NonHub(this, id,
-                            parentId, speed, libUsbDevice);
-                    }
-                   
-                    // Add new device to global device list.
-                    this.devices.put(id, device);
+                }
+                catch (LibUsbException e)
+                {
+                    // TODO Add some warnings here
+                    continue;
                 }
                 
                 // Remember current device as "current"
