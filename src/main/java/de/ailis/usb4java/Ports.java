@@ -124,12 +124,6 @@ final class Ports
         }
     }
 
-    /**
-     * Disconnects the specified device from the hub.
-     * 
-     * @param device
-     *            The device to disconnected from the hub.
-     */
     @Override
     public void disconnectUsbDevice(final AbstractDevice device)
     {
