@@ -144,8 +144,8 @@ final class DeviceId implements Serializable
      */
     public static boolean equals(final DeviceId a, final DeviceId b)
     {
-        if (a == b) return true;
-        if (a == null) return false;
+        if (a == null && b == null) return true;
+        if (a == null || b == null) return false;
         return a.equals(b);
     }
 }
