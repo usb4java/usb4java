@@ -6,7 +6,7 @@ LIBUSB="libusbx"
 LIBUSB_VERSION="1.0.16"
 LIBUSB_RC="-rc6"
 LIBUSBX_VERSION="1.0.15"
-LIBUSBX_RC="-rc3"
+LIBUSBX_RC=""
 
 build()
 {
