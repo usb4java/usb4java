@@ -78,7 +78,7 @@ public class TransferTest
     {
         try
         {
-            Field field = DeviceHandle.class.getDeclaredField("pointer");
+            Field field = DeviceHandle.class.getDeclaredField("handlePointer");
             field.setAccessible(true);
             field.set(handle, pointer);
         }
@@ -100,7 +100,7 @@ public class TransferTest
         DeviceHandle handle = new DeviceHandle();
         setPointer(handle, 1);
         DeviceHandle handle2 = new DeviceHandle();
-        setPointer(handle, 2);
+        setPointer(handle2, 2);
         assertNull(transfer.getDevHandle());
         transfer.setDevHandle(handle);
         assertNotNull(transfer.getDevHandle());
