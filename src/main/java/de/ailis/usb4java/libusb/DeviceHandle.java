@@ -61,7 +61,7 @@ public final class DeviceHandle
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         final DeviceHandle other = (DeviceHandle) obj;
-        return this.handlePointer != other.handlePointer;
+        return this.handlePointer == other.handlePointer;
     }
 
     @Override
