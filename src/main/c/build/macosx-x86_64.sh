@@ -10,7 +10,7 @@ set -e
 OS="macosx"
 ARCH="x86_64"
 CFLAGS="-arch x86_64"
-LIBUSBX_CONFIG="--disable-shared"
+LIBUSB_CONFIG="--disable-shared"
 USB4JAVA_LIBS="-lobjc -Wl,-framework,IOKit -Wl,-framework,CoreFoundation"
 LIBUSB="libusb"
 

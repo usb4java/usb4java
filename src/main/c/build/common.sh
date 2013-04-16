@@ -75,5 +75,5 @@ build()
     chmod -x "$DISTDIR/"*
 
     # Cleanup
-    rm -rf "$TMPDIR"
+#    rm -rf "$TMPDIR"
 }
