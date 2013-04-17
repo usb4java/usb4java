@@ -52,9 +52,9 @@ public class LibUSBDeviceTest
     public void setUp()
     {
         this.context = new Context();
+        LibUsb.init(this.context);
         try
         {
-            LibUsb.init(this.context);
             this.device = findTestDevice();
             if (this.device == null)
                 throw new IllegalStateException("Need at least one USB device "
@@ -63,7 +63,6 @@ public class LibUSBDeviceTest
         }
         catch (Throwable e)
         {
-            this.context = null;
             this.device = null;
         }
     }
