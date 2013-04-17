@@ -1158,17 +1158,25 @@ public class LibUSBDeviceTest
     {
         assumeUsbTestsEnabled();
         DeviceList list = new DeviceList();
-        assertTrue(LibUsb.getDeviceList(null, list) >= 0);
-        LibUsb.freeDeviceList(list, true);
-        
+        assertEquals(0, LibUsb.init(null));
         try
         {
+            assertTrue(LibUsb.getDeviceList(null, list) >= 0);
             LibUsb.freeDeviceList(list, true);
-            fail("Double-free should throw IllegalStateException");
+            
+            try
+            {
+                LibUsb.freeDeviceList(list, true);
+                fail("Double-free should throw IllegalStateException");
+            }
+            catch (IllegalStateException e)
+            {
+                // Expected behavior
+            }
         }
-        catch (IllegalStateException e)
+        finally
         {
-            // Expected behavior
+            LibUsb.exit(null);
         }
     }
 }
