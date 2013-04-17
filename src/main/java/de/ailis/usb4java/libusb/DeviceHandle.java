@@ -52,7 +52,8 @@ public final class DeviceHandle
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.deviceHandlePointer).toHashCode();
+        return new HashCodeBuilder().append(this.deviceHandlePointer)
+            .toHashCode();
     }
 
     @Override

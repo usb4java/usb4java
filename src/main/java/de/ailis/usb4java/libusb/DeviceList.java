@@ -76,7 +76,8 @@ public final class DeviceList implements Iterable<Device>
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.deviceListPointer).toHashCode();
+        return new HashCodeBuilder().append(this.deviceListPointer)
+            .toHashCode();
     }
 
     @Override
