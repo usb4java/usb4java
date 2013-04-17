@@ -31,7 +31,7 @@ import de.ailis.usb4java.utils.DescriptorUtils;
 public final class EndpointDescriptor implements UsbEndpointDescriptor
 {
     /** The native pointer to the descriptor structure. */
-    private long pointer;
+    private long endpointDescriptorPointer;
 
     /**
      * Package-private constructor to prevent manual instantiation. Endpoint 
@@ -49,7 +49,7 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
      */
     public long getPointer()
     {
-        return this.pointer;
+        return this.endpointDescriptorPointer;
     }
 
     @Override

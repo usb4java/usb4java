@@ -28,7 +28,7 @@ import javax.usb.*;
 
 import org.junit.runner.RunWith;
 
-import de.ailis.usb4java.TCKRunner;
+import de.ailis.usb4java.test.TCKRunner;
 
 /**
  * Usb Interface Policy Test

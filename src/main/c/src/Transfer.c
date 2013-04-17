@@ -16,6 +16,11 @@ struct libusb_transfer* unwrapTransfer(JNIEnv *env, jobject obj)
     UNWRAP_POINTER(env, obj, struct libusb_transfer*, "pointer");
 }
 
+void resetTransfer(JNIEnv* env, jobject obj)
+{
+    RESET_POINTER(env, obj, "pointer");
+}
+
 /**
  * void setDevHandle(DeviceHandle)
  */

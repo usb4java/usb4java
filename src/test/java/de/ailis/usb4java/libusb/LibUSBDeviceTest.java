@@ -5,10 +5,11 @@
 
 package de.ailis.usb4java.libusb;
 
-import static de.ailis.usb4java.UsbAssume.assumeUsbTestsEnabled;
+import static de.ailis.usb4java.test.UsbAssume.assumeUsbTestsEnabled;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeNotNull;
 
 import java.nio.ByteBuffer;
@@ -56,7 +57,8 @@ public class LibUSBDeviceTest
             LibUsb.init(this.context);
             this.device = findTestDevice();
             if (this.device == null)
-                throw new IllegalStateException("Need at least one USB device " +
+                throw new IllegalStateException("Need at least one USB device "
+                    +
                     "with at least one endpoint to execute this test");
         }
         catch (Throwable e)
@@ -141,16 +143,6 @@ public class LibUSBDeviceTest
     }
 
     /**
-     * Tests the {@link LibUsb#getBusNumber(Device)} method without a device.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void testGetBusNumberWithoutDevice()
-    {
-        assumeUsbTestsEnabled();
-        LibUsb.getBusNumber(null);
-    }
-
-    /**
      * Tests the {@link LibUsb#getPortNumber(Device)} method.
      */
     @Test
@@ -159,16 +151,6 @@ public class LibUSBDeviceTest
         assumeUsbTestsEnabled();
         assumeNotNull(this.device);
         assertTrue(LibUsb.getPortNumber(this.device) >= 0);
-    }
-
-    /**
-     * Tests the {@link LibUsb#getPortNumber(Device)} method without a device.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void testGetPortNumberWithoutDevice()
-    {
-        assumeUsbTestsEnabled();
-        LibUsb.getPortNumber(null);
     }
 
     /**
@@ -219,6 +201,30 @@ public class LibUSBDeviceTest
     {
         assumeUsbTestsEnabled();
         LibUsb.getPortPath(this.context, this.device, null);
+    }
+
+    /**
+     * Tests {@link LibUsb#getPortPath(Context, Device, byte[])} method with
+     * uninitialized USB context.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testGetPortPathWithUninitializedContext()
+    {
+        assumeUsbTestsEnabled();
+        assumeNotNull(this.device);
+        final Context context = new Context();
+        LibUsb.getPortPath(context, this.device, new byte[16]);
+    }
+
+    /**
+     * Tests {@link LibUsb#getPortPath(Context, Device, byte[])} method with
+     * uninitialized device.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testGetPortPathWithUninitializedDevice()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getPortPath(this.context, new Device(), new byte[16]);
     }
 
     /**
@@ -425,14 +431,27 @@ public class LibUSBDeviceTest
      * crash.
      */
     @Test
-    public void testOpen()
+    public void testOpenAndClose()
     {
         assumeUsbTestsEnabled();
         assumeNotNull(this.device);
         DeviceHandle handle = new DeviceHandle();
         int result = LibUsb.open(this.device, handle);
         assertTrue(result == LibUsb.SUCCESS || result == LibUsb.ERROR_ACCESS);
-        if (result == LibUsb.SUCCESS) LibUsb.close(handle);
+        if (result == LibUsb.SUCCESS)
+        {
+            LibUsb.close(handle);
+
+            try
+            {
+                LibUsb.close(handle);
+                fail("Double-close should throw IllegalStateException");
+            }
+            catch (IllegalStateException e)
+            {
+                // Expected behavior
+            }
+        }
     }
 
     /**
@@ -878,6 +897,16 @@ public class LibUSBDeviceTest
         finally
         {
             LibUsb.freeConfigDescriptor(desc);
+
+            try
+            {
+                LibUsb.freeConfigDescriptor(desc);
+                fail("Double-free should throw IllegalStateException");
+            }
+            catch (IllegalStateException e)
+            {
+                // Expected behavior
+            }
         }
     }
 
@@ -1103,5 +1132,28 @@ public class LibUSBDeviceTest
         assumeUsbTestsEnabled();
         LibUsb.interruptTransfer(new DeviceHandle(), 0, ByteBuffer.allocate(0),
             null, 0);
+    }
+
+    /**
+     * Tests the {@link LibUsb#getDeviceList(Context, DeviceList)} and
+     * LibUsb#freeDeviceList(DeviceList, boolean)} methods.
+     */
+    @Test
+    public void testGetAndFreeDeviceList()
+    {
+        assumeUsbTestsEnabled();
+        DeviceList list = new DeviceList();
+        assertTrue(LibUsb.getDeviceList(this.context, list) >= 0);
+        LibUsb.freeDeviceList(list, true);
+        
+        try
+        {
+            LibUsb.freeDeviceList(list, true);
+            fail("Double-free should throw IllegalStateException");
+        }
+        catch (IllegalStateException e)
+        {
+            // Expected behavior
+        }
     }
 }

@@ -26,6 +26,13 @@
     (*ENV)->SetLongField(ENV, OBJECT, field, (jptr) PTR); \
 }
 
+#define RESET_POINTER(ENV, OBJECT, FIELD) \
+{ \
+    jclass cls = (*ENV)->GetObjectClass(ENV, OBJECT); \
+    jfieldID field = (*ENV)->GetFieldID(ENV, cls, FIELD, "J"); \
+    (*ENV)->SetLongField(ENV, OBJECT, field, 0); \
+}
+
 #define WRAP_POINTER(ENV, PTR, CLASS_NAME, FIELD) \
 { \
     if (!PTR) return NULL; \
@@ -44,6 +51,8 @@
     if (!OBJECT) return NULL; \
     jclass cls = (*ENV)->GetObjectClass(ENV, OBJECT); \
     jfieldID field = (*ENV)->GetFieldID(ENV, cls, FIELD, "J"); \
+    jptr ptr = (jptr) (*ENV)->GetLongField(ENV, OBJECT, field); \
+    if (!ptr) illegalState(ENV, FIELD" is not initialized"); \
     return (TYPE) (jptr) (*ENV)->GetLongField(ENV, OBJECT, field); \
 }
 
@@ -94,5 +103,6 @@
     if (getEnvResult == JNI_EDETACHED) (*jvm)->DetachCurrentThread(jvm);
 
 jint illegalArgument(JNIEnv *env, char *message);
+jint illegalState(JNIEnv *env, char *message);
 
 #endif

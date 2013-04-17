@@ -11,5 +11,6 @@
 void setDeviceHandle(JNIEnv*, libusb_device_handle*, jobject);
 jobject wrapDeviceHandle(JNIEnv*, libusb_device_handle*);
 libusb_device_handle* unwrapDeviceHandle(JNIEnv*, jobject);
+void resetDeviceHandle(JNIEnv*, jobject);
 
 #endif

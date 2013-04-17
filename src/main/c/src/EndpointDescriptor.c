@@ -8,7 +8,7 @@
 jobject wrapEndpointDescriptor(JNIEnv *env,
     const struct libusb_endpoint_descriptor *descriptor)
 {
-    WRAP_POINTER(env, descriptor, "EndpointDescriptor", "pointer");
+    WRAP_POINTER(env, descriptor, "EndpointDescriptor", "endpointDescriptorPointer");
 }
 
 jobjectArray wrapEndpointDescriptors(JNIEnv *env, int count,
@@ -28,7 +28,7 @@ jobjectArray wrapEndpointDescriptors(JNIEnv *env, int count,
 struct libusb_endpoint_descriptor *unwrapEndpointDescriptor(JNIEnv *env,
     jobject obj)
 {
-    UNWRAP_POINTER(env, obj, struct libusb_endpoint_descriptor*, "pointer");
+    UNWRAP_POINTER(env, obj, struct libusb_endpoint_descriptor*, "endpointDescriptorPointer");
 }
 
 /**

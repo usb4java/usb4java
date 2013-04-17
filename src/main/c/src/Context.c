@@ -14,3 +14,8 @@ libusb_context* unwrapContext(JNIEnv* env, jobject context)
 {
     UNWRAP_POINTER(env, context, libusb_context*, "contextPointer");
 }
+
+void resetContext(JNIEnv* env, jobject obj)
+{
+    RESET_POINTER(env, obj, "contextPointer");
+}

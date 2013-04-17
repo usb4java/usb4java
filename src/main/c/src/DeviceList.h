@@ -10,5 +10,6 @@
 
 void setDeviceList(JNIEnv*, libusb_device**, int, jobject);
 libusb_device** unwrapDeviceList(JNIEnv*, jobject);
+void resetDeviceList(JNIEnv*, jobject);
 
 #endif

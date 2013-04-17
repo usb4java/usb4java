@@ -5,7 +5,7 @@
 
 package de.ailis.usb4java.libusb;
 
-import static de.ailis.usb4java.UsbAssume.assumeUsbTestsEnabled;
+import static de.ailis.usb4java.test.UsbAssume.assumeUsbTestsEnabled;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;

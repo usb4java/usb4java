@@ -5,12 +5,21 @@
 
 package de.ailis.usb4java.libusb;
 
-import static de.ailis.usb4java.UsbAssume.assumeUsbTestsEnabled;
+import static de.ailis.usb4java.test.UsbAssume.assumeUsbTestsEnabled;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.io.FileDescriptor;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 
 import org.junit.Test;
+
+import de.ailis.usb4java.libusb.mocks.PollfdListenerMock;
 
 /**
  * Tests the {@link LibUsb} class.
@@ -166,10 +175,13 @@ public class LibUSBTest
         assumeUsbTestsEnabled();
         assertEquals(LibUsb.SUCCESS, LibUsb.init(null));
         LibUsb.exit(null);
+        
+        // Double-exit without a context should work
+        LibUsb.exit(null);
     }
 
     /**
-     * Tests the initialization and deinitialization of libusb with a custom
+     * Tests the initialization and deinitialization of libusb with a custom USB
      * context.
      */
     @Test
@@ -179,5 +191,752 @@ public class LibUSBTest
         Context context = new Context();
         assertEquals(LibUsb.SUCCESS, LibUsb.init(context));
         LibUsb.exit(context);
+        
+        try
+        {
+            LibUsb.exit(context);
+            fail("Double-exit should throw IllegalStateException");
+        }
+        catch (IllegalStateException e)
+        {
+            // Expected behavior
+        }
+    }
+
+    /**
+     * Tests {@link LibUsb#exit(Context)} method with uninitialized Context
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testExitWithUninitializedContext()
+    {
+        assumeUsbTestsEnabled();
+        final Context context = new Context();
+        LibUsb.exit(context);
+    }
+
+    /**
+     * Tests {@link LibUsb#setDebug(Context, int)} method with uninitialized USB
+     * context
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testSetDebugWithUninitializedContext()
+    {
+        assumeUsbTestsEnabled();
+        final Context context = new Context();
+        LibUsb.setDebug(context, 0);
+    }
+
+    /**
+     * Tests {@link LibUsb#getDeviceList(Context, DeviceList)} method with
+     * uninitialized USB context.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testGetDeviceListWithUninitializedContext()
+    {
+        assumeUsbTestsEnabled();
+        final Context context = new Context();
+        LibUsb.getDeviceList(context, new DeviceList());
+    }
+
+    /**
+     * Tests {@link LibUsb#freeDeviceList(DeviceList, boolean)} method with
+     * uninitialized list.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testFreeDeviceListWithUninitializedList()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.freeDeviceList(new DeviceList(), true);
+    }
+
+    /**
+     * Tests {@link LibUsb#freeDeviceList(DeviceList, boolean)} method without
+     * list.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testFreeDeviceListWithoutList()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.freeDeviceList(null, true);
+    }
+
+    /**
+     * Tests the {@link LibUsb#getBusNumber(Device)} method without a device.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetBusNumberWithoutDevice()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getBusNumber(null);
+    }
+
+    /**
+     * Tests the {@link LibUsb#getBusNumber(Device)} method with uninitialized
+     * device.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testGetBusNumberWithUninitializedDevice()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getBusNumber(new Device());
+    }
+
+    /**
+     * Tests the {@link LibUsb#getPortNumber(Device)} method without a device.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetPortNumberWithoutDevice()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getPortNumber(null);
+    }
+
+    /**
+     * Tests the {@link LibUsb#getPortNumber(Device)} method with uninitialized
+     * device.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testGetPortNumberWithUninitializedDevice()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getPortNumber(new Device());
+    }
+
+    /**
+     * Tests the {@link LibUsb#getParent(Device)} method with uninitialized
+     * device.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testGetParentWithUninitializedDevice()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getParent(new Device());
+    }
+
+    /**
+     * Tests the {@link LibUsb#getDeviceAddress(Device)} method with
+     * uninitialized device.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testGetDeviceAddressWithUninitializedDevice()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getDeviceAddress(new Device());
+    }
+
+    /**
+     * Tests the {@link LibUsb#getDeviceSpeed(Device)} method with uninitialized
+     * device.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testGetDeviceDeviceSpeedWithUninitializedDevice()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getDeviceSpeed(new Device());
+    }
+
+    /**
+     * Tests the {@link LibUsb#getMaxPacketSize(Device, int)} method with
+     * uninitialized device.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testMaxPacketSizeWithUninitializedDevice()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getMaxPacketSize(new Device(), 0);
+    }
+
+    /**
+     * Tests the {@link LibUsb#getMaxIsoPacketSize(Device, int)} method with
+     * uninitialized device.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testMaxIsoPacketSizeWithUninitializedDevice()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getMaxIsoPacketSize(new Device(), 0);
+    }
+
+    /**
+     * Tests the {@link LibUsb#refDevice(Device)} method with uninitialized
+     * device.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testRefDeviceWithUninitializedDevice()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.refDevice(new Device());
+    }
+
+    /**
+     * Tests the {@link LibUsb#unrefDevice(Device)} method with uninitialized
+     * device.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testUnrefDeviceWithUninitializedDevice()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.unrefDevice(new Device());
+    }
+
+    /**
+     * Tests the {@link LibUsb#open(Device, DeviceHandle)} method with
+     * uninitialized device.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testOpenWithUninitializedDevice()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.open(new Device(), new DeviceHandle());
+    }
+
+    /**
+     * Tests the {@link LibUsb#close(DeviceHandle)} method with uninitialized
+     * device handle.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testCloseWithUninitializedHandle()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.close(new DeviceHandle());
+    }
+
+    /**
+     * Tests the {@link LibUsb#getDevice(DeviceHandle)} method with
+     * uninitialized device handle.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testGetDeviceWithUninitializedHandle()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getDevice(new DeviceHandle());
+    }
+
+    /**
+     * Tests the {@link LibUsb#getConfiguration(DeviceHandle, IntBuffer)} method
+     * with uninitialized device handle.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testGetConfigurationWithUninitializedHandle()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getConfiguration(new DeviceHandle(), IntBuffer.allocate(1));
+    }
+
+    /**
+     * Tests the {@link LibUsb#setConfiguration(DeviceHandle, int)} method with
+     * uninitialized device handle.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testSetConfigurationWithUninitializedHandle()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.setConfiguration(new DeviceHandle(), 0);
+    }
+
+    /**
+     * Tests the {@link LibUsb#claimInterface(DeviceHandle, int)} method with
+     * uninitialized device handle.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testClaimInterfaceWithUninitializedHandle()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.claimInterface(new DeviceHandle(), 0);
+    }
+
+    /**
+     * Tests the {@link LibUsb#releaseInterface(DeviceHandle, int)} method with
+     * uninitialized device handle.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testReleaseInterfaceWithUninitializedHandle()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.releaseInterface(new DeviceHandle(), 0);
+    }
+
+    /**
+     * Tests the {@link LibUsb#setInterfaceAltSetting(DeviceHandle, int, int)}
+     * method with uninitialized device handle.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testSetInterfaceAltSettingWithUninitializedHandle()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.setInterfaceAltSetting(new DeviceHandle(), 0, 0);
+    }
+
+    /**
+     * Tests the {@link LibUsb#clearHalt(DeviceHandle, int)} method with
+     * uninitialized device handle.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testClearHaltWithUninitializedHandle()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.clearHalt(new DeviceHandle(), 0);
+    }
+
+    /**
+     * Tests the {@link LibUsb#resetDevice(DeviceHandle)} method with
+     * uninitialized device handle.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testResetDeviceWithUninitializedHandle()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.resetDevice(new DeviceHandle());
+    }
+
+    /**
+     * Tests the {@link LibUsb#kernelDriverActive(DeviceHandle, int)} method
+     * with uninitialized device handle.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testKernelDriverActiveWithUninitializedHandle()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.kernelDriverActive(new DeviceHandle(), 0);
+    }
+
+    /**
+     * Tests the {@link LibUsb#detachKernelDriver(DeviceHandle, int)} method
+     * with uninitialized device handle.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testDetachKernelDriverWithUninitializedHandle()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.detachKernelDriver(new DeviceHandle(), 0);
+    }
+
+    /**
+     * Tests the {@link LibUsb#attachKernelDriver(DeviceHandle, int)} method
+     * with uninitialized device handle.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testAttachKernelDriverWithUninitializedHandle()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.attachKernelDriver(new DeviceHandle(), 0);
+    }
+
+    /**
+     * Tests the {@link LibUsb#getDeviceDescriptor(Device, DeviceDescriptor)}
+     * method with uninitialized device.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testGetDeviceDescriptorWithUninitializedDevice()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getDeviceDescriptor(new Device(), new DeviceDescriptor());
+    }
+
+    /**
+     * Tests the
+     * {@link LibUsb#getStringDescriptorAscii(DeviceHandle, int, StringBuffer, int)}
+     * method with uninitialized device handle.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testGetStringDescriptorAsciiWithUninitializedHandle()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getStringDescriptorAscii(new DeviceHandle(), 0,
+            new StringBuffer(), 0);
+    }
+
+    /**
+     * Tests the
+     * {@link LibUsb#getActiveConfigDescriptor(Device, ConfigDescriptor)} method
+     * with uninitialized device.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testGetActiveConfigDescriptorWithUninitializedDevice()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getActiveConfigDescriptor(new Device(), new ConfigDescriptor());
+    }
+
+    /**
+     * Tests the
+     * {@link LibUsb#getConfigDescriptor(Device, int, ConfigDescriptor)} method
+     * with uninitialized device.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testGetConfigDescriptorWithUninitializedDevice()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getConfigDescriptor(new Device(), 0, new ConfigDescriptor());
+    }
+
+    /**
+     * Tests the
+     * {@link LibUsb#getConfigDescriptorByValue(Device, int, ConfigDescriptor)}
+     * method with uninitialized device.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testGetConfigDescriptorByValueWithUninitializedDevice()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getConfigDescriptorByValue(new Device(), 0,
+            new ConfigDescriptor());
+    }
+
+    /**
+     * Tests the {@link LibUsb#freeConfigDescriptor(ConfigDescriptor)} method
+     * with uninitialized descriptor.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testFreeConfigDescriptorWithUninitializedDescriptor()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.freeConfigDescriptor(new ConfigDescriptor());
+    }
+
+    /**
+     * Tests the
+     * {@link LibUsb#getDescriptor(DeviceHandle, int, int, ByteBuffer)} method
+     * with uninitialized device handle.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testGetDescriptorWithUninitializedHandle()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getDescriptor(new DeviceHandle(), 0, 0,
+            ByteBuffer.allocateDirect(1));
+    }
+
+    /**
+     * Tests the
+     * {@link LibUsb#getStringDescriptor(DeviceHandle, int, int, ByteBuffer)}
+     * method with uninitialized device handle.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testGetStringDescriptorWithUninitializedHandle()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getStringDescriptor(new DeviceHandle(), 0, 0,
+            ByteBuffer.allocateDirect(1));
+    }
+
+    /**
+     * Tests the
+     * {@link LibUsb#controlTransfer(DeviceHandle, int, int, int, int, ByteBuffer, int)}
+     * method with uninitialized device handle.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testControlTransferWithUninitializedHandle()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.controlTransfer(new DeviceHandle(), 0, 0, 0, 0,
+            ByteBuffer.allocateDirect(1), 0);
+    }
+
+    /**
+     * Tests the
+     * {@link LibUsb#bulkTransfer(DeviceHandle, int, ByteBuffer, IntBuffer, int)}
+     * method with uninitialized device handle.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testBulkTransferWithUninitializedHandle()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.bulkTransfer(new DeviceHandle(), 0,
+            ByteBuffer.allocateDirect(1), IntBuffer.allocate(1), 0);
+    }
+
+    /**
+     * Tests the
+     * {@link LibUsb#interruptTransfer(DeviceHandle, int, ByteBuffer, IntBuffer, int)}
+     * method with uninitialized device handle.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testInterruptTransferWithUninitializedHandle()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.interruptTransfer(new DeviceHandle(), 0,
+            ByteBuffer.allocateDirect(1), IntBuffer.allocate(1), 0);
+    }
+
+    /**
+     * Tests the {@link LibUsb#freeTransfer(Transfer)} method with uninitialized
+     * device handle.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testFreeTransferWithUninitializedTransfer()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.freeTransfer(new Transfer());
+    }
+
+    /**
+     * Tests {@link LibUsb#openDeviceWithVidPid(Context, int, int)} with
+     * uninitialized USB context.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testOpenDeviceWithVidPid()
+    {
+        assumeUsbTestsEnabled();
+        final Context context = new Context();
+        LibUsb.openDeviceWithVidPid(context, 0, 0);
+    }
+
+    /**
+     * Tests {@link LibUsb#tryLockEvents(Context)} with uninitialized USB
+     * context.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testTryLockEventsWithUninitializedContext()
+    {
+        assumeUsbTestsEnabled();
+        final Context context = new Context();
+        LibUsb.tryLockEvents(context);
+    }
+
+    /**
+     * Tests {@link LibUsb#lockEvents(Context)} with uninitialized USB context.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testLockEventsWithUninitializedContext()
+    {
+        assumeUsbTestsEnabled();
+        final Context context = new Context();
+        LibUsb.lockEvents(context);
+    }
+
+    /**
+     * Tests {@link LibUsb#unlockEvents(Context)} with uninitialized USB
+     * context.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testUnlockEventsWithUninitializedContext()
+    {
+        assumeUsbTestsEnabled();
+        final Context context = new Context();
+        LibUsb.unlockEvents(context);
+    }
+
+    /**
+     * Tests {@link LibUsb#eventHandlingOk(Context)} with uninitialized USB
+     * context.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testEventHandlingOkWithUninitializedContext()
+    {
+        assumeUsbTestsEnabled();
+        final Context context = new Context();
+        LibUsb.eventHandlingOk(context);
+    }
+
+    /**
+     * Tests {@link LibUsb#eventHandlerActive(Context)} with uninitialized USB
+     * context.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testEventHandlerActiveWithUninitializedContext()
+    {
+        assumeUsbTestsEnabled();
+        final Context context = new Context();
+        LibUsb.eventHandlerActive(context);
+    }
+
+    /**
+     * Tests {@link LibUsb#lockEventWaiters(Context)} with uninitialized USB
+     * context.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testLockEventWaitersWithUninitializedContext()
+    {
+        assumeUsbTestsEnabled();
+        final Context context = new Context();
+        LibUsb.lockEventWaiters(context);
+    }
+
+    /**
+     * Tests {@link LibUsb#unlockEventWaiters(Context)} with uninitialized USB
+     * context.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testUnlockEventWaitersWithUninitializedContext()
+    {
+        assumeUsbTestsEnabled();
+        final Context context = new Context();
+        LibUsb.unlockEventWaiters(context);
+    }
+
+    /**
+     * Tests {@link LibUsb#waitForEvent(Context, long)} with uninitialized USB
+     * context.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testWaitForEventWithUninitializedContext()
+    {
+        assumeUsbTestsEnabled();
+        final Context context = new Context();
+        LibUsb.waitForEvent(context, 53);
+    }
+
+    /**
+     * Tests
+     * {@link LibUsb#handleEventsTimeoutCompleted(Context, long, IntBuffer)}
+     * with uninitialized USB context.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testHandleEventsTimeoutCompletedWithUninitializedContext()
+    {
+        assumeUsbTestsEnabled();
+        final Context context = new Context();
+        LibUsb.handleEventsTimeoutCompleted(context, 53, IntBuffer.allocate(1));
+    }
+
+    /**
+     * Tests {@link LibUsb#handleEventsTimeout(Context, long)} with
+     * uninitialized USB context.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testHandleEventsTimeoutWithUninitializedContext()
+    {
+        assumeUsbTestsEnabled();
+        final Context context = new Context();
+        LibUsb.handleEventsTimeout(context, 53);
+    }
+
+    /**
+     * Tests {@link LibUsb#handleEvents(Context)} with uninitialized USB
+     * context.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testHandleEventsWithUninitializedContext()
+    {
+        assumeUsbTestsEnabled();
+        final Context context = new Context();
+        LibUsb.handleEvents(context);
+    }
+
+    /**
+     * Tests {@link LibUsb#handleEventsCompleted(Context, IntBuffer)} with
+     * uninitialized USB context.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testHandleEventsCompletedWithUninitializedContext()
+    {
+        assumeUsbTestsEnabled();
+        final Context context = new Context();
+        LibUsb.handleEventsCompleted(context, IntBuffer.allocate(1));
+    }
+
+    /**
+     * Tests {@link LibUsb#handleEventsLocked(Context, long)} with uninitialized
+     * USB context.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testHandleEventsLockedWithUninitializedContext()
+    {
+        assumeUsbTestsEnabled();
+        final Context context = new Context();
+        LibUsb.handleEventsLocked(context, 53);
+    }
+
+    /**
+     * Tests {@link LibUsb#pollfdsHandleTimeouts(Context)} with uninitialized
+     * USB context.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testPollfdsHandleTimeoutsWithUninitializedContext()
+    {
+        assumeUsbTestsEnabled();
+        final Context context = new Context();
+        LibUsb.pollfdsHandleTimeouts(context);
+    }
+
+    /**
+     * Tests {@link LibUsb#getNextTimeout(Context, IntBuffer)} with
+     * uninitialized USB context.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testGetNextTimeoutWithUninitializedContext()
+    {
+        assumeUsbTestsEnabled();
+        final Context context = new Context();
+        LibUsb.getNextTimeout(context, IntBuffer.allocate(1));
+    }
+
+    /**
+     * Tests {@link LibUsb#setPollfdNotifiers(Context)} with uninitialized USB
+     * context.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testSetPollfdNotifiersWithUninitializedContext()
+    {
+        assumeUsbTestsEnabled();
+        final Context context = new Context();
+        LibUsb.setPollfdNotifiers(context);
+    }
+
+    /**
+     * Tests {@link LibUsb#unsetPollfdNotifiers(Context)} with uninitialized USB
+     * context.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testUnsetPollfdNotifiersWithUninitializedContext()
+    {
+        assumeUsbTestsEnabled();
+        final Context context = new Context();
+        LibUsb.unsetPollfdNotifiers(context);
+    }
+
+    /**
+     * Tests the
+     * {@link LibUsb#setPollfdNotifiers(Context, PollfdListener, Object)}
+     * method.
+     */
+    @Test
+    public void testPollFdNotifiers()
+    {
+        assumeUsbTestsEnabled();
+        PollfdListenerMock listener = new PollfdListenerMock();
+        Context context = new Context();
+        LibUsb.init(context);
+        LibUsb.setPollfdNotifiers(context, listener, "test");
+
+        FileDescriptor fd = new FileDescriptor();
+        LibUsb.triggerPollfdAdded(fd, 53);
+        assertEquals(53, listener.addedEvents);
+        assertSame(fd, listener.addedFd);
+        assertSame("test", listener.addedUserData);
+        assertNull(listener.removedFd);
+        assertNull(listener.removedUserData);
+
+        listener.reset();
+
+        fd = new FileDescriptor();
+        LibUsb.triggerPollfdRemoved(fd);
+        assertEquals(0, listener.addedEvents);
+        assertNull(listener.addedFd);
+        assertNull(listener.addedUserData);
+        assertSame(fd, listener.removedFd);
+        assertSame("test", listener.removedUserData);
+
+        LibUsb.setPollfdNotifiers(context, null, null);
+        listener.reset();
+
+        fd = new FileDescriptor();
+        LibUsb.triggerPollfdAdded(fd, 53);
+        assertEquals(0, listener.addedEvents);
+        assertNull(listener.addedFd);
+        assertNull(listener.addedUserData);
+        assertNull(listener.removedFd);
+        assertNull(listener.removedUserData);
+
+        listener.reset();
+
+        fd = new FileDescriptor();
+        LibUsb.triggerPollfdRemoved(fd);
+        assertEquals(0, listener.addedEvents);
+        assertNull(listener.addedFd);
+        assertNull(listener.addedUserData);
+        assertNull(listener.removedFd);
+        assertNull(listener.removedUserData);
     }
 }

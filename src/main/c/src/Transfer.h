@@ -10,5 +10,6 @@
 
 jobject wrapTransfer(JNIEnv*, struct libusb_transfer*);
 struct libusb_transfer* unwrapTransfer(JNIEnv*, jobject);
+void resetTransfer(JNIEnv*, jobject);
 
 #endif

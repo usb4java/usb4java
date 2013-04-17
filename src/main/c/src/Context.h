@@ -10,5 +10,6 @@
 
 void setContext(JNIEnv*, libusb_context*, jobject);
 libusb_context* unwrapContext(JNIEnv*, jobject);
+void resetContext(JNIEnv*, jobject);
 
 #endif

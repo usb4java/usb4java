@@ -31,7 +31,7 @@ import javax.usb.event.*;
 
 import org.junit.runner.RunWith;
 
-import de.ailis.usb4java.TCKRunner;
+import de.ailis.usb4java.test.TCKRunner;
 
 /**
  * Control I/O Test - Synchronous and asynchronous Control Irp and Control

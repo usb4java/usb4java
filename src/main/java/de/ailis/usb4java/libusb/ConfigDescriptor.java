@@ -31,7 +31,7 @@ import de.ailis.usb4java.utils.DescriptorUtils;
 public final class ConfigDescriptor implements UsbConfigurationDescriptor
 {
     /** The native pointer to the descriptor structure. */
-    private long pointer;
+    private long configDescriptorPointer;
 
     /**
      * Constructs a new config descriptor which can be passed to the
@@ -49,7 +49,7 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
      */
     public long getPointer()
     {
-        return this.pointer;
+        return this.configDescriptorPointer;
     }
 
     @Override

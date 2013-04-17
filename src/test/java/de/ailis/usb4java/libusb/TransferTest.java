@@ -5,12 +5,13 @@
 
 package de.ailis.usb4java.libusb;
 
-import static de.ailis.usb4java.UsbAssume.assumeUsbTestsEnabled;
+import static de.ailis.usb4java.test.UsbAssume.assumeUsbTestsEnabled;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import java.lang.reflect.Field;
 
@@ -64,6 +65,16 @@ public class TransferTest
         Transfer transfer = LibUsb.allocTransfer(0);
         assertNotNull(transfer);
         LibUsb.freeTransfer(transfer);
+
+        try
+        {
+            LibUsb.freeTransfer(transfer);
+            fail("Double-free should throw IllegalStateException");
+        }
+        catch (IllegalStateException e)
+        {
+            // Expected behavior
+        }
     }
 
     /**
@@ -78,7 +89,8 @@ public class TransferTest
     {
         try
         {
-            Field field = DeviceHandle.class.getDeclaredField("handlePointer");
+            Field field =
+                DeviceHandle.class.getDeclaredField("deviceHandlePointer");
             field.setAccessible(true);
             field.set(handle, pointer);
         }

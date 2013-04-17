@@ -10,5 +10,6 @@
 
 void setConfigDescriptor(JNIEnv*, struct libusb_config_descriptor*, jobject);
 struct libusb_config_descriptor* unwrapConfigDescriptor(JNIEnv*, jobject);
+void resetConfigDescriptor(JNIEnv*, jobject);
 
 #endif

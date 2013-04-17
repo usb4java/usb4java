@@ -24,7 +24,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public final class DeviceList implements Iterable<Device>
 {
     /** The native pointer to the devices array. */
-    private long pointer;
+    private long deviceListPointer;
 
     /** The number of devices in the list. */
     private int size;
@@ -45,7 +45,7 @@ public final class DeviceList implements Iterable<Device>
      */
     public long getPointer()
     {
-        return this.pointer;
+        return this.deviceListPointer;
     }
         
     /**
@@ -76,7 +76,7 @@ public final class DeviceList implements Iterable<Device>
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.pointer).toHashCode();
+        return new HashCodeBuilder().append(this.deviceListPointer).toHashCode();
     }
 
     @Override
@@ -85,6 +85,6 @@ public final class DeviceList implements Iterable<Device>
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         final DeviceList other = (DeviceList) obj;
-        return this.pointer == other.pointer;
+        return this.deviceListPointer == other.deviceListPointer;
     }
 }
