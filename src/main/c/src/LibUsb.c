@@ -25,6 +25,8 @@
 
 static JavaVM *jvm;
 
+static int defaultContextInitialized = 0;
+
 /**
  * Version getVersion()
  */
@@ -46,7 +48,13 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, init)
 {
     if (!context)
     {
-        return libusb_init(NULL);
+        if (defaultContextInitialized)
+        {
+            return illegalState(env, "Default context already initialized");
+        }
+        int result = libusb_init(NULL);
+        if (!result) defaultContextInitialized = 1;
+        return result;
     }
     else
     {
@@ -67,8 +75,17 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, exit)
 {
     struct libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return;
+
+    if (!context && !defaultContextInitialized)
+    {
+        illegalState(env, "Default context not initialized");
+        return;
+    }
     libusb_exit(ctx);
-    resetContext(env, context);
+    if (context)
+        resetContext(env, context);
+    else
+        defaultContextInitialized = 0;
 }
 
 /**

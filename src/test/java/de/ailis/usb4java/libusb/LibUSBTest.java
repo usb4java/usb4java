@@ -176,8 +176,16 @@ public class LibUSBTest
         assertEquals(LibUsb.SUCCESS, LibUsb.init(null));
         LibUsb.exit(null);
         
-        // Double-exit without a context should work
-        LibUsb.exit(null);
+        try
+        {
+            // Double-exit should throw exception
+            LibUsb.exit(null);
+            fail("Double-exit should throw IllegalStateException");
+        }
+        catch (IllegalStateException e)
+        {
+            // Expected behavior
+        }            
     }
 
     /**
