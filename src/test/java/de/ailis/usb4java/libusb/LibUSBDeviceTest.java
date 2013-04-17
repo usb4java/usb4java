@@ -259,16 +259,7 @@ public class LibUSBDeviceTest
     public void testGetParentWithoutDevice()
     {
         assumeUsbTestsEnabled();
-        DeviceList list = new DeviceList();
-        LibUsb.getDeviceList(this.context, list);
-        try
-        {
-            LibUsb.getParent(null);
-        }
-        finally
-        {
-            LibUsb.freeDeviceList(list, true);
-        }
+        LibUsb.getParent(null);
     }
 
     /**
@@ -1144,6 +1135,30 @@ public class LibUSBDeviceTest
         assumeUsbTestsEnabled();
         DeviceList list = new DeviceList();
         assertTrue(LibUsb.getDeviceList(this.context, list) >= 0);
+        LibUsb.freeDeviceList(list, true);
+        
+        try
+        {
+            LibUsb.freeDeviceList(list, true);
+            fail("Double-free should throw IllegalStateException");
+        }
+        catch (IllegalStateException e)
+        {
+            // Expected behavior
+        }
+    }
+
+    /**
+     * Tests the {@link LibUsb#getDeviceList(Context, DeviceList)} and
+     * LibUsb#freeDeviceList(DeviceList, boolean)} methods with the default
+     * context.
+     */
+    @Test
+    public void testGetAndFreeDeviceListWithDefaultContext()
+    {
+        assumeUsbTestsEnabled();
+        DeviceList list = new DeviceList();
+        assertTrue(LibUsb.getDeviceList(null, list) >= 0);
         LibUsb.freeDeviceList(list, true);
         
         try
