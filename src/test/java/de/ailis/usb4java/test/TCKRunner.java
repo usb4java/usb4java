@@ -5,6 +5,7 @@
 
 package de.ailis.usb4java.test;
 
+import org.junit.internal.AssumptionViolatedException;
 import org.junit.internal.runners.JUnit38ClassRunner;
 import org.junit.runner.Description;
 import org.junit.runner.manipulation.Filter;
@@ -34,7 +35,15 @@ public class TCKRunner extends JUnit38ClassRunner
             @Override
             public boolean shouldRun(Description description)
             {
-                return System.getProperty("TCK_TESTS") != null;
+                try
+                {
+                    UsbAssume.assumeTckTestsEnabled();
+                    return true;
+                }
+                catch (AssumptionViolatedException e)
+                {
+                    return false;
+                }
             }
 
             @Override
