@@ -96,18 +96,17 @@ public final class DescriptorUtils
     {
         final int columns = 16;
         bytes.rewind();
-        if (!bytes.hasRemaining()) return "";
         final StringBuilder builder = new StringBuilder();
         int i = 0;
         while (bytes.hasRemaining())
         {
+            if (i % columns != 0)
+                builder.append(' ');
+            else if (i >= columns)
+                builder.append(String.format("%n"));
+            builder.append(String.format("%02x", bytes.get()));
             i++;
-            if (i % columns == 0)
-                builder.append(String.format("%02x%n", bytes.get()));
-            else
-                builder.append(String.format("%02x ", bytes.get()));
         }
-        if (i % columns != 0) builder.append(String.format("%n"));
         return builder.toString();
     }
     
@@ -200,7 +199,7 @@ public final class DescriptorUtils
             + "  bInterfaceClass %10d%n"
             + "  bInterfaceSubClass %7d%n"
             + "  bInterfaceProtocol %7d%n"
-            + "  iInterface %15d%n",
+            + "  iInterface %15d",
             descriptor.bLength(),
             descriptor.bDescriptorType(),
             descriptor.bInterfaceNumber() & 0xff,
@@ -228,7 +227,7 @@ public final class DescriptorUtils
             + "  bEndpointAddress %9s%n"
             + "  bmAttributes %13d%n"
             + "  wMaxPacketSize %11d%n"
-            + "  bInterval %16d%n",
+            + "  bInterval %16d",
             descriptor.bLength(),
             descriptor.bDescriptorType(),
             String.format("0x%02x", descriptor.bEndpointAddress() & 0xff),
