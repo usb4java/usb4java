@@ -7,6 +7,7 @@ package de.ailis.usb4java.descriptors;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 
 import javax.usb.UsbStringDescriptor;
 
@@ -113,13 +114,6 @@ public final class SimpleUsbStringDescriptor extends SimpleUsbDescriptor
     @Override
     public String toString()
     {
-        try
-        {
-            return getString();
-        }
-        catch (UnsupportedEncodingException e)
-        {
-            return super.toString();
-        }
+        return new String(this.bString, Charset.forName("UTF-16LE"));
     }
 }
