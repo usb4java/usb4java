@@ -7,6 +7,7 @@ package de.ailis.usb4java.utils;
 
 import static org.junit.Assert.assertEquals;
 
+import java.lang.reflect.Constructor;
 import java.nio.ByteBuffer;
 
 import org.junit.Test;
@@ -172,5 +173,20 @@ public class DescriptorUtilsTest
             + "  bInterval                5",
             DescriptorUtils.dump(new SimpleUsbEndpointDescriptor((byte) 0,
                 (byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5)));
+    }
+
+    /**
+     * Ensure constructor is private.
+     * 
+     * @throws Exception
+     *             When constructor test fails.
+     */
+    @Test
+    public void testPrivateConstructor() throws Exception
+    {
+        assertEquals(0, DescriptorUtils.class.getConstructors().length);
+        Constructor<?> c = DescriptorUtils.class.getDeclaredConstructor();
+        c.setAccessible(true);
+        c.newInstance();
     }
 }
