@@ -1,7 +1,12 @@
-usb4java - USB library for Java based on libusb 1.0
+usb4java
+========
+
+USB library for Java based on libusb 1.0
+----------------------------------------
+
 Copyright (C) 2011 Klaus Reimer <k@ailis.de>
+
 See LICENSE.md for licensing information.
-==============================================================================
 
 This library can be used to access USB devices in Java. It is based on the 
 native libusb 1.0 shared library and reflects this API as complete as 
@@ -13,6 +18,7 @@ The native libraries are included in pre-compiled form for Linux, Windows and
 Mac OS X in 32 and 64 bit versions. The libraries are automatically extracted
 and loaded so you don't need to care about them. 
 
-For more detailed information please visit the usb4java website:
+For more detailed information please visit the [usb4java website](http://kayahr.github.com/usb4java).
 
-http://kayahr.github.com/usb4java
+[![Build Status](https://ci.ailis.de/job/usb4java/badge/icon)](https://ci.ailis.de/job/usb4java/)
+
