@@ -66,8 +66,8 @@
   </issueManagement>
   
   <ciManagement>
-    <system>Travis CI</system>
-    <url>https://travis-ci.org/kayahr/${project.artifactId}/</url>
+    <system>Jenkins</system>
+    <url>https://ci.ailis.de/job/${project.artifactId}/</url>
   </ciManagement>
   
   <reporting>
