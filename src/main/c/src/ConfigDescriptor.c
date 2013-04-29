@@ -135,7 +135,7 @@ JNIEXPORT jobject JNICALL METHOD_NAME(ConfigDescriptor, extra)
 {
     struct libusb_config_descriptor *descriptor =
         unwrapConfigDescriptor(env, this);
-    return (*env)->NewDirectByteBuffer(env, descriptor,
+    return (*env)->NewDirectByteBuffer(env, (void *) descriptor->extra,
         descriptor->extra_length);
 }
 

@@ -155,7 +155,7 @@ JNIEXPORT jobject JNICALL METHOD_NAME(InterfaceDescriptor, extra)
 {
     struct libusb_interface_descriptor *descriptor =
         unwrapInterfaceDescriptor(env, this);
-    return (*env)->NewDirectByteBuffer(env, descriptor,
+    return (*env)->NewDirectByteBuffer(env, (void *) descriptor->extra,
         descriptor->extra_length);
 }
 
