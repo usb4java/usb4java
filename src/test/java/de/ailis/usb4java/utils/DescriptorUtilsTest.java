@@ -35,7 +35,7 @@ public class DescriptorUtilsTest
     }
 
     /**
-     * Tests the DescriptorUtils#getSpeedName(int)} method.
+     * Tests the {@link DescriptorUtils#getSpeedName(int)} method.
      */
     @Test
     public void testGetSpeedName()
@@ -48,6 +48,44 @@ public class DescriptorUtilsTest
             DescriptorUtils.getSpeedName(LibUsb.SPEED_UNKNOWN));
     }
 
+    /**
+     * Tests the {@link DescriptorUtils#getSynchTypeName(int)} method.
+     */
+    @Test
+    public void testGetSynchTypeName()
+    {
+        assertEquals("None", DescriptorUtils.getSynchTypeName(0));
+        assertEquals("Asynchronous", DescriptorUtils.getSynchTypeName(4));
+        assertEquals("Adaptive", DescriptorUtils.getSynchTypeName(8));
+        assertEquals("Synchronous", DescriptorUtils.getSynchTypeName(12));
+    }
+
+    /**
+     * Tests the {@link DescriptorUtils#getUsageTypeName(int)} method.
+     */
+    @Test
+    public void testGetUsageTypeName()
+    {
+        assertEquals("Data", DescriptorUtils.getUsageTypeName(0));
+        assertEquals("Feedback", DescriptorUtils.getUsageTypeName(16));
+        assertEquals("Explicit Feedback Data", 
+            DescriptorUtils.getUsageTypeName(32));
+        assertEquals("Reserved", DescriptorUtils.getUsageTypeName(48));
+    }
+
+
+    /**
+     * Tests the {@link DescriptorUtils#getTransferTypeName(int)} method.
+     */
+    @Test
+    public void testGetTransferTypeName()
+    {
+        assertEquals("Control", DescriptorUtils.getTransferTypeName(0));
+        assertEquals("Isochronous", DescriptorUtils.getTransferTypeName(1));
+        assertEquals("Bulk", DescriptorUtils.getTransferTypeName(2));
+        assertEquals("Interrupt", DescriptorUtils.getTransferTypeName(3));
+    }
+    
     /**
      * Tests the {@link DescriptorUtils#getUSBClassName(int)} method.
      */
