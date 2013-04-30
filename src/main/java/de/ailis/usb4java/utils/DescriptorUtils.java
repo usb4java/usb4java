@@ -256,7 +256,7 @@ public final class DescriptorUtils
         return String.format("Endpoint Descriptor:%n"
             + "  bLength %18d%n"
             + "  bDescriptorType %10d%n"
-            + "  bEndpointAddress %9s%n"
+            + "  bEndpointAddress %9s  EP %d %s%n"
             + "  bmAttributes %13d%n"
             + "    Transfer Type             %s%n"
             + "    Synch Type                %s%n"
@@ -266,6 +266,8 @@ public final class DescriptorUtils
             descriptor.bLength(),
             descriptor.bDescriptorType(),
             String.format("0x%02x", descriptor.bEndpointAddress() & 0xff),
+            descriptor.bEndpointAddress() & 0xf, 
+            (descriptor.bEndpointAddress() & 0x80) == 0 ? "OUT" : "IN",
             descriptor.bmAttributes() & 0xff,
             getTransferTypeName(descriptor.bmAttributes() & 0xff),
             getSynchTypeName(descriptor.bmAttributes() & 0xff),
