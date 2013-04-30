@@ -258,14 +258,88 @@ public final class DescriptorUtils
             + "  bDescriptorType %10d%n"
             + "  bEndpointAddress %9s%n"
             + "  bmAttributes %13d%n"
+            + "    Transfer Type             %s%n"
+            + "    Synch Type                %s%n"
+            + "    Usage Type                %s%n"
             + "  wMaxPacketSize %11d%n"
             + "  bInterval %16d",
             descriptor.bLength(),
             descriptor.bDescriptorType(),
             String.format("0x%02x", descriptor.bEndpointAddress() & 0xff),
             descriptor.bmAttributes() & 0xff,
+            getTransferTypeName(descriptor.bmAttributes() & 0xff),
+            getSynchTypeName(descriptor.bmAttributes() & 0xff),
+            getUsageTypeName(descriptor.bmAttributes() & 0xff),
             descriptor.wMaxPacketSize() & 0xffff,
             descriptor.bInterval() & 0xff);
+    }
+
+    /**
+     * Returns the name for the transfer type in the specified endpoint
+     * attributes.
+     * 
+     * @param bmAttributes
+     *            The endpoint attributes value.
+     * @return The transfer type name.
+     */
+    public static String getTransferTypeName(final int bmAttributes)
+    {
+        switch (bmAttributes & 3)
+        {
+            case 1:
+                return "Isochronous";
+            case 2:
+                return "Bulk";
+            case 3:
+                return "Interrupt";
+            default:
+                return "Control";
+        }
+    }
+
+    /**
+     * Returns the name for the synchronization type in the specified endpoint
+     * attributes.
+     * 
+     * @param bmAttributes
+     *            The endpoint attributes value.
+     * @return The synch type name.
+     */
+    public static String getSynchTypeName(final int bmAttributes)
+    {
+        switch (bmAttributes & 3)
+        {
+            case 1:
+                return "Asynchronous";
+            case 2:
+                return "Adaptive";
+            case 3:
+                return "Synchronous";
+            default:
+                return "None";
+        }
+    }
+
+    /**
+     * Returns the name for the usage type in the specified endpoint attributes.
+     * 
+     * @param bmAttributes
+     *            The endpoint attributes value.
+     * @return The usage type name.
+     */
+    public static String getUsageTypeName(final int bmAttributes)
+    {
+        switch (bmAttributes & 3)
+        {
+            case 1:
+                return "Feedback";
+            case 2:
+                return "Explicit Feedback Data";
+            case 3:
+                return "Reserved";
+            default:
+                return "Data";
+        }
     }
 
     /**
