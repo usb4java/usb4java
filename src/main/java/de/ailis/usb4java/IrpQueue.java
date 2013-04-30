@@ -123,7 +123,7 @@ final class IrpQueue extends AbstractIrpQueue<UsbIrp>
             final int size =
                 Math.min(len - read, descriptor.wMaxPacketSize() & 0xffff);
             final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
-            int result = transfer(handle, descriptor, type, buffer);
+            final int result = transfer(handle, descriptor, type, buffer);
             buffer.rewind();
             buffer.get(data, offset + read, result);
             read += result;
@@ -161,7 +161,7 @@ final class IrpQueue extends AbstractIrpQueue<UsbIrp>
             final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
             buffer.put(data, offset + written, size);
             buffer.rewind();
-            int result = transfer(handle, descriptor, type, buffer);
+            final int result = transfer(handle, descriptor, type, buffer);
             written += result;
 
             // Short packet detected, aborting
@@ -185,8 +185,9 @@ final class IrpQueue extends AbstractIrpQueue<UsbIrp>
      * @throws UsbException
      *             When data transfer fails.
      */
-    private int transfer(DeviceHandle handle, UsbEndpointDescriptor descriptor,
-        int type, ByteBuffer buffer) throws UsbException
+    private int transfer(final DeviceHandle handle, 
+        final UsbEndpointDescriptor descriptor, final int type, 
+        final ByteBuffer buffer) throws UsbException
     {
         final IntBuffer transferred = IntBuffer.allocate(1);
         int result;
