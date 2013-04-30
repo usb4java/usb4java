@@ -200,6 +200,8 @@ public final class DescriptorUtils
             + "  bConfigurationValue %6d%n"
             + "  iConfiguration %11d%n"
             + "  bmAttributes %13s%n"
+            + "    %s%n"
+            + "%s"
             + "  bMaxPower %16smA",
             descriptor.bLength(),
             descriptor.bDescriptorType(),
@@ -208,6 +210,10 @@ public final class DescriptorUtils
             descriptor.bConfigurationValue() & 0xff,
             descriptor.iConfiguration() & 0xff,
             String.format("0x%02x", descriptor.bmAttributes() & 0xff),
+            (descriptor.bmAttributes() & 64) == 0 ? "(Bus Powered)" : 
+                "Self Powered", 
+            (descriptor.bmAttributes() & 32) == 0 ? "" : 
+                String.format("    Remote Wakeup%n"), 
             (descriptor.bMaxPower() & 0xff) * 2);
     }
 
