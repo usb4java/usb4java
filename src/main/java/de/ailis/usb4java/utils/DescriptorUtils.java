@@ -315,7 +315,7 @@ public final class DescriptorUtils
      */
     public static String getSynchTypeName(final int bmAttributes)
     {
-        switch (bmAttributes & 3)
+        switch ((bmAttributes >> 2) & 3)
         {
             case 1:
                 return "Asynchronous";
@@ -337,7 +337,7 @@ public final class DescriptorUtils
      */
     public static String getUsageTypeName(final int bmAttributes)
     {
-        switch (bmAttributes & 3)
+        switch ((bmAttributes >> 4) & 3)
         {
             case 1:
                 return "Feedback";
