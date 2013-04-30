@@ -199,7 +199,7 @@ final class IrpQueue extends AbstractIrpQueue<UsbIrp>
             if (result < 0)
             {
                 throw new LibUsbException(
-                    "Unable to write to bulk endpoint", result);
+                    "Transfer error on bulk endpoint", result);
             }
         }
         else if (type == UsbConst.ENDPOINT_TYPE_INTERRUPT)
@@ -210,13 +210,13 @@ final class IrpQueue extends AbstractIrpQueue<UsbIrp>
             if (result < 0)
             {
                 throw new LibUsbException(
-                    "Unable to write to interrupt endpoint", result);
+                    "Transfer error on interrupt endpoint", result);
             }
         }
         else
         {
             throw new UsbException("Unsupported endpoint type: " + type);
         }
-        return result;
+        return transferred.get(0);
     }
 }
