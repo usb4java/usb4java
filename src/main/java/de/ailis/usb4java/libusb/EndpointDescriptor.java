@@ -109,22 +109,11 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
      */
     public String dump()
     {
-        return String.format("Endpoint Descriptor:%n"
-            + "  bLength           %5d%n"
-            + "  bDecsriptorType   %5d%n"
-            + "  bEndpointAddress   0x%02x%n"
-            + "  bmAttributes       0x%02x%n"
-            + "  wMaxPacketSize    %5d%n"
-            + "  bInterval         %5d%n"
-            + "  extralen     %10d%n"
+        return String.format("%s%n"
+            + "  extralen %17d%n"
             + "  extra:%n"
             + "%s",
-            bLength() & 0xff, 
-            bDescriptorType() & 0xff, 
-            bEndpointAddress() & 0xff, 
-            bmAttributes() & 0xff,
-            wMaxPacketSize() & 0xffff, 
-            bInterval() & 0xff, 
+            DescriptorUtils.dump(this),
             extraLength(),
             DescriptorUtils.dump(extra()).replaceAll("(?m)^", "    "));
     }

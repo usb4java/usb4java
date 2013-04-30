@@ -122,26 +122,11 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
     {
         final StringBuilder builder = new StringBuilder();
         builder
-            .append(String.format("Configuration Descriptor:%n"
-                + "  bLength               %5d%n"
-                + "  bDescriptorType       %5d%n"
-                + "  wTotalLength          %5d%n"
-                + "  bNumInterfaces        %5d%n"
-                + "  bConfigurationValue   %5d%n"
-                + "  iConfiguration        %5d%n"
-                + "  bmAttributes           %#04x%n"
-                + "  bMaxPower             %5dmA%n"
-                + "  extralen         %10d%n"
+            .append(String.format("%s%n"
+                + "  extralen %17d%n"
                 + "  extra:%n"
                 + "%s",
-                bLength() & 0xff,
-                bDescriptorType() & 0xff,
-                wTotalLength() & 0xffff,
-                bNumInterfaces() & 0xff,
-                bConfigurationValue() & 0xff,
-                iConfiguration() & 0xff,
-                bmAttributes() & 0xff,
-                (bMaxPower() & 0xff) * 2,
+                DescriptorUtils.dump(this),
                 extraLength(),
                 DescriptorUtils.dump(extra()).replaceAll("(?m)^", "    ")));
         for (final Interface descriptor: iface())

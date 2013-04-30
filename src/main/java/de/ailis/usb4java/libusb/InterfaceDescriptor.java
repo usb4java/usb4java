@@ -127,29 +127,11 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
         final int iInterface = iInterface();
         String sInterface = LibUsb.getStringDescriptor(handle, iInterface);
         if (sInterface == null) sInterface = "";
-        builder.append(String.format("Interface Descriptor:%n"
-            + "  bLength             %5d%n"
-            + "  bDescriptorType     %5d%n"
-            + "  bInterfaceNumber    %5d%n"
-            + "  bAlternateSetting   %5d%n"
-            + "  bNumEndpoints       %5d%n"
-            + "  bInterfaceClass     %5d %s%n"
-            + "  bInterfaceSubClass  %5d%n"
-            + "  bInterfaceProtocol  %5d%n"
-            + "  iInterface          %5d %s%n"
-            + "  extralen       %10d%n"
+        builder.append(String.format("%s%n"
+            + "  extralen %17d%n"
             + "  extra:%n"
             + "%s",
-            bLength() & 0xff, 
-            bDescriptorType() & 0xff, 
-            bInterfaceNumber() & 0xff,
-            bAlternateSetting() & 0xff, 
-            bNumEndpoints() & 0xff, 
-            bInterfaceClass() & 0xff, 
-            DescriptorUtils.getUSBClassName(bInterfaceClass()), 
-            bInterfaceSubClass() & 0xff,
-            bInterfaceProtocol() & 0xff, 
-            iInterface() & 0xff, sInterface, 
+            DescriptorUtils.dump(this),
             extraLength(),
             DescriptorUtils.dump(extra()).replaceAll("(?m)^", "    ")));
         if (extraLength() != 0) return builder.toString();

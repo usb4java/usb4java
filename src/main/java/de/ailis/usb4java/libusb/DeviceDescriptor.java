@@ -114,47 +114,7 @@ public final class DeviceDescriptor implements UsbDeviceDescriptor
      */
     public String dump(final DeviceHandle handle)
     {
-        final int iManufacturer = iManufacturer();
-        String sManufacturer =
-            LibUsb.getStringDescriptor(handle, iManufacturer);
-        if (sManufacturer == null) sManufacturer = "";
-        final int iProduct = iProduct();
-        String sProduct = LibUsb.getStringDescriptor(handle, iProduct);
-        if (sProduct == null) sProduct = "";
-        final int iSerialNumber = iSerialNumber();
-        String sSerialNumber =
-            LibUsb.getStringDescriptor(handle, iSerialNumber);
-        if (sSerialNumber == null) sSerialNumber = "";
-        return String.format("Device Descriptor:%n"
-            + "  bLength               %5d%n"
-            + "  bDescriptorType       %5d%n"
-            + "  bcdUSB                %5s%n"
-            + "  bDeviceClass          %5d %s%n"
-            + "  bDeviceSubClass       %5d%n"
-            + "  bDeviceProtocol       %5d%n"
-            + "  bMaxPacketSize0       %5d%n"
-            + "  idVendor             %#06x%n"
-            + "  idProduct            %#06x%n"
-            + "  bcdDevice             %5s%n"
-            + "  iManufacturer         %5d %s%n"
-            + "  iProduct              %5d %s%n"
-            + "  iSerialNumber         %5d %s%n"
-            + "  bNumConfigurations    %5d",
-            bLength() & 0xff,
-            bDescriptorType() % 0xff,
-            DescriptorUtils.decodeBCD(bcdUSB()),
-            bDeviceClass() & 0xff,
-            DescriptorUtils.getUSBClassName(bDeviceClass()),
-            bDeviceSubClass() & 0xff,
-            bDeviceProtocol() & 0xff,
-            bMaxPacketSize0() & 0xff,
-            idVendor() & 0xffff,
-            idProduct() & 0xffff,
-            DescriptorUtils.decodeBCD(bcdDevice()),
-            iManufacturer & 0xff, sManufacturer,
-            iProduct & 0xff, sProduct,
-            iSerialNumber & 0xff, sSerialNumber,
-            bNumConfigurations() & 0xff);
+        return DescriptorUtils.dump(this, handle);
     }
 
     @Override
