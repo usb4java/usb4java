@@ -22,8 +22,8 @@ public final class Loader
     /** Buffer size used for copying data. */
     private static final int BUFFER_SIZE = 8192;
 
-    /** Constant for Mac OS X operating system. */
-    private static final String OS_MACOSX = "macosx";
+    /** Constant for OS X operating system. */
+    private static final String OS_OSX = "osx";
 
     /** Constant for Linux operating system. */
     private static final String OS_LINUX = "linux";
@@ -74,7 +74,7 @@ public final class Loader
 
     /**
      * Returns the operating system name. This could be "linux", "windows" or
-     * "macosx" or (for any other non-supported platform) the value of the
+     * "osx" or (for any other non-supported platform) the value of the
      * "os.name" property converted to lower case and with removed space
      * characters.
      * 
@@ -118,7 +118,7 @@ public final class Loader
             return EXT_SO;
         if (os.equals(OS_WINDOWS))
             return EXT_DLL;
-        if (os.equals(OS_MACOSX))
+        if (os.equals(OS_OSX))
             return EXT_DYLIB;
         throw new LoaderException("Unable to determine the shared library " +
             "file extension for operating system '" + os +

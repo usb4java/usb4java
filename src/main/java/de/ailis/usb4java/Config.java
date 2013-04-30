@@ -53,7 +53,7 @@ final class Config
     Config(final Properties properties)
     {
         // Read scanHierarchy property. If not set then hierarchy scan is
-        // disabled on Mac OS X (because libusb always returns a null root_dev
+        // disabled on OS X (because libusb always returns a null root_dev
         // on this platform) and true for all other platforms.
         if (properties.containsKey(SCAN_HIERARCHY_KEY))
             this.scanHierarchy = Boolean.parseBoolean(properties.getProperty(
