@@ -13,88 +13,10 @@ Installation
   {{{http://javax-usb.sourceforge.net/}javax.usb project site}}.
   This JAR must also be copied into your class path.
   
+  Another dependency needed since version 1.0.0 is
+  {{{http://commons.apache.org/proper/commons-lang/}commons-lang v3}}.
 
-The low-level API
 
-  It is recommended to use the high-level javax.usb API but there are
-  situations where you might want to use the low-level API instead. 
-  For example if you are already familiar with libusb or if you
-  are porting a C program to Java then it might be easier to use the
-  low-level API which is based on libusb version 0.1.12.
-  
-  All global functions and constants of libusb are defined as static
-  members of the class
-  {{{./apidocs/de/ailis/usb4java/jni/USB.html}de.ailis.usb4java.jni.USB}}.
-  All structures of libusb are defined in separate classes which are named
-  similiar to the original struct names. For example the struct
-  <usb_device> is defined in the class
-  {{{./apidocs/de/ailis/usb4java/jni/USB_Device.html}USB_Device}}. Struct
-  members are represented by static methods in the corresponding class.
-   
-  The following differences exists between the <libusb 0.1 API> and
-  the low-level API of <usb4java>:
-    
-  * <interface> in the configuration descriptor is named <iface> because
-    <interface> is a reserved word in Java.
-    
-  * <MaxPower> in the configuration descriptor is named <bMaxPower> to
-    be compatible to the USB specification and because method names starting
-    with upper-case letters are quite unusual in Java.
-    
-  * Whenever libusb expects a byte pointer and a length you have to use
-    a direct Java NIO ByteBuffer instead.
-    
-  * The method <libusb_has_get_driver_np()> can be used to check if the
-    platform-dependent method <usb_get_driver_np()> is available. 
-
-  * The method <libusb_has_detach_kernel_driver_np()> can be used to check if
-    the platform-dependent method <usb_detach_kernel_driver_np()> is available.
-    
-  * All methods which are returning a string through a byte buffer which was
-    passed as argument have additional simplified overloaded method
-    equivalents which are returning a Java String directly.
-  
-  []
-  
-  It is recommended to use static imports to access the API. Here is a small
-  example which iterates over all USB devices and prints the vendor and
-  product IDs:
-  
-+-----------------------------------------------------------------------------+
-import static de.ailis.usb4java.jni.USB.*;
-
-public class Dump
-{
-    public static void main(String[] args)
-    {
-        usb_init();
-        usb_find_busses();
-        usb_find_devices();
-        USB_Bus bus = usb_get_busses();
-        while (bus != null)
-        {
-            USB_Device device = bus.devices();
-            while (device != null)
-            {
-                USB_Device_Descriptor desc = device.descriptor();
-                System.out.format("%04x:%04x%n", desc.idVendor(), desc.idProduct());
-                device = device.next();
-            }
-            bus = bus.next();
-        }
-    }
-}
-+-----------------------------------------------------------------------------+
-  
-* More information about the low-level API
-
-  * {{{./apidocs/de/ailis/usb4java/jni/package-summary.html}Low-level API documentation of usb4java}}
-  
-  * {{{http://libusb.sourceforge.net/doc/}API documentatiaon of libusb 0.1}}
-  
-  []
-  
-  
 The high-level API
 
   The high-level API implements the
@@ -200,6 +122,57 @@ System.out.println(irp.getData()[0]);
   * {{{./apidocs/index.html}API documentation of usb4java}}
   
   * {{{http://javax-usb.sourceforge.net/}javax-usb website}}
+  
+  []
+  
+
+The low-level API
+
+  It is recommended to use the high-level javax.usb API but there are
+  situations where you might want to use the low-level API instead. 
+  For example if you are already familiar with libusb or if you
+  are porting a C program to Java then it might be easier to use the
+  low-level API which is based on libusb version 1.0.
+  
+  All global functions and constants of libusb are defined as static
+  members of the class
+  {{{./apidocs/de/ailis/usb4java/libusb/LibUsb.html}de.ailis.usb4java.libusb.LibUsb}}.
+  All structures of libusb are defined in separate classes which are named
+  similar to the original struct names but without underscores, with upper
+  case names and with the libusb prefix removed. For example the struct
+  <libusb_device_handle> is defined in the class
+  {{{./apidocs/de/ailis/usb4java/libusb/DeviceHandle.html}DeviceHandle}}. Struct
+  members are represented by static methods in the corresponding class.
+   
+  The following notable differences exists between the <libusb 1.0 API> and
+  the low-level API of <usb4java>:
+    
+  * <interface> in the configuration descriptor is named <iface> because
+    <interface> is a reserved word in Java.
+    
+  * <MaxPower> in the configuration descriptor is named <bMaxPower> to
+    be compatible to the USB specification and because method names starting
+    with upper-case letters are quite unusual in Java.
+    
+  * Whenever libusb expects a byte pointer and a length you have to use
+    a direct Java NIO ByteBuffer instead.
+    
+  * Methods which are returning a string through a byte buffer which was
+    passed as argument have additional simplified overloaded method
+    equivalents which are returning a Java String directly.
+    
+  * Currently the asynchronous functions of libusb are not wrapped by usb4java.
+    This may change in the future (Some help here is highly appreciated). So
+    currently asynchronous communication is only possible with the high-level
+    API which uses the synchronous libusb functions in Java threads.
+  
+  []
+    
+* More information about the low-level API
+
+  * {{{./apidocs/de/ailis/usb4java/libusb/package-summary.html}Low-level API documentation of usb4java}}
+  
+  * {{{http://libusb.sourceforge.net/doc/}API documentatiaon of libusb 0.1}}
   
   []
   

@@ -18,7 +18,7 @@
     <links>
       <item name="javax.usb" href="http://javax-usb.sourceforge.net/" />
       <item name="libusb" href="http://www.libusb.org/" />
-      <item name="libusb-win32" href="http://sourceforge.net/apps/trac/libusb-win32/wiki" />
+      <item name="libusbx" href="http://www.libusbx.org/" />
     </links>
   
     <head>

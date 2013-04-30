@@ -5,34 +5,36 @@
 Library loading
 
   The native libraries for all supported platforms are included in the
-  usb4java JAR file. usb4java determines on startup which libraries are needed
-  for the current platform and extracts them to a temporary directory and
-  loads them from there. This makes it easy to use usb4java because you just
-  need to put the JAR in your classpath. No need to fiddle around with
-  <java.library.path> or environment variables like <LD_LIBRARY_PATH> or
-  <DYLD_LIBRARY_PATH>.
+  standard usb4java JAR file (But there is also one without the native 
+  libs if you want to package them in your own way). usb4java determines on 
+  startup which libraries are needed for the current platform and extracts them 
+  to a temporary directory and loads them from there. This makes it easy to use 
+  usb4java because you just need to put the JAR in your classpath. No need to 
+  fiddle around with <java.library.path> or environment variables like 
+  <LD_LIBRARY_PATH> or <DYLD_LIBRARY_PATH>.
   
   usb4java only extracts the files into a temporary directory when they
   are inside a JAR file. So if you prefer direct loading without extracting
-  to a temporary directory then you may want to use the <usb4java-nonatives.jar>
-  file instead and ship the native libraries with your application in extracted 
-  form. Here is an example application layout:
+  to a temporary directory then you may want to use the 
+  <usb4java-no-natives.jar> file instead and ship the native libraries with 
+  your application in extracted form. Here is an example application layout:
   
 +-----------------------------------------------------------------------------+
 natives/
-  de/ailis/usb4java/jni/
+  de/ailis/usb4java/libusb/
     linux-x86/libusb4java.so
     windows-x86/libusb4java.dll
-    macosx-universal/libusb4java.dylib
+    osx-x86/libusb4java.dylib
 lib/
-  usb4java-nonatives.jar
+  usb4java-no-natives.jar
+  commons-lang3.jar
   usb.jar
 myapp.sh
 +-----------------------------------------------------------------------------+          
 
   To make this work just make sure to put the <natives> folder into your
-  classpath. The native libraries itself can be found in the <usb4java.jar>
-  file.
+  classpath. The native libraries itself can be found in the 
+  <usb4java.jar> or the <usb4java-natives.jar> file.
   
   
 Unsupported platforms
@@ -41,7 +43,7 @@ Unsupported platforms
   usb4java then you might get one of the following two exceptions:
 
 +----+
-Native library not found in classpath: /de/ailis/usb4java/jni/freebsd-x86/libusb4java.so
+Native library not found in classpath: /de/ailis/usb4java/libusb/freebsd-x86/libusb4java.so
 +----+
 
 +----+
@@ -68,31 +70,25 @@ Unable to determine the shared library file extension for operating system
      Make sure the environment variable <JAVA_HOME> is pointing to the
      directory where you have installed the JDK.
   
-  2. Install a {{{http://gcc.gnu.org/}GNU compiler}}, 
-     {{{http://www.gnu.org/software/autoconf/}autoconf}}, 
-     {{{http://www.gnu.org/software/automake/}automake}} and 
-     {{{http://www.gnu.org/software/libtool/}libtool}}.
+  2. Install the {{{http://www.libusb.org/}libusb}} development files.
   
-  3. Install the {{{http://www.libusb.org/}libusb}} development files.
+  3. Install {{{http://git-scm.com/}Git}}.
   
-  4. Install {{{http://git-scm.com/}Git}}.
-  
-  5. Clone the {{{https://github.com/kayahr/usb4java/}usb4java source code repository}} with Git:
+  4. Clone the {{{https://github.com/kayahr/usb4java/}usb4java source code repository}} with Git:
   
 +----
 $ git clone git://github.com/kayahr/usb4java.git
 +----
 
-  6. Go to the directory containing the C sources of the JNI wrapper:
+  5. Go to the directory containing the C sources of the JNI wrapper:
   
 +----
 $ cd usb4java/src/main/c
 +----
 
-  7. Compile the wrapper:
+  6. Compile the wrapper:
   
 +----
-$ make -f Makefile.scm
 $ ./configure --prefix=/
 $ make install-strip DESTDIR=/tmp
 +---- 
@@ -101,7 +97,7 @@ $ make install-strip DESTDIR=/tmp
      the directory </tmp/lib>. The file name depends on your operating system.
      Make sure you rename it to <libusb4java.so> (Or whatever file extension
      your platform uses) and copy this file into the directory 
-     </de/ailis/usb4java/jni/OS-ARCH/> in your classpath where <OS> is the name
+     </de/ailis/usb4java/libusb/OS-ARCH/> in your classpath where <OS> is the name
      of your operating system and <ARCH> is your CPU architecture (Both
      must match the names mentioned in the exception thrown by usb4java.)
      
@@ -111,6 +107,7 @@ $ make install-strip DESTDIR=/tmp
   sub folder. You could write a new simple Makefile or whatever is needed on
   your platform.
 
-  If you have problems then please open an 
-  {{{${project.issueManagement.url}}issue on GitHub}}. Someone may be able to
-  help.
+  If you have problems then please consult the  
+  {{{http://groups.google.com/group/usb4java}usb4java Google Group}}. 
+  Someone may be able to help.
+  
