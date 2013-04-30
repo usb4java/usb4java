@@ -5,11 +5,18 @@
 
 package de.ailis.usb4java;
 
+import java.nio.ByteBuffer;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import javax.usb.UsbControlIrp;
 import javax.usb.UsbException;
 import javax.usb.UsbIrp;
+import javax.usb.UsbShortPacketException;
+
+import de.ailis.usb4java.libusb.DeviceHandle;
+import de.ailis.usb4java.libusb.LibUsb;
+import de.ailis.usb4java.libusb.LibUsbException;
 
 
 /**
@@ -182,4 +189,38 @@ abstract class AbstractIrpQueue<T extends UsbIrp>
     {
         return this.device;
     }
+    
+    /**
+     * Processes the control IRP.
+     * 
+     * @param irp
+     *            The IRP to process.
+     * @throws UsbException
+     *             When processing the IRP fails.
+     */
+    protected final void processControlIrp(final UsbControlIrp irp)
+        throws UsbException
+    {
+        final ByteBuffer buffer =
+            ByteBuffer.allocateDirect(irp.getLength());
+        buffer.put(irp.getData(), irp.getOffset(), irp.getLength());
+        buffer.rewind();
+        final DeviceHandle handle = getDevice().open();
+        final int result = LibUsb.controlTransfer(handle, irp.bmRequestType(),
+            irp.bRequest(), irp.wValue(), irp.wIndex(), buffer,
+            getConfig().getTimeout());
+        if (result < 0)
+        {
+            throw new LibUsbException(
+                "Unable to submit control message", result);
+        }
+        buffer.rewind();
+        buffer.get(irp.getData(), irp.getOffset(), result);
+        irp.setActualLength(result);
+        if (irp.getActualLength() != irp.getLength()
+            && !irp.getAcceptShortPacket())
+        {
+            throw new UsbShortPacketException();
+        }
+    }    
 }

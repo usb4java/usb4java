@@ -99,35 +99,6 @@ final class IrpQueue extends AbstractIrpQueue<UsbIrp>
     }
 
     /**
-     * Processes the control IRP.
-     * 
-     * @param irp
-     *            The IRP to process.
-     * @throws UsbException
-     *             When processing the IRP fails.
-     */
-    private void processControlIrp(final UsbControlIrp irp) throws UsbException
-    {
-        final ByteBuffer buffer =
-            ByteBuffer.allocateDirect(irp.getLength());
-        buffer.put(irp.getData(), irp.getOffset(), irp.getLength());
-        buffer.rewind();
-        final DeviceHandle handle = getDevice().open();
-        final int result = LibUsb.controlTransfer(handle, irp.bmRequestType(),
-            irp.bRequest(), irp.wValue(), irp.wIndex(), buffer,
-            getConfig().getTimeout());
-        if (result < 0)
-            throw new LibUsbException(
-                "Unable to submit control message", result);
-        buffer.rewind();
-        buffer.get(irp.getData(), irp.getOffset(), result);
-        irp.setActualLength(result);
-        if (irp.getActualLength() != irp.getLength()
-            && !irp.getAcceptShortPacket())
-            throw new UsbShortPacketException();
-    }
-
-    /**
      * Reads bytes from an interrupt endpoint into the specified data array.
      * 
      * @param data
