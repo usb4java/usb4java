@@ -14,7 +14,6 @@ import javax.usb.UsbDeviceDescriptor;
 import javax.usb.UsbEndpointDescriptor;
 import javax.usb.UsbInterfaceDescriptor;
 
-import de.ailis.usb4java.libusb.DeviceHandle;
 import de.ailis.usb4java.libusb.LibUsb;
 
 /**
@@ -121,7 +120,7 @@ public final class DescriptorUtils
      */
     public static String dump(final UsbDeviceDescriptor descriptor)
     {
-        return dump(descriptor, null);
+        return dump(descriptor, null, null, null);
     }
 
     /**
@@ -130,26 +129,17 @@ public final class DescriptorUtils
      * 
      * @param descriptor
      *            The USB device descriptor to dump.
-     * @param handle
-     *            The device handle. Null if not available. When present then
-     *            string descriptors are read from the device.
+     * @param manufacturer
+     *            The manufacturer string or null if unknown.
+     * @param product
+     *            The product string or null if unknown.
+     * @param serial
+     *            The serial number strsing or null if unknown.
      * @return The descriptor dump.
      */
     public static String dump(final UsbDeviceDescriptor descriptor,
-        final DeviceHandle handle)
+        final String manufacturer, final String product, final String serial)
     {
-        final int iManufacturer = descriptor.iManufacturer();
-        String sManufacturer =
-            LibUsb.getStringDescriptor(handle, iManufacturer);
-        if (sManufacturer == null) sManufacturer = "";
-        final int iProduct = descriptor.iProduct();
-        String sProduct = LibUsb.getStringDescriptor(handle, iProduct);
-        if (sProduct == null) sProduct = "";
-        final int iSerialNumber = descriptor.iSerialNumber();
-        String sSerialNumber =
-            LibUsb.getStringDescriptor(handle, iSerialNumber);
-        if (sSerialNumber == null) sSerialNumber = "";
-
         return String.format("Device Descriptor:%n"
             + "  bLength %18d%n"
             + "  bDescriptorType %10d%n"
@@ -176,9 +166,12 @@ public final class DescriptorUtils
             String.format("0x%04x", descriptor.idVendor() & 0xffff),
             String.format("0x%04x", descriptor.idProduct() & 0xffff),
             decodeBCD(descriptor.bcdDevice()),
-            descriptor.iManufacturer() & 0xff, sManufacturer,
-            descriptor.iProduct() & 0xff, sProduct,
-            descriptor.iSerialNumber() & 0xff, sSerialNumber,
+            descriptor.iManufacturer() & 0xff, 
+            manufacturer == null ? "" : manufacturer,
+            descriptor.iProduct() & 0xff,
+            product == null ? "" : product,
+            descriptor.iSerialNumber() & 0xff, 
+            serial == null ? "" : serial,
             descriptor.bNumConfigurations() & 0xff);
     }
 

@@ -114,7 +114,13 @@ public final class DeviceDescriptor implements UsbDeviceDescriptor
      */
     public String dump(final DeviceHandle handle)
     {
-        return DescriptorUtils.dump(this, handle);
+        final String sManufacturer = LibUsb.getStringDescriptor(handle, 
+            iManufacturer());
+        final String sProduct = LibUsb.getStringDescriptor(handle, iProduct());
+        final String sSerialNumber = LibUsb.getStringDescriptor(handle, 
+            iSerialNumber());
+        return DescriptorUtils.dump(this, sManufacturer, sProduct, 
+            sSerialNumber);
     }
 
     @Override
