@@ -151,9 +151,9 @@ public final class DescriptorUtils
             + "  idVendor %17s%n"
             + "  idProduct %16s%n"
             + "  bcdDevice %16s%n"
-            + "  iManufacturer %12d %s%n"
-            + "  iProduct %17d %s%n"
-            + "  iSerial %18d %s%n"
+            + "  iManufacturer %12d%s%n"
+            + "  iProduct %17d%s%n"
+            + "  iSerial %18d%s%n"
             + "  bNumConfigurations %7d",
             descriptor.bLength(),
             descriptor.bDescriptorType(),
@@ -167,11 +167,11 @@ public final class DescriptorUtils
             String.format("0x%04x", descriptor.idProduct() & 0xffff),
             decodeBCD(descriptor.bcdDevice()),
             descriptor.iManufacturer() & 0xff, 
-            manufacturer == null ? "" : manufacturer,
+            manufacturer == null ? "" : " " + manufacturer,
             descriptor.iProduct() & 0xff,
-            product == null ? "" : product,
+            product == null ? "" : " " + product,
             descriptor.iSerialNumber() & 0xff, 
-            serial == null ? "" : serial,
+            serial == null ? "" : " " + serial,
             descriptor.bNumConfigurations() & 0xff);
     }
 

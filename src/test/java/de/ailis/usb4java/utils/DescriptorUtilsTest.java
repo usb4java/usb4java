@@ -95,8 +95,8 @@ public class DescriptorUtilsTest
         assertEquals("Device Descriptor:\n"
             + "  bLength                  0\n"
             + "  bDescriptorType          1\n"
-            + "  bcdDevice             0.02\n"
-            + "  bDeviceClass             3\n"
+            + "  bcdUSB                0.02\n"
+            + "  bDeviceClass             3 HID\n"
             + "  bDeviceSubClass          4\n"
             + "  bDeviceProtocol          5\n"
             + "  bMaxPacketSize0          6\n"
@@ -129,6 +129,7 @@ public class DescriptorUtilsTest
             + "  bConfigurationValue      4\n"
             + "  iConfiguration           5\n"
             + "  bmAttributes          0x06\n"
+            + "    (Bus Powered)\n"
             + "  bMaxPower               14mA",
             DescriptorUtils.dump(new SimpleUsbConfigurationDescriptor((byte) 0,
                 (byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5, (byte) 6,
@@ -148,7 +149,7 @@ public class DescriptorUtilsTest
             + "  bInterfaceNumber         2\n"
             + "  bAlternateSetting        3\n"
             + "  bNumEndpoints            4\n"
-            + "  bInterfaceClass          5\n"
+            + "  bInterfaceClass          5 Unknown\n"
             + "  bInterfaceSubClass       6\n"
             + "  bInterfaceProtocol       7\n"
             + "  iInterface               8",
@@ -167,8 +168,11 @@ public class DescriptorUtilsTest
         assertEquals("Endpoint Descriptor:\n"
             + "  bLength                  0\n"
             + "  bDescriptorType          1\n"
-            + "  bEndpointAddress      0x02\n"
+            + "  bEndpointAddress      0x02  EP 2 OUT\n"
             + "  bmAttributes             3\n"
+            + "    Transfer Type             Interrupt\n"
+            + "    Synch Type                None\n"
+            + "    Usage Type                Data\n"
             + "  wMaxPacketSize           4\n"
             + "  bInterval                5",
             DescriptorUtils.dump(new SimpleUsbEndpointDescriptor((byte) 0,
