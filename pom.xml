@@ -169,8 +169,44 @@
             </manifest>
           </archive>
         </configuration>
+        <executions>
+          <execution>
+            <id>no-natives</id>
+            <goals><goal>jar</goal></goals>
+            <phase>package</phase>
+            <configuration>
+              <classifier>no-natives</classifier>
+              <excludes>
+                <exclude>de/ailis/usb4java/libusb/*-*/**</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>natives</id>
+            <goals><goal>jar</goal></goals>
+            <phase>package</phase>
+            <configuration>
+              <classifier>natives</classifier>
+              <includes>
+                <include>de/ailis/usb4java/libusb/*-*/**</include>
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
+        
+        <!-- 
+          - This updated dependency fixes a problem with broken permissions
+          - inside the JAR files. 
+          -->
+        <dependencies>
+          <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-archiver</artifactId>
+            <version>2.1.1</version>
+          </dependency>
+        </dependencies>
       </plugin>
-      
+
     </plugins>
   </build>  
   
