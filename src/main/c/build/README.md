@@ -37,6 +37,12 @@ Build for linux-x86_64
 
 On a 64 bit x868 Linux host you only need the `gcc` package.
 
+
+Build for linux-arm
+-------------------
+
+On a Linux host you need the `gcc-arm-linux-gnueabi` package.
+
  
 Build for windows-x86 and windows-x86_64
 ----------------------------------------
