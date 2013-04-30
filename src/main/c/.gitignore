@@ -1,1 +1,15 @@
 /downloads
+*.o
+*.lo
+*.la
+*.tar.gz
+autom4te.cache
+Makefile
+config.h
+config.h.in~
+config.log
+config.status
+libtool
+stamp-h1
+.deps
+.libs
