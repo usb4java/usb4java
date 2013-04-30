@@ -123,35 +123,7 @@ final class IrpQueue extends AbstractIrpQueue<UsbIrp>
             final int size =
                 Math.min(len - read, descriptor.wMaxPacketSize() & 0xffff);
             final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
-            final IntBuffer transferred = IntBuffer.allocate(1);
-            int result;
-            if (type == UsbConst.ENDPOINT_TYPE_BULK)
-            {
-                result = LibUsb.bulkTransfer(handle, 
-                    descriptor.bEndpointAddress(), buffer, transferred,
-                    getConfig().getTimeout());
-                if (result < 0)
-                {
-                    throw new LibUsbException(
-                        "Unable to read from bulk endpoint", result);
-                }
-            }
-            else if (type == UsbConst.ENDPOINT_TYPE_INTERRUPT)
-            {
-                result = LibUsb.interruptTransfer(handle,
-                    descriptor.bEndpointAddress(), buffer, transferred,
-                    getConfig().getTimeout());
-                if (result < 0)
-                {
-                    throw new LibUsbException(
-                        "Unable to read from interrupt endpoint", result);
-                }
-            }
-            else
-            {
-                throw new UsbException("Unsupported endpoint type: " + type);
-            }
-            result = transferred.get(0);
+            int result = transfer(handle, descriptor, type, buffer);
             buffer.rewind();
             buffer.get(data, offset + read, result);
             read += result;
@@ -189,40 +161,61 @@ final class IrpQueue extends AbstractIrpQueue<UsbIrp>
             final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
             buffer.put(data, offset + written, size);
             buffer.rewind();
-            final IntBuffer transferred = IntBuffer.allocate(1);
-            int result;
-            if (type == UsbConst.ENDPOINT_TYPE_BULK)
-            {
-                result = LibUsb.bulkTransfer(handle,
-                    descriptor.bEndpointAddress(), buffer, transferred,
-                    getConfig().getTimeout());
-                if (result < 0) 
-                {
-                    throw new LibUsbException(
-                        "Unable to write to bulk endpoint", result);
-                }
-            }
-            else if (type == UsbConst.ENDPOINT_TYPE_INTERRUPT)
-            {
-                result = LibUsb.interruptTransfer(handle,
-                    descriptor.bEndpointAddress(), buffer, transferred,
-                    getConfig().getTimeout());
-                if (result < 0) 
-                {
-                    throw new LibUsbException(
-                        "Unable to write to interrupt endpoint", result);
-                }
-            }
-            else
-            {
-                throw new UsbException("Unsupported endpoint type: " + type);
-            }
-            result = transferred.get(0);
+            int result = transfer(handle, descriptor, type, buffer);
             written += result;
 
             // Short packet detected, aborting
             if (result < size) break;
         }
         return written;
+    }
+
+    /**
+     * Transfers data from or to the device.
+     * 
+     * @param handle
+     *            The device handle.
+     * @param descriptor
+     *            The endpoint descriptor.
+     * @param type
+     *            The endpoint type.
+     * @param buffer
+     *            The data buffer.
+     * @return The number of transferred bytes.
+     * @throws UsbException
+     *             When data transfer fails.
+     */
+    private int transfer(DeviceHandle handle, UsbEndpointDescriptor descriptor,
+        int type, ByteBuffer buffer) throws UsbException
+    {
+        final IntBuffer transferred = IntBuffer.allocate(1);
+        int result;
+        if (type == UsbConst.ENDPOINT_TYPE_BULK)
+        {
+            result = LibUsb.bulkTransfer(handle,
+                descriptor.bEndpointAddress(), buffer, transferred,
+                getConfig().getTimeout());
+            if (result < 0)
+            {
+                throw new LibUsbException(
+                    "Unable to write to bulk endpoint", result);
+            }
+        }
+        else if (type == UsbConst.ENDPOINT_TYPE_INTERRUPT)
+        {
+            result = LibUsb.interruptTransfer(handle,
+                descriptor.bEndpointAddress(), buffer, transferred,
+                getConfig().getTimeout());
+            if (result < 0)
+            {
+                throw new LibUsbException(
+                    "Unable to write to interrupt endpoint", result);
+            }
+        }
+        else
+        {
+            throw new UsbException("Unsupported endpoint type: " + type);
+        }
+        return result;
     }
 }
