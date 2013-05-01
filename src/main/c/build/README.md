@@ -70,7 +70,7 @@ Here are some step by step instructions to do this:
 
         tar xvfz pkg-config-0.28.tar.gz
         cd pkg-config-0.28
-        ./configure --with-internal-glib CFLAGS=-march=i486
+        ./configure --prefix=/mingw --with-internal-glib CFLAGS=-march=i486
         make
         make install
 
