@@ -9,6 +9,6 @@ set -e
 OS="windows"
 ARCH="x86_64"
 HOST="$ARCH-w64-mingw32"
-CFLAGS="-m64"
+CFLAGS="-m64 -Wl,--add-stdcall-alias"
 
 build
