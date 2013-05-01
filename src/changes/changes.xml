@@ -8,7 +8,10 @@
     <author email="k@ailis.de">Klaus Reimer</author>
   </properties>
   <body>    
-    <release version="0.5.1" date="2013-02-16" description="Minor update">
+    <release version="1.0.0" date="2013-05-01" description="Major update">
+      <action dev="kayahr" type="add" date="2013-05-01">
+        Rewritten library to use libusb 1.0 as backend.  
+      </action>
       <action dev="kayahr" type="add" date="2013-02-16">
         Made library loading more universal to support loading shared libraries
         for platforms not officially supported by usb4java.  

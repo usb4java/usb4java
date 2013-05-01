@@ -26,12 +26,12 @@
       <ul class="download">
         <li>
           Current version<br />
-          <strong><a href="${releasesUrl}/${project.version}/${project.artifactId}-${project.version}.jar">${project.artifactId}-${project.version}.jar</a></strong> (Native libraries included)<br />
-          <strong><a href="${releasesUrl}/${project.version}/${project.artifactId}-${project.version}-no-natives.jar">${project.artifactId}-${project.version}-no-natives.jar</a></strong> (Without native libraries)<br />
-          <strong><a href="${releasesUrl}/${project.version}/${project.artifactId}-${project.version}-natives.jar">${project.artifactId}-${project.version}-natives.jar</a></strong> (Native libraries only)
+          <strong><a href="${artifactBaseUrl}.jar">${project.artifactId}-${project.version}.jar</a></strong> (Native libraries included)<br />
+          <strong><a href="${artifactBaseUrl}-no-natives.jar">${project.artifactId}-${project.version}-no-natives.jar</a></strong> (Without native libraries)<br />
+          <strong><a href="${artifactBaseUrl}-natives.jar">${project.artifactId}-${project.version}-natives.jar</a></strong> (Native libraries only)
         </li>
-        <li><a href="${releasesUrl}/">Older versions</a></li>
-        <li><a href="${snapshotsUrl}/">Snapshots</a></li>
+        <li><a href="${oldRepoBaseUrl}/">Older versions</a></li>
+        <li><a href="${repoBaseUrl}/">Snapshots</a></li>
         <li>
           Source code repository: 
           <a href="http://github.com/kayahr/${project.artifactId}/">GitHub</a> / 
@@ -58,7 +58,7 @@
     
     <section name="Getting started">
       <p>
-        <a href="${releasesUrl}/${project.version}/${project.artifactId}-${project.version}.jar">Download</a>
+        <a href="${artifactBaseUrl}.jar">Download</a>
         the latest usb4java and then read the 
         <a href="quickstart.html">quick start guide</a> and the 
         <a href="faq.html">FAQ</a>.
