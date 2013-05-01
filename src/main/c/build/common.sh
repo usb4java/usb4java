@@ -31,7 +31,12 @@ build()
     mkdir -p "$DOWNLOADS"
     if [ ! -e "$DOWNLOADS/$LIBUSB_ARCHIVE" ]
     then
-       curl -L -o "$DOWNLOADS/$LIBUSB_ARCHIVE" "$LIBUSB_URL"
+       if type curl >/dev/null 2>&1
+       then
+           curl -L -o "$DOWNLOADS/$LIBUSB_ARCHIVE" "$LIBUSB_URL"
+       else
+           wget -O "$DOWNLOADS/$LIBUSB_ARCHIVE" "$LIBUSB_URL"
+       fi
     fi
 
     # Unpack and compile libusb
