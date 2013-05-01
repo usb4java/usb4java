@@ -53,8 +53,7 @@ build()
     cd "$SRCDIR"
     if [ ! -e configure ]
     then
-        mkdir -p m4
-        autoreconf --install --force
+    	./autogen.sh
     fi
 
     # Build libusb4java
