@@ -53,7 +53,8 @@ build()
     cd "$SRCDIR"
     if [ ! -e configure ]
     then
-        make -f Makefile.scm
+        mkdir -p m4
+        autoreconf --install --force
     fi
 
     # Build libusb4java
