@@ -9,7 +9,7 @@ set -e
 OS="linux"
 ARCH="arm"
 HOST="$ARCH-$OS-gnueabi"
-LIBUSBX_CONFIG="--disable-shared"
+LIBUSB_CONFIG="--disable-shared"
 USB4JAVA_LIBS="-lrt"
 
 build
