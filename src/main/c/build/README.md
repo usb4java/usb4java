@@ -45,6 +45,10 @@ Build for linux-arm
 On a Linux host you need the `gcc-arm-linux-gnueabi` package to be able to
 cross-compile for the ARM platform.
 
+Unfortunately the cross-compiled library currently doesn't work for unknown
+reasons. So the library must be build natively on an ARM platform (Like the
+Raspberry Pi)
+
  
 Build for windows-x86 and windows-x86_64
 ----------------------------------------
