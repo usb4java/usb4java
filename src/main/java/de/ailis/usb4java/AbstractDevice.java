@@ -147,12 +147,27 @@ abstract class AbstractDevice implements UsbDevice
         final ConfigDescriptor configDescriptor = new ConfigDescriptor();
         final int result =
             LibUsb.getActiveConfigDescriptor(device, configDescriptor);
-        if (result < 0)
+        
+        // ERROR_NOT_FOUND is returned when device is in unconfigured state.
+        // On OSX it may return INVALID_PARAM in this case because of a bug
+        // in libusb
+        if (result == LibUsb.ERROR_NOT_FOUND || 
+            result == LibUsb.ERROR_INVALID_PARAM)
+        {
+            this.activeConfigurationNumber = 0;
+        }
+        else if (result < 0)
+        {
             throw new LibUsbException(
                 "Unable to read active config descriptor from device " + id,
                 result);
-        this.activeConfigurationNumber = configDescriptor.bConfigurationValue();
-        LibUsb.freeConfigDescriptor(configDescriptor);
+        }
+        else
+        {
+            this.activeConfigurationNumber = 
+                configDescriptor.bConfigurationValue();
+            LibUsb.freeConfigDescriptor(configDescriptor);
+        }
     }
 
     /**
