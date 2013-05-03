@@ -50,9 +50,10 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <oldRepoBaseUrl>http://nexus.ailis.de/content/repositories/releases/de/ailis/${project.artifactId}/${project.artifactId}</oldRepoBaseUrl>
-    <repoBaseUrl>https://oss.sonatype.org/content/groups/public/de/ailis/${project.artifactId}/${project.artifactId}</repoBaseUrl>
-    <artifactBaseUrl>${repoBaseUrl}/${project.version}/${project.artifactId}-${project.version}</artifactBaseUrl>
+    <releaseBaseUrl>http://nexus.ailis.de/content/repositories/releases/de/ailis/${project.artifactId}/${project.artifactId}</releaseBaseUrl>
+    <snapshotBaseUrl>http://nexus.ailis.de/content/repositories/snapshots/de/ailis/${project.artifactId}/${project.artifactId}</snapshotBaseUrl>
+    <!--<releaseBaseUrl>https://oss.sonatype.org/content/groups/public/de/ailis/${project.artifactId}/${project.artifactId}</releaseBaseUrl>-->
+    <downloadBaseUrl>${releaseBaseUrl}/${project.version}/${project.artifactId}-${project.version}</downloadBaseUrl>
   </properties>
   
   <scm>
@@ -262,6 +263,7 @@
       <id>project-website</id>
       <url>file://${project.basedir}/../${project.artifactId}-site/</url>
     </site>
+    <!--
     <repository>
       <id>sonatype-staging</id>
       <name>Sonatype Staging Repository</name>
@@ -272,6 +274,18 @@
       <name>Sonatype Snapshot Repository</name>
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </snapshotRepository>    
+    -->
+    <repository>
+      <id>ailis-releases</id>
+      <name>Ailis Maven Releases</name>
+      <url>http://nexus.ailis.de/content/repositories/releases</url>
+    </repository>
+    <snapshotRepository>
+      <id>ailis-snapshots</id>
+      <name>Ailis Maven Snapshots</name>
+      <url>http://nexus.ailis.de/content/repositories/snapshots</url>
+    </snapshotRepository>    
+
   </distributionManagement>
   
   <dependencies>
