@@ -25,6 +25,9 @@ public final class Loader
     /** Constant for OS X operating system. */
     private static final String OS_OSX = "osx";
 
+    /** Constant for OS X operating system. */
+    private static final String OS_MACOSX = "macosx";
+
     /** Constant for Linux operating system. */
     private static final String OS_LINUX = "linux";
 
@@ -82,9 +85,11 @@ public final class Loader
      */
     private static String getOS()
     {
-        final String os = System.getProperty("os.name");
-        if (os.toLowerCase().contains(OS_WINDOWS)) return OS_WINDOWS;
-        return os.toLowerCase().replace(" ", "");
+        final String os = System.getProperty("os.name").toLowerCase()
+            .replace(" ", "");
+        if (os.contains(OS_WINDOWS)) return OS_WINDOWS;
+        if (os.equals(OS_MACOSX)) return OS_OSX;
+        return os;
     }
 
     /**
