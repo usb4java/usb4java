@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import javax.usb.UsbException;
 import javax.usb.UsbHub;
@@ -30,10 +29,6 @@ import de.ailis.usb4java.libusb.LibUsbException;
  */
 final class DeviceManager
 {
-    /** The logger. */
-    private static final Logger LOG = Logger.getLogger(DeviceManager.class
-        .getName());
-
     /** The virtual USB root hub. */
     private final RootHub rootHub;
 
@@ -86,14 +81,16 @@ final class DeviceManager
      * Creates a device ID from the specified device.
      * 
      * @param device
-     *            The libusb device.
-     * @return The device id. Null if device is null or ID could not be build
-     *         because an error occured while reading the device descriptor.
-     *         Device should be ignored in this case.
+     *            The libusb device. Must not be null.
+     * @return The device id.
+     * @throws LibUsbException
+     *             When device descriptor could not be read from the specified
+     *             device.
      */
-    private DeviceId createId(final Device device)
+    private DeviceId createId(final Device device) throws LibUsbException
     {
-        if (device == null) return null;
+        if (device == null)
+            throw new IllegalArgumentException("device must be set");
         final int busNumber = LibUsb.getBusNumber(device);
         final int addressNumber = LibUsb.getDeviceAddress(device);
         final int portNumber = LibUsb.getPortNumber(device);
@@ -101,10 +98,9 @@ final class DeviceManager
         final int result = LibUsb.getDeviceDescriptor(device, deviceDescriptor);
         if (result < 0)
         {
-            LOG.warning("Unable to get device descriptor for device " +
-                addressNumber + " at bus " + busNumber + ": " +
-                LibUsb.errorName(result));
-            return null;
+            throw new LibUsbException(
+                "Unable to get device descriptor for device " + addressNumber
+                    + " at bus " + busNumber, result);
         }
         return new DeviceId(busNumber, addressNumber, portNumber,
             new SimpleUsbDeviceDescriptor(deviceDescriptor));
@@ -219,18 +215,16 @@ final class DeviceManager
             // Iterate over all currently connected devices
             for (final Device libUsbDevice: devices)
             {
-                // Create device ID. Ignore device if this fails.
-                final DeviceId id = createId(libUsbDevice);
-                if (id == null) continue;
-
-                // Create new device if not already in device list
                 try
                 {
+                    final DeviceId id = createId(libUsbDevice);
+
                     AbstractDevice device = this.devices.get(id);
                     if (device == null)
                     {
                         final Device parent = LibUsb.getParent(libUsbDevice);
-                        final DeviceId parentId = createId(parent);
+                        final DeviceId parentId = parent == null ? null : 
+                            createId(parent);
                         final int speed = LibUsb.getDeviceSpeed(libUsbDevice);
                         final boolean isHub = id.getDeviceDescriptor()
                             .bDeviceClass() == LibUsb.CLASS_HUB;
@@ -248,15 +242,15 @@ final class DeviceManager
                         // Add new device to global device list.
                         this.devices.put(id, device);
                     }
+
+                    // Remember current device as "current"
+                    current.add(id);
                 }
                 catch (LibUsbException e)
                 {
-                    // TODO Add some warnings here
+                    // Devices which can't be enumerated are ignored
                     continue;
                 }
-
-                // Remember current device as "current"
-                current.add(id);
             }
 
             this.devices.keySet().retainAll(current);
@@ -301,10 +295,18 @@ final class DeviceManager
         {
             for (Device device: devices)
             {
-                if (id.equals(createId(device)))
+                try
                 {
-                    LibUsb.refDevice(device);
-                    return device;
+                    if (id.equals(createId(device)))
+                    {
+                        LibUsb.refDevice(device);
+                        return device;
+                    }
+                }
+                catch (LibUsbException e)
+                {
+                    // Devices for which no ID can be created are ignored
+                    continue;
                 }
             }
         }
