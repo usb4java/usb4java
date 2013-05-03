@@ -29,30 +29,3 @@ javax.usb.services = de.ailis.usb4java.Services
 +----+
 de.ailis.usb4java.timeout = 250
 +----+
-
-
-* Device filtering
-
-  To improve USB device scan performance you can configure device filters
-  with these two properties:
-
-+----+  
-de.ailis.usb4java.vendors = 12ab cd56
-de.ailis.usb4java.products = 01aa
-+----+
-
-  With a configuration like this <usb4java> ignores all devices which does
-  not have vendor ID <<<12ab>>> or <<<cd56>>> and not product ID <<<01aa>>>.
-  
-  The purpose of this device filtering is performance. When your machine
-  has many USB devices connected then it may slow down your application when
-  <usb4java> has to read all the descriptors of all connected devices on
-  startup and every time a USB device has been attached or detached.
-  So filtering for vendor ID and/or product ID will hide all
-  uninteresting devices from the <usb4java>. When using this feature then it is
-  recommended to disable hierarchy scan, too, because then hubs can be totally
-  ignored. With enabled hierarchy scan <usb4java> has to traverse all hubs to
-  find interesting devices.
-  
-  
-     

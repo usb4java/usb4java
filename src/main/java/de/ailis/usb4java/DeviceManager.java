@@ -107,7 +107,7 @@ final class DeviceManager
     }
 
     /**
-     * Scans the specified ports for removed devices. 
+     * Scans the specified ports for removed devices.
      * 
      * @param ports
      *            The ports to scan for removals.
@@ -118,15 +118,15 @@ final class DeviceManager
         {
             // Scan for removed child devices if current device is a hub
             if (device.isUsbHub()) scanRemovedDevices((Hub) device);
-            
+
             // If device is no longer present then remove it
             if (!this.devices.containsKey(device.getId()))
-                ports.disconnectUsbDevice(device);                    
+                ports.disconnectUsbDevice(device);
         }
     }
-    
+
     /**
-     * Scans the specified ports for new devices. 
+     * Scans the specified ports for new devices.
      * 
      * @param ports
      *            The ports to scan for new devices.
@@ -143,7 +143,7 @@ final class DeviceManager
             // devices/hubs can't be fully enumerated.)
             DeviceId parentId = device.getParentId();
             if (!this.devices.containsKey(parentId)) parentId = null;
-            
+
             if (DeviceId.equals(parentId, hubId))
             {
                 if (!ports.isUsbDeviceAttached(device))
@@ -157,7 +157,7 @@ final class DeviceManager
                     device.getId());
             }
         }
-        
+
     }
 
     /**
@@ -176,7 +176,7 @@ final class DeviceManager
         {
             throw new ScanException("Unable to scan for USB devices: " + e, e);
         }
-        
+
         if (hub.isRootUsbHub())
         {
             final RootHub rootHub = (RootHub) hub;
@@ -202,7 +202,7 @@ final class DeviceManager
     private void updateDeviceList() throws LibUsbException
     {
         final List<DeviceId> current = new ArrayList<DeviceId>();
-        
+
         // Get device list from libusb and abort if it failed
         final DeviceList devices = new DeviceList();
         final int result = LibUsb.getDeviceList(this.context, devices);
@@ -218,7 +218,7 @@ final class DeviceManager
                 // Create device ID. Ignore device if this fails.
                 final DeviceId id = createId(libUsbDevice);
                 if (id == null) continue;
-                
+
                 // Create new device if not already in device list
                 try
                 {
@@ -240,7 +240,7 @@ final class DeviceManager
                             device = new NonHub(this, id,
                                 parentId, speed, libUsbDevice);
                         }
-                       
+
                         // Add new device to global device list.
                         this.devices.put(id, device);
                     }
@@ -250,11 +250,11 @@ final class DeviceManager
                     // TODO Add some warnings here
                     continue;
                 }
-                
+
                 // Remember current device as "current"
-                current.add(id);            
+                current.add(id);
             }
-            
+
             this.devices.keySet().retainAll(current);
         }
         finally
@@ -262,7 +262,7 @@ final class DeviceManager
             LibUsb.freeDeviceList(devices, true);
         }
     }
-    
+
     /**
      * Scans the USB busses for new or removed devices.
      */
