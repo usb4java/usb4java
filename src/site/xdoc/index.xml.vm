@@ -38,6 +38,27 @@
           <a href="http://bitbucket.org/kayahr/${project.artifactId}/">Bitbucket</a> 
         </li>
       </ul>
+      <p>
+        When you are using Maven then you can add the necessary dependencies 
+        like this:
+      </p>
+      <div class="source"><pre>&lt;repositories&gt;
+  &lt;repository&gt;
+    &lt;id&gt;ailis-releases&lt;/id&gt;
+    &lt;name&gt;Ailis Maven Releases&lt;/name&gt;
+    &lt;url&gt;http://nexus.ailis.de/content/groups/public/&lt;/url&gt;
+    &lt;releases&gt;&lt;enabled&gt;true&lt;/enabled&gt;&lt;/releases&gt;
+    &lt;snapshots&gt;&lt;enabled&gt;false&lt;/enabled&gt;&lt;/snapshots&gt;
+  &lt;/repository&gt;
+&lt;/repositories&gt;
+
+&lt;dependencies&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;de.ailis.usb4java&lt;/groupId&gt;
+    &lt;artifactId&gt;usb4java&lt;/artifactId&gt;
+    &lt;version&gt;1.0.0&lt;/version&gt;
+  &lt;/dependency&gt;
+&lt;/dependencies&gt;</pre></div>
     </section>
     
     <section name="License">
