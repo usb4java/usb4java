@@ -29,3 +29,23 @@ javax.usb.services = de.ailis.usb4java.Services
 +----+
 de.ailis.usb4java.timeout = 250
 +----+
+
+
+* Scan interval
+
+  The default USB device scan interval of <usb4java> is 500 milliseconds. To
+  change this to 1000 milliseconds for example add this to the properties file:
+
++----+
+de.ailis.usb4java.scanInterval = 1000
++----+
+
+  When you set this interval to 0 then <usb4java> only scans once during
+  application startup. If you want to trigger a manual device <scan> you can
+  do it by calling the scan method on the USB services class (Must be casted
+  to the <usb4java> implementation, because this is not a javax.usb feature:
+
++----+
+((de.ailis.usb4java.Services) UsbHostManager.getUsbServices()).scan();
++----+
+  

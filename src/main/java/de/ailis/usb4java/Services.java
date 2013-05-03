@@ -40,7 +40,7 @@ public final class Services implements UsbServices
     private final RootHub rootHub;
 
     /** The USB device scanner. */
-    private final DeviceManager deviceScanner;
+    private final DeviceManager deviceManager;
 
     /** If devices should be scanned by hierarchy. */
     private final Config config;
@@ -58,14 +58,15 @@ public final class Services implements UsbServices
         this.config = new Config(UsbHostManager.getProperties());
         Loader.load();
         this.rootHub = new RootHub();
-        this.deviceScanner = new DeviceManager(this.rootHub);
-        this.deviceScanner.start();
+        this.deviceManager = new DeviceManager(this.rootHub, 
+            this.config.getScanInterval());
+        this.deviceManager.start();
     }
 
     @Override
     public UsbHub getRootUsbHub()
     {
-        this.deviceScanner.firstScan();
+        this.deviceManager.firstScan();
         return this.rootHub;
     }
 
@@ -152,5 +153,13 @@ public final class Services implements UsbServices
             throw new ServicesException("Unable to create USB services: "
                 + e, e);
         }
+    }
+    
+    /**
+     * Manually scans for USB device connection changes.
+     */
+    public void scan()
+    {
+        this.deviceManager.scan();
     }
 }

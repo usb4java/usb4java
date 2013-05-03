@@ -16,12 +16,24 @@ final class Config
 {
     /** Base key name for properties. */
     private static final String KEY_BASE = "de.ailis.usb4java.";
+    
+    /** The default USB communication timeout in milliseconds. */
+    private static final int DEFAULT_TIMEOUT = 2500;
+    
+    /** The default scan interval in milliseconds. */
+    private static final int DEFAULT_SCAN_INTERVAL = 500;
 
     /** Key name for USB communication timeout. */
     private static final String TIMEOUT_KEY = KEY_BASE + "timeout";
 
+    /** Key name for USB communication timeout. */
+    private static final String SCAN_INTERVAL_KEY = KEY_BASE + "scanInterval";
+
     /** The timeout for USB communication in milliseconds. */
-    private int timeout = 2500;
+    private int timeout = DEFAULT_TIMEOUT;
+    
+    /** The scan interval in milliseconds. */
+    private int scanInterval = DEFAULT_SCAN_INTERVAL;
 
     /**
      * Constructs new configuration from the specified properties.
@@ -36,6 +48,13 @@ final class Config
         {
             this.timeout = Integer.valueOf(properties.getProperty(TIMEOUT_KEY));
         }
+
+        // Read the USB device scan interval
+        if (properties.containsKey(SCAN_INTERVAL_KEY))
+        {
+            this.scanInterval = Integer.valueOf(properties.getProperty(
+                SCAN_INTERVAL_KEY));
+        }
     }
 
     /**
@@ -46,5 +65,15 @@ final class Config
     public int getTimeout()
     {
         return this.timeout;
+    }
+
+    /**
+     * Returns the scan interval in milliseconds.
+     *
+     * @return The scan interval in milliseconds.
+     */
+    public int getScanInterval()
+    {
+        return this.scanInterval;
     }
 }

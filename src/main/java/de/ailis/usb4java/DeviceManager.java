@@ -30,9 +30,6 @@ import de.ailis.usb4java.libusb.LibUsbException;
  */
 final class DeviceManager
 {
-    /** The scan interval in milliseconds. */
-    private static final int DEFAULT_SCAN_INTERVAL = 500;
-
     /** The logger. */
     private static final Logger LOG = Logger.getLogger(DeviceManager.class
         .getName());
@@ -46,6 +43,9 @@ final class DeviceManager
     /** If scanner already scanned for devices. */
     private boolean scanned = false;
 
+    /** The scan interval in milliseconds. */
+    private final int scanInterval;
+
     /** The currently connected devices. */
     private final Map<DeviceId, AbstractDevice> devices = Collections
         .synchronizedMap(new HashMap<DeviceId, AbstractDevice>());
@@ -55,13 +55,17 @@ final class DeviceManager
      * 
      * @param rootHub
      *            The root hub. Must not be null.
+     * @param scanInterval
+     *            The scan interval in milliseconds.
      * @throws UsbException
      *             When USB initialization fails.
      */
-    DeviceManager(final RootHub rootHub) throws UsbException
+    DeviceManager(final RootHub rootHub, final int scanInterval)
+        throws UsbException
     {
         if (rootHub == null)
             throw new IllegalArgumentException("rootHub must be set");
+        this.scanInterval = scanInterval;
         this.rootHub = rootHub;
         this.context = new Context();
         final int result = LibUsb.init(this.context);
@@ -77,7 +81,7 @@ final class DeviceManager
     {
         LibUsb.exit(this.context);
     }
-
+    
     /**
      * Creates a device ID from the specified device.
      * 
@@ -266,7 +270,7 @@ final class DeviceManager
     /**
      * Scans the USB busses for new or removed devices.
      */
-    public void scan()
+    public synchronized void scan()
     {
         scan(this.rootHub);
         this.scanned = true;
@@ -330,6 +334,10 @@ final class DeviceManager
      */
     public void start()
     {
+        // Do not start the scan thread when interval is set to 0
+        final int scanInterval = this.scanInterval;
+        if (scanInterval == 0) return;
+        
         final Thread thread = new Thread(new Runnable()
         {
             @Override
@@ -339,7 +347,7 @@ final class DeviceManager
                 {
                     try
                     {
-                        Thread.sleep(DEFAULT_SCAN_INTERVAL);
+                        Thread.sleep(scanInterval);
                     }
                     catch (final InterruptedException e)
                     {
