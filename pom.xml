@@ -50,10 +50,9 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <releaseBaseUrl>http://nexus.ailis.de/content/repositories/releases/de/ailis/${project.artifactId}/${project.artifactId}</releaseBaseUrl>
-    <snapshotBaseUrl>http://nexus.ailis.de/content/repositories/snapshots/de/ailis/${project.artifactId}/${project.artifactId}</snapshotBaseUrl>
-    <!--<releaseBaseUrl>https://oss.sonatype.org/content/groups/public/de/ailis/${project.artifactId}/${project.artifactId}</releaseBaseUrl>-->
-    <downloadBaseUrl>${releaseBaseUrl}/${project.version}/${project.artifactId}-${project.version}</downloadBaseUrl>
+    <repoBaseUrl>http://nexus.ailis.de/content/groups/public/de/ailis/${project.artifactId}/${project.artifactId}</repoBaseUrl>
+    <!--<repoBaseUrl>https://oss.sonatype.org/content/groups/public/de/ailis/${project.artifactId}/${project.artifactId}</repoBaseUrl>-->
+    <artifactBaseUrl>${repoBaseUrl}/${project.version}/${project.artifactId}-${project.version}</artifactBaseUrl>
   </properties>
   
   <scm>
@@ -209,6 +208,34 @@
         </dependencies>
       </plugin>
 
+      <!-- Build binary artifacts for Unix, Mac OS X and Windows -->
+      <plugin> 
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.2.2</version>
+        <configuration>
+          <appendAssemblyId>false</appendAssemblyId>
+          <descriptors>
+            <descriptor>src/main/assembly/tarball.xml</descriptor>
+            <descriptor>src/main/assembly/zip.xml</descriptor>
+          </descriptors>
+          <!-- Workaround for issue MASSEMBLY-449 -->        
+          <archiverConfig>
+            <fileMode>420</fileMode> <!-- 420(dec) = 644(oct) -->
+            <directoryMode>493</directoryMode> <!-- 493(dec) = 755(oct) -->
+            <defaultDirectoryMode>493</defaultDirectoryMode>
+          </archiverConfig>
+        </configuration>
+        <executions>
+          <execution>
+            <id>package-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>attached</goal>
+            </goals>
+          </execution>
+        </executions> 
+      </plugin>
+
     </plugins>
   </build>  
   
@@ -243,18 +270,9 @@
   
   <repositories>
     <repository>
-      <id>ailis-releases</id>
-      <name>Ailis Maven Releases</name>
+      <id>ailis</id>
+      <name>Ailis Maven Repository</name>
       <url>http://nexus.ailis.de/content/groups/public/</url>
-      <releases><enabled>true</enabled></releases>
-      <snapshots><enabled>false</enabled></snapshots>
-    </repository>
-    <repository> 
-      <id>ailis-snapshots</id>
-      <name>Ailis Maven Snapshots</name>
-      <url>http://nexus.ailis.de/content/groups/public-snapshots/</url>
-      <releases><enabled>false</enabled></releases>
-      <snapshots><enabled>true</enabled></snapshots>
     </repository>
   </repositories>
 

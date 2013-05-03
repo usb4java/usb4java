@@ -25,15 +25,13 @@
     <section name="Download">
       <ul class="download">
         <li>
-          Current version<br />
-          <strong><a href="${downloadBaseUrl}.jar">${project.artifactId}-${project.version}.jar</a></strong> (Native libraries included)<br />
-          <strong><a href="${downloadBaseUrl}-no-natives.jar">${project.artifactId}-${project.version}-no-natives.jar</a></strong> (Without native libraries)<br />
-          <strong><a href="${downloadBaseUrl}-natives.jar">${project.artifactId}-${project.version}-natives.jar</a></strong> (Native libraries only)
+          Current version:<br />
+          <strong><a href="${artifactBaseUrl}.tar.bz2">${project.artifactId}-${project.version}.tar.bz2</a></strong><br />
+          <strong><a href="${artifactBaseUrl}.zip">${project.artifactId}-${project.version}.zip</a></strong><br />
         </li>
-        <li><a href="${releaseBaseUrl}/">Older versions</a></li>
-        <li><a href="${snapshotBaseUrl}/">Snapshots</a></li>
+        <li><a href="${repoBaseUrl}/">Older versions and snapshots</a></li>
         <li>
-          Source code repository: 
+          Source code repository:
           <a href="http://github.com/kayahr/${project.artifactId}/">GitHub</a> / 
           <a href="http://bitbucket.org/kayahr/${project.artifactId}/">Bitbucket</a> 
         </li>
@@ -44,19 +42,17 @@
       </p>
       <div class="source"><pre>&lt;repositories&gt;
   &lt;repository&gt;
-    &lt;id&gt;ailis-releases&lt;/id&gt;
+    &lt;id&gt;ailis&lt;/id&gt;
     &lt;name&gt;Ailis Maven Releases&lt;/name&gt;
     &lt;url&gt;http://nexus.ailis.de/content/groups/public/&lt;/url&gt;
-    &lt;releases&gt;&lt;enabled&gt;true&lt;/enabled&gt;&lt;/releases&gt;
-    &lt;snapshots&gt;&lt;enabled&gt;false&lt;/enabled&gt;&lt;/snapshots&gt;
   &lt;/repository&gt;
 &lt;/repositories&gt;
 
 &lt;dependencies&gt;
   &lt;dependency&gt;
-    &lt;groupId&gt;de.ailis.usb4java&lt;/groupId&gt;
-    &lt;artifactId&gt;usb4java&lt;/artifactId&gt;
-    &lt;version&gt;1.0.0&lt;/version&gt;
+    &lt;groupId&gt;${project.groupId}&lt;/groupId&gt;
+    &lt;artifactId&gt;${project.artifactId}&lt;/artifactId&gt;
+    &lt;version&gt;${project.version}&lt;/version&gt;
   &lt;/dependency&gt;
 &lt;/dependencies&gt;</pre></div>
     </section>
@@ -79,10 +75,12 @@
     
     <section name="Getting started">
       <p>
-        <a href="${downloadBaseUrl}.jar">Download</a>
+        <a href="${artifactBaseUrl}.jar">Download</a>
         the latest usb4java and then read the 
         <a href="quickstart.html">quick start guide</a> and the 
-        <a href="faq.html">FAQ</a>.
+        <a href="faq.html">FAQ</a>. There are also some
+        <a href="https://github.com/kayahr/usb4java-examples/">examples</a>
+        available.
       </p>
     </section>
     
