@@ -20,9 +20,6 @@ final class Config
     /** Base key name for properties. */
     private static final String KEY_BASE = "de.ailis.usb4java.";
 
-    /** Key name for scanHierarchy property. */
-    private static final String SCAN_HIERARCHY_KEY = KEY_BASE + "scanHierarchy";
-
     /** Key name for vendors filter property. */
     private static final String VENDORS_KEY = KEY_BASE + "vendors";
 
@@ -31,9 +28,6 @@ final class Config
 
     /** Key name for USB communication timeout. */
     private static final String TIMEOUT_KEY = KEY_BASE + "timeout";
-
-    /** If device hierarchy should be scanned. */
-    private boolean scanHierarchy;
 
     /** The vendor filter list or null if not filtering. */
     private Set<Integer> vendors;
@@ -52,16 +46,6 @@ final class Config
      */
     Config(final Properties properties)
     {
-        // Read scanHierarchy property. If not set then hierarchy scan is
-        // disabled on OS X (because libusb always returns a null root_dev
-        // on this platform) and true for all other platforms.
-        if (properties.containsKey(SCAN_HIERARCHY_KEY))
-            this.scanHierarchy = Boolean.parseBoolean(properties.getProperty(
-                SCAN_HIERARCHY_KEY));
-        else
-            this.scanHierarchy =
-                !System.getProperty("os.name").startsWith("Mac OS X");
-
         // Read vendor filter list
         if (properties.containsKey(VENDORS_KEY))
         {
@@ -94,16 +78,6 @@ final class Config
         {
             this.timeout = Integer.valueOf(properties.getProperty(TIMEOUT_KEY));
         }
-    }
-
-    /**
-     * Checks if device hierarchy should be scanned.
-     *
-     * @return True if device hierarchy should be scanned, false if not.
-     */
-    public boolean getScanHierarchy()
-    {
-        return this.scanHierarchy;
     }
 
     /**
