@@ -246,6 +246,7 @@
     </plugins>
   </build>  
   
+  <!--
   <profiles>
     <profile>
       <id>release-sign-artifacts</id>
@@ -274,6 +275,7 @@
       </build>
     </profile>
   </profiles>
+  -->
   
   <repositories>
     <repository>
