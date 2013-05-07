@@ -11,7 +11,8 @@ Installation
   If you are using the high-level <javax.usb> API then you also need the
   <jsr80.jar> which can be downloaded from the
   {{{http://javax-usb.sourceforge.net/}javax.usb project site}}.
-  This JAR must also be copied into your class path.
+  This JAR (Which is also included in the usb4java distribution tarball/zip
+  as <usb-api.jar>) must also be copied into your class path.
   
   Another dependency needed since version 1.0.0 is
   {{{http://commons.apache.org/proper/commons-lang/}commons-lang v3}}.
