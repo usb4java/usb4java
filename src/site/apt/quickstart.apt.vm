@@ -172,7 +172,7 @@ The low-level API
 
   * {{{./apidocs/de/ailis/usb4java/libusb/package-summary.html}Low-level API documentation of usb4java}}
   
-  * {{{http://libusb.sourceforge.net/doc/}API documentatiaon of libusb 0.1}}
+  * {{{http://libusb.sourceforge.net/api-1.0/}API documentatiaon of libusb}}
   
   []
   
