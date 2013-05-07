@@ -89,6 +89,7 @@ $ cd usb4java/src/main/c
   6. Compile the wrapper:
   
 +----
+$ ./autogen.sh
 $ ./configure --prefix=/
 $ make install-strip DESTDIR=/tmp
 +---- 
