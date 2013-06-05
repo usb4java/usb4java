@@ -172,14 +172,17 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getPortPath)
     if (!ctx && context) return 0;
     libusb_device *dev = unwrapDevice(env, device);
     if (!dev) return 0;
-    jsize size = (*env)->GetArrayLength(env, path);
-    unsigned char buffer[size];
+    int result = 0;
+
     #if defined(LIBUSBX_API_VERSION)
-        int result = libusb_get_port_path(ctx, dev, buffer, size);
-    #else
-        int result = 0;
+    	jbyte* buffer = (*env)->GetByteArrayElements(env, path, NULL);
+        jsize size = (*env)->GetArrayLength(env, path);
+
+        result = libusb_get_port_path(ctx, dev, (uint8_t *) buffer, size);
+
+        (*env)->ReleaseByteArrayElements(env, path, buffer, 0);
     #endif
-    if (result > 0) (*env)->SetByteArrayRegion(env, path, 0, result, (jbyte *) buffer);
+
     return result;
 }
 
