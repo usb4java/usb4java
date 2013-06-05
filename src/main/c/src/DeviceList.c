@@ -23,6 +23,11 @@ libusb_device** unwrapDeviceList(JNIEnv* env, jobject list)
 void resetDeviceList(JNIEnv* env, jobject obj)
 {
     RESET_POINTER(env, obj, "deviceListPointer");
+
+    // Reset size to zero too.
+    jclass cls = (*env)->GetObjectClass(env, obj);
+    jfieldID field = (*env)->GetFieldID(env, cls, "size", "I");
+    (*env)->SetIntField(env, object, field, 0);
 }
 
 /**
