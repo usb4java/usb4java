@@ -111,7 +111,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(EndpointDescriptor, bRefresh)
 /**
  * byte bSynchAddress()
  */
-JNIEXPORT jint JNICALL METHOD_NAME(EndpointDescriptor, bSynchAddress)
+JNIEXPORT jbyte JNICALL METHOD_NAME(EndpointDescriptor, bSynchAddress)
 (
     JNIEnv *env, jobject this
 )
