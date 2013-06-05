@@ -8,17 +8,17 @@
 
 jobject wrapTransfer(JNIEnv* env, struct libusb_transfer* transfer)
 {
-    WRAP_POINTER(env, transfer, "Transfer", "pointer");
+    WRAP_POINTER(env, transfer, "Transfer", "transferPointer");
 }
 
 struct libusb_transfer* unwrapTransfer(JNIEnv *env, jobject obj)
 {
-    UNWRAP_POINTER(env, obj, struct libusb_transfer*, "pointer");
+    UNWRAP_POINTER(env, obj, struct libusb_transfer*, "transferPointer");
 }
 
 void resetTransfer(JNIEnv* env, jobject obj)
 {
-    RESET_POINTER(env, obj, "pointer");
+    RESET_POINTER(env, obj, "transferPointer");
 }
 
 /**

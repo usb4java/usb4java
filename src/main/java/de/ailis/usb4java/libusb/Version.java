@@ -23,7 +23,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public final class Version implements Comparable<Version>
 {
     /** The native pointer to the version structure. */
-    private long pointer;
+    private long versionPointer;
     
     /**
      * Package-private constructor to prevent manual instantiation. An instance
@@ -41,7 +41,7 @@ public final class Version implements Comparable<Version>
      */
     public long getPointer()
     {
-        return this.pointer;
+        return this.versionPointer;
     }
 
     /**
@@ -81,7 +81,7 @@ public final class Version implements Comparable<Version>
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.pointer).toHashCode();
+        return new HashCodeBuilder().append(this.versionPointer).toHashCode();
     }
 
     @Override

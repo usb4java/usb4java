@@ -10,7 +10,7 @@
 jobject wrapInterfaceDescriptor(JNIEnv *env,
     const struct libusb_interface_descriptor *descriptor)
 {
-    WRAP_POINTER(env, descriptor, "InterfaceDescriptor", "pointer");
+    WRAP_POINTER(env, descriptor, "InterfaceDescriptor", "interfaceDescriptorPointer");
 }
 
 jobjectArray wrapInterfaceDescriptors(JNIEnv *env, int count,
@@ -30,7 +30,7 @@ jobjectArray wrapInterfaceDescriptors(JNIEnv *env, int count,
 struct libusb_interface_descriptor *unwrapInterfaceDescriptor(JNIEnv *env,
     jobject obj)
 {
-    UNWRAP_POINTER(env, obj, struct libusb_interface_descriptor*, "pointer");
+    UNWRAP_POINTER(env, obj, struct libusb_interface_descriptor*, "interfaceDescriptorPointer");
 }
 
 /**

@@ -25,7 +25,7 @@ import java.nio.ByteBuffer;
 public final class Transfer
 {
     /** The native pointer to the transfer structure. */
-    private long pointer;
+    private long transferPointer;
 
     /**
      * Constructs a new transfer structure.
@@ -42,7 +42,7 @@ public final class Transfer
      */
     public long getPointer()
     {
-        return this.pointer;
+        return this.transferPointer;
     }
 
     /**
