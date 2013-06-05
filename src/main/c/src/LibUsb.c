@@ -25,8 +25,6 @@
 
 static JavaVM *jvm;
 
-static int defaultContextInitialized = 0;
-
 /**
  * Version getVersion()
  */
@@ -48,13 +46,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, init)
 {
     if (!context)
     {
-        if (defaultContextInitialized)
-        {
-            return illegalState(env, "Default context already initialized");
-        }
-        int result = libusb_init(NULL);
-        if (!result) defaultContextInitialized = 1;
-        return result;
+        return libusb_init(NULL);
     }
     else
     {
@@ -73,19 +65,19 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, exit)
     JNIEnv *env, jclass class, jobject context
 )
 {
-    struct libusb_context *ctx = unwrapContext(env, context);
-    if (!ctx && context) return;
+	if (!context)
+	{
+		libusb_exit(NULL);
+	}
+	else
+	{
+		libusb_context *ctx = unwrapContext(env, context);
+		if (!ctx) return;
 
-    if (!context && !defaultContextInitialized)
-    {
-        illegalState(env, "Default context not initialized");
-        return;
-    }
-    libusb_exit(ctx);
-    if (context)
+        libusb_exit(ctx);
+
         resetContext(env, context);
-    else
-        defaultContextInitialized = 0;
+	}
 }
 
 /**
@@ -96,8 +88,9 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, setDebug)
     JNIEnv *env, jclass class, jobject context, jint level
 )
 {
-    struct libusb_context *ctx = unwrapContext(env, context);
+    libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return;
+
     libusb_set_debug(ctx, level);
 }
 
@@ -110,7 +103,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getDeviceList)
 )
 {
     NOT_NULL(env, deviceList, return 0);
-    struct libusb_context *ctx = unwrapContext(env, context);
+    libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return 0;
     libusb_device **list;
     ssize_t result = libusb_get_device_list(ctx, &list);
@@ -175,7 +168,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getPortPath)
 {
     NOT_NULL(env, device, return 0);
     NOT_NULL(env, path, return 0);
-    struct libusb_context *ctx = unwrapContext(env, context);
+    libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return 0;
     libusb_device *dev = unwrapDevice(env, device);
     if (!dev) return 0;
@@ -320,7 +313,7 @@ JNIEXPORT jobject JNICALL METHOD_NAME(LibUsb, openDeviceWithVidPid)
     jint productId
 )
 {
-    struct libusb_context *ctx = unwrapContext(env, context);
+    libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return NULL;
     return wrapDeviceHandle(env, libusb_open_device_with_vid_pid(
         ctx, vendorId, productId));
@@ -791,7 +784,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, tryLockEvents)
     JNIEnv *env, jclass class, jobject context
 )
 {
-    struct libusb_context *ctx = unwrapContext(env, context);
+    libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return 0;
     return libusb_try_lock_events(ctx);
 }
@@ -804,7 +797,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, lockEvents)
     JNIEnv *env, jclass class, jobject context
 )
 {
-    struct libusb_context *ctx = unwrapContext(env, context);
+    libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return;
     libusb_lock_events(ctx);
 }
@@ -817,7 +810,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, unlockEvents)
     JNIEnv *env, jclass class, jobject context
 )
 {
-    struct libusb_context *ctx = unwrapContext(env, context);
+    libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return;
     libusb_unlock_events(ctx);
 }
@@ -830,7 +823,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, eventHandlingOk)
     JNIEnv *env, jclass class, jobject context
 )
 {
-    struct libusb_context *ctx = unwrapContext(env, context);
+    libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return 0;
     return libusb_event_handling_ok(ctx);
 }
@@ -843,7 +836,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, eventHandlerActive)
     JNIEnv *env, jclass class, jobject context
 )
 {
-    struct libusb_context *ctx = unwrapContext(env, context);
+    libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return 0;
     return libusb_event_handler_active(ctx);
 }
@@ -856,7 +849,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, lockEventWaiters)
     JNIEnv *env, jclass class, jobject context
 )
 {
-    struct libusb_context *ctx = unwrapContext(env, context);
+    libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return;
     libusb_lock_event_waiters(ctx);
 }
@@ -869,7 +862,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, unlockEventWaiters)
     JNIEnv *env, jclass class, jobject context
 )
 {
-    struct libusb_context *ctx = unwrapContext(env, context);
+    libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return;
     libusb_unlock_event_waiters(ctx);
 }
@@ -882,7 +875,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, waitForEvent)
     JNIEnv *env, jclass class, jobject context, jlong timeout
 )
 {
-    struct libusb_context *ctx = unwrapContext(env, context);
+    libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return 0;
     struct timeval tv;
     tv.tv_sec = timeout / 1000000;
@@ -899,7 +892,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, handleEventsTimeoutCompleted)
     jobject completed
 )
 {
-    struct libusb_context *ctx = unwrapContext(env, context);
+    libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return 0;
     struct timeval tv;
     tv.tv_sec = timeout / 1000000;
@@ -923,7 +916,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, handleEventsTimeout)
     JNIEnv *env, jclass class, jobject context, jlong timeout
 )
 {
-    struct libusb_context *ctx = unwrapContext(env, context);
+    libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return 0;
     struct timeval tv;
     tv.tv_sec = timeout / 1000000;
@@ -939,7 +932,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, handleEvents)
     JNIEnv *env, jclass class, jobject context
 )
 {
-    struct libusb_context *ctx = unwrapContext(env, context);
+    libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return 0;
     return libusb_handle_events(ctx);
 }
@@ -952,7 +945,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, handleEventsCompleted)
     JNIEnv *env, jclass class, jobject context, jobject completed
 )
 {
-    struct libusb_context *ctx = unwrapContext(env, context);
+    libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return 0;
     int complete;
     int result = libusb_handle_events_completed(ctx, &complete);
@@ -973,7 +966,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, handleEventsLocked)
     JNIEnv *env, jclass class, jobject context, jlong timeout
 )
 {
-    struct libusb_context *ctx = unwrapContext(env, context);
+    libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return 0;
     struct timeval tv;
     tv.tv_sec = timeout / 1000000;
@@ -989,7 +982,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, pollfdsHandleTimeouts)
     JNIEnv *env, jclass class, jobject context
 )
 {
-    struct libusb_context *ctx = unwrapContext(env, context);
+    libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return 0;
     return libusb_pollfds_handle_timeouts(ctx);
 }
@@ -1002,7 +995,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getNextTimeout)
     JNIEnv *env, jclass class, jobject context, jobject timeout
 )
 {
-    struct libusb_context *ctx = unwrapContext(env, context);
+    libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return 0;
     struct timeval tv;
     int result = libusb_get_next_timeout(ctx, &tv);
@@ -1057,7 +1050,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, setPollfdNotifiers)
     JNIEnv *env, jclass class, jobject context
 )
 {
-    struct libusb_context *ctx = unwrapContext(env, context);
+    libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return;
     (*env)->GetJavaVM(env, &jvm);
     libusb_set_pollfd_notifiers(ctx, triggerPollfdAdded, triggerPollfdRemoved, 
@@ -1072,7 +1065,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, unsetPollfdNotifiers)
     JNIEnv *env, jclass class, jobject context
 )
 {
-    struct libusb_context *ctx = unwrapContext(env, context);
+    libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return;
     libusb_set_pollfd_notifiers(ctx, NULL, NULL, NULL);
 }
