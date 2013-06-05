@@ -65,7 +65,7 @@ public final class Transfer
      * 
      * @return The transfer flags.
      */
-    public native int getFlags();
+    public native byte getFlags();
 
     /**
      * Sets the bitwise OR combination of libusb transfer flags.
@@ -73,14 +73,14 @@ public final class Transfer
      * @param flags
      *            The transfer flags to set.
      */
-    public native void setFlags(final int flags);
+    public native void setFlags(final byte flags);
 
     /**
      * Returns the address of the endpoint where this transfer will be sent.
      * 
      * @return The endpoint address.
      */
-    public native int getEndpoint();
+    public native byte getEndpoint();
 
     /**
      * Sets the address of the endpoint where this transfer will be sent.
@@ -88,14 +88,14 @@ public final class Transfer
      * @param endpoint
      *            The endpoint address to set
      */
-    public native void setEndpoint(final int endpoint);
+    public native void setEndpoint(final byte endpoint);
 
     /**
      * Returns the type of the endpoint.
      * 
      * @return The endpoint type.
      */
-    public native int getType();
+    public native byte getType();
 
     /**
      * Sets the type of the endpoint.
@@ -103,7 +103,7 @@ public final class Transfer
      * @param type
      *            The endpoint type to set.
      */
-    public native void setType(final int type);
+    public native void setType(final byte type);
 
     /**
      * Returns the timeout for this transfer in milliseconds. A value of 0
@@ -111,7 +111,7 @@ public final class Transfer
      * 
      * @return The timeout.
      */
-    public native long getTimeout();
+    public native int getTimeout();
 
     /**
      * Sets the timeout for this transfer in milliseconds. A value of 0

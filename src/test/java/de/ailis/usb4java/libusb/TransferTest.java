@@ -125,7 +125,7 @@ public class TransferTest
     }
 
     /**
-     * Tests the {@link Transfer#setFlags(int)} and {@link Transfer#getFlags()}
+     * Tests the {@link Transfer#setFlags(byte)} and {@link Transfer#getFlags()}
      * methods.
      */
     @Test
@@ -134,15 +134,15 @@ public class TransferTest
         assumeUsbTestsEnabled();
         Transfer transfer = LibUsb.allocTransfer(0);
         assertEquals(0, transfer.getFlags());
-        transfer.setFlags(1);
+        transfer.setFlags((byte) 1);
         assertEquals(1, transfer.getFlags());
-        transfer.setFlags(0);
+        transfer.setFlags((byte) 0);
         assertEquals(0, transfer.getFlags());
         LibUsb.freeTransfer(transfer);
     }
 
     /**
-     * Tests the {@link Transfer#setEndpoint(int)} and
+     * Tests the {@link Transfer#setEndpoint(byte)} and
      * {@link Transfer#getEndpoint()} methods.
      */
     @Test
@@ -151,15 +151,15 @@ public class TransferTest
         assumeUsbTestsEnabled();
         Transfer transfer = LibUsb.allocTransfer(0);
         assertEquals(0, transfer.getEndpoint());
-        transfer.setEndpoint(1);
+        transfer.setEndpoint((byte) 1);
         assertEquals(1, transfer.getEndpoint());
-        transfer.setEndpoint(0);
+        transfer.setEndpoint((byte) 0);
         assertEquals(0, transfer.getEndpoint());
         LibUsb.freeTransfer(transfer);
     }
 
     /**
-     * Tests the {@link Transfer#setType(int)} and {@link Transfer#getType()}
+     * Tests the {@link Transfer#setType(byte)} and {@link Transfer#getType()}
      * methods.
      */
     @Test
@@ -168,9 +168,9 @@ public class TransferTest
         assumeUsbTestsEnabled();
         Transfer transfer = LibUsb.allocTransfer(0);
         assertEquals(0, transfer.getType());
-        transfer.setType(1);
+        transfer.setType((byte) 1);
         assertEquals(1, transfer.getType());
-        transfer.setType(0);
+        transfer.setType((byte) 0);
         assertEquals(0, transfer.getType());
         LibUsb.freeTransfer(transfer);
     }

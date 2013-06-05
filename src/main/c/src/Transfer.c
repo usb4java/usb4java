@@ -44,20 +44,20 @@ JNIEXPORT jobject JNICALL METHOD_NAME(Transfer, getDevHandle)
 }
 
 /**
- * void setFlags(int)
+ * void setFlags(byte)
  */
 JNIEXPORT void JNICALL METHOD_NAME(Transfer, setFlags)
 (
-    JNIEnv *env, jobject this, jint flags
+    JNIEnv *env, jobject this, jbyte flags
 )
 {
     unwrapTransfer(env, this)->flags = flags;
 }
 
 /**
- * int getFlags()
+ * byte getFlags()
  */
-JNIEXPORT jint JNICALL METHOD_NAME(Transfer, getFlags)
+JNIEXPORT jbyte JNICALL METHOD_NAME(Transfer, getFlags)
 (
     JNIEnv *env, jobject this
 )
@@ -66,20 +66,20 @@ JNIEXPORT jint JNICALL METHOD_NAME(Transfer, getFlags)
 }
 
 /**
- * void setEndpoint(int)
+ * void setEndpoint(byte)
  */
 JNIEXPORT void JNICALL METHOD_NAME(Transfer, setEndpoint)
 (
-    JNIEnv *env, jobject this, jint endpoint
+    JNIEnv *env, jobject this, jbyte endpoint
 )
 {
     unwrapTransfer(env, this)->endpoint = endpoint;
 }
 
 /**
- * int getEndpoint()
+ * byte getEndpoint()
  */
-JNIEXPORT jint JNICALL METHOD_NAME(Transfer, getEndpoint)
+JNIEXPORT jbyte JNICALL METHOD_NAME(Transfer, getEndpoint)
 (
     JNIEnv *env, jobject this
 )
@@ -88,20 +88,20 @@ JNIEXPORT jint JNICALL METHOD_NAME(Transfer, getEndpoint)
 }
 
 /**
- * void setType(int)
+ * void setType(byte)
  */
 JNIEXPORT void JNICALL METHOD_NAME(Transfer, setType)
 (
-    JNIEnv *env, jobject this, jint type
+    JNIEnv *env, jobject this, jbyte type
 )
 {
     unwrapTransfer(env, this)->type = type;
 }
 
 /**
- * int getType()
+ * byte getType()
  */
-JNIEXPORT jint JNICALL METHOD_NAME(Transfer, getType)
+JNIEXPORT jbyte JNICALL METHOD_NAME(Transfer, getType)
 (
     JNIEnv *env, jobject this
 )
@@ -110,20 +110,20 @@ JNIEXPORT jint JNICALL METHOD_NAME(Transfer, getType)
 }
 
 /**
- * void setTimeout(long)
+ * void setTimeout(int)
  */
 JNIEXPORT void JNICALL METHOD_NAME(Transfer, setTimeout)
 (
-    JNIEnv *env, jobject this, jlong timeout
+    JNIEnv *env, jobject this, jint timeout
 )
 {
     unwrapTransfer(env, this)->timeout = timeout;
 }
 
 /**
- * long getTimeout()
+ * int getTimeout()
  */
-JNIEXPORT jlong JNICALL METHOD_NAME(Transfer, getTimeout)
+JNIEXPORT jint JNICALL METHOD_NAME(Transfer, getTimeout)
 (
     JNIEnv *env, jobject this
 )
@@ -140,4 +140,59 @@ JNIEXPORT jint JNICALL METHOD_NAME(Transfer, getStatus)
 )
 {
     return unwrapTransfer(env, this)->status;
+}
+
+/**
+ * void setLength(int)
+ */
+JNIEXPORT void JNICALL METHOD_NAME(Transfer, setLength)
+(
+    JNIEnv *env, jobject this, jint length
+)
+{
+    unwrapTransfer(env, this)->length = length;
+}
+
+/**
+ * int getLength()
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(Transfer, getLength)
+(
+    JNIEnv *env, jobject this
+)
+{
+    return unwrapTransfer(env, this)->length;
+}
+
+/**
+ * int getActualLength()
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(Transfer, getActualLength)
+(
+    JNIEnv *env, jobject this
+)
+{
+    return unwrapTransfer(env, this)->actual_length;
+}
+
+/**
+ * void setNumIsoPackets(int)
+ */
+JNIEXPORT void JNICALL METHOD_NAME(Transfer, setNumIsoPackets)
+(
+    JNIEnv *env, jobject this, jint numIsoPackets
+)
+{
+    unwrapTransfer(env, this)->num_iso_packets = numIsoPackets;
+}
+
+/**
+ * int getNumIsoPackets()
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(Transfer, getNumIsoPackets)
+(
+    JNIEnv *env, jobject this
+)
+{
+    return unwrapTransfer(env, this)->num_iso_packets;
 }
