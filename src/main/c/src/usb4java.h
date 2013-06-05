@@ -53,7 +53,7 @@
     jfieldID field = (*ENV)->GetFieldID(ENV, cls, FIELD, "J"); \
     jptr ptr = (jptr) (*ENV)->GetLongField(ENV, OBJECT, field); \
     if (!ptr) illegalState(ENV, FIELD" is not initialized"); \
-    return (TYPE) (jptr) (*ENV)->GetLongField(ENV, OBJECT, field); \
+    return (TYPE) ptr; \
 }
 
 #define SET_DATA(ENV, PTR, SIZE, OBJECT, FIELD) \
@@ -100,7 +100,8 @@
         (*jvm)->AttachCurrentThread(jvm, (void**) &ENV, NULL);
 
 #define THREAD_END \
-    if (getEnvResult == JNI_EDETACHED) (*jvm)->DetachCurrentThread(jvm);
+    if (getEnvResult == JNI_EDETACHED) \
+        (*jvm)->DetachCurrentThread(jvm);
 
 jint illegalArgument(JNIEnv *env, char *message);
 jint illegalState(JNIEnv *env, char *message);
