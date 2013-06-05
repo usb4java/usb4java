@@ -30,12 +30,12 @@ struct libusb_interface *unwrapInterface(JNIEnv *env, jobject obj)
     UNWRAP_POINTER(env, obj, struct libusb_interface*, "interfacePointer");
 }
 
-JNIEXPORT jshort JNICALL METHOD_NAME(Interface, numAltsetting)
+JNIEXPORT jint JNICALL METHOD_NAME(Interface, numAltsetting)
 (
     JNIEnv *env, jobject this
 )
 {
-    return (jshort) unwrapInterface(env, this)->num_altsetting;
+    return unwrapInterface(env, this)->num_altsetting;
 }
 
 JNIEXPORT jobjectArray JNICALL METHOD_NAME(Interface, altsetting)
