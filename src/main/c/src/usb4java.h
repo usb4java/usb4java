@@ -20,21 +20,16 @@
 #endif
 
 #define SET_POINTER(ENV, PTR, OBJECT, FIELD) \
-{ \
     jclass cls = (*ENV)->GetObjectClass(ENV, OBJECT); \
     jfieldID field = (*ENV)->GetFieldID(ENV, cls, FIELD, "J"); \
-    (*ENV)->SetLongField(ENV, OBJECT, field, (jptr) PTR); \
-}
+    (*ENV)->SetLongField(ENV, OBJECT, field, (jptr) PTR);
 
 #define RESET_POINTER(ENV, OBJECT, FIELD) \
-{ \
     jclass cls = (*ENV)->GetObjectClass(ENV, OBJECT); \
     jfieldID field = (*ENV)->GetFieldID(ENV, cls, FIELD, "J"); \
-    (*ENV)->SetLongField(ENV, OBJECT, field, 0); \
-}
+    (*ENV)->SetLongField(ENV, OBJECT, field, 0);
 
 #define WRAP_POINTER(ENV, PTR, CLASS_NAME, FIELD) \
-{ \
     if (!PTR) return NULL; \
     jclass cls = (*ENV)->FindClass(ENV, PACKAGE_DIR"/"CLASS_NAME); \
     if (cls == NULL) return NULL; \
@@ -43,48 +38,38 @@
     jobject object = (*ENV)->NewObject(ENV, cls, constructor); \
     jfieldID field = (*ENV)->GetFieldID(ENV, cls, FIELD, "J"); \
     (*ENV)->SetLongField(ENV, object, field, (jptr) PTR); \
-    return object; \
-}
+    return object;
 
 #define UNWRAP_POINTER(ENV, OBJECT, TYPE, FIELD) \
-{ \
     if (!OBJECT) return NULL; \
     jclass cls = (*ENV)->GetObjectClass(ENV, OBJECT); \
     jfieldID field = (*ENV)->GetFieldID(ENV, cls, FIELD, "J"); \
     jptr ptr = (jptr) (*ENV)->GetLongField(ENV, OBJECT, field); \
     if (!ptr) illegalState(ENV, FIELD" is not initialized"); \
-    return (TYPE) ptr; \
-}
+    return (TYPE) ptr;
 
 #define SET_DATA(ENV, PTR, SIZE, OBJECT, FIELD) \
-{ \
     jclass cls = (*ENV)->GetObjectClass(ENV, OBJECT); \
     jfieldID field = (*ENV)->GetFieldID(ENV, cls, FIELD, \
         "Ljava/nio/ByteBuffer;"); \
     jobject buffer = (*ENV)->NewDirectByteBuffer(env, PTR, SIZE); \
-    (*ENV)->SetObjectField(ENV, OBJECT, field, buffer); \
-}
+    (*ENV)->SetObjectField(ENV, OBJECT, field, buffer);
 
 #define UNWRAP_DATA(ENV, OBJECT, TYPE, FIELD) \
-{ \
     jclass cls = (*ENV)->GetObjectClass(ENV, OBJECT); \
     jfieldID field = (*ENV)->GetFieldID(ENV, cls, FIELD, \
         "Ljava/nio/ByteBuffer;"); \
     jobject buffer = (*ENV)->GetObjectField(ENV, OBJECT, field); \
-    return (TYPE) (*ENV)->GetDirectBufferAddress(ENV, buffer); \
-}
+    return (TYPE) (*ENV)->GetDirectBufferAddress(ENV, buffer);
 
-#define DIRECT_BUFFER(ENV, VAR, ACTION) \
-{ \
-    jclass cls = (*ENV)->GetObjectClass(ENV, VAR); \
-    jmethodID method = (*ENV)->GetMethodID(ENV, cls, "isDirect", \
-        "()Z"); \
-    if (!(*ENV)->CallBooleanMethod(ENV, VAR, method)) \
-    { \
-        illegalArgument(ENV, #VAR" must be a direct buffer"); \
-        ACTION; \
-    } \
-}
+// GetDirectBufferAddress returns NULL if called on a non-direct buffer.
+#define DIRECT_BUFFER(ENV, VAR, BUFFER, ACTION) \
+    unsigned char *BUFFER = (*ENV)->GetDirectBufferAddress(ENV, VAR); \
+	if (!BUFFER) \
+	{ \
+	    illegalArgument(ENV, #VAR" must be a direct buffer"); \
+	    ACTION; \
+	}
 
 #define NOT_NULL(ENV, VAR, ACTION) \
     if (!VAR) \

@@ -10,8 +10,8 @@ void setDeviceList(JNIEnv* env, libusb_device** list, int size, jobject object)
 {
     SET_POINTER(env, list, object, "deviceListPointer");
 
-    jclass cls = (*env)->GetObjectClass(env, object);
-    jfieldID field = (*env)->GetFieldID(env, cls, "size", "I");
+    // We already have the class from the previous call.
+    field = (*env)->GetFieldID(env, cls, "size", "I");
     (*env)->SetIntField(env, object, field, size);
 }
 
@@ -25,8 +25,8 @@ void resetDeviceList(JNIEnv* env, jobject obj)
     RESET_POINTER(env, obj, "deviceListPointer");
 
     // Reset size to zero too.
-    jclass cls = (*env)->GetObjectClass(env, obj);
-    jfieldID field = (*env)->GetFieldID(env, cls, "size", "I");
+    // We already have the class from the previous call.
+    field = (*env)->GetFieldID(env, cls, "size", "I");
     (*env)->SetIntField(env, obj, field, 0);
 }
 
