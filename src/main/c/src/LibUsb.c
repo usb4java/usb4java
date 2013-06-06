@@ -905,20 +905,20 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, handleEventsTimeoutCompleted)
     jobject completed
 )
 {
+    int *complete = NULL;
+    if (completed) {
+        DIRECT_BUFFER(env, completed, complete_tmp, return 0);
+        complete = (int *) complete_tmp;
+    }
+
     libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return 0;
+
     struct timeval tv;
     tv.tv_sec = timeout / 1000000;
     tv.tv_usec = timeout % 1000000;
-    int complete; // TODO: this has to be an external pointer that gets read, it is NOT a place to write to!
-    int result = libusb_handle_events_timeout_completed(ctx, &tv, &complete);
-    if (!result && completed)
-    {
-        jclass cls = (*env)->GetObjectClass(env, completed);
-        jmethodID method = (*env)->GetMethodID(env, cls, "put", "(II)Ljava/nio/IntBuffer;");
-        (*env)->CallVoidMethod(env, completed, method, 0, complete);
-    }
-    return result;
+
+    return libusb_handle_events_timeout_completed(ctx, &tv, complete);
 }
 
 /**
@@ -958,17 +958,16 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, handleEventsCompleted)
     JNIEnv *env, jclass class, jobject context, jobject completed
 )
 {
+    int *complete = NULL;
+    if (completed) {
+        DIRECT_BUFFER(env, completed, complete_tmp, return 0);
+        complete = (int *) complete_tmp;
+    }
+
     libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return 0;
-    int complete; // TODO: same as above!
-    int result = libusb_handle_events_completed(ctx, &complete);
-    if (!result && completed)
-    {
-        jclass cls = (*env)->GetObjectClass(env, completed);
-        jmethodID method = (*env)->GetMethodID(env, cls, "put", "(II)Ljava/nio/IntBuffer;");
-        (*env)->CallVoidMethod(env, completed, method, 0, complete);
-    }
-    return result;
+
+    return libusb_handle_events_completed(ctx, complete);
 }
 
 /**
