@@ -720,7 +720,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, controlTransfer)
 }
 
 /**
- * int bulkTransfer(DeviceHandle, int, int, int, int, IntBuffer, int)
+ * int bulkTransfer(DeviceHandle, int, ByteBuffer, IntBuffer, int)
  */
 JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, bulkTransfer)
 (
@@ -750,7 +750,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, bulkTransfer)
 }
 
 /**
- * int interruptTransfer(DeviceHandle, int, int, int, int, IntBuffer, int)
+ * int interruptTransfer(DeviceHandle, int, ByteBuffer, IntBuffer, int)
  */
 JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, interruptTransfer)
 (
