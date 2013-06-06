@@ -73,7 +73,7 @@ public final class Transfer
      * @param flags
      *            The transfer flags to set.
      */
-    public native void setFlags(final byte flags);
+    public native void setFlags(final int flags);
 
     /**
      * Returns the address of the endpoint where this transfer will be sent.
@@ -88,7 +88,7 @@ public final class Transfer
      * @param endpoint
      *            The endpoint address to set
      */
-    public native void setEndpoint(final byte endpoint);
+    public native void setEndpoint(final int endpoint);
 
     /**
      * Returns the type of the endpoint.
@@ -103,7 +103,7 @@ public final class Transfer
      * @param type
      *            The endpoint type to set.
      */
-    public native void setType(final byte type);
+    public native void setType(final int type);
 
     /**
      * Returns the timeout for this transfer in milliseconds. A value of 0

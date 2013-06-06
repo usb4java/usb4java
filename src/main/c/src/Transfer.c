@@ -44,11 +44,11 @@ JNIEXPORT jobject JNICALL METHOD_NAME(Transfer, getDevHandle)
 }
 
 /**
- * void setFlags(byte)
+ * void setFlags(int)
  */
 JNIEXPORT void JNICALL METHOD_NAME(Transfer, setFlags)
 (
-    JNIEnv *env, jobject this, jbyte flags
+    JNIEnv *env, jobject this, jint flags
 )
 {
     unwrapTransfer(env, this)->flags = flags;
@@ -66,11 +66,11 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(Transfer, getFlags)
 }
 
 /**
- * void setEndpoint(byte)
+ * void setEndpoint(int)
  */
 JNIEXPORT void JNICALL METHOD_NAME(Transfer, setEndpoint)
 (
-    JNIEnv *env, jobject this, jbyte endpoint
+    JNIEnv *env, jobject this, jint endpoint
 )
 {
     unwrapTransfer(env, this)->endpoint = endpoint;
@@ -88,11 +88,11 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(Transfer, getEndpoint)
 }
 
 /**
- * void setType(byte)
+ * void setType(int)
  */
 JNIEXPORT void JNICALL METHOD_NAME(Transfer, setType)
 (
-    JNIEnv *env, jobject this, jbyte type
+    JNIEnv *env, jobject this, jint type
 )
 {
     unwrapTransfer(env, this)->type = type;
