@@ -455,9 +455,6 @@ public final class LibUsb
     /** Device sent more data than requested. */
     public static final int TRANSFER_OVERFLOW = 6;
 
-    /** The maximum size of a string (Unicode). */
-    private static final int MAX_STRING_SIZE = 126;
-
     /** The currently set pollfd listener. */
     private static PollfdListener pollfdListener;
 
@@ -1132,17 +1129,14 @@ public final class LibUsb
      *            The index of the descriptor to retrieve.
      * @param string
      *            Output buffer for ASCII string descriptor.
-     * @param length
-     *            Maximum number of bytes to read.
      * @return Number of bytes returned in data, or ERROR code on failure.
      */
     public static native int getStringDescriptorAscii(
-        final DeviceHandle handle, final int index, final StringBuffer string,
-        final int length);
+        final DeviceHandle handle, final int index, final StringBuffer string);
 
     /**
      * A simple wrapper around
-     * {@link #getStringDescriptorAscii(DeviceHandle, int, StringBuffer, int)}
+     * {@link #getStringDescriptorAscii(DeviceHandle, int, StringBuffer)}
      * Simply returns the string (Maximum length of 126) if possible. If not
      * possible (NULL handle or 0-index specified or error occured) then null is
      * returned.
@@ -1160,8 +1154,7 @@ public final class LibUsb
     {
         if (handle == null || index == 0) return null;
         final StringBuffer buffer = new StringBuffer();
-        if (getStringDescriptorAscii(handle, index, buffer,
-            MAX_STRING_SIZE) >= 0)
+        if (getStringDescriptorAscii(handle, index, buffer) >= 0)
         {
             return buffer.toString();
         }
@@ -1286,7 +1279,7 @@ public final class LibUsb
      * @param data
      *            Output buffer for descriptor.
      * @return number of bytes returned in data, or LIBUSB_ERROR code on failure
-     * @see #getStringDescriptorAscii(DeviceHandle, int, StringBuffer, int)
+     * @see #getStringDescriptorAscii(DeviceHandle, int, StringBuffer)
      */
     public static native int getStringDescriptor(final DeviceHandle handle,
         final int index, final int langId, final ByteBuffer data);

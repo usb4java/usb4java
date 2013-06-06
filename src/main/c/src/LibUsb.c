@@ -564,24 +564,25 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getDeviceDescriptor)
 }
 
 /**
- * int getStringDescriptorAscii(DeviceHandle, int, StringBuffer, int)
+ * int getStringDescriptorAscii(DeviceHandle, int, StringBuffer)
  */
 JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getStringDescriptorAscii)
 (
-    JNIEnv *env, jclass class, jobject handle, jint index, jobject string,
-    jint length
+    JNIEnv *env, jclass class, jobject handle, jint index, jobject string
 )
 {
     NOT_NULL(env, handle, return 0);
     NOT_NULL(env, string, return 0);
     libusb_device_handle *dev_handle = unwrapDeviceHandle(env, handle);
     if (!dev_handle) return 0;
-    unsigned char buffer[length + 1];
+    // Maximum size of a descriptor is 256 bytes, -2 for length/type = 254, /2 because of Unicode = 127 characters
+    // and then +1 for the terminating NUL byte for C strings (the descriptor itself doesn't necessarily have one!).
+    unsigned char buffer[127 + 1];
     int result = libusb_get_string_descriptor_ascii(
-        dev_handle, index, buffer, length);
+        dev_handle, index, buffer, 127);
     if (result >= 0)
     {
-        buffer[result] = 0;
+        buffer[result] = 0x00;
         jobject tmp = (*env)->NewStringUTF(env, (char *) buffer);
         jclass cls = (*env)->GetObjectClass(env, string);
         jmethodID method = (*env)->GetMethodID(env, cls, "append",

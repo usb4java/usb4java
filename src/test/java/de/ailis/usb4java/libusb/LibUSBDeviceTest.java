@@ -920,7 +920,7 @@ public class LibUSBDeviceTest
     public void testGetStringDescriptorAsciiWithoutHandle()
     {
         assumeUsbTestsEnabled();
-        LibUsb.getStringDescriptorAscii(null, 0, new StringBuffer(), 0);
+        LibUsb.getStringDescriptorAscii(null, 0, new StringBuffer());
     }
 
     /**
@@ -932,7 +932,7 @@ public class LibUSBDeviceTest
     public void testGetStringDescriptorAsciiWithoutBuffer()
     {
         assumeUsbTestsEnabled();
-        LibUsb.getStringDescriptorAscii(new DeviceHandle(), 0, null, 0);
+        LibUsb.getStringDescriptorAscii(new DeviceHandle(), 0, null);
     }
 
     /**

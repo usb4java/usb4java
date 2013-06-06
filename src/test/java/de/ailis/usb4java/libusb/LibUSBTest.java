@@ -552,7 +552,7 @@ public class LibUSBTest
     {
         assumeUsbTestsEnabled();
         LibUsb.getStringDescriptorAscii(new DeviceHandle(), 0,
-            new StringBuffer(), 0);
+            new StringBuffer());
     }
 
     /**
