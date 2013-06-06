@@ -48,20 +48,6 @@
     if (!ptr) illegalState(ENV, FIELD" is not initialized"); \
     return (TYPE) ptr;
 
-#define SET_DATA(ENV, PTR, SIZE, OBJECT, FIELD) \
-    jclass cls = (*ENV)->GetObjectClass(ENV, OBJECT); \
-    jfieldID field = (*ENV)->GetFieldID(ENV, cls, FIELD, \
-        "Ljava/nio/ByteBuffer;"); \
-    jobject buffer = (*ENV)->NewDirectByteBuffer(env, PTR, SIZE); \
-    (*ENV)->SetObjectField(ENV, OBJECT, field, buffer);
-
-#define UNWRAP_DATA(ENV, OBJECT, TYPE, FIELD) \
-    jclass cls = (*ENV)->GetObjectClass(ENV, OBJECT); \
-    jfieldID field = (*ENV)->GetFieldID(ENV, cls, FIELD, \
-        "Ljava/nio/ByteBuffer;"); \
-    jobject buffer = (*ENV)->GetObjectField(ENV, OBJECT, field); \
-    return (TYPE) (*ENV)->GetDirectBufferAddress(ENV, buffer);
-
 // GetDirectBufferAddress returns NULL if called on a non-direct buffer.
 #define DIRECT_BUFFER(ENV, VAR, BUFFER, ACTION) \
     unsigned char *BUFFER = (*ENV)->GetDirectBufferAddress(ENV, VAR); \

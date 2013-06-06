@@ -10,5 +10,6 @@
 
 void setDeviceDescriptor(JNIEnv*, struct libusb_device_descriptor*, jobject);
 struct libusb_device_descriptor* unwrapDeviceDescriptor(JNIEnv*, jobject);
+void resetDeviceDescriptor(JNIEnv*, jobject);
 
 #endif

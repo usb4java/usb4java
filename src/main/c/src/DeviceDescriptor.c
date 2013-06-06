@@ -8,14 +8,18 @@
 void setDeviceDescriptor(JNIEnv* env,
     struct libusb_device_descriptor* descriptor, jobject object)
 {
-    SET_DATA(env, descriptor, sizeof(struct libusb_device_descriptor),
-        object, "data");
+    SET_POINTER(env, descriptor, object, "deviceDescriptorPointer");
 }
 
-struct libusb_device_descriptor* unwrapDeviceDescriptor(JNIEnv* env,
-    jobject descriptor)
+struct libusb_device_descriptor* unwrapDeviceDescriptor(JNIEnv *env,
+    jobject obj)
 {
-    UNWRAP_DATA(env, descriptor, struct libusb_device_descriptor*, "data");
+    UNWRAP_POINTER(env, obj, struct libusb_device_descriptor*, "deviceDescriptorPointer");
+}
+
+void resetDeviceDescriptor(JNIEnv* env, jobject obj)
+{
+    RESET_POINTER(env, obj, "deviceDescriptorPointer");
 }
 
 /**

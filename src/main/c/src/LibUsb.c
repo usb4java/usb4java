@@ -554,11 +554,27 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getDeviceDescriptor)
     NOT_NULL(env, descriptor, return 0);
     libusb_device *dev = unwrapDevice(env, device);
     if (!dev) return 0;
-    struct libusb_device_descriptor *data = 
+    struct libusb_device_descriptor *data =
         malloc(sizeof(struct libusb_device_descriptor));
     int result = libusb_get_device_descriptor(dev, data);
     if (!result) setDeviceDescriptor(env, data, descriptor);
     return result;
+}
+
+/**
+ * void freeDeviceDescriptor(DeviceDescriptor)
+ */
+JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeDeviceDescriptor)
+(
+    JNIEnv *env, jclass class, jobject descriptor
+)
+{
+    NOT_NULL(env, descriptor, return);
+    struct libusb_device_descriptor *data = unwrapDeviceDescriptor(env,
+        descriptor);
+    if (!data) return;
+    free(data);
+    resetDeviceDescriptor(env, descriptor);
 }
 
 /**

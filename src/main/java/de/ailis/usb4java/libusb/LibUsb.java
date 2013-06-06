@@ -1119,6 +1119,23 @@ public final class LibUsb
      */
     public static native int getDeviceDescriptor(final Device device,
         final DeviceDescriptor descriptor);
+    
+    /**
+     * Free a device descriptor obtained from
+     * {@link #getDeviceDescriptor(Device, DeviceDescriptor)}.
+     * 
+     * It is safe to call this function with a NULL device parameter, in which
+     * case the function simply returns.
+     * 
+     * This function is not present in the libusb-1.0 API, but since
+     * getDeviceDescriptor() requires memory to be allocated manually,
+     * a way to deallocate it from Java is required to avoid a memory leak.
+     * 
+     * @param descriptor
+     *            The device descriptor to free
+     */
+    public static native void freeDeviceDescriptor(
+    	final DeviceDescriptor descriptor);
 
     /**
      * Retrieve a string descriptor in C style ASCII.

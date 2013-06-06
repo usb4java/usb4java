@@ -11,8 +11,6 @@
 
 package de.ailis.usb4java.libusb;
 
-import java.nio.ByteBuffer;
-
 import javax.usb.UsbDeviceDescriptor;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -30,8 +28,8 @@ import de.ailis.usb4java.utils.DescriptorUtils;
  */
 public final class DeviceDescriptor implements UsbDeviceDescriptor
 {
-    /** The native data of the descriptor structure. */
-    private ByteBuffer data;
+	/** The native pointer to the descriptor structure. */
+    private long deviceDescriptorPointer;
 
     /**
      * Constructs a new device descriptor which can be passed to the
@@ -43,13 +41,13 @@ public final class DeviceDescriptor implements UsbDeviceDescriptor
     }
 
     /**
-     * Returns the native data of the descriptor structure.
+     * Returns the native pointer.
      * 
-     * @return The native data.
+     * @return The native pointer.
      */
-    public ByteBuffer getData()
+    public long getPointer()
     {
-        return this.data;
+        return this.deviceDescriptorPointer;
     }
 
     @Override
