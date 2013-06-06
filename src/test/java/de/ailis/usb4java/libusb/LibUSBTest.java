@@ -16,6 +16,7 @@ import static org.junit.Assert.fail;
 import java.io.FileDescriptor;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.nio.LongBuffer;
 
 import org.junit.Test;
 
@@ -867,7 +868,7 @@ public class LibUSBTest
     {
         assumeUsbTestsEnabled();
         final Context context = new Context();
-        LibUsb.getNextTimeout(context, IntBuffer.allocate(1));
+        LibUsb.getNextTimeout(context, LongBuffer.allocate(1));
     }
 
     /**

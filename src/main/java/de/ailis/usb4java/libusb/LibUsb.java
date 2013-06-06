@@ -14,6 +14,7 @@ package de.ailis.usb4java.libusb;
 import java.io.FileDescriptor;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.nio.LongBuffer;
 
 /**
  * Static class providing the constants and functions of libusbx.
@@ -1752,7 +1753,7 @@ public final class LibUsb
      *         or {@link #ERROR_OTHER} failure
      */
     public static native int getNextTimeout(final Context context,
-        final IntBuffer timeout);
+        final LongBuffer timeout);
 
     /**
      * Register notification functions for file descriptor additions/removals.

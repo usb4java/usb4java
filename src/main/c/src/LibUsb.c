@@ -720,7 +720,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, controlTransfer)
 }
 
 /**
- * int bulkTransfer(DeviceHandle, int, int, int, int, ByteBuffer, int)
+ * int bulkTransfer(DeviceHandle, int, int, int, int, IntBuffer, int)
  */
 JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, bulkTransfer)
 (
@@ -750,7 +750,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, bulkTransfer)
 }
 
 /**
- * int interruptTransfer(DeviceHandle, int, int, int, int, ByteBuffer, int)
+ * int interruptTransfer(DeviceHandle, int, int, int, int, IntBuffer, int)
  */
 JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, interruptTransfer)
 (
@@ -900,7 +900,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, handleEventsTimeoutCompleted)
     struct timeval tv;
     tv.tv_sec = timeout / 1000000;
     tv.tv_usec = timeout % 1000000;
-    int complete;
+    int complete; // TODO: this has to be an external pointer that gets read, it is NOT a place to write to!
     int result = libusb_handle_events_timeout_completed(ctx, &tv, &complete);
     if (!result && completed)
     {
@@ -950,7 +950,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, handleEventsCompleted)
 {
     libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return 0;
-    int complete;
+    int complete; // TODO: same as above!
     int result = libusb_handle_events_completed(ctx, &complete);
     if (!result && completed)
     {
@@ -1006,7 +1006,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getNextTimeout)
     {
         jclass cls = (*env)->GetObjectClass(env, timeout);
         jmethodID method = (*env)->GetMethodID(env, cls, "put",
-            "(II)Ljava/nio/LongBuffer;");
+            "(IJ)Ljava/nio/LongBuffer;");
         (*env)->CallVoidMethod(env, timeout, method, 0,
             tv.tv_sec * 1000000 + tv.tv_usec);
     }
@@ -1023,7 +1023,7 @@ static void LIBUSB_CALL triggerPollfdAdded(int fd, short events, void *user_data
 
     jclass cls = (*env)->FindClass(env, PACKAGE_DIR"/LibUsb");
     jmethodID method = (*env)->GetStaticMethodID(env, cls,
-        "triggerPollfdAdded", "(Ljava/io/FileDescriptor;)V");
+        "triggerPollfdAdded", "(Ljava/io/FileDescriptor;I)V");
     (*env)->CallStaticVoidMethod(env, cls, method, object, events);
 
     THREAD_END
@@ -1056,7 +1056,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, setPollfdNotifiers)
     libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return;
     (*env)->GetJavaVM(env, &jvm);
-    libusb_set_pollfd_notifiers(ctx, triggerPollfdAdded, triggerPollfdRemoved, 
+    libusb_set_pollfd_notifiers(ctx, &triggerPollfdAdded, &triggerPollfdRemoved,
         NULL);
 }
 
