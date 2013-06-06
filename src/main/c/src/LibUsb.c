@@ -37,7 +37,7 @@ JNIEXPORT jobject JNICALL METHOD_NAME(LibUsb, getVersion)
 }
 
 /**
- * int init()
+ * int init(Context)
  */
 JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, init)
 (
@@ -58,7 +58,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, init)
 }
 
 /**
- * void exit()
+ * void exit(Context)
  */
 JNIEXPORT void JNICALL METHOD_NAME(LibUsb, exit)
 (
@@ -185,7 +185,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getPortPath)
 }
 
 /**
- * int getPortNumber(Device)
+ * Device getParent(Device)
  */
 JNIEXPORT jobject JNICALL METHOD_NAME(LibUsb, getParent)
 (
@@ -306,7 +306,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, open)
 }
 
 /**
- * DeviceHandle open(Context, int, int)
+ * DeviceHandle openDeviceWithVidPid(Context, int, int)
  */
 JNIEXPORT jobject JNICALL METHOD_NAME(LibUsb, openDeviceWithVidPid)
 (
