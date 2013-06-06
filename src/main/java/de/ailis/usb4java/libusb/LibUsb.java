@@ -613,7 +613,7 @@ public final class LibUsb
      *         array is too small
      */
     public static native int getPortPath(final Context context,
-        final Device device, final byte[] path);
+        final Device device, final ByteBuffer path);
 
     /**
      * Get the the parent from the specified device [EXPERIMENTAL].

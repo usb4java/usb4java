@@ -153,21 +153,21 @@ public class LibUSBDeviceTest
     }
 
     /**
-     * Tests the {@link LibUsb#getPortPath(Context, Device, byte[])} method.
+     * Tests the {@link LibUsb#getPortPath(Context, Device, ByteBuffer)} method.
      */
     @Test
     public void testGetPortPath()
     {
         assumeUsbTestsEnabled();
         assumeNotNull(this.device);
-        byte[] path = new byte[8];
+        ByteBuffer path = ByteBuffer.allocateDirect(8);
         int result = LibUsb.getPortPath(this.context, this.device, path);
         assertTrue(result > 0);
-        assertTrue(result <= path.length);
+        assertTrue(result <= path.capacity());
     }
 
     /**
-     * Tests the {@link LibUsb#getPortPath(Context, Device, byte[])} method with
+     * Tests the {@link LibUsb#getPortPath(Context, Device, ByteBuffer)} method with
      * 0-sized path buffer.
      */
     @Test
@@ -175,24 +175,24 @@ public class LibUSBDeviceTest
     {
         assumeUsbTestsEnabled();
         assumeNotNull(this.device);
-        byte[] path = new byte[0];
+        ByteBuffer path = ByteBuffer.allocateDirect(0);
         int result = LibUsb.getPortPath(this.context, this.device, path);
         assertEquals(LibUsb.ERROR_OVERFLOW, result);
     }
 
     /**
-     * Tests the {@link LibUsb#getPortPath(Context, Device, byte[])} method
+     * Tests the {@link LibUsb#getPortPath(Context, Device, ByteBuffer)} method
      * without a device.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testGetPortPathWithoutDevice()
     {
         assumeUsbTestsEnabled();
-        LibUsb.getPortPath(this.context, null, new byte[8]);
+        LibUsb.getPortPath(this.context, null, ByteBuffer.allocateDirect(8));
     }
 
     /**
-     * Tests the {@link LibUsb#getPortPath(Context, Device, byte[])} method
+     * Tests the {@link LibUsb#getPortPath(Context, Device, ByteBuffer)} method
      * without a buffer.
      */
     @Test(expected = IllegalArgumentException.class)
@@ -203,7 +203,7 @@ public class LibUSBDeviceTest
     }
 
     /**
-     * Tests {@link LibUsb#getPortPath(Context, Device, byte[])} method with
+     * Tests {@link LibUsb#getPortPath(Context, Device, ByteBuffer)} method with
      * uninitialized USB context.
      */
     @Test(expected = IllegalStateException.class)
@@ -212,18 +212,18 @@ public class LibUSBDeviceTest
         assumeUsbTestsEnabled();
         assumeNotNull(this.device);
         final Context context = new Context();
-        LibUsb.getPortPath(context, this.device, new byte[16]);
+        LibUsb.getPortPath(context, this.device, ByteBuffer.allocateDirect(16));
     }
 
     /**
-     * Tests {@link LibUsb#getPortPath(Context, Device, byte[])} method with
+     * Tests {@link LibUsb#getPortPath(Context, Device, ByteBuffer)} method with
      * uninitialized device.
      */
     @Test(expected = IllegalStateException.class)
     public void testGetPortPathWithUninitializedDevice()
     {
         assumeUsbTestsEnabled();
-        LibUsb.getPortPath(this.context, new Device(), new byte[16]);
+        LibUsb.getPortPath(this.context, new Device(), ByteBuffer.allocateDirect(16));
     }
 
     /**
