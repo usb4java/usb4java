@@ -23,7 +23,7 @@
 #include "ConfigDescriptor.h"
 #include "Transfer.h"
 
-static JavaVM *jvm;
+static JavaVM *jvm = NULL;
 
 /**
  * Version getVersion()
@@ -1123,7 +1123,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, setPollfdNotifiers)
     libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return;
 
-    (*env)->GetJavaVM(env, &jvm);
+    if (!jvm) (*env)->GetJavaVM(env, &jvm);
     libusb_set_pollfd_notifiers(ctx, &triggerPollfdAdded, &triggerPollfdRemoved,
         NULL);
 }
