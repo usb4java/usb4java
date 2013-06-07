@@ -32,9 +32,9 @@
 #define WRAP_POINTER(ENV, PTR, CLASS_NAME, FIELD) \
     if (!PTR) return NULL; \
     jclass cls = (*ENV)->FindClass(ENV, PACKAGE_DIR"/"CLASS_NAME); \
-    if (cls == NULL) return NULL; \
+    if (!cls) return NULL; \
     jmethodID constructor = (*ENV)->GetMethodID(ENV, cls, "<init>", "()V"); \
-    if (constructor == NULL) return NULL; \
+    if (!constructor) return NULL; \
     jobject object = (*ENV)->NewObject(ENV, cls, constructor); \
     jfieldID field = (*ENV)->GetFieldID(ENV, cls, FIELD, "J"); \
     (*ENV)->SetLongField(ENV, object, field, (jptr) PTR); \
