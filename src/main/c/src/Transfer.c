@@ -208,16 +208,25 @@ JNIEXPORT jint JNICALL METHOD_NAME(Transfer, getNumIsoPackets)
 }
 
 static void transferCallback(struct libusb_transfer *transfer) {
-	THREAD_BEGIN(env)
+    THREAD_BEGIN(env)
 
-	// Call back into Java.
+    // The saved reference to the Java Transfer object.
+    jobject jTransfer = transfer->user_data;
 
-	// Cleanup Java Transfer object too, if requested.
-	if (transfer->flags & LIBUSB_TRANSFER_FREE_TRANSFER) {
-		resetTransfer(env, transfer->user_data);
-	}
+    // Call back into Java.
+    jclass cls = (*env)->GetObjectClass(env, jTransfer);
+    jmethodID method = (*env)->GetMethodID(env, cls, "transferCallback", "()V");
+    (*env)->CallVoidMethod(env, jTransfer, method);
 
-	THREAD_END
+    // Cleanup Java Transfer object too, if requested.
+    if (transfer->flags & LIBUSB_TRANSFER_FREE_TRANSFER)
+    {
+        resetTransfer(env, jTransfer);
+    }
+
+    (*env)->DeleteGlobalRef(env, jTransfer);
+
+    THREAD_END
 }
 
 /**
@@ -228,10 +237,19 @@ JNIEXPORT void JNICALL METHOD_NAME(Transfer, setCallbackNative)
     JNIEnv *env, jobject this
 )
 {
+    // First ensure the JVM is properly registered.
+    if (!jvm)
+        (*env)->GetJavaVM(env, &jvm);
+
+    // Then, set the callback to the appropriate C function and abuse the user_data field
+    // to keep a reference to the Java Transfer object we'll call back to later.
     unwrapTransfer(env, this)->callback = &transferCallback;
     unwrapTransfer(env, this)->user_data = this;
 
-    if (!jvm) (*env)->GetJavaVM(env, &jvm);
+    // To ensure the Java Transfer object's reference will still be valid after waiting on
+    // completion (for example it might get GC'd because no references in Java are held to
+    // it anymore, while the C part is still working fine), we have to make it a global ref.
+    (*env)->NewGlobalRef(env, this);
 }
 
 /**
@@ -242,7 +260,13 @@ JNIEXPORT void JNICALL METHOD_NAME(Transfer, unsetCallbackNative)
     JNIEnv *env, jobject this
 )
 {
-    unwrapTransfer(env, this)->callback = NULL;
-    unwrapTransfer(env, this)->user_data = NULL;
+    // If the callback was already set, unset it, and remember to delete the global reference again!
+    if (unwrapTransfer(env, this)->callback)
+    {
+        (*env)->DeleteGlobalRef(env, unwrapTransfer(env, this)->user_data);
+
+        unwrapTransfer(env, this)->callback = NULL;
+        unwrapTransfer(env, this)->user_data = NULL;
+    }
 }
 
