@@ -26,6 +26,9 @@ public final class Transfer
 {
     /** The native pointer to the transfer structure. */
     private long transferPointer;
+    
+    private TransferCallback callback;
+    private Object callbackUserData;
 
     /**
      * Constructs a new transfer structure.
@@ -158,6 +161,39 @@ public final class Transfer
      * @return The actual length of the transferred data.
      */
     public native int getActualLength();
+    
+    public TransferCallback getCallback() {
+    	return callback;
+    }
+    
+    public void setCallback(final TransferCallback cb) {
+    	callback = cb;
+    	
+    	// Call native method to enable callback and set Transfer correctly.
+    	if (cb == null) {
+    		unsetCallbackNative();
+    	}
+    	else {
+    		setCallbackNative(this);
+    	}
+    }
+    
+    native void setCallbackNative(final Transfer transfer);
+    native void unsetCallbackNative();
+    
+    void transferCallback(final Transfer transfer) {
+    	if (callback != null) {
+    		callback.processTransfer(transfer);
+    	}
+    }
+    
+    public Object getUserData() {
+    	return callbackUserData;
+    }
+    
+    public void setUserData(final Object userData) {
+    	callbackUserData = userData;
+    }
 
     /**
      * Returns the data buffer.

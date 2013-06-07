@@ -24,8 +24,8 @@ void resetDeviceList(JNIEnv* env, jobject obj)
 {
     RESET_POINTER(env, obj, "deviceListPointer");
 
-    // Reset size to zero too.
     // We already have the class from the previous call.
+    // Reset size field to zero too.
     field = (*env)->GetFieldID(env, cls, "size", "I");
     (*env)->SetIntField(env, obj, field, 0);
 }

@@ -19,6 +19,13 @@ struct libusb_transfer* unwrapTransfer(JNIEnv *env, jobject obj)
 void resetTransfer(JNIEnv* env, jobject obj)
 {
     RESET_POINTER(env, obj, "transferPointer");
+
+    // We already have the class from the previous call.
+    // Reset callback and callbackUserData fields to NULL too.
+    field = (*env)->GetFieldID(env, cls, "callback", "L"PACKAGE_DIR"/TransferCallback;");
+    (*env)->SetObjectField(env, obj, field, NULL);
+    field = (*env)->GetFieldID(env, cls, "callbackUserData", "Ljava/lang/Object;");
+    (*env)->SetObjectField(env, obj, field, NULL);
 }
 
 /**
@@ -150,6 +157,7 @@ JNIEXPORT void JNICALL METHOD_NAME(Transfer, setLength)
     JNIEnv *env, jobject this, jint length
 )
 {
+    // TODO: check length against the buffer!
     unwrapTransfer(env, this)->length = length;
 }
 

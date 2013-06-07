@@ -388,7 +388,10 @@ public final class LibUsb
 
     /**
      * Automatically free transfer buffer during {@link #freeTransfer(Transfer)}
-     * TODO Not sure how to do this memory management between Java and C.
+     * 
+     * Please note that this conflicts with Java memory management and is thus
+     * implemented purely in Java using the callback of the Transfer class.
+     * As such this flag is not passed on to the libusb library via JNI.
      */
     public static final int TRANSFER_FREE_BUFFER = 2;
 
@@ -1851,6 +1854,19 @@ public final class LibUsb
      */
     static native void unsetPollfdNotifiers(final Context context);
 
+    /**
+     * Allocate a libusbx transfer without support for isochronous transfers.
+     * 
+     * The returned transfer is pre-initialized for you. When the new transfer
+     * is no longer needed, it should be freed with
+     * {@link #freeTransfer(Transfer)}.
+     * 
+     * @return A newly allocated transfer, or NULL on error
+     */
+    public static Transfer allocTransfer() {
+    	return allocTransfer(0);
+    }
+    
     /**
      * Allocate a libusbx transfer with a specified number of isochronous packet
      * descriptors.
