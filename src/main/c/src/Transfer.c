@@ -38,7 +38,11 @@ JNIEXPORT void JNICALL METHOD_NAME(Transfer, setDevHandle)
     JNIEnv *env, jobject this, jobject handle
 )
 {
-    unwrapTransfer(env, this)->dev_handle = unwrapDeviceHandle(env, handle);
+    NOT_NULL(env, handle, return);
+    libusb_device_handle *dev_handle = unwrapDeviceHandle(env, handle);
+    if (!dev_handle) return;
+
+    unwrapTransfer(env, this)->dev_handle = dev_handle;
 }
 
 /**

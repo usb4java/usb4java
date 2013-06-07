@@ -14,3 +14,8 @@ libusb_device* unwrapDevice(JNIEnv* env, jobject device)
 {
     UNWRAP_POINTER(env, device, libusb_device*, "devicePointer");
 }
+
+void resetDevice(JNIEnv* env, jobject object)
+{
+    RESET_POINTER(env, object, "devicePointer");
+}

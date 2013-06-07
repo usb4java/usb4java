@@ -298,6 +298,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, unrefDevice)
     if (!dev) return;
 
     libusb_unref_device(dev);
+    resetDevice(env, device);
 }
 
 /**

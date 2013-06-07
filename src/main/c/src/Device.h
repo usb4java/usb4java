@@ -10,5 +10,6 @@
 
 jobject wrapDevice(JNIEnv*, libusb_device*);
 libusb_device* unwrapDevice(JNIEnv*, jobject);
+void resetDevice(JNIEnv*, jobject);
 
 #endif
