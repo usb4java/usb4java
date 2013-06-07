@@ -174,16 +174,16 @@ public final class Transfer
     		unsetCallbackNative();
     	}
     	else {
-    		setCallbackNative(this);
+    		setCallbackNative();
     	}
     }
     
-    native void setCallbackNative(final Transfer transfer);
+    native void setCallbackNative();
     native void unsetCallbackNative();
     
-    void transferCallback(final Transfer transfer) {
+    void transferCallback() {
     	if (callback != null) {
-    		callback.processTransfer(transfer);
+    		callback.processTransfer(this);
     	}
     }
     

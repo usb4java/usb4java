@@ -6,6 +6,8 @@
 #include "Transfer.h"
 #include "DeviceHandle.h"
 
+static JavaVM *jvm = NULL;
+
 jobject wrapTransfer(JNIEnv* env, struct libusb_transfer* transfer)
 {
     WRAP_POINTER(env, transfer, "Transfer", "transferPointer");
@@ -204,3 +206,43 @@ JNIEXPORT jint JNICALL METHOD_NAME(Transfer, getNumIsoPackets)
 {
     return unwrapTransfer(env, this)->num_iso_packets;
 }
+
+static void transferCallback(struct libusb_transfer *transfer) {
+	THREAD_BEGIN(env)
+
+	// Call back into Java.
+
+	// Cleanup Java Transfer object too, if requested.
+	if (transfer->flags & LIBUSB_TRANSFER_FREE_TRANSFER) {
+		resetTransfer(env, transfer->user_data);
+	}
+
+	THREAD_END
+}
+
+/**
+ * void setCallbackNative()
+ */
+JNIEXPORT void JNICALL METHOD_NAME(Transfer, setCallbackNative)
+(
+    JNIEnv *env, jobject this
+)
+{
+    unwrapTransfer(env, this)->callback = &transferCallback;
+    unwrapTransfer(env, this)->user_data = this;
+
+    if (!jvm) (*env)->GetJavaVM(env, &jvm);
+}
+
+/**
+ * void unsetCallbackNative()
+ */
+JNIEXPORT void JNICALL METHOD_NAME(Transfer, unsetCallbackNative)
+(
+    JNIEnv *env, jobject this
+)
+{
+    unwrapTransfer(env, this)->callback = NULL;
+    unwrapTransfer(env, this)->user_data = NULL;
+}
+
