@@ -72,7 +72,7 @@
     { \
         illegalState(ENV, FIELD" is already initialized"); \
         ACTION; \
-	}
+    }
 
 #define THREAD_BEGIN(ENV) \
     JNIEnv *ENV; \

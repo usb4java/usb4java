@@ -50,7 +50,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, init)
     }
     else
     {
-    	NOT_SET(env, context, "contextPointer", return 0);
+        NOT_SET(env, context, "contextPointer", return 0);
 
         libusb_context *ctx;
         int result = libusb_init(&ctx);
