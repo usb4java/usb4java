@@ -64,6 +64,16 @@
         ACTION; \
     }
 
+#define NOT_SET(ENV, VAR, FIELD, ACTION) \
+    jclass cls = (*ENV)->GetObjectClass(ENV, VAR); \
+    jfieldID field = (*ENV)->GetFieldID(ENV, cls, FIELD, "J"); \
+    jptr ptr = (jptr) (*ENV)->GetLongField(ENV, VAR, field); \
+    if (ptr) \
+    { \
+        illegalState(ENV, FIELD" is already initialized"); \
+        ACTION; \
+	}
+
 #define THREAD_BEGIN(ENV) \
     JNIEnv *ENV; \
     jint getEnvResult = (*jvm)->GetEnv(jvm, (void **) &ENV, JNI_VERSION_1_4); \

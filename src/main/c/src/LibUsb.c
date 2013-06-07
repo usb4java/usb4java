@@ -50,6 +50,8 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, init)
     }
     else
     {
+    	NOT_SET(env, context, "contextPointer", return 0);
+
         libusb_context *ctx;
         int result = libusb_init(&ctx);
         if (!result) setContext(env, ctx, context);
@@ -103,6 +105,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getDeviceList)
 )
 {
     NOT_NULL(env, deviceList, return 0);
+    NOT_SET(env, deviceList, "deviceListPointer", return 0);
     libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return 0;
 
@@ -307,6 +310,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, open)
 {
     NOT_NULL(env, device, return 0);
     NOT_NULL(env, handle, return 0);
+    NOT_SET(env, handle, "deviceHandlePointer", return 0);
     libusb_device *dev = unwrapDevice(env, device);
     if (!dev) return 0;
 
@@ -576,6 +580,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getDeviceDescriptor)
 {
     NOT_NULL(env, device, return 0);
     NOT_NULL(env, descriptor, return 0);
+    NOT_SET(env, descriptor, "deviceDescriptorPointer", return 0);
     libusb_device *dev = unwrapDevice(env, device);
     if (!dev) return 0;
 
@@ -642,6 +647,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getActiveConfigDescriptor)
 {
     NOT_NULL(env, device, return 0);
     NOT_NULL(env, descriptor, return 0);
+    NOT_SET(env, descriptor, "configDescriptorPointer", return 0);
     libusb_device *dev = unwrapDevice(env, device);
     if (!dev) return 0;
 
@@ -661,6 +667,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getConfigDescriptor)
 {
     NOT_NULL(env, device, return 0);
     NOT_NULL(env, descriptor, return 0);
+    NOT_SET(env, descriptor, "configDescriptorPointer", return 0);
     libusb_device *dev = unwrapDevice(env, device);
     if (!dev) return 0;
 
@@ -680,6 +687,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getConfigDescriptorByValue)
 {
     NOT_NULL(env, device, return 0);
     NOT_NULL(env, descriptor, return 0);
+    NOT_SET(env, descriptor, "configDescriptorPointer", return 0);
     libusb_device *dev = unwrapDevice(env, device);
     if (!dev) return 0;
 
