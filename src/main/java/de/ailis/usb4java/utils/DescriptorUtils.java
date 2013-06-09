@@ -69,7 +69,12 @@ public final class DescriptorUtils
     public static String getUSBClassName(final int usbClass)
     {
         final String name = CLASS_NAMES.get(usbClass);
-        if (name == null) return "Unknown";
+
+        if (name == null)
+        {
+            return "Unknown";
+        }
+
         return name;
     }
 
@@ -94,25 +99,31 @@ public final class DescriptorUtils
      */
     public static String dump(final ByteBuffer bytes)
     {
-        final int columns = 16;
         bytes.rewind();
+        final int columns = 16;
         final StringBuilder builder = new StringBuilder();
+
         int i = 0;
         while (bytes.hasRemaining())
         {
-            if (i % columns != 0)
+            if ((i % columns) != 0)
+            {
                 builder.append(' ');
+            }
             else if (i >= columns)
+            {
                 builder.append(String.format("%n"));
+            }
+
             builder.append(String.format("%02x", bytes.get()));
             i++;
         }
+
         return builder.toString();
     }
 
     /**
-     * Dumps the specified USB device descriptor into a string and
-     * returns it.
+     * Dumps the specified USB device descriptor into a string and returns it.
      * 
      * @param descriptor
      *            The USB device descriptor to dump.
@@ -124,8 +135,7 @@ public final class DescriptorUtils
     }
 
     /**
-     * Dumps the specified USB device descriptor into a string and
-     * returns it.
+     * Dumps the specified USB device descriptor into a string and returns it.
      * 
      * @param descriptor
      *            The USB device descriptor to dump.
@@ -166,12 +176,12 @@ public final class DescriptorUtils
             String.format("0x%04x", descriptor.idVendor() & 0xffff),
             String.format("0x%04x", descriptor.idProduct() & 0xffff),
             decodeBCD(descriptor.bcdDevice()),
-            descriptor.iManufacturer() & 0xff, 
-            manufacturer == null ? "" : " " + manufacturer,
+            descriptor.iManufacturer() & 0xff,
+            (manufacturer == null) ? ("") : (" " + manufacturer),
             descriptor.iProduct() & 0xff,
-            product == null ? "" : " " + product,
-            descriptor.iSerialNumber() & 0xff, 
-            serial == null ? "" : " " + serial,
+            (product == null) ? ("") : (" " + product),
+            descriptor.iSerialNumber() & 0xff,
+            (serial == null) ? ("") : (" " + serial),
             descriptor.bNumConfigurations() & 0xff);
     }
 
@@ -203,16 +213,16 @@ public final class DescriptorUtils
             descriptor.bConfigurationValue() & 0xff,
             descriptor.iConfiguration() & 0xff,
             String.format("0x%02x", descriptor.bmAttributes() & 0xff),
-            (descriptor.bmAttributes() & 64) == 0 ? "(Bus Powered)" : 
-                "Self Powered", 
-            (descriptor.bmAttributes() & 32) == 0 ? "" : 
-                String.format("    Remote Wakeup%n"), 
+            ((descriptor.bmAttributes() & 64) == 0) ? ("Bus Powered")
+                : ("Self Powered"),
+            ((descriptor.bmAttributes() & 32) == 0) ? ("")
+                : String.format("    Remote Wakeup%n"),
             (descriptor.bMaxPower() & 0xff) * 2);
     }
 
     /**
-     * Dumps the specified USB interface descriptor into a string and
-     * returns it.
+     * Dumps the specified USB interface descriptor into a string and returns
+     * it.
      * 
      * @param descriptor
      *            The USB interface descriptor to dump.
@@ -243,8 +253,7 @@ public final class DescriptorUtils
     }
 
     /**
-     * Dumps the specified USB endpoint descriptor into a string and
-     * returns it.
+     * Dumps the specified USB endpoint descriptor into a string and returns it.
      * 
      * @param descriptor
      *            The USB endpoint descriptor to dump.
@@ -265,8 +274,8 @@ public final class DescriptorUtils
             descriptor.bLength(),
             descriptor.bDescriptorType(),
             String.format("0x%02x", descriptor.bEndpointAddress() & 0xff),
-            descriptor.bEndpointAddress() & 0xf, 
-            (descriptor.bEndpointAddress() & 0x80) == 0 ? "OUT" : "IN",
+            descriptor.bEndpointAddress() & 0xf,
+            ((descriptor.bEndpointAddress() & 0x80) == 0) ? ("OUT") : ("IN"),
             descriptor.bmAttributes() & 0xff,
             getTransferTypeName(descriptor.bmAttributes() & 0xff),
             getSynchTypeName(descriptor.bmAttributes() & 0xff),
@@ -288,7 +297,7 @@ public final class DescriptorUtils
         switch (bmAttributes & LibUsb.TRANSFER_TYPE_MASK)
         {
             case LibUsb.TRANSFER_TYPE_CONTROL:
-        	    return "Control";
+                return "Control";
             case LibUsb.TRANSFER_TYPE_ISOCHRONOUS:
                 return "Isochronous";
             case LibUsb.TRANSFER_TYPE_BULK:
@@ -313,7 +322,7 @@ public final class DescriptorUtils
         switch (bmAttributes & LibUsb.ISO_SYNC_TYPE_ASYNC)
         {
             case LibUsb.ISO_SYNC_TYPE_NONE:
-        	    return "None";
+                return "None";
             case LibUsb.ISO_SYNC_TYPE_ASYNC:
                 return "Asynchronous";
             case LibUsb.ISO_SYNC_TYPE_ADAPTIVE:

@@ -2,7 +2,7 @@
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
  * 
- * Based on libusbx <http://libusbx.org/>:  
+ * Based on libusbx <http://libusbx.org/>:
  * 
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2008 Daniel Drake <dsd@gentoo.org>
@@ -356,7 +356,7 @@ public final class LibUsb
     // Synchronization type for isochronous endpoints.
     // Values for bits 2:3 of the bmAttributes field in
     // EndpointDescriptor.
-    
+
     public static final int ISO_SYNC_TYPE_MASK = 0x0C;
 
     /** No synchronization. */
@@ -373,7 +373,7 @@ public final class LibUsb
 
     // Usage type for isochronous endpoints. Values for bits 4:5 of the
     // bmAttributes field in EndpointDescriptor.
-    
+
     public static final int ISO_USAGE_TYPE_MASK = 0x30;
 
     /** Data endpoint. */
@@ -394,10 +394,11 @@ public final class LibUsb
      * Automatically free transfer buffer during {@link #freeTransfer(Transfer)}
      * 
      * Please note that this flag is effectively a no-op (set to zero) here in
-     * the Java wrapper, since the ByteBuffer that acts as a buffer for transfers
-     * is allocated by the JVM and is subject to garbage collection like any other
-     * object at some point. Nulling the reference is the only needed action to
-     * take, and it is already done by the TRANSFER_FREE_TRANSFER flag.
+     * the Java wrapper, since the ByteBuffer that acts as a buffer for
+     * transfers is allocated by the JVM and is subject to garbage collection
+     * like any other object at some point. Nulling the reference is the only
+     * needed action to take, and it is already done by the
+     * TRANSFER_FREE_TRANSFER flag.
      */
     public static final int TRANSFER_FREE_BUFFER = 0; // Originally 2
 
@@ -542,8 +543,7 @@ public final class LibUsb
      * @param level
      *            The log level to set.
      */
-    public static native void setDebug(final Context context,
-        final int level);
+    public static native void setDebug(final Context context, final int level);
 
     /**
      * Returns the version of the libusbx runtime.
@@ -752,8 +752,7 @@ public final class LibUsb
      *         {@link #ERROR_NO_DEVICE} if the device has been disconnected
      *         another error on other failure
      */
-    public static native int open(final Device device,
-        final DeviceHandle handle);
+    public static native int open(final Device device, final DeviceHandle handle);
 
     /**
      * Convenience function for finding a device with a particular
@@ -1128,7 +1127,7 @@ public final class LibUsb
      */
     public static native int getDeviceDescriptor(final Device device,
         final DeviceDescriptor descriptor);
-    
+
     /**
      * Free a device descriptor obtained from
      * {@link #getDeviceDescriptor(Device, DeviceDescriptor)}.
@@ -1144,7 +1143,7 @@ public final class LibUsb
      *            The device descriptor to free
      */
     public static native void freeDeviceDescriptor(
-    	final DeviceDescriptor descriptor);
+        final DeviceDescriptor descriptor);
 
     /**
      * Retrieve a string descriptor in C style ASCII.
@@ -1162,8 +1161,8 @@ public final class LibUsb
 
     /**
      * A simple wrapper around
-     * {@link #getStringDescriptorAscii(DeviceHandle, int, StringBuffer)}
-     * Simply returns the string (Maximum length of 126) if possible. If not
+     * {@link #getStringDescriptorAscii(DeviceHandle, int, StringBuffer)}.
+     * It simply returns the string (Maximum length of 126) if possible. If not
      * possible (NULL handle or 0-index specified or error occured) then null is
      * returned.
      * 
@@ -1178,7 +1177,10 @@ public final class LibUsb
     public static String getStringDescriptor(final DeviceHandle handle,
         final int index)
     {
-        if (handle == null || index == 0) return null;
+        if ((handle == null) || (index == 0))
+        {
+            return null;
+        }
         final StringBuffer buffer = new StringBuffer();
         if (getStringDescriptorAscii(handle, index, buffer) >= 0)
         {
@@ -1612,7 +1614,7 @@ public final class LibUsb
      * The only way to implement this in Java is by passing a direct buffer, and
      * then accessing memory directly. IntBuffers can be direct, if they are
      * created as a view of a direct ByteBuffer, as in the following code:
-     *   ByteBuffer.allocateDirect(Integer.SIZE / Byte.SIZE).asIntBuffer()
+     * ByteBuffer.allocateDirect(Integer.SIZE / Byte.SIZE).asIntBuffer()
      * 
      * @param context
      *            the context to operate on, or NULL for the default context
@@ -1806,13 +1808,18 @@ public final class LibUsb
      */
     public static void setPollfdNotifiers(final Context context,
         final PollfdListener listener, final Object userData)
-    {     
+    {
         if (listener == null)
+        {
             unsetPollfdNotifiers(context);
+        }
         else
+        {
             setPollfdNotifiers(context);
-        
-        // Once we know the native calls have gone through, update the references.
+        }
+
+        // Once we know the native calls have gone through, update the
+        // references.
         pollfdListener = listener;
         pollfdListenerUserData = userData;
     }
@@ -1829,7 +1836,9 @@ public final class LibUsb
     static void triggerPollfdAdded(final FileDescriptor fd, final int events)
     {
         if (pollfdListener != null)
+        {
             pollfdListener.pollfdAdded(fd, events, pollfdListenerUserData);
+        }
     }
 
     /**
@@ -1841,7 +1850,9 @@ public final class LibUsb
     static void triggerPollfdRemoved(final FileDescriptor fd)
     {
         if (pollfdListener != null)
+        {
             pollfdListener.pollfdRemoved(fd, pollfdListenerUserData);
+        }
     }
 
     /**
@@ -1871,10 +1882,11 @@ public final class LibUsb
      * 
      * @return A newly allocated transfer, or NULL on error
      */
-    public static Transfer allocTransfer() {
-    	return allocTransfer(0);
+    public static Transfer allocTransfer()
+    {
+        return allocTransfer(0);
     }
-    
+
     /**
      * Allocate a libusbx transfer with a specified number of isochronous packet
      * descriptors.

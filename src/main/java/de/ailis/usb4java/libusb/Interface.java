@@ -2,7 +2,7 @@
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
  * 
- * Based on libusbx <http://libusbx.org/>:  
+ * Based on libusbx <http://libusbx.org/>:
  * 
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2008 Daniel Drake <dsd@gentoo.org>
@@ -10,8 +10,6 @@
  */
 
 package de.ailis.usb4java.libusb;
-
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * A collection of alternate settings for a particular USB interface.
@@ -24,14 +22,14 @@ public final class Interface
     private long interfacePointer;
 
     /**
-     * Package-private constructor to prevent manual instantiation. Interfaces 
+     * Package-private constructor to prevent manual instantiation. Interfaces
      * are always created by JNI.
      */
     Interface()
     {
         // Empty
     }
-    
+
     /**
      * Returns the native pointer.
      * 
@@ -39,9 +37,9 @@ public final class Interface
      */
     public long getPointer()
     {
-        return this.interfacePointer;
+        return interfacePointer;
     }
-        
+
     /**
      * Returns the array with interface descriptors. The length of this array is
      * determined by the {@link #numAltsetting()} field.
@@ -59,47 +57,57 @@ public final class Interface
 
     /**
      * Returns a dump of this interface.
-     *
+     * 
      * @return The interface dump.
      */
     public String dump()
     {
-        return dump(null);
-    }
-
-    /**
-     * Returns a dump of this descriptor.
-     *
-     * @param handle
-     *            The USB device handle for resolving string descriptors. If
-     *            null then no strings are resolved.
-     * @return The descriptor dump.
-     */
-    public String dump(final DeviceHandle handle)
-    {
         final StringBuilder builder = new StringBuilder();
-        for (final InterfaceDescriptor descriptor : altsetting())
+
+        builder.append(String.format("Interface:%n" + "  numAltsetting %10d",
+            numAltsetting()));
+
+        for (final InterfaceDescriptor intDesc : altsetting())
         {
-            builder.append(descriptor.dump());
+            builder.append("%n" + intDesc.dump());
         }
+
         return builder.toString();
     }
 
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.interfacePointer).toHashCode();
+        final int prime = 31;
+        int result = 1;
+        result = (prime * result)
+            + (int) (interfacePointer ^ (interfacePointer >>> 32));
+        return result;
     }
 
     @Override
     public boolean equals(final Object obj)
     {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
         final Interface other = (Interface) obj;
-        return this.interfacePointer == other.interfacePointer;
+        if (interfacePointer != other.interfacePointer)
+        {
+            return false;
+        }
+        return true;
     }
-    
+
     @Override
     public String toString()
     {

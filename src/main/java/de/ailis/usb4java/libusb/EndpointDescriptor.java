@@ -2,7 +2,7 @@
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
  * 
- * Based on libusbx <http://libusbx.org/>:  
+ * Based on libusbx <http://libusbx.org/>:
  * 
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2008 Daniel Drake <dsd@gentoo.org>
@@ -25,7 +25,7 @@ import de.ailis.usb4java.utils.DescriptorUtils;
  * 
  * This descriptor is documented in section 9.6.6 of the USB 3.0 specification.
  * All multiple-byte fields are represented in host-endian format.
- *
+ * 
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class EndpointDescriptor implements UsbEndpointDescriptor
@@ -34,14 +34,14 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
     private long endpointDescriptorPointer;
 
     /**
-     * Package-private constructor to prevent manual instantiation. Endpoint 
+     * Package-private constructor to prevent manual instantiation. Endpoint
      * descriptors are always created by JNI.
      */
     EndpointDescriptor()
     {
         // Empty
     }
-    
+
     /**
      * Returns the native pointer.
      * 
@@ -49,7 +49,7 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
      */
     public long getPointer()
     {
-        return this.endpointDescriptorPointer;
+        return endpointDescriptorPointer;
     }
 
     @Override
@@ -109,34 +109,10 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
      */
     public String dump()
     {
-        return String.format("%s%n"
-            + "  extralen %17d%n"
-            + "  extra:%n"
-            + "%s",
-            DescriptorUtils.dump(this),
-            extraLength(),
+        return String.format(
+            "%s%n" + "  extralen %17d%n" + "  extra:%n" + "%s",
+            DescriptorUtils.dump(this), extraLength(),
             DescriptorUtils.dump(extra()).replaceAll("(?m)^", "    "));
-    }
-
-    @Override
-    public boolean equals(final Object obj)
-    {
-        if (obj == null) return false;
-        if (obj == this) return true;
-        if (obj.getClass() != getClass()) return false;
-        final EndpointDescriptor other = (EndpointDescriptor) obj;
-        return new EqualsBuilder()
-            .append(bLength(), other.bLength())
-            .append(bDescriptorType(), other.bDescriptorType())
-            .append(bEndpointAddress(), other.bEndpointAddress())
-            .append(bmAttributes(), other.bmAttributes())
-            .append(wMaxPacketSize(), other.wMaxPacketSize())
-            .append(bInterval(), other.bInterval())
-            .append(bRefresh(), other.bRefresh())
-            .append(bSynchAddress(), other.bSynchAddress())
-            .append(extra(), other.extra())
-            .append(extraLength(), other.extraLength())
-            .isEquals();
     }
 
     @Override
@@ -151,9 +127,39 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
             .append(bInterval())
             .append(bRefresh())
             .append(bSynchAddress())
-            .append(extra())
             .append(extraLength())
             .toHashCode();
+    }
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+
+        final EndpointDescriptor other = (EndpointDescriptor) obj;
+
+        return new EqualsBuilder()
+            .append(bLength(), other.bLength())
+            .append(bDescriptorType(), other.bDescriptorType())
+            .append(bEndpointAddress(), other.bEndpointAddress())
+            .append(bmAttributes(), other.bmAttributes())
+            .append(wMaxPacketSize(), other.wMaxPacketSize())
+            .append(bInterval(), other.bInterval())
+            .append(bRefresh(), other.bRefresh())
+            .append(bSynchAddress(), other.bSynchAddress())
+            .append(extraLength(), other.extraLength())
+            .isEquals();
     }
 
     @Override

@@ -2,7 +2,7 @@
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
  * 
- * Based on libusbx <http://libusbx.org/>:  
+ * Based on libusbx <http://libusbx.org/>:
  * 
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2008 Daniel Drake <dsd@gentoo.org>
@@ -10,8 +10,6 @@
  */
 
 package de.ailis.usb4java.libusb;
-
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * Structure representing a handle on a USB device.
@@ -31,8 +29,8 @@ public final class DeviceHandle
 
     /**
      * Constructs a new device handle. Must be passed to
-     * {@link LibUsb#open(Device, DeviceHandle)} before passing it to any
-     * other method.
+     * {@link LibUsb#open(Device, DeviceHandle)} before passing it to any other
+     * method.
      */
     public DeviceHandle()
     {
@@ -46,28 +44,45 @@ public final class DeviceHandle
      */
     public long getPointer()
     {
-        return this.deviceHandlePointer;
+        return deviceHandlePointer;
     }
 
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.deviceHandlePointer)
-            .toHashCode();
+        final int prime = 31;
+        int result = 1;
+        result = (prime * result)
+            + (int) (deviceHandlePointer ^ (deviceHandlePointer >>> 32));
+        return result;
     }
 
     @Override
     public boolean equals(final Object obj)
     {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
         final DeviceHandle other = (DeviceHandle) obj;
-        return this.deviceHandlePointer == other.deviceHandlePointer;
+        if (deviceHandlePointer != other.deviceHandlePointer)
+        {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString()
     {
-        return String.format("libusb handle 0x%x", this.deviceHandlePointer);
+        return String.format("libusb device handle 0x%x", deviceHandlePointer);
     }
 }

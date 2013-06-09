@@ -2,7 +2,7 @@
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
  * 
- * Based on libusbx <http://libusbx.org/>:  
+ * Based on libusbx <http://libusbx.org/>:
  * 
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2008 Daniel Drake <dsd@gentoo.org>
@@ -13,12 +13,10 @@ package de.ailis.usb4java.libusb;
 
 import java.util.Iterator;
 
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 /**
  * List of devices as returned by
  * {@link LibUsb#getDeviceList(Context, DeviceList)}.
- *
+ * 
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class DeviceList implements Iterable<Device>
@@ -36,7 +34,7 @@ public final class DeviceList implements Iterable<Device>
     public DeviceList()
     {
         // Empty
-    }       
+    }
 
     /**
      * Returns the native pointer.
@@ -45,9 +43,9 @@ public final class DeviceList implements Iterable<Device>
      */
     public long getPointer()
     {
-        return this.deviceListPointer;
+        return deviceListPointer;
     }
-        
+
     /**
      * Returns the number of devices in the list.
      * 
@@ -55,7 +53,7 @@ public final class DeviceList implements Iterable<Device>
      */
     public int getSize()
     {
-        return this.size;
+        return size;
     }
 
     /**
@@ -76,16 +74,45 @@ public final class DeviceList implements Iterable<Device>
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.deviceListPointer)
-            .toHashCode();
+        final int prime = 31;
+        int result = 1;
+        result = (prime * result)
+            + (int) (deviceListPointer ^ (deviceListPointer >>> 32));
+        result = (prime * result) + size;
+        return result;
     }
 
     @Override
     public boolean equals(final Object obj)
     {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
         final DeviceList other = (DeviceList) obj;
-        return this.deviceListPointer == other.deviceListPointer;
+        if (deviceListPointer != other.deviceListPointer)
+        {
+            return false;
+        }
+        if (size != other.size)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.format("libusb device list 0x%x with size %d",
+            deviceListPointer, size);
     }
 }

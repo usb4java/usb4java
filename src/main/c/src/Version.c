@@ -49,7 +49,18 @@ JNIEXPORT jint JNICALL METHOD_NAME(Version, micro)
 }
 
 /**
- * string rc()
+ * int nano()
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(Version, nano)
+(
+    JNIEnv *env, jobject this
+)
+{
+    return unwrapVersion(env, this)->nano;
+}
+
+/**
+ * String rc()
  */
 JNIEXPORT jstring JNICALL METHOD_NAME(Version, rc)
 (

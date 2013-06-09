@@ -2,7 +2,7 @@
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
  * 
- * Based on libusbx <http://libusbx.org/>:  
+ * Based on libusbx <http://libusbx.org/>:
  * 
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2008 Daniel Drake <dsd@gentoo.org>
@@ -49,7 +49,7 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
      */
     public long getPointer()
     {
-        return this.configDescriptorPointer;
+        return configDescriptorPointer;
     }
 
     @Override
@@ -107,55 +107,18 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
      */
     public String dump()
     {
-        return dump(null);
-    }
-
-    /**
-     * Returns a dump of this descriptor.
-     * 
-     * @param handle
-     *            The USB device handle for resolving string descriptors. If
-     *            null then no strings are resolved.
-     * @return The descriptor dump.
-     */
-    public String dump(final DeviceHandle handle)
-    {
         final StringBuilder builder = new StringBuilder();
-        builder
-            .append(String.format("%s%n"
-                + "  extralen %17d%n"
-                + "  extra:%n"
-                + "%s",
-                DescriptorUtils.dump(this),
-                extraLength(),
-                DescriptorUtils.dump(extra()).replaceAll("(?m)^", "    ")));
-        for (final Interface descriptor: iface())
-        {
-            builder.append(descriptor.dump(handle)
-                .replaceAll("(?m)^", "  "));
-        }
-        return builder.toString();
-    }
 
-    @Override
-    public boolean equals(final Object obj)
-    {
-        if (obj == null) return false;
-        if (obj == this) return true;
-        if (obj.getClass() != getClass()) return false;
-        final ConfigDescriptor other = (ConfigDescriptor) obj;
-        return new EqualsBuilder()
-            .append(bLength(), other.bLength())
-            .append(bDescriptorType(), other.bDescriptorType())
-            .append(wTotalLength(), other.wTotalLength())
-            .append(bNumInterfaces(), other.bNumInterfaces())
-            .append(bConfigurationValue(), other.bConfigurationValue())
-            .append(iConfiguration(), other.iConfiguration())
-            .append(bmAttributes(), other.bmAttributes())
-            .append(bMaxPower(), other.bMaxPower())
-            .append(extra(), other.extra())
-            .append(extraLength(), other.extraLength())
-            .isEquals();
+        builder.append(String.format("%s%n" + "  extralen %17d%n"
+            + "  extra:%n" + "%s", DescriptorUtils.dump(this), extraLength(),
+            DescriptorUtils.dump(extra()).replaceAll("(?m)^", "    ")));
+
+        for (final Interface iface : iface())
+        {
+            builder.append("%n" + iface.dump());
+        }
+
+        return builder.toString();
     }
 
     @Override
@@ -170,9 +133,39 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
             .append(iConfiguration())
             .append(bmAttributes())
             .append(bMaxPower())
-            .append(extra())
             .append(extraLength())
             .toHashCode();
+    }
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+
+        final ConfigDescriptor other = (ConfigDescriptor) obj;
+
+        return new EqualsBuilder()
+            .append(bLength(), other.bLength())
+            .append(bDescriptorType(), other.bDescriptorType())
+            .append(wTotalLength(), other.wTotalLength())
+            .append(bNumInterfaces(), other.bNumInterfaces())
+            .append(bConfigurationValue(), other.bConfigurationValue())
+            .append(iConfiguration(), other.iConfiguration())
+            .append(bmAttributes(), other.bmAttributes())
+            .append(bMaxPower(), other.bMaxPower())
+            .append(extraLength(), other.extraLength())
+            .isEquals();
     }
 
     @Override
