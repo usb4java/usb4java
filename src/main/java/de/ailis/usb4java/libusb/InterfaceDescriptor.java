@@ -137,6 +137,8 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
             .append(bInterfaceSubClass())
             .append(bInterfaceProtocol())
             .append(iInterface())
+            .append(endpoint())
+            .append(extra())
             .append(extraLength())
             .toHashCode();
     }
@@ -156,6 +158,7 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
         {
             return false;
         }
+
         final InterfaceDescriptor other = (InterfaceDescriptor) obj;
 
         return new EqualsBuilder()
@@ -168,6 +171,8 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
             .append(bInterfaceSubClass(), other.bInterfaceSubClass())
             .append(bInterfaceProtocol(), other.bInterfaceProtocol())
             .append(iInterface(), other.iInterface())
+            .append(endpoint(), other.endpoint())
+            .append(extra(), other.extra())
             .append(extraLength(), other.extraLength())
             .isEquals();
     }

@@ -80,12 +80,6 @@ public final class Version implements Comparable<Version>
     public native String rc();
 
     @Override
-    public String toString()
-    {
-        return major() + "." + minor() + "." + micro() + "." + nano() + rc();
-    }
-
-    @Override
     public int hashCode()
     {
         return new HashCodeBuilder()
@@ -143,5 +137,11 @@ public final class Version implements Comparable<Version>
             .append(nano(), other.nano())
             .append(rc(), other.rc())
             .toComparison();
+    }
+
+    @Override
+    public String toString()
+    {
+        return major() + "." + minor() + "." + micro() + "." + nano() + rc();
     }
 }

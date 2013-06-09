@@ -11,6 +11,9 @@
 
 package de.ailis.usb4java.libusb;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * A collection of alternate settings for a particular USB interface.
  * 
@@ -78,11 +81,10 @@ public final class Interface
     @Override
     public int hashCode()
     {
-        final int prime = 31;
-        int result = 1;
-        result = (prime * result)
-            + (int) (interfacePointer ^ (interfacePointer >>> 32));
-        return result;
+        return new HashCodeBuilder()
+            .append(altsetting())
+            .append(numAltsetting())
+            .toHashCode();
     }
 
     @Override
@@ -100,12 +102,13 @@ public final class Interface
         {
             return false;
         }
+
         final Interface other = (Interface) obj;
-        if (interfacePointer != other.interfacePointer)
-        {
-            return false;
-        }
-        return true;
+
+        return new EqualsBuilder()
+            .append(altsetting(), other.altsetting())
+            .append(numAltsetting(), other.numAltsetting())
+            .isEquals();
     }
 
     @Override

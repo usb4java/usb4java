@@ -127,6 +127,7 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
             .append(bInterval())
             .append(bRefresh())
             .append(bSynchAddress())
+            .append(extra())
             .append(extraLength())
             .toHashCode();
     }
@@ -158,6 +159,7 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
             .append(bInterval(), other.bInterval())
             .append(bRefresh(), other.bRefresh())
             .append(bSynchAddress(), other.bSynchAddress())
+            .append(extra(), other.extra())
             .append(extraLength(), other.extraLength())
             .isEquals();
     }

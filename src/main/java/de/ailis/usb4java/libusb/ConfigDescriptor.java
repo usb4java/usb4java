@@ -133,6 +133,8 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
             .append(iConfiguration())
             .append(bmAttributes())
             .append(bMaxPower())
+            .append(iface())
+            .append(extra())
             .append(extraLength())
             .toHashCode();
     }
@@ -164,6 +166,8 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
             .append(iConfiguration(), other.iConfiguration())
             .append(bmAttributes(), other.bmAttributes())
             .append(bMaxPower(), other.bMaxPower())
+            .append(iface(), other.iface())
+            .append(extra(), other.extra())
             .append(extraLength(), other.extraLength())
             .isEquals();
     }
