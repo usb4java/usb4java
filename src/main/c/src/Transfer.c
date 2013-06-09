@@ -6,8 +6,6 @@
 #include "Transfer.h"
 #include "DeviceHandle.h"
 
-static JavaVM *jvm = NULL;
-
 jobject wrapTransfer(JNIEnv* env, struct libusb_transfer* transfer)
 {
     WRAP_POINTER(env, transfer, "Transfer", "transferPointer");
@@ -23,11 +21,15 @@ void resetTransfer(JNIEnv* env, jobject obj)
     RESET_POINTER(env, obj, "transferPointer");
 
     // We already have the class from the previous call.
-    // Reset callback and callbackUserData fields to NULL too.
+    // Reset all data fields to initial values (usually NULL/zero).
     field = (*env)->GetFieldID(env, cls, "callback", "L"PACKAGE_DIR"/TransferCallback;");
     (*env)->SetObjectField(env, obj, field, NULL);
     field = (*env)->GetFieldID(env, cls, "callbackUserData", "Ljava/lang/Object;");
     (*env)->SetObjectField(env, obj, field, NULL);
+    field = (*env)->GetFieldID(env, cls, "buffer", "Ljava/nio/ByteBuffer;");
+    (*env)->SetObjectField(env, obj, field, NULL);
+    field = (*env)->GetFieldID(env, cls, "maxNumIsoPackets", "I");
+    (*env)->SetIntField(env, obj, field, -1);
 }
 
 /**
@@ -156,14 +158,13 @@ JNIEXPORT jint JNICALL METHOD_NAME(Transfer, getStatus)
 }
 
 /**
- * void setLength(int)
+ * void setLengthNative(int)
  */
-JNIEXPORT void JNICALL METHOD_NAME(Transfer, setLength)
+JNIEXPORT void JNICALL METHOD_NAME(Transfer, setLengthNative)
 (
     JNIEnv *env, jobject this, jint length
 )
 {
-    // TODO: check length against the buffer!
     unwrapTransfer(env, this)->length = length;
 }
 
@@ -189,29 +190,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(Transfer, getActualLength)
     return unwrapTransfer(env, this)->actual_length;
 }
 
-/**
- * void setNumIsoPackets(int)
- */
-JNIEXPORT void JNICALL METHOD_NAME(Transfer, setNumIsoPackets)
-(
-    JNIEnv *env, jobject this, jint numIsoPackets
-)
-{
-    unwrapTransfer(env, this)->num_iso_packets = numIsoPackets;
-}
-
-/**
- * int getNumIsoPackets()
- */
-JNIEXPORT jint JNICALL METHOD_NAME(Transfer, getNumIsoPackets)
-(
-    JNIEnv *env, jobject this
-)
-{
-    return unwrapTransfer(env, this)->num_iso_packets;
-}
-
-static void transferCallback(struct libusb_transfer *transfer) {
+static void LIBUSB_CALL transferCallback(struct libusb_transfer *transfer) {
     THREAD_BEGIN(env)
 
     // The saved reference to the Java Transfer object.
@@ -241,10 +220,6 @@ JNIEXPORT void JNICALL METHOD_NAME(Transfer, setCallbackNative)
     JNIEnv *env, jobject this
 )
 {
-    // First ensure the JVM is properly registered.
-    if (!jvm)
-        (*env)->GetJavaVM(env, &jvm);
-
     // Then, set the callback to the appropriate C function and abuse the user_data field
     // to keep a reference to the Java Transfer object we'll call back to later.
     unwrapTransfer(env, this)->callback = &transferCallback;
@@ -274,3 +249,48 @@ JNIEXPORT void JNICALL METHOD_NAME(Transfer, unsetCallbackNative)
     }
 }
 
+// getCallback() is done in Java. As the Java class already keeps that information,
+// it's quicker to just get it that way.
+
+// setUserData() and getUserData() are done fully on the Java side. Since the user_data field in
+// the libusb_transfer struct is already used to keep a reference to the Transfer object, this
+// data has to be kept in Java. That way you also get garbage collection on it for free.
+
+/**
+ * void setBufferNative(ByteBuffer)
+ */
+JNIEXPORT void JNICALL METHOD_NAME(Transfer, setBufferNative)
+(
+    JNIEnv *env, jobject this, jobject buffer
+)
+{
+    NOT_NULL(env, buffer, return);
+    DIRECT_BUFFER(env, buffer, buf_ptr, return);
+
+    unwrapTransfer(env, this)->buffer = buf_ptr;
+}
+
+// getBuffer() is done in Java. As the Java class already keeps that information,
+// it's quicker to just get it that way.
+
+/**
+ * void setNumIsoPacketsNative(int)
+ */
+JNIEXPORT void JNICALL METHOD_NAME(Transfer, setNumIsoPacketsNative)
+(
+    JNIEnv *env, jobject this, jint numIsoPackets
+)
+{
+    unwrapTransfer(env, this)->num_iso_packets = numIsoPackets;
+}
+
+/**
+ * int getNumIsoPackets()
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(Transfer, getNumIsoPackets)
+(
+    JNIEnv *env, jobject this
+)
+{
+    return unwrapTransfer(env, this)->num_iso_packets;
+}

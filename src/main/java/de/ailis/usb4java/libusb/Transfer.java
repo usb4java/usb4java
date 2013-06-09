@@ -2,7 +2,7 @@
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
  * 
- * Based on libusbx <http://libusbx.org/>:  
+ * Based on libusbx <http://libusbx.org/>:
  * 
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2008 Daniel Drake <dsd@gentoo.org>
@@ -19,16 +19,28 @@ import java.nio.ByteBuffer;
  * The user populates this structure and then submits it in order to request a
  * transfer. After the transfer has completed, the library populates the
  * transfer with the results and passes it back to the user.
- *
+ * 
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class Transfer
 {
     /** The native pointer to the transfer structure. */
     private long transferPointer;
-    
+
     private TransferCallback callback;
     private Object callbackUserData;
+
+    // Keeping a reference to the buffer has multiple benefits: faster get(), GC
+    // prevention
+    // (while Transfer is alive) and you can check the buffer's original
+    // capacity.
+    private ByteBuffer buffer;
+
+    // This is needed to check setNumIsoPackets() against the original number of
+    // Iso Packets,
+    // since memory is only allocated for up to that number and going above is
+    // an error.
+    private int maxNumIsoPackets = -1;
 
     /**
      * Constructs a new transfer structure.
@@ -45,7 +57,7 @@ public final class Transfer
      */
     public long getPointer()
     {
-        return this.transferPointer;
+        return transferPointer;
     }
 
     /**
@@ -151,7 +163,30 @@ public final class Transfer
      * @param length
      *            The data buffer length to set.
      */
-    public native void setLength(final int length);
+    public void setLength(final int length)
+    {
+        // Verify that the new length doesn't exceed the current buffer's
+        // capacity.
+        if (length != 0)
+        {
+            if (buffer == null)
+            {
+                throw new IllegalArgumentException(
+                    "buffer is null, only a length of 0 is allowed");
+            }
+
+            if (buffer.capacity() < length)
+            {
+                throw new IllegalArgumentException(
+                    "buffer too small for requested length");
+            }
+        }
+
+        // Native call.
+        setLengthNative(length);
+    }
+
+    native void setLengthNative(final int length);
 
     /**
      * Returns the actual length of data that was transferred. Read-only, and
@@ -161,38 +196,49 @@ public final class Transfer
      * @return The actual length of the transferred data.
      */
     public native int getActualLength();
-    
-    public TransferCallback getCallback() {
-    	return callback;
+
+    public TransferCallback getCallback()
+    {
+        return callback;
     }
-    
-    public void setCallback(final TransferCallback cb) {
-    	callback = cb;
-    	
-    	// Call native method to enable callback and set Transfer correctly.
-    	if (cb == null) {
-    		unsetCallbackNative();
-    	}
-    	else {
-    		setCallbackNative();
-    	}
+
+    public void setCallback(final TransferCallback cb)
+    {
+        // Call native method to enable callback and set Transfer correctly.
+        if (cb == null)
+        {
+            unsetCallbackNative();
+        }
+        else
+        {
+            setCallbackNative();
+        }
+
+        // Once we know the native calls have gone through, update the
+        // reference.
+        callback = cb;
     }
-    
+
     native void setCallbackNative();
+
     native void unsetCallbackNative();
-    
-    void transferCallback() {
-    	if (callback != null) {
-    		callback.processTransfer(this);
-    	}
+
+    void transferCallback()
+    {
+        if (callback != null)
+        {
+            callback.processTransfer(this);
+        }
     }
-    
-    public Object getUserData() {
-    	return callbackUserData;
+
+    public Object getUserData()
+    {
+        return callbackUserData;
     }
-    
-    public void setUserData(final Object userData) {
-    	callbackUserData = userData;
+
+    public void setUserData(final Object userData)
+    {
+        callbackUserData = userData;
     }
 
     /**
@@ -200,7 +246,10 @@ public final class Transfer
      * 
      * @return The data buffer.
      */
-    public native ByteBuffer getBuffer();
+    public ByteBuffer getBuffer()
+    {
+        return buffer;
+    }
 
     /**
      * Sets the data buffer.
@@ -208,7 +257,17 @@ public final class Transfer
      * @param buffer
      *            The data buffer to set.
      */
-    public native void setBuffer(final ByteBuffer buffer);
+    public void setBuffer(final ByteBuffer transferBuffer)
+    {
+        // Native call.
+        setBufferNative(transferBuffer);
+
+        // Once we know the native calls have gone through, update the
+        // reference.
+        buffer = transferBuffer;
+    }
+
+    native void setBufferNative(final ByteBuffer buffer);
 
     /**
      * Returns the number of isochronous packets. Only used for I/O with
@@ -224,5 +283,26 @@ public final class Transfer
      * @param numIsoPackets
      *            The number of isochronous packets to set.
      */
-    public native void setNumIsoPackets(final int numIsoPackets);
+    public void setNumIsoPackets(final int numIsoPackets)
+    {
+        if (maxNumIsoPackets == -1)
+        {
+            // maxNumIsoPackets is not yet set and changing the way we interact
+            // with
+            // constructors in JNI for this one case just isn't worth it.
+            maxNumIsoPackets = getNumIsoPackets();
+        }
+
+        // Check that the new number doesn't exceed the maximum.
+        if (numIsoPackets > maxNumIsoPackets)
+        {
+            throw new IllegalArgumentException(
+                "numIsoPackets exceeds maximum specified with allocTransfer()");
+        }
+
+        // Native call.
+        setNumIsoPacketsNative(numIsoPackets);
+    }
+
+    native void setNumIsoPacketsNative(final int numIsoPackets);
 }
