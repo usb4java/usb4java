@@ -5,6 +5,8 @@
 
 #include "usb4java.h"
 
+JavaVM *jvm = NULL;
+
 jint illegalArgument(JNIEnv *env, char *message)
 {
     jclass cls = (*env)->FindClass(env, "java/lang/IllegalArgumentException");
@@ -17,3 +19,7 @@ jint illegalState(JNIEnv *env, char *message)
     return (*env)->ThrowNew(env, cls, message);
 }
 
+jint JNI_OnLoad(JavaVM *vm, void *reserved) {
+    jvm = vm;
+    return JNI_VERSION_1_4;
+}

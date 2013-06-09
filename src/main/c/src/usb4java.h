@@ -84,6 +84,8 @@
     if (getEnvResult == JNI_EDETACHED) \
         (*jvm)->DetachCurrentThread(jvm);
 
+extern JavaVM *jvm;
+
 jint illegalArgument(JNIEnv *env, char *message);
 jint illegalState(JNIEnv *env, char *message);
 

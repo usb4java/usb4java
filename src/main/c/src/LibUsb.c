@@ -23,8 +23,6 @@
 #include "ConfigDescriptor.h"
 #include "Transfer.h"
 
-static JavaVM *jvm = NULL;
-
 /**
  * Version getVersion()
  */
@@ -387,7 +385,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getConfiguration)
     {
         jclass cls = (*env)->GetObjectClass(env, buffer);
         jmethodID method = (*env)->GetMethodID(env, cls, "put", "(II)Ljava/nio/IntBuffer;");
-        (*env)->CallVoidMethod(env, buffer, method, 0, config);
+        (*env)->CallObjectMethod(env, buffer, method, 0, config);
     }
     return result;
 }
@@ -799,7 +797,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, bulkTransfer)
         jclass cls = (*env)->GetObjectClass(env, transferred);
         jmethodID method = (*env)->GetMethodID(env, cls, "put",
             "(II)Ljava/nio/IntBuffer;");
-        (*env)->CallVoidMethod(env, transferred, method, 0, sent);
+        (*env)->CallObjectMethod(env, transferred, method, 0, sent);
     }
     return result;
 }
@@ -829,7 +827,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, interruptTransfer)
         jclass cls = (*env)->GetObjectClass(env, transferred);
         jmethodID method = (*env)->GetMethodID(env, cls, "put",
             "(II)Ljava/nio/IntBuffer;");
-        (*env)->CallVoidMethod(env, transferred, method, 0, sent);
+        (*env)->CallObjectMethod(env, transferred, method, 0, sent);
     }
     return result;
 }
@@ -1075,7 +1073,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getNextTimeout)
         jclass cls = (*env)->GetObjectClass(env, timeout);
         jmethodID method = (*env)->GetMethodID(env, cls, "put",
             "(IJ)Ljava/nio/LongBuffer;");
-        (*env)->CallVoidMethod(env, timeout, method, 0,
+        (*env)->CallObjectMethod(env, timeout, method, 0,
             tv.tv_sec * 1000000 + tv.tv_usec);
     }
     return result;
@@ -1124,7 +1122,6 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, setPollfdNotifiers)
     libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return;
 
-    if (!jvm) (*env)->GetJavaVM(env, &jvm);
     libusb_set_pollfd_notifiers(ctx, &triggerPollfdAdded, &triggerPollfdRemoved,
         NULL);
 }
