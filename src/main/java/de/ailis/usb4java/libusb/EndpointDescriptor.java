@@ -126,15 +126,16 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
         if (obj.getClass() != getClass()) return false;
         final EndpointDescriptor other = (EndpointDescriptor) obj;
         return new EqualsBuilder()
-            .append(bDescriptorType(), other.bDescriptorType())
             .append(bLength(), other.bLength())
+            .append(bDescriptorType(), other.bDescriptorType())
             .append(bEndpointAddress(), other.bEndpointAddress())
             .append(bmAttributes(), other.bmAttributes())
-            .append(bInterval(), other.bInterval())
-            .append(bSynchAddress(), other.bSynchAddress())
             .append(wMaxPacketSize(), other.wMaxPacketSize())
-            .append(extraLength(), other.extraLength())
+            .append(bInterval(), other.bInterval())
+            .append(bRefresh(), other.bRefresh())
+            .append(bSynchAddress(), other.bSynchAddress())
             .append(extra(), other.extra())
+            .append(extraLength(), other.extraLength())
             .isEquals();
     }
 

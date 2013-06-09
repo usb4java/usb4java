@@ -129,22 +129,21 @@ public final class DeviceDescriptor implements UsbDeviceDescriptor
         if (obj.getClass() != getClass()) return false;
         final DeviceDescriptor other = (DeviceDescriptor) obj;
         return new EqualsBuilder()
-            .append(bDescriptorType(), other.bDescriptorType())
             .append(bLength(), other.bLength())
-            .append(idProduct(), other.idProduct())
-            .append(idVendor(), other.idVendor())
-            .append(bcdDevice(), other.bcdDevice())
+            .append(bDescriptorType(), other.bDescriptorType())
             .append(bcdUSB(), other.bcdUSB())
-            .append(bDescriptorType(), other.bDescriptorType())
             .append(bDeviceClass(), other.bDeviceClass())
-            .append(bDeviceProtocol(), other.bDeviceProtocol())
             .append(bDeviceSubClass(), other.bDeviceSubClass())
-            .append(bLength(), other.bLength())
+            .append(bDeviceProtocol(), other.bDeviceProtocol())
             .append(bMaxPacketSize0(), other.bMaxPacketSize0())
-            .append(bNumConfigurations(), other.bNumConfigurations())
+            .append(idVendor(), other.idVendor())
+            .append(idProduct(), other.idProduct())
+            .append(bcdDevice(), other.bcdDevice())
             .append(iManufacturer(), other.iManufacturer())
             .append(iProduct(), other.iProduct())
-            .append(iSerialNumber(), other.iSerialNumber()).isEquals();
+            .append(iSerialNumber(), other.iSerialNumber())
+            .append(bNumConfigurations(), other.bNumConfigurations())
+            .isEquals();
     }
 
     @Override
@@ -164,7 +163,8 @@ public final class DeviceDescriptor implements UsbDeviceDescriptor
             .append(iManufacturer())
             .append(iProduct())
             .append(iSerialNumber())
-            .append(bNumConfigurations()).toHashCode();
+            .append(bNumConfigurations())
+            .toHashCode();
     }
 
     @Override

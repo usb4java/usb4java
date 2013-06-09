@@ -145,14 +145,17 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
         if (obj.getClass() != getClass()) return false;
         final ConfigDescriptor other = (ConfigDescriptor) obj;
         return new EqualsBuilder()
-            .append(bDescriptorType(), other.bDescriptorType())
             .append(bLength(), other.bLength())
-            .append(bConfigurationValue(), other.bConfigurationValue())
-            .append(bmAttributes(), other.bmAttributes())
+            .append(bDescriptorType(), other.bDescriptorType())
+            .append(wTotalLength(), other.wTotalLength())
             .append(bNumInterfaces(), other.bNumInterfaces())
+            .append(bConfigurationValue(), other.bConfigurationValue())
             .append(iConfiguration(), other.iConfiguration())
+            .append(bmAttributes(), other.bmAttributes())
             .append(bMaxPower(), other.bMaxPower())
-            .append(wTotalLength(), other.wTotalLength()).isEquals();
+            .append(extra(), other.extra())
+            .append(extraLength(), other.extraLength())
+            .isEquals();
     }
 
     @Override

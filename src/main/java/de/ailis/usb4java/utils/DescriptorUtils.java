@@ -29,10 +29,11 @@ public final class DescriptorUtils
 
     static
     {
-        CLASS_NAMES.put(LibUsb.CLASS_PER_INTERFACE, "Per interface");
+        CLASS_NAMES.put(LibUsb.CLASS_PER_INTERFACE, "Per Interface");
         CLASS_NAMES.put(LibUsb.CLASS_AUDIO, "Audio");
         CLASS_NAMES.put(LibUsb.CLASS_COMM, "Communications");
         CLASS_NAMES.put(LibUsb.CLASS_HID, "HID");
+        CLASS_NAMES.put(LibUsb.CLASS_PHYSICAL, "Physical");
         CLASS_NAMES.put(LibUsb.CLASS_IMAGE, "Imaging");
         CLASS_NAMES.put(LibUsb.CLASS_PRINTER, "Printer");
         CLASS_NAMES.put(LibUsb.CLASS_MASS_STORAGE, "Mass Storage");
@@ -41,13 +42,12 @@ public final class DescriptorUtils
         CLASS_NAMES.put(LibUsb.CLASS_SMART_CARD, "Smart Card");
         CLASS_NAMES.put(LibUsb.CLASS_CONTENT_SECURITY, "Content Security");
         CLASS_NAMES.put(LibUsb.CLASS_VIDEO, "Video");
-        CLASS_NAMES.put(LibUsb.CLASS_VENDOR_SPEC, "Vendor-specific");
-        CLASS_NAMES.put(LibUsb.CLASS_APPLICATION, "Application");
         CLASS_NAMES.put(LibUsb.CLASS_PERSONAL_HEALTHCARE,
             "Personal Healthcare");
         CLASS_NAMES.put(LibUsb.CLASS_DIAGNOSTIC_DEVICE, "Diagnostic Device");
         CLASS_NAMES.put(LibUsb.CLASS_WIRELESS, "Wireless");
-
+        CLASS_NAMES.put(LibUsb.CLASS_APPLICATION, "Application");
+        CLASS_NAMES.put(LibUsb.CLASS_VENDOR_SPEC, "Vendor-specific");
     }
 
     /**
@@ -285,16 +285,18 @@ public final class DescriptorUtils
      */
     public static String getTransferTypeName(final int bmAttributes)
     {
-        switch (bmAttributes & 3)
+        switch (bmAttributes & LibUsb.TRANSFER_TYPE_MASK)
         {
-            case 1:
+            case LibUsb.TRANSFER_TYPE_CONTROL:
+        	    return "Control";
+            case LibUsb.TRANSFER_TYPE_ISOCHRONOUS:
                 return "Isochronous";
-            case 2:
+            case LibUsb.TRANSFER_TYPE_BULK:
                 return "Bulk";
-            case 3:
+            case LibUsb.TRANSFER_TYPE_INTERRUPT:
                 return "Interrupt";
             default:
-                return "Control";
+                return "Unknown";
         }
     }
 
@@ -308,16 +310,18 @@ public final class DescriptorUtils
      */
     public static String getSynchTypeName(final int bmAttributes)
     {
-        switch ((bmAttributes >> 2) & 3)
+        switch (bmAttributes & LibUsb.ISO_SYNC_TYPE_ASYNC)
         {
-            case 1:
+            case LibUsb.ISO_SYNC_TYPE_NONE:
+        	    return "None";
+            case LibUsb.ISO_SYNC_TYPE_ASYNC:
                 return "Asynchronous";
-            case 2:
+            case LibUsb.ISO_SYNC_TYPE_ADAPTIVE:
                 return "Adaptive";
-            case 3:
+            case LibUsb.ISO_SYNC_TYPE_SYNC:
                 return "Synchronous";
             default:
-                return "None";
+                return "Unknown";
         }
     }
 
@@ -330,16 +334,16 @@ public final class DescriptorUtils
      */
     public static String getUsageTypeName(final int bmAttributes)
     {
-        switch ((bmAttributes >> 4) & 3)
+        switch (bmAttributes & LibUsb.ISO_USAGE_TYPE_MASK)
         {
-            case 1:
-                return "Feedback";
-            case 2:
-                return "Explicit Feedback Data";
-            case 3:
-                return "Reserved";
-            default:
+            case LibUsb.ISO_USAGE_TYPE_DATA:
                 return "Data";
+            case LibUsb.ISO_USAGE_TYPE_FEEDBACK:
+                return "Feedback";
+            case LibUsb.ISO_USAGE_TYPE_IMPLICIT:
+                return "Implicit Feedback Data";
+            default:
+                return "Unknown";
         }
     }
 

@@ -80,7 +80,7 @@ public final class Interface
         final StringBuilder builder = new StringBuilder();
         for (final InterfaceDescriptor descriptor : altsetting())
         {
-            builder.append(descriptor.dump(handle));
+            builder.append(descriptor.dump());
         }
         return builder.toString();
     }

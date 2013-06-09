@@ -110,23 +110,7 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
      */
     public String dump()
     {
-        return dump(null);
-    }
-
-    /**
-     * Returns a dump of this descriptor.
-     * 
-     * @param handle
-     *            The USB device handle for resolving string descriptors. If
-     *            null then no strings are resolved.
-     * @return The descriptor dump.
-     */
-    public String dump(final DeviceHandle handle)
-    {
         final StringBuilder builder = new StringBuilder();
-        final int iInterface = iInterface();
-        String sInterface = LibUsb.getStringDescriptor(handle, iInterface);
-        if (sInterface == null) sInterface = "";
         builder.append(String.format("%s%n"
             + "  extralen %17d%n"
             + "  extra:%n"
@@ -150,17 +134,17 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
         if (obj.getClass() != getClass()) return false;
         final InterfaceDescriptor other = (InterfaceDescriptor) obj;
         return new EqualsBuilder()
-            .append(bDescriptorType(), other.bDescriptorType())
             .append(bLength(), other.bLength())
-            .append(bAlternateSetting(), other.bAlternateSetting())
-            .append(bInterfaceClass(), other.bInterfaceClass())
+            .append(bDescriptorType(), other.bDescriptorType())
             .append(bInterfaceNumber(), other.bInterfaceNumber())
-            .append(bInterfaceProtocol(), other.bInterfaceProtocol())
-            .append(bInterfaceSubClass(), other.bInterfaceSubClass())
+            .append(bAlternateSetting(), other.bAlternateSetting())
             .append(bNumEndpoints(), other.bNumEndpoints())
+            .append(bInterfaceClass(), other.bInterfaceClass())
+            .append(bInterfaceSubClass(), other.bInterfaceSubClass())
+            .append(bInterfaceProtocol(), other.bInterfaceProtocol())
             .append(iInterface(), other.iInterface())
-            .append(extraLength(), other.extraLength())
             .append(extra(), other.extra())
+            .append(extraLength(), other.extraLength())
             .isEquals();
     }
 

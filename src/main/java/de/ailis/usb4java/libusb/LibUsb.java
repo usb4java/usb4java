@@ -356,6 +356,8 @@ public final class LibUsb
     // Synchronization type for isochronous endpoints.
     // Values for bits 2:3 of the bmAttributes field in
     // EndpointDescriptor.
+    
+    public static final int ISO_SYNC_TYPE_MASK = 0x0C;
 
     /** No synchronization. */
     public static final int ISO_SYNC_TYPE_NONE = 0;
@@ -371,6 +373,8 @@ public final class LibUsb
 
     // Usage type for isochronous endpoints. Values for bits 4:5 of the
     // bmAttributes field in EndpointDescriptor.
+    
+    public static final int ISO_USAGE_TYPE_MASK = 0x30;
 
     /** Data endpoint. */
     public static final int ISO_USAGE_TYPE_DATA = 0;
@@ -389,11 +393,13 @@ public final class LibUsb
     /**
      * Automatically free transfer buffer during {@link #freeTransfer(Transfer)}
      * 
-     * Please note that this conflicts with Java memory management and is thus
-     * implemented purely in Java using the callback of the Transfer class.
-     * As such this flag is not passed on to the libusb library via JNI.
+     * Please note that this flag is effectively a no-op (set to zero) here in
+     * the Java wrapper, since the ByteBuffer that acts as a buffer for transfers
+     * is allocated by the JVM and is subject to garbage collection like any other
+     * object at some point. Nulling the reference is the only needed action to
+     * take, and it is already done by the TRANSFER_FREE_TRANSFER flag.
      */
-    public static final int TRANSFER_FREE_BUFFER = 2;
+    public static final int TRANSFER_FREE_BUFFER = 0; // Originally 2
 
     /**
      * Automatically call {@link #freeTransfer(Transfer)} after callback
@@ -1800,13 +1806,15 @@ public final class LibUsb
      */
     public static void setPollfdNotifiers(final Context context,
         final PollfdListener listener, final Object userData)
-    {
-        pollfdListener = listener;
-        pollfdListenerUserData = userData;
+    {     
         if (listener == null)
             unsetPollfdNotifiers(context);
         else
             setPollfdNotifiers(context);
+        
+        // Once we know the native calls have gone through, update the references.
+        pollfdListener = listener;
+        pollfdListenerUserData = userData;
     }
 
     /**
