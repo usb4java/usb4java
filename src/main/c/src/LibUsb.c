@@ -1199,3 +1199,33 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeTransfer)
     free(transfer->user_data);
     libusb_free_transfer(transfer);
 }
+
+/**
+ * int submitTransfer(Transfer)
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, submitTransfer)
+(
+    JNIEnv *env, jclass class, jobject trans
+)
+{
+    NOT_NULL(env, trans, return 0);
+    struct libusb_transfer *transfer = unwrapTransfer(env, trans);
+    if (!transfer) return 0;
+
+    return libusb_submit_transfer(transfer);
+}
+
+/**
+ * int cancelTransfer(Transfer)
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, cancelTransfer)
+(
+    JNIEnv *env, jclass class, jobject trans
+)
+{
+    NOT_NULL(env, trans, return 0);
+    struct libusb_transfer *transfer = unwrapTransfer(env, trans);
+    if (!transfer) return 0;
+
+    return libusb_cancel_transfer(transfer);
+}

@@ -1920,9 +1920,8 @@ public final class LibUsb
      * This should be called for all transfers allocated with
      * {@link #allocTransfer(int)}.
      * 
-     * If the LIBUSB_TRANSFER_FREE_BUFFER flag is set and the transfer buffer is
-     * non-NULL, this function will also free the transfer buffer using the
-     * standard system memory allocator (e.g. free()).
+     * Please refer to {@link #TRANSFER_FREE_BUFFER} for an explanation
+     * of how buffers are freed.
      * 
      * It is legal to call this function with a NULL transfer. In this case, the
      * function will simply return safely.
@@ -1934,4 +1933,32 @@ public final class LibUsb
      *            The transfer to free
      */
     public static native void freeTransfer(final Transfer transfer);
+
+    /**
+     * Submit a transfer.
+     * 
+     * This function will fire off the USB transfer and then return immediately.
+     * 
+     * @param transfer
+     *           The transfer to submit
+     * @return 0 on success, {@link #LIBUSB_ERROR_NO_DEVICE} if the device has been
+     * disconnected, {@link #LIBUSB_ERROR_BUSY} if the transfer has already been
+     * submitted. {@link #LIBUSB_ERROR_NOT_SUPPORTED} if the transfer flags are
+     * not supported by the operating system. Another LIBUSB_ERROR code on failure.
+     */
+    public static native int submitTransfer(final Transfer transfer);
+
+    /**
+     * Asynchronously cancel a previously submitted transfer.
+     * 
+     * This function returns immediately, but this does not indicate cancellation
+     * is complete. Your callback function will be invoked at some later time
+     * with a transfer status of {@link #LIBUSB_TRANSFER_CANCELLED}.
+     * 
+     * @param transfer
+     *            The transfer to cancel
+     * @return 0 on success, {@link #LIBUSB_ERROR_NOT_FOUND} if the transfer is
+     * already complete or cancelled. Another LIBUSB_ERROR code on failure.
+     */
+    public static native int cancelTransfer(final Transfer transfer);
 }
