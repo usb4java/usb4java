@@ -12,7 +12,6 @@ jobject wrapEndpointDescriptor(JNIEnv*,
     const struct libusb_endpoint_descriptor*);
 jobjectArray wrapEndpointDescriptors(JNIEnv*, int,
     const struct libusb_endpoint_descriptor*);
-struct libusb_endpoint_descriptor *unwrapEndpointDescriptor(JNIEnv *,
-    jobject);
+struct libusb_endpoint_descriptor *unwrapEndpointDescriptor(JNIEnv*, jobject);
 
 #endif
