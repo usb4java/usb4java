@@ -43,7 +43,11 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(InterfaceDescriptor, bLength)
     JNIEnv *env, jobject this
 )
 {
-    return unwrapInterfaceDescriptor(env, this)->bLength;
+    struct libusb_interface_descriptor *interface =
+        unwrapInterfaceDescriptor(env, this);
+    if (!interface) return 0;
+
+    return interface->bLength;
 }
 
 /**
@@ -54,7 +58,11 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(InterfaceDescriptor, bDescriptorType)
     JNIEnv *env, jobject this
 )
 {
-    return unwrapInterfaceDescriptor(env, this)->bDescriptorType;
+    struct libusb_interface_descriptor *interface =
+        unwrapInterfaceDescriptor(env, this);
+    if (!interface) return 0;
+
+    return interface->bDescriptorType;
 }
 
 /**
@@ -65,7 +73,11 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(InterfaceDescriptor, bInterfaceNumber)
     JNIEnv *env, jobject this
 )
 {
-    return unwrapInterfaceDescriptor(env, this)->bInterfaceNumber;
+    struct libusb_interface_descriptor *interface =
+        unwrapInterfaceDescriptor(env, this);
+    if (!interface) return 0;
+
+    return interface->bInterfaceNumber;
 }
 
 /**
@@ -76,7 +88,11 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(InterfaceDescriptor, bAlternateSetting)
     JNIEnv *env, jobject this
 )
 {
-    return unwrapInterfaceDescriptor(env, this)->bAlternateSetting;
+    struct libusb_interface_descriptor *interface =
+        unwrapInterfaceDescriptor(env, this);
+    if (!interface) return 0;
+
+    return interface->bAlternateSetting;
 }
 
 /**
@@ -87,7 +103,11 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(InterfaceDescriptor, bNumEndpoints)
     JNIEnv *env, jobject this
 )
 {
-    return unwrapInterfaceDescriptor(env, this)->bNumEndpoints;
+    struct libusb_interface_descriptor *interface =
+        unwrapInterfaceDescriptor(env, this);
+    if (!interface) return 0;
+
+    return interface->bNumEndpoints;
 }
 
 /**
@@ -98,7 +118,11 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(InterfaceDescriptor, bInterfaceClass)
     JNIEnv *env, jobject this
 )
 {
-    return unwrapInterfaceDescriptor(env, this)->bInterfaceClass;
+    struct libusb_interface_descriptor *interface =
+        unwrapInterfaceDescriptor(env, this);
+    if (!interface) return 0;
+
+    return interface->bInterfaceClass;
 }
 
 /**
@@ -109,7 +133,11 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(InterfaceDescriptor, bInterfaceSubClass)
     JNIEnv *env, jobject this
 )
 {
-    return unwrapInterfaceDescriptor(env, this)->bInterfaceSubClass;
+    struct libusb_interface_descriptor *interface =
+        unwrapInterfaceDescriptor(env, this);
+    if (!interface) return 0;
+
+    return interface->bInterfaceSubClass;
 }
 
 /**
@@ -120,7 +148,11 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(InterfaceDescriptor, bInterfaceProtocol)
     JNIEnv *env, jobject this
 )
 {
-    return unwrapInterfaceDescriptor(env, this)->bInterfaceProtocol;
+    struct libusb_interface_descriptor *interface =
+        unwrapInterfaceDescriptor(env, this);
+    if (!interface) return 0;
+
+    return interface->bInterfaceProtocol;
 }
 
 /**
@@ -131,7 +163,11 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(InterfaceDescriptor, iInterface)
     JNIEnv *env, jobject this
 )
 {
-    return unwrapInterfaceDescriptor(env, this)->iInterface;
+    struct libusb_interface_descriptor *interface =
+        unwrapInterfaceDescriptor(env, this);
+    if (!interface) return 0;
+
+    return interface->iInterface;
 }
 
 /**
@@ -142,9 +178,12 @@ JNIEXPORT jobjectArray JNICALL METHOD_NAME(InterfaceDescriptor, endpoint)
     JNIEnv *env, jobject this
 )
 {
-    struct libusb_interface_descriptor *descriptor = unwrapInterfaceDescriptor(
-        env, this);
-    return wrapEndpointDescriptors(env, descriptor->bNumEndpoints, descriptor->endpoint);
+    struct libusb_interface_descriptor *interface =
+        unwrapInterfaceDescriptor(env, this);
+    if (!interface) return NULL;
+
+    return wrapEndpointDescriptors(env, interface->bNumEndpoints,
+        interface->endpoint);
 }
 
 /**
@@ -155,10 +194,12 @@ JNIEXPORT jobject JNICALL METHOD_NAME(InterfaceDescriptor, extra)
     JNIEnv *env, jobject this
 )
 {
-    struct libusb_interface_descriptor *descriptor =
+    struct libusb_interface_descriptor *interface =
         unwrapInterfaceDescriptor(env, this);
-    return (*env)->NewDirectByteBuffer(env, (void *) descriptor->extra,
-        descriptor->extra_length);
+    if (!interface) return NULL;
+
+    return (*env)->NewDirectByteBuffer(env, (void *) interface->extra,
+        interface->extra_length);
 }
 
 /**
@@ -169,5 +210,9 @@ JNIEXPORT jint JNICALL METHOD_NAME(InterfaceDescriptor, extraLength)
     JNIEnv *env, jobject this
 )
 {
-    return unwrapInterfaceDescriptor(env, this)->extra_length;
+    struct libusb_interface_descriptor *interface =
+        unwrapInterfaceDescriptor(env, this);
+    if (!interface) return 0;
+
+    return interface->extra_length;
 }
