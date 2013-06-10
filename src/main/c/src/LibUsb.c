@@ -1172,7 +1172,14 @@ JNIEXPORT jobject JNICALL METHOD_NAME(LibUsb, allocTransfer)
     transfer->user_data = transferData;
     transferData->maxNumIsoPackets = isoPackets;
 
-    return wrapTransfer(env, transfer);
+    jobject transferObject = wrapTransfer(env, transfer);
+
+    // Make sure the cleanup callback is always there, as it's perfectly legal
+    // to not set any callback and still enable the FREE_TRANSFER flag, in which
+    // case one would expect the Java Transfer object to be properly cleaned up.
+    cleanupCallbackEnable(env, transferObject);
+
+    return transferObject;
 }
 
 /**
@@ -1187,7 +1194,8 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeTransfer)
     struct libusb_transfer *transfer = unwrapTransfer(env, trans);
     if (!transfer) return;
 
+    cleanupGlobalReferences(env, trans);
+    resetTransfer(env, trans);
     free(transfer->user_data);
     libusb_free_transfer(transfer);
-    resetTransfer(env, trans);
 }
