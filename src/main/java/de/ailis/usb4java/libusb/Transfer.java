@@ -27,20 +27,10 @@ public final class Transfer
     /** The native pointer to the transfer structure. */
     private long transferPointer;
 
-    private TransferCallback callback;
-    private Object callbackUserData;
-
     // Keeping a reference to the buffer has multiple benefits: faster get(), GC
-    // prevention
-    // (while Transfer is alive) and you can check the buffer's original
-    // capacity.
-    private ByteBuffer buffer;
-
-    // This is needed to check setNumIsoPackets() against the original number of
-    // Iso Packets,
-    // since memory is only allocated for up to that number and going above is
-    // an error.
-    private int maxNumIsoPackets = -1;
+    // prevention (while Transfer is alive) and you can check the buffer's
+    // original capacity (needed to check setLength() properly).
+    private ByteBuffer transferBuffer;
 
     /**
      * Constructs a new transfer structure.
@@ -65,7 +55,7 @@ public final class Transfer
      * 
      * @return The handle of the device.
      */
-    public native DeviceHandle getDevHandle();
+    public native DeviceHandle devHandle();
 
     /**
      * Sets the handle of the device that this transfer will be submitted to.
@@ -80,7 +70,7 @@ public final class Transfer
      * 
      * @return The transfer flags.
      */
-    public native byte getFlags();
+    public native byte flags();
 
     /**
      * Sets the bitwise OR combination of libusb transfer flags.
@@ -95,7 +85,7 @@ public final class Transfer
      * 
      * @return The endpoint address.
      */
-    public native byte getEndpoint();
+    public native byte endpoint();
 
     /**
      * Sets the address of the endpoint where this transfer will be sent.
@@ -110,7 +100,7 @@ public final class Transfer
      * 
      * @return The endpoint type.
      */
-    public native byte getType();
+    public native byte type();
 
     /**
      * Sets the type of the endpoint.
@@ -126,7 +116,7 @@ public final class Transfer
      * 
      * @return The timeout.
      */
-    public native int getTimeout();
+    public native int timeout();
 
     /**
      * Sets the timeout for this transfer in milliseconds. A value of 0
@@ -148,17 +138,19 @@ public final class Transfer
      * 
      * @return The transfer status.
      */
-    public native int getStatus();
+    public native int status();
 
     /**
      * Returns the length of the data buffer.
      * 
      * @return The data buffer length.
      */
-    public native int getLength();
+    public native int length();
 
     /**
      * Sets the length of the data buffer.
+     * 
+     * This is checked against the maximum capacity of the supplied ByteBuffer.
      * 
      * @param length
      *            The data buffer length to set.
@@ -166,16 +158,16 @@ public final class Transfer
     public void setLength(final int length)
     {
         // Verify that the new length doesn't exceed the current buffer's
-        // capacity.
+        // maximum capacity.
         if (length != 0)
         {
-            if (buffer == null)
+            if (transferBuffer == null)
             {
                 throw new IllegalArgumentException(
                     "buffer is null, only a length of 0 is allowed");
             }
 
-            if (buffer.capacity() < length)
+            if (transferBuffer.capacity() < length)
             {
                 throw new IllegalArgumentException(
                     "buffer too small for requested length");
@@ -195,51 +187,41 @@ public final class Transfer
      * 
      * @return The actual length of the transferred data.
      */
-    public native int getActualLength();
+    public native int actualLength();
 
-    public TransferCallback getCallback()
-    {
-        return callback;
-    }
 
-    public void setCallback(final TransferCallback cb)
-    {
-        // Call native method to enable callback and set Transfer correctly.
-        if (cb == null)
-        {
-            unsetCallbackNative();
-        }
-        else
-        {
-            setCallbackNative();
-        }
+    /**
+     * Returns the current callback object.
+     * 
+     * @return The current callback object.
+     */
+    public native TransferCallback callback();
 
-        // Once we know the native calls have gone through, update the
-        // reference.
-        callback = cb;
-    }
+    /**
+     * Sets the callback object.
+     * 
+     * This will be invoked when the transfer completes, fails, or is cancelled.
+     * 
+     * @param callback
+     *            The callback object to use.
+     */
+    public native void setCallback(final TransferCallback callback);
 
-    native void setCallbackNative();
+    /**
+     * Returns the current user data object.
+     * 
+     * @return The current user data object.
+     */
+    public native Object userData();
 
-    native void unsetCallbackNative();
-
-    void transferCallback()
-    {
-        if (callback != null)
-        {
-            callback.processTransfer(this);
-        }
-    }
-
-    public Object getUserData()
-    {
-        return callbackUserData;
-    }
-
-    public void setUserData(final Object userData)
-    {
-        callbackUserData = userData;
-    }
+    /**
+     * Sets the user data object, representing user context data to pass to
+     * the callback function and that can be accessed from there.
+     * 
+     * @param userData
+     *            The user data object to set.
+     */
+    public native void setUserData(final Object userData);
 
     /**
      * Returns the data buffer.
@@ -248,7 +230,7 @@ public final class Transfer
      */
     public ByteBuffer getBuffer()
     {
-        return buffer;
+        return transferBuffer;
     }
 
     /**
@@ -257,14 +239,14 @@ public final class Transfer
      * @param buffer
      *            The data buffer to set.
      */
-    public void setBuffer(final ByteBuffer transferBuffer)
+    public void setBuffer(final ByteBuffer buffer)
     {
         // Native call.
-        setBufferNative(transferBuffer);
+        setBufferNative(buffer);
 
         // Once we know the native calls have gone through, update the
         // reference.
-        buffer = transferBuffer;
+        transferBuffer = buffer;
     }
 
     native void setBufferNative(final ByteBuffer buffer);
@@ -275,7 +257,7 @@ public final class Transfer
      * 
      * @return The number of isochronous packets.
      */
-    public native int getNumIsoPackets();
+    public native int numIsoPackets();
 
     /**
      * Sets the number of isochronous packets.
@@ -283,26 +265,5 @@ public final class Transfer
      * @param numIsoPackets
      *            The number of isochronous packets to set.
      */
-    public void setNumIsoPackets(final int numIsoPackets)
-    {
-        if (maxNumIsoPackets == -1)
-        {
-            // maxNumIsoPackets is not yet set and changing the way we interact
-            // with
-            // constructors in JNI for this one case just isn't worth it.
-            maxNumIsoPackets = getNumIsoPackets();
-        }
-
-        // Check that the new number doesn't exceed the maximum.
-        if (numIsoPackets > maxNumIsoPackets)
-        {
-            throw new IllegalArgumentException(
-                "numIsoPackets exceeds maximum specified with allocTransfer()");
-        }
-
-        // Native call.
-        setNumIsoPacketsNative(numIsoPackets);
-    }
-
-    native void setNumIsoPacketsNative(final int numIsoPackets);
+    public native void setNumIsoPackets(final int numIsoPackets);
 }
