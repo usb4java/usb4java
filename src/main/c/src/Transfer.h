@@ -12,6 +12,7 @@ struct transfer_data
 {
     jobject transferObject;
     jobject callbackObject;
+    jmethodID callbackObjectMethod;
     jobject callbackUserDataObject;
     size_t maxNumIsoPackets;
 };

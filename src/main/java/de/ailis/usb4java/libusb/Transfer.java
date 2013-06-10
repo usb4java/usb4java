@@ -244,6 +244,9 @@ public final class Transfer
         // Native call.
         setBufferNative(buffer);
 
+        // Set new length. The native call above ensures that buffer isn't null.
+        setLengthNative(buffer.capacity());
+
         // Once we know the native calls have gone through, update the
         // reference.
         transferBuffer = buffer;

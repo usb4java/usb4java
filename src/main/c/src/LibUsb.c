@@ -1159,20 +1159,20 @@ JNIEXPORT jobject JNICALL METHOD_NAME(LibUsb, allocTransfer)
     JNIEnv *env, jclass class, jint isoPackets
 )
 {
-    struct libusb_transfer *trans = libusb_alloc_transfer(isoPackets);
-    if (!trans) return NULL;
+    struct libusb_transfer *transfer = libusb_alloc_transfer(isoPackets);
+    if (!transfer) return NULL;
 
-    struct transfer_data *transData = calloc(1, sizeof(*transData));
-    if (!transData)
+    struct transfer_data *transferData = calloc(1, sizeof(*transferData));
+    if (!transferData)
     {
-        libusb_free_transfer(trans);
+        libusb_free_transfer(transfer);
         return NULL;
     }
 
-    trans->user_data = transData;
-    transData->maxNumIsoPackets = isoPackets;
+    transfer->user_data = transferData;
+    transferData->maxNumIsoPackets = isoPackets;
 
-    return wrapTransfer(env, trans);
+    return wrapTransfer(env, transfer);
 }
 
 /**
@@ -1180,14 +1180,14 @@ JNIEXPORT jobject JNICALL METHOD_NAME(LibUsb, allocTransfer)
  */
 JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeTransfer)
 (
-    JNIEnv *env, jclass class, jobject transfer
+    JNIEnv *env, jclass class, jobject trans
 )
 {
-    NOT_NULL(env, transfer, return);
-    struct libusb_transfer *trans = unwrapTransfer(env, transfer);
-    if (!trans) return;
+    NOT_NULL(env, trans, return);
+    struct libusb_transfer *transfer = unwrapTransfer(env, trans);
+    if (!transfer) return;
 
-    free(trans->user_data);
-    libusb_free_transfer(trans);
-    resetTransfer(env, transfer);
+    free(transfer->user_data);
+    libusb_free_transfer(transfer);
+    resetTransfer(env, trans);
 }
