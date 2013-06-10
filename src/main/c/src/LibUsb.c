@@ -52,7 +52,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, init)
 
         libusb_context *ctx;
         int result = libusb_init(&ctx);
-        if (!result) setContext(env, ctx, context);
+        if (result == LIBUSB_SUCCESS) setContext(env, ctx, context);
         return result;
     }
 }
@@ -173,16 +173,16 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getPortPath)
 {
     NOT_NULL(env, device, return 0);
     NOT_NULL(env, path, return 0);
-    DIRECT_BUFFER(env, path, ptr, return 0);
+    DIRECT_BUFFER(env, path, path_ptr, return 0);
     libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return 0;
     libusb_device *dev = unwrapDevice(env, device);
     if (!dev) return 0;
 
     #if defined(LIBUSBX_API_VERSION)
-        jlong size = (*env)->GetDirectBufferCapacity(env, path);
+        jlong path_size = (*env)->GetDirectBufferCapacity(env, path);
 
-        return libusb_get_port_path(ctx, dev, ptr, size);
+        return libusb_get_port_path(ctx, dev, path_ptr, path_size);
     #else
         return 0;
     #endif
@@ -313,9 +313,9 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, open)
     libusb_device *dev = unwrapDevice(env, device);
     if (!dev) return 0;
 
-    libusb_device_handle *deviceHandle;
-    int result = libusb_open(dev, &deviceHandle);
-    if (!result) setDeviceHandle(env, deviceHandle, handle);
+    libusb_device_handle *dev_handle;
+    int result = libusb_open(dev, &dev_handle);
+    if (result == LIBUSB_SUCCESS) setDeviceHandle(env, dev_handle, handle);
     return result;
 }
 
@@ -381,7 +381,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getConfiguration)
 
     int config;
     int result = libusb_get_configuration(dev_handle, &config);
-    if (!result)
+    if (result == LIBUSB_SUCCESS)
     {
         jclass cls = (*env)->GetObjectClass(env, buffer);
         jmethodID method = (*env)->GetMethodID(env, cls, "put", "(II)Ljava/nio/IntBuffer;");
@@ -541,7 +541,7 @@ JNIEXPORT jboolean JNICALL METHOD_NAME(LibUsb, hasCapability)
  */
 JNIEXPORT jstring JNICALL METHOD_NAME(LibUsb, errorName)
 (
-    JNIEnv *env, jobject this, jint code
+    JNIEnv *env, jclass class, jint code
 )
 {
     return (*env)->NewStringUTF(env, libusb_error_name(code));
@@ -552,7 +552,7 @@ JNIEXPORT jstring JNICALL METHOD_NAME(LibUsb, errorName)
  */
 JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, le16ToCpu)
 (
-    JNIEnv *env, jobject this, jint x
+    JNIEnv *env, jclass class, jint x
 )
 {
     return libusb_le16_to_cpu(x);
@@ -563,7 +563,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, le16ToCpu)
  */
 JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, cpuToLe16)
 (
-    JNIEnv *env, jobject this, jint x
+    JNIEnv *env, jclass class, jint x
 )
 {
     return libusb_cpu_to_le16(x);
@@ -583,10 +583,18 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getDeviceDescriptor)
     libusb_device *dev = unwrapDevice(env, device);
     if (!dev) return 0;
 
-    struct libusb_device_descriptor *data =
-        malloc(sizeof(struct libusb_device_descriptor));
-    int result = libusb_get_device_descriptor(dev, data);
-    if (!result) setDeviceDescriptor(env, data, descriptor);
+    struct libusb_device_descriptor *dev_desc = calloc(1, sizeof(*dev_desc));
+    if (!dev_desc) return LIBUSB_ERROR_NO_MEM;
+
+    int result = libusb_get_device_descriptor(dev, dev_desc);
+    if (result == LIBUSB_SUCCESS)
+    {
+    	setDeviceDescriptor(env, dev_desc, descriptor);
+    }
+    else
+    {
+    	free(dev_desc);
+    }
     return result;
 }
 
@@ -599,11 +607,11 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeDeviceDescriptor)
 )
 {
     NOT_NULL(env, descriptor, return);
-    struct libusb_device_descriptor *data = unwrapDeviceDescriptor(env,
+    struct libusb_device_descriptor *dev_desc = unwrapDeviceDescriptor(env,
         descriptor);
-    if (!data) return;
+    if (!dev_desc) return;
 
-    free(data);
+    free(dev_desc);
     resetDeviceDescriptor(env, descriptor);
 }
 
@@ -652,7 +660,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getActiveConfigDescriptor)
 
     struct libusb_config_descriptor *config;
     int result = libusb_get_active_config_descriptor(dev, &config);
-    if (!result) setConfigDescriptor(env, config, descriptor);
+    if (result == LIBUSB_SUCCESS) setConfigDescriptor(env, config, descriptor);
     return result;
 }
 
@@ -672,7 +680,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getConfigDescriptor)
 
     struct libusb_config_descriptor *config;
     int result = libusb_get_config_descriptor(dev, index, &config);
-    if (!result) setConfigDescriptor(env, config, descriptor);
+    if (result == LIBUSB_SUCCESS) setConfigDescriptor(env, config, descriptor);
     return result;
 }
 
@@ -693,7 +701,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getConfigDescriptorByValue)
     struct libusb_config_descriptor *config;
     int result = libusb_get_config_descriptor_by_value(
         dev, index, &config);
-    if (!result) setConfigDescriptor(env, config, descriptor);
+    if (result == LIBUSB_SUCCESS) setConfigDescriptor(env, config, descriptor);
     return result;
 }
 
@@ -706,7 +714,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeConfigDescriptor)
 )
 {
     NOT_NULL(env, descriptor, return);
-    struct libusb_config_descriptor *config = unwrapConfigDescriptor(env, 
+    struct libusb_config_descriptor *config = unwrapConfigDescriptor(env,
         descriptor);
     if (!config) return;
 
@@ -725,12 +733,12 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getDescriptor)
 {
     NOT_NULL(env, handle, return 0);
     NOT_NULL(env, data, return 0);
-    DIRECT_BUFFER(env, data, ptr, return 0);
+    DIRECT_BUFFER(env, data, data_ptr, return 0);
     libusb_device_handle *dev_handle = unwrapDeviceHandle(env, handle);
     if (!dev_handle) return 0;
 
-    jlong size = (*env)->GetDirectBufferCapacity(env, data);
-    return libusb_get_descriptor(dev_handle, type, index, ptr, size);
+    jlong data_size = (*env)->GetDirectBufferCapacity(env, data);
+    return libusb_get_descriptor(dev_handle, type, index, data_ptr, data_size);
 }
 
 /**
@@ -744,12 +752,12 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getStringDescriptor)
 {
     NOT_NULL(env, handle, return 0);
     NOT_NULL(env, data, return 0);
-    DIRECT_BUFFER(env, data, ptr, return 0);
+    DIRECT_BUFFER(env, data, data_ptr, return 0);
     libusb_device_handle *dev_handle = unwrapDeviceHandle(env, handle);
     if (!dev_handle) return 0;
 
-    jlong size = (*env)->GetDirectBufferCapacity(env, data);
-    return libusb_get_string_descriptor(dev_handle, index, langId, ptr, size);
+    jlong data_size = (*env)->GetDirectBufferCapacity(env, data);
+    return libusb_get_string_descriptor(dev_handle, index, langId, data_ptr, data_size);
 }
 
 /**
@@ -763,13 +771,13 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, controlTransfer)
 {
     NOT_NULL(env, handle, return 0);
     NOT_NULL(env, data, return 0);
-    DIRECT_BUFFER(env, data, ptr, return 0);
+    DIRECT_BUFFER(env, data, data_ptr, return 0);
     libusb_device_handle *dev_handle = unwrapDeviceHandle(env, handle);
     if (!dev_handle) return 0;
 
-    jlong size = (*env)->GetDirectBufferCapacity(env, data);
-    return libusb_control_transfer(dev_handle, bmRequestType, bRequest, 
-        wValue, wIndex, ptr, size, timeout);
+    jlong data_size = (*env)->GetDirectBufferCapacity(env, data);
+    return libusb_control_transfer(dev_handle, bmRequestType, bRequest,
+        wValue, wIndex, data_ptr, data_size, timeout);
 }
 
 /**
@@ -784,15 +792,15 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, bulkTransfer)
     NOT_NULL(env, handle, return 0);
     NOT_NULL(env, data, return 0);
     NOT_NULL(env, transferred, return 0);
-    DIRECT_BUFFER(env, data, ptr, return 0);
+    DIRECT_BUFFER(env, data, data_ptr, return 0);
     libusb_device_handle *dev_handle = unwrapDeviceHandle(env, handle);
     if (!dev_handle) return 0;
 
     int sent;
-    jlong size = (*env)->GetDirectBufferCapacity(env, data);
-    int result = libusb_bulk_transfer(dev_handle, endpoint, ptr, size, &sent, 
+    jlong data_size = (*env)->GetDirectBufferCapacity(env, data);
+    int result = libusb_bulk_transfer(dev_handle, endpoint, data_ptr, data_size, &sent,
         timeout);
-    if (!result)
+    if (result == LIBUSB_SUCCESS)
     {
         jclass cls = (*env)->GetObjectClass(env, transferred);
         jmethodID method = (*env)->GetMethodID(env, cls, "put",
@@ -814,15 +822,15 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, interruptTransfer)
     NOT_NULL(env, handle, return 0);
     NOT_NULL(env, data, return 0);
     NOT_NULL(env, transferred, return 0);
-    DIRECT_BUFFER(env, data, ptr, return 0);
+    DIRECT_BUFFER(env, data, data_ptr, return 0);
     libusb_device_handle *dev_handle = unwrapDeviceHandle(env, handle);
     if (!dev_handle) return 0;
 
     int sent;
-    jlong size = (*env)->GetDirectBufferCapacity(env, data);
-    int result = libusb_interrupt_transfer(dev_handle, endpoint, ptr, size, 
+    jlong data_size = (*env)->GetDirectBufferCapacity(env, data);
+    int result = libusb_interrupt_transfer(dev_handle, endpoint, data_ptr, data_size,
         &sent, timeout);
-    if (!result)
+    if (result == LIBUSB_SUCCESS)
     {
         jclass cls = (*env)->GetObjectClass(env, transferred);
         jmethodID method = (*env)->GetMethodID(env, cls, "put",
@@ -944,6 +952,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, waitForEvent)
     struct timeval tv;
     tv.tv_sec = timeout / 1000000;
     tv.tv_usec = timeout % 1000000;
+
     return libusb_wait_for_event(ctx, &tv);
 }
 
@@ -986,6 +995,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, handleEventsTimeout)
     struct timeval tv;
     tv.tv_sec = timeout / 1000000;
     tv.tv_usec = timeout % 1000000;
+
     return libusb_handle_events_timeout(ctx, &tv);
 }
 
@@ -1037,6 +1047,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, handleEventsLocked)
     struct timeval tv;
     tv.tv_sec = timeout / 1000000;
     tv.tv_usec = timeout % 1000000;
+
     return libusb_handle_events_locked(ctx, &tv);
 }
 
@@ -1148,7 +1159,20 @@ JNIEXPORT jobject JNICALL METHOD_NAME(LibUsb, allocTransfer)
     JNIEnv *env, jclass class, jint isoPackets
 )
 {
-    return wrapTransfer(env, libusb_alloc_transfer(isoPackets));
+    struct libusb_transfer *trans = libusb_alloc_transfer(isoPackets);
+    if (!trans) return NULL;
+
+    struct transfer_data *transData = calloc(1, sizeof(*transData));
+    if (!transData)
+    {
+        libusb_free_transfer(trans);
+        return NULL;
+    }
+
+    trans->user_data = transData;
+    transData->maxNumIsoPackets = isoPackets;
+
+    return wrapTransfer(env, trans);
 }
 
 /**
@@ -1160,9 +1184,10 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeTransfer)
 )
 {
     NOT_NULL(env, transfer, return);
-    struct libusb_transfer *handle = unwrapTransfer(env, transfer);
-    if (!handle) return;
+    struct libusb_transfer *trans = unwrapTransfer(env, transfer);
+    if (!trans) return;
 
-    libusb_free_transfer(handle);
+    free(trans->user_data);
+    libusb_free_transfer(trans);
     resetTransfer(env, transfer);
 }
