@@ -17,4 +17,5 @@ libusb4java_la_SOURCES = \
     Interface.c \
     InterfaceDescriptor.c \
     EndpointDescriptor.c \
+    IsoPacketDescriptor.c \
     Transfer.c
