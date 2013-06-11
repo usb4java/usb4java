@@ -36,9 +36,10 @@ public final class Transfer
     private ByteBuffer transferBuffer;
 
     /**
-     * Constructs a new transfer structure.
+     * Package-private constructor to prevent manual instantiation.
+     * Transfers are always created by JNI with allocTransfer().
      */
-    public Transfer()
+    Transfer()
     {
         // Empty
     }
