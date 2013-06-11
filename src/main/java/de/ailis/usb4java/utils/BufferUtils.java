@@ -6,8 +6,8 @@ import java.nio.LongBuffer;
 
 public final class BufferUtils
 {
-    private static int intSize = Integer.SIZE / Byte.SIZE;
-    private static int longSize = Long.SIZE / Byte.SIZE;
+    private static final int intSize = Integer.SIZE / Byte.SIZE;
+    private static final int longSize = Long.SIZE / Byte.SIZE;
 
     public static ByteBuffer allocateByteBuffer(final int bytes)
     {
@@ -27,8 +27,8 @@ public final class BufferUtils
     public static ByteBuffer slice(final ByteBuffer buffer, final int offset,
         final int length)
     {
-        int oldPosition = buffer.position();
-        int oldLimit = buffer.limit();
+        final int oldPosition = buffer.position();
+        final int oldLimit = buffer.limit();
 
         buffer.position(offset);
         buffer.limit(offset + length);

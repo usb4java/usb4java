@@ -190,6 +190,8 @@ public final class LibUsb
     /** The hasCapability() API is available. */
     public static final int CAP_HAS_CAPABILITY = 0x00;
 
+    public static final int CONTROL_SETUP_SIZE = 8;
+
     // Device and/or Interface Class codes.
 
     /**
@@ -1970,9 +1972,51 @@ public final class LibUsb
      */
     public static native int cancelTransfer(final Transfer transfer);
 
-    public static void fillBulkTransfer(Transfer transfer, DeviceHandle handle,
-        int endpoint, ByteBuffer buffer, TransferCallback callback,
-        Object userData, int timeout)
+    public static ByteBuffer controlTransferGetData(final Transfer transfer)
+    {
+        return BufferUtils.slice(transfer.buffer(), CONTROL_SETUP_SIZE,
+            transfer.buffer().limit() - CONTROL_SETUP_SIZE);
+    }
+
+    public static ControlSetup controlTransferGetSetup(final Transfer transfer)
+    {
+        return new ControlSetup(transfer.buffer());
+    }
+
+    public static void fillControlSetup(final ByteBuffer buffer,
+        final int bmRequestType, final int bRequest, final int wValue,
+        final int wIndex, final int wLength)
+    {
+        final ControlSetup setup = new ControlSetup(buffer);
+        setup.setBmRequestType(bmRequestType);
+        setup.setBRequest(bRequest);
+        setup.setWValue(wValue);
+        setup.setWIndex(wIndex);
+        setup.setWLength(wLength);
+    }
+
+    public static void fillControlTransfer(final Transfer transfer,
+        final DeviceHandle handle, final ByteBuffer buffer,
+        final TransferCallback callback, final Object userData,
+        final int timeout)
+    {
+        transfer.setDevHandle(handle);
+        transfer.setEndpoint(0);
+        transfer.setType(TRANSFER_TYPE_CONTROL);
+        transfer.setTimeout(timeout);
+        transfer.setBuffer(buffer);
+        transfer.setUserData(userData);
+        transfer.setCallback(callback);
+
+        // Set length based on wLength from Control Setup.
+        final ControlSetup setup = new ControlSetup(buffer);
+        transfer.setLength(CONTROL_SETUP_SIZE + setup.wLength());
+    }
+
+    public static void fillBulkTransfer(final Transfer transfer,
+        final DeviceHandle handle, final int endpoint, final ByteBuffer buffer,
+        final TransferCallback callback, final Object userData,
+        final int timeout)
     {
         transfer.setDevHandle(handle);
         transfer.setEndpoint(endpoint);
@@ -1983,9 +2027,10 @@ public final class LibUsb
         transfer.setCallback(callback);
     }
 
-    public static void fillInterruptTransfer(Transfer transfer,
-        DeviceHandle handle, int endpoint, ByteBuffer buffer,
-        TransferCallback callback, Object userData, int timeout)
+    public static void fillInterruptTransfer(final Transfer transfer,
+        final DeviceHandle handle, final int endpoint, final ByteBuffer buffer,
+        final TransferCallback callback, final Object userData,
+        final int timeout)
     {
         transfer.setDevHandle(handle);
         transfer.setEndpoint(endpoint);
@@ -1996,9 +2041,10 @@ public final class LibUsb
         transfer.setCallback(callback);
     }
 
-    public static void fillIsoTransfer(Transfer transfer, DeviceHandle handle,
-        int endpoint, ByteBuffer buffer, int numIsoPackets,
-        TransferCallback callback, Object userData, int timeout)
+    public static void fillIsoTransfer(final Transfer transfer,
+        final DeviceHandle handle, final int endpoint, final ByteBuffer buffer,
+        final int numIsoPackets, final TransferCallback callback,
+        final Object userData, final int timeout)
     {
         transfer.setDevHandle(handle);
         transfer.setEndpoint(endpoint);
@@ -2010,22 +2056,24 @@ public final class LibUsb
         transfer.setCallback(callback);
     }
 
-    public static void setIsoPacketLengths(Transfer transfer, int length)
+    public static void setIsoPacketLengths(final Transfer transfer,
+        final int length)
     {
-        for (IsoPacketDescriptor isoDesc: transfer.isoPacketDesc())
+        for (final IsoPacketDescriptor isoDesc : transfer.isoPacketDesc())
         {
             isoDesc.setLength(length);
         }
     }
 
-    public static ByteBuffer getIsoPacketBuffer(Transfer transfer, int packet)
+    public static ByteBuffer getIsoPacketBuffer(final Transfer transfer,
+        final int packet)
     {
         if (packet >= transfer.numIsoPackets())
         {
             return null;
         }
 
-        IsoPacketDescriptor isoDescriptors[] = transfer.isoPacketDesc();
+        final IsoPacketDescriptor isoDescriptors[] = transfer.isoPacketDesc();
         int offset = 0;
 
         for (int i = 0; i < packet; i++)
@@ -2037,16 +2085,16 @@ public final class LibUsb
             isoDescriptors[packet].length());
     }
 
-    public static ByteBuffer getIsoPacketBufferSimple(Transfer transfer,
-        int packet)
+    public static ByteBuffer getIsoPacketBufferSimple(final Transfer transfer,
+        final int packet)
     {
         if (packet >= transfer.numIsoPackets())
         {
             return null;
         }
 
-        IsoPacketDescriptor isoDescriptors[] = transfer.isoPacketDesc();
-        int offset = isoDescriptors[0].length() * packet;
+        final IsoPacketDescriptor isoDescriptors[] = transfer.isoPacketDesc();
+        final int offset = isoDescriptors[0].length() * packet;
 
         return BufferUtils.slice(transfer.buffer(), offset,
             isoDescriptors[packet].length());
