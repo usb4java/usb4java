@@ -23,4 +23,21 @@ public final class BufferUtils
     {
         return ByteBuffer.allocateDirect(longSize).asLongBuffer();
     }
+
+    public static ByteBuffer slice(final ByteBuffer buffer, final int offset,
+        final int length)
+    {
+        int oldPosition = buffer.position();
+        int oldLimit = buffer.limit();
+
+        buffer.position(offset);
+        buffer.limit(offset + length);
+
+        final ByteBuffer slice = buffer.slice();
+
+        buffer.position(oldPosition);
+        buffer.limit(oldLimit);
+
+        return slice;
+    }
 }

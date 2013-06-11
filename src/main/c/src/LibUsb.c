@@ -723,44 +723,6 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeConfigDescriptor)
 }
 
 /**
- * int getDescriptor(DeviceHandle, int, int, ByteBuffer)
- */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getDescriptor)
-(
-    JNIEnv *env, jclass class, jobject handle, jint type, jint index,
-    jobject data
-)
-{
-    NOT_NULL(env, handle, return 0);
-    NOT_NULL(env, data, return 0);
-    DIRECT_BUFFER(env, data, data_ptr, return 0);
-    libusb_device_handle *dev_handle = unwrapDeviceHandle(env, handle);
-    if (!dev_handle) return 0;
-
-    jlong data_size = (*env)->GetDirectBufferCapacity(env, data);
-    return libusb_get_descriptor(dev_handle, type, index, data_ptr, data_size);
-}
-
-/**
- * int getStringDescriptor(DeviceHandle, int, int, ByteBuffer)
- */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getStringDescriptor)
-(
-    JNIEnv *env, jclass class, jobject handle, jint index, jint langId,
-    jobject data
-)
-{
-    NOT_NULL(env, handle, return 0);
-    NOT_NULL(env, data, return 0);
-    DIRECT_BUFFER(env, data, data_ptr, return 0);
-    libusb_device_handle *dev_handle = unwrapDeviceHandle(env, handle);
-    if (!dev_handle) return 0;
-
-    jlong data_size = (*env)->GetDirectBufferCapacity(env, data);
-    return libusb_get_string_descriptor(dev_handle, index, langId, data_ptr, data_size);
-}
-
-/**
  * int controlTransfer(DeviceHandle, int, int, int, int, ByteBuffer, int)
  */
 JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, controlTransfer)

@@ -16,6 +16,8 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.LongBuffer;
 
+import de.ailis.usb4java.utils.BufferUtils;
+
 /**
  * Static class providing the constants and functions of libusbx.
  * 
@@ -695,10 +697,8 @@ public final class LibUsb
      * 
      * This function is useful for setting up isochronous transfers, for example
      * you might pass the return value from this function to
-     * libusb_set_iso_packet_lengths() in order to set the length field of every
-     * isochronous packet in a transfer.
-     * 
-     * TODO Link to libusb_set_iso_packet_lengths when implemented
+     * {@link #setIsoPacketLengths(Transfer, int)} in order to set the length
+     * field of every isochronous packet in a transfer.
      * 
      * @param device
      *            A device.
@@ -1288,8 +1288,12 @@ public final class LibUsb
      * @return number of bytes returned in data, or ERROR code on failure
      * 
      */
-    public static native int getDescriptor(final DeviceHandle handle,
-        final int type, final int index, final ByteBuffer data);
+    public static int getDescriptor(final DeviceHandle handle, final int type,
+        final int index, final ByteBuffer data)
+    {
+        return controlTransfer(handle, ENDPOINT_IN, REQUEST_GET_DESCRIPTOR,
+            (type << 8) | index, 0, data, 1000);
+    }
 
     /**
      * Retrieve a descriptor from a device.
@@ -1309,8 +1313,12 @@ public final class LibUsb
      * @return number of bytes returned in data, or LIBUSB_ERROR code on failure
      * @see #getStringDescriptorAscii(DeviceHandle, int, StringBuffer)
      */
-    public static native int getStringDescriptor(final DeviceHandle handle,
-        final int index, final int langId, final ByteBuffer data);
+    public static int getStringDescriptor(final DeviceHandle handle,
+        final int index, final int langId, final ByteBuffer data)
+    {
+        return controlTransfer(handle, ENDPOINT_IN, REQUEST_GET_DESCRIPTOR,
+            (DT_STRING << 8) | index, langId, data, 1000);
+    }
 
     /**
      * Perform a USB control transfer.
@@ -1961,4 +1969,86 @@ public final class LibUsb
      * already complete or cancelled. Another LIBUSB_ERROR code on failure.
      */
     public static native int cancelTransfer(final Transfer transfer);
+
+    public static void fillBulkTransfer(Transfer transfer, DeviceHandle handle,
+        int endpoint, ByteBuffer buffer, TransferCallback callback,
+        Object userData, int timeout)
+    {
+        transfer.setDevHandle(handle);
+        transfer.setEndpoint(endpoint);
+        transfer.setType(TRANSFER_TYPE_BULK);
+        transfer.setTimeout(timeout);
+        transfer.setBuffer(buffer);
+        transfer.setUserData(userData);
+        transfer.setCallback(callback);
+    }
+
+    public static void fillInterruptTransfer(Transfer transfer,
+        DeviceHandle handle, int endpoint, ByteBuffer buffer,
+        TransferCallback callback, Object userData, int timeout)
+    {
+        transfer.setDevHandle(handle);
+        transfer.setEndpoint(endpoint);
+        transfer.setType(TRANSFER_TYPE_INTERRUPT);
+        transfer.setTimeout(timeout);
+        transfer.setBuffer(buffer);
+        transfer.setUserData(userData);
+        transfer.setCallback(callback);
+    }
+
+    public static void fillIsoTransfer(Transfer transfer, DeviceHandle handle,
+        int endpoint, ByteBuffer buffer, int numIsoPackets,
+        TransferCallback callback, Object userData, int timeout)
+    {
+        transfer.setDevHandle(handle);
+        transfer.setEndpoint(endpoint);
+        transfer.setType(TRANSFER_TYPE_ISOCHRONOUS);
+        transfer.setTimeout(timeout);
+        transfer.setBuffer(buffer);
+        transfer.setNumIsoPackets(numIsoPackets);
+        transfer.setUserData(userData);
+        transfer.setCallback(callback);
+    }
+
+    public static void setIsoPacketLengths(Transfer transfer, int length)
+    {
+        for (IsoPacketDescriptor isoDesc: transfer.isoPacketDesc())
+        {
+            isoDesc.setLength(length);
+        }
+    }
+
+    public static ByteBuffer getIsoPacketBuffer(Transfer transfer, int packet)
+    {
+        if (packet >= transfer.numIsoPackets())
+        {
+            return null;
+        }
+
+        IsoPacketDescriptor isoDescriptors[] = transfer.isoPacketDesc();
+        int offset = 0;
+
+        for (int i = 0; i < packet; i++)
+        {
+            offset += isoDescriptors[i].length();
+        }
+
+        return BufferUtils.slice(transfer.buffer(), offset,
+            isoDescriptors[packet].length());
+    }
+
+    public static ByteBuffer getIsoPacketBufferSimple(Transfer transfer,
+        int packet)
+    {
+        if (packet >= transfer.numIsoPackets())
+        {
+            return null;
+        }
+
+        IsoPacketDescriptor isoDescriptors[] = transfer.isoPacketDesc();
+        int offset = isoDescriptors[0].length() * packet;
+
+        return BufferUtils.slice(transfer.buffer(), offset,
+            isoDescriptors[packet].length());
+    }
 }
