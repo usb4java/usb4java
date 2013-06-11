@@ -20,7 +20,7 @@ struct transfer_data
 void cleanupGlobalReferences(JNIEnv*, jobject);
 void cleanupCallbackEnable(JNIEnv*, jobject);
 
-jobject wrapTransfer(JNIEnv*, struct libusb_transfer*);
+jobject wrapTransfer(JNIEnv*, const struct libusb_transfer*);
 struct libusb_transfer* unwrapTransfer(JNIEnv*, jobject);
 void resetTransfer(JNIEnv*, jobject);
 

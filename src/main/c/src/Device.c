@@ -5,7 +5,7 @@
 
 #include "Device.h"
 
-jobject wrapDevice(JNIEnv* env, libusb_device* device)
+jobject wrapDevice(JNIEnv* env, const libusb_device* device)
 {
     WRAP_POINTER(env, device, "Device", "devicePointer");
 }

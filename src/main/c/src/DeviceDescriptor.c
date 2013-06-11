@@ -6,7 +6,7 @@
 #include "DeviceDescriptor.h"
 
 void setDeviceDescriptor(JNIEnv* env,
-    struct libusb_device_descriptor* descriptor, jobject object)
+    const struct libusb_device_descriptor* descriptor, jobject object)
 {
     SET_POINTER(env, descriptor, object, "deviceDescriptorPointer");
 }

@@ -7,7 +7,7 @@
 #include "Interface.h"
 
 void setConfigDescriptor(JNIEnv* env,
-    struct libusb_config_descriptor* descriptor, jobject object)
+    const struct libusb_config_descriptor* descriptor, jobject object)
 {
     SET_POINTER(env, descriptor, object, "configDescriptorPointer");
 }

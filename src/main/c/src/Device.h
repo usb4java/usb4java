@@ -8,7 +8,7 @@
 
 #include "usb4java.h"
 
-jobject wrapDevice(JNIEnv*, libusb_device*);
+jobject wrapDevice(JNIEnv*, const libusb_device*);
 libusb_device* unwrapDevice(JNIEnv*, jobject);
 void resetDevice(JNIEnv*, jobject);
 

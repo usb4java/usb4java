@@ -10,7 +10,7 @@
 static void LIBUSB_CALL cleanupCallback(struct libusb_transfer *transfer);
 static void LIBUSB_CALL transferCallback(struct libusb_transfer *transfer);
 
-jobject wrapTransfer(JNIEnv* env, struct libusb_transfer* transfer)
+jobject wrapTransfer(JNIEnv* env, const struct libusb_transfer* transfer)
 {
     WRAP_POINTER(env, transfer, "Transfer", "transferPointer");
 }
