@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include "Transfer.h"
 #include "DeviceHandle.h"
+#include "IsoPacketDescriptor.h"
 
 static void LIBUSB_CALL cleanupCallback(struct libusb_transfer *transfer);
 static void LIBUSB_CALL transferCallback(struct libusb_transfer *transfer);
@@ -473,4 +474,19 @@ JNIEXPORT jint JNICALL METHOD_NAME(Transfer, numIsoPackets)
     if (!transfer) return 0;
 
     return transfer->num_iso_packets;
+}
+
+/**
+ * IsoPacketDescriptor[] isoPacketDesc()
+ */
+JNIEXPORT jobjectArray JNICALL METHOD_NAME(Transfer, isoPacketDesc)
+(
+    JNIEnv *env, jobject this
+)
+{
+    struct libusb_transfer *transfer = unwrapTransfer(env, this);
+    if (!transfer) return NULL;
+
+    return wrapIsoPacketDescriptors(env, transfer->num_iso_packets,
+        transfer->iso_packet_desc);
 }

@@ -13,6 +13,9 @@ package de.ailis.usb4java.libusb;
 
 import java.nio.ByteBuffer;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * The generic USB transfer structure.
  * 
@@ -228,7 +231,7 @@ public final class Transfer
      * 
      * @return The data buffer.
      */
-    public ByteBuffer getBuffer()
+    public ByteBuffer buffer()
     {
         return transferBuffer;
     }
@@ -269,4 +272,66 @@ public final class Transfer
      *            The number of isochronous packets to set.
      */
     public native void setNumIsoPackets(final int numIsoPackets);
+
+    /**
+     * Array of isochronous packet descriptors, for isochronous transfers only.
+     * 
+     * @return The array of isochronous packet descriptors.
+     */
+    public native IsoPacketDescriptor[] isoPacketDesc();
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder()
+        .append(devHandle())
+        .append(flags())
+        .append(endpoint())
+        .append(type())
+        .append(timeout())
+        .append(status())
+        .append(length())
+        .append(actualLength())
+        .append(callback())
+        .append(userData())
+        .append(buffer())
+        .append(numIsoPackets())
+        .append(isoPacketDesc())
+        .toHashCode();
+    }
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+
+        final Transfer other = (Transfer) obj;
+
+        return new EqualsBuilder()
+        .append(devHandle(), other.devHandle())
+        .append(flags(), other.flags())
+        .append(endpoint(), other.endpoint())
+        .append(type(), other.type())
+        .append(timeout(), other.timeout())
+        .append(status(), other.status())
+        .append(length(), other.length())
+        .append(actualLength(), other.actualLength())
+        .append(callback(), other.callback())
+        .append(userData(), other.userData())
+        .append(buffer(), other.buffer())
+        .append(numIsoPackets(), other.numIsoPackets())
+        .append(isoPacketDesc(), other.isoPacketDesc())
+        .isEquals();
+    }
 }
