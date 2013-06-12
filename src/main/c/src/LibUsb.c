@@ -23,6 +23,8 @@
 #include "ConfigDescriptor.h"
 #include "Transfer.h"
 
+static int defaultContextRefcnt = 0;
+
 /**
  * Version getVersion()
  */
@@ -44,7 +46,9 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, init)
 {
     if (!context)
     {
-        return libusb_init(NULL);
+        int result = libusb_init(NULL);
+        if (result == LIBUSB_SUCCESS) defaultContextRefcnt++;
+        return result;
     }
     else
     {
@@ -65,19 +69,23 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, exit)
     JNIEnv *env, jclass class, jobject context
 )
 {
-	if (!context)
-	{
-		libusb_exit(NULL);
-	}
-	else
-	{
-		libusb_context *ctx = unwrapContext(env, context);
-		if (!ctx) return;
+    if (!context)
+    {
+        if (defaultContextRefcnt <= 0) return;
+
+        libusb_exit(NULL);
+
+        defaultContextRefcnt--;
+    }
+    else
+    {
+        libusb_context *ctx = unwrapContext(env, context);
+        if (!ctx) return;
 
         libusb_exit(ctx);
 
         resetContext(env, context);
-	}
+    }
 }
 
 /**

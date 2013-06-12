@@ -525,7 +525,7 @@ public final class LibUsb
      * 
      * @see <a href="http://libusbx.sf.net/api-1.0/contexts.html">Contexts</a>
      */
-    public static native int init(final Context context);
+    public static synchronized native int init(final Context context);
 
     /**
      * Deinitialize libusb.
@@ -537,7 +537,7 @@ public final class LibUsb
      *            The {@link Context} to deinitialize, or NULL for the default
      *            context.
      */
-    public static native void exit(final Context context);
+    public static synchronized native void exit(final Context context);
 
     /**
      * Set log message verbosity.
