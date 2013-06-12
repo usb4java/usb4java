@@ -161,7 +161,7 @@ public class LibUSBTest
         assertNotNull(version);
         assertEquals(1, version.major());
         assertEquals(0, version.minor());
-        assertTrue(version.micro() > 0 && version.micro() < 100);
+        assertTrue((version.micro() > 0) && (version.micro() < 100));
         assertNotNull(version.rc());
         assertTrue(version.toString().startsWith("1.0."));
     }
@@ -176,7 +176,7 @@ public class LibUSBTest
         assumeUsbTestsEnabled();
         assertEquals(LibUsb.SUCCESS, LibUsb.init(null));
         LibUsb.exit(null);
-        
+
         try
         {
             // Double-exit should throw exception
@@ -186,7 +186,7 @@ public class LibUSBTest
         catch (IllegalStateException e)
         {
             // Expected behavior
-        }            
+        }
     }
 
     /**
@@ -200,7 +200,7 @@ public class LibUSBTest
         Context context = new Context();
         assertEquals(LibUsb.SUCCESS, LibUsb.init(context));
         LibUsb.exit(context);
-        
+
         try
         {
             LibUsb.exit(context);
@@ -880,7 +880,7 @@ public class LibUSBTest
     {
         assumeUsbTestsEnabled();
         final Context context = new Context();
-        LibUsb.setPollfdNotifiers(context);
+        LibUsb.setPollfdNotifiers(context, context.hashCode());
     }
 
     /**
@@ -910,7 +910,7 @@ public class LibUSBTest
         LibUsb.setPollfdNotifiers(context, listener, "test");
 
         FileDescriptor fd = new FileDescriptor();
-        LibUsb.triggerPollfdAdded(fd, 53);
+        LibUsb.triggerPollfdAdded(fd, 53, context.hashCode());
         assertEquals(53, listener.addedEvents);
         assertSame(fd, listener.addedFd);
         assertSame("test", listener.addedUserData);
@@ -920,7 +920,7 @@ public class LibUSBTest
         listener.reset();
 
         fd = new FileDescriptor();
-        LibUsb.triggerPollfdRemoved(fd);
+        LibUsb.triggerPollfdRemoved(fd, context.hashCode());
         assertEquals(0, listener.addedEvents);
         assertNull(listener.addedFd);
         assertNull(listener.addedUserData);
@@ -931,7 +931,7 @@ public class LibUSBTest
         listener.reset();
 
         fd = new FileDescriptor();
-        LibUsb.triggerPollfdAdded(fd, 53);
+        LibUsb.triggerPollfdAdded(fd, 53, context.hashCode());
         assertEquals(0, listener.addedEvents);
         assertNull(listener.addedFd);
         assertNull(listener.addedUserData);
@@ -941,7 +941,7 @@ public class LibUSBTest
         listener.reset();
 
         fd = new FileDescriptor();
-        LibUsb.triggerPollfdRemoved(fd);
+        LibUsb.triggerPollfdRemoved(fd, context.hashCode());
         assertEquals(0, listener.addedEvents);
         assertNull(listener.addedFd);
         assertNull(listener.addedUserData);

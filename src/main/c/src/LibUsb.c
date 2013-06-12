@@ -1047,12 +1047,13 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getNextTimeout)
         jmethodID method = (*env)->GetMethodID(env, cls, "put",
             "(IJ)Ljava/nio/LongBuffer;");
         (*env)->CallObjectMethod(env, timeout, method, 0,
-            tv.tv_sec * 1000000 + tv.tv_usec);
+            (jlong) (tv.tv_sec * 1000000 + tv.tv_usec));
     }
     return result;
 }
 
-static void LIBUSB_CALL triggerPollfdAdded(int fd, short events, void *user_data)
+static void LIBUSB_CALL triggerPollfdAdded(int fd, short events,
+    void *user_data)
 {
     THREAD_BEGIN(env)
 
@@ -1061,9 +1062,10 @@ static void LIBUSB_CALL triggerPollfdAdded(int fd, short events, void *user_data
     jobject object = (*env)->NewObject(env, fdcls, constructor, fd);
 
     jclass cls = (*env)->FindClass(env, PACKAGE_DIR"/LibUsb");
-    jmethodID method = (*env)->GetStaticMethodID(env, cls,
-        "triggerPollfdAdded", "(Ljava/io/FileDescriptor;I)V");
-    (*env)->CallStaticVoidMethod(env, cls, method, object, events);
+    jmethodID method = (*env)->GetStaticMethodID(env, cls, "triggerPollfdAdded",
+        "(Ljava/io/FileDescriptor;II)V");
+    (*env)->CallStaticVoidMethod(env, cls, method, object, (jint) events,
+        (jint) (intptr_t) user_data);
 
     THREAD_END
 }
@@ -1078,25 +1080,26 @@ static void LIBUSB_CALL triggerPollfdRemoved(int fd, void *user_data)
 
     jclass cls = (*env)->FindClass(env, PACKAGE_DIR"/LibUsb");
     jmethodID method = (*env)->GetStaticMethodID(env, cls,
-        "triggerPollfdRemoved", "(Ljava/io/FileDescriptor;)V");
-    (*env)->CallStaticVoidMethod(env, cls, method, object);
+        "triggerPollfdRemoved", "(Ljava/io/FileDescriptor;I)V");
+    (*env)->CallStaticVoidMethod(env, cls, method, object,
+        (jint) (intptr_t) user_data);
 
     THREAD_END
 }
 
 /**
- * void setPollfdNotifiers(Context)
+ * void setPollfdNotifiers(Context, int)
  */
 JNIEXPORT void JNICALL METHOD_NAME(LibUsb, setPollfdNotifiers)
 (
-    JNIEnv *env, jclass class, jobject context
+    JNIEnv *env, jclass class, jobject context, jint context_hash
 )
 {
     libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return;
 
     libusb_set_pollfd_notifiers(ctx, &triggerPollfdAdded, &triggerPollfdRemoved,
-        NULL);
+        (void *) (intptr_t) context_hash);
 }
 
 /**

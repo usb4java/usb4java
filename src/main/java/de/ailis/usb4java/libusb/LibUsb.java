@@ -15,6 +15,10 @@ import java.io.FileDescriptor;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.LongBuffer;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import de.ailis.usb4java.utils.BufferUtils;
 
@@ -469,11 +473,11 @@ public final class LibUsb
     /** Device sent more data than requested. */
     public static final int TRANSFER_OVERFLOW = 6;
 
-    /** The currently set pollfd listener. */
-    private static PollfdListener pollfdListener;
-
-    /** The currently set pollfd listener user data. */
-    private static Object pollfdListenerUserData;
+    /**
+     * pollfd listeners (to support different listeners for different contexts).
+     */
+    private static final ConcurrentMap<Integer, ImmutablePair<PollfdListener, Object>> pollfdListeners =
+        new ConcurrentHashMap<Integer, ImmutablePair<PollfdListener, Object>>();
 
     static
     {
@@ -1819,19 +1823,30 @@ public final class LibUsb
     public static void setPollfdNotifiers(final Context context,
         final PollfdListener listener, final Object userData)
     {
-        if (listener == null)
+        int contextHash;
+
+        if (context == null)
         {
-            unsetPollfdNotifiers(context);
+            contextHash = 31; // Manual result of Context.hashCode() for 0.
         }
         else
         {
-            setPollfdNotifiers(context);
+            contextHash = context.hashCode();
         }
 
-        // Once we know the native calls have gone through, update the
-        // references.
-        pollfdListener = listener;
-        pollfdListenerUserData = userData;
+        if (listener == null)
+        {
+            unsetPollfdNotifiers(context);
+
+            pollfdListeners.remove(contextHash);
+        }
+        else
+        {
+            setPollfdNotifiers(context, contextHash);
+
+            pollfdListeners.put(contextHash,
+                new ImmutablePair<PollfdListener, Object>(listener, userData));
+        }
     }
 
     /**
@@ -1843,11 +1858,15 @@ public final class LibUsb
      * @param events
      *            events to monitor for, see libusb_pollfd for a description
      */
-    static void triggerPollfdAdded(final FileDescriptor fd, final int events)
+    static void triggerPollfdAdded(final FileDescriptor fd, final int events,
+        final int contextHash)
     {
-        if (pollfdListener != null)
+        final ImmutablePair<PollfdListener, Object> listener = pollfdListeners
+            .get(contextHash);
+
+        if (listener != null)
         {
-            pollfdListener.pollfdAdded(fd, events, pollfdListenerUserData);
+            listener.left.pollfdAdded(fd, events, listener.right);
         }
     }
 
@@ -1857,11 +1876,15 @@ public final class LibUsb
      * @param fd
      *            The removed file descriptor.
      */
-    static void triggerPollfdRemoved(final FileDescriptor fd)
+    static void triggerPollfdRemoved(final FileDescriptor fd,
+        final int contextHash)
     {
-        if (pollfdListener != null)
+        final ImmutablePair<PollfdListener, Object> listener = pollfdListeners
+            .get(contextHash);
+
+        if (listener != null)
         {
-            pollfdListener.pollfdRemoved(fd, pollfdListenerUserData);
+            listener.left.pollfdRemoved(fd, listener.right);
         }
     }
 
@@ -1872,7 +1895,8 @@ public final class LibUsb
      * @param context
      *            The context to operate on, or NULL for the default context
      */
-    static native void setPollfdNotifiers(final Context context);
+    static native void setPollfdNotifiers(final Context context,
+        final int contextHash);
 
     /**
      * Tells libusbx to stop informing this class about pollfd additions and
