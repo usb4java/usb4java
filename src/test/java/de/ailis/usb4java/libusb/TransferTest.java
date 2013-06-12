@@ -122,8 +122,17 @@ public class TransferTest
         assertNotSame(handle, transfer.devHandle());
         assertNotEquals(handle2, transfer.devHandle());
         assertEquals(handle, transfer.devHandle());
-        transfer.setDevHandle(null);
-        assertNull(transfer.devHandle());
+
+        try
+        {
+            transfer.setDevHandle(null);
+            fail("Setting devHandle to null should throw IllegalArgumentException");
+        }
+        catch (IllegalArgumentException e)
+        {
+            // Expected behavior
+        }
+
         LibUsb.freeTransfer(transfer);
     }
 

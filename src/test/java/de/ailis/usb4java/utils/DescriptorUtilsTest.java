@@ -68,7 +68,7 @@ public class DescriptorUtilsTest
     {
         assertEquals("Data", DescriptorUtils.getUsageTypeName(0));
         assertEquals("Feedback", DescriptorUtils.getUsageTypeName(16));
-        assertEquals("Explicit Feedback Data", 
+        assertEquals("Implicit Feedback Data",
             DescriptorUtils.getUsageTypeName(32));
         assertEquals("Reserved", DescriptorUtils.getUsageTypeName(48));
     }
@@ -85,7 +85,7 @@ public class DescriptorUtilsTest
         assertEquals("Bulk", DescriptorUtils.getTransferTypeName(2));
         assertEquals("Interrupt", DescriptorUtils.getTransferTypeName(3));
     }
-    
+
     /**
      * Tests the {@link DescriptorUtils#getUSBClassName(int)} method.
      */
@@ -178,7 +178,7 @@ public class DescriptorUtilsTest
                 (byte) 7, (byte) 8, (byte) 9, (byte) 10, (byte) 11, (byte) 12,
                 (byte) 13), "Manufacturer", "Product", "Serial"));
     }
-    
+
     /**
      * Tests the
      * {@link DescriptorUtils#dump(javax.usb.UsbConfigurationDescriptor)}
@@ -248,7 +248,7 @@ public class DescriptorUtilsTest
                 (byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5, (byte) 0x20,
                 (byte) 7)));
     }
-    
+
     /**
      * Tests the {@link DescriptorUtils#dump(javax.usb.UsbInterfaceDescriptor)}
      * method.
@@ -262,7 +262,7 @@ public class DescriptorUtilsTest
             + "  bInterfaceNumber         2\n"
             + "  bAlternateSetting        3\n"
             + "  bNumEndpoints            4\n"
-            + "  bInterfaceClass          5 Unknown\n"
+            + "  bInterfaceClass          5 Physical\n"
             + "  bInterfaceSubClass       6\n"
             + "  bInterfaceProtocol       7\n"
             + "  iInterface               8",
@@ -312,7 +312,7 @@ public class DescriptorUtilsTest
             DescriptorUtils.dump(new SimpleUsbEndpointDescriptor((byte) 0,
                 (byte) 1, (byte) 0x82, (byte) 3, (byte) 4, (byte) 5)));
     }
-    
+
     /**
      * Ensure constructor is private.
      * 

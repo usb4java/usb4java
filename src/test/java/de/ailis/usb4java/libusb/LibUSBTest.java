@@ -21,6 +21,7 @@ import java.nio.LongBuffer;
 import org.junit.Test;
 
 import de.ailis.usb4java.libusb.mocks.PollfdListenerMock;
+import de.ailis.usb4java.utils.BufferUtils;
 
 /**
  * Tests the {@link LibUsb} class.
@@ -796,7 +797,7 @@ public class LibUSBTest
     {
         assumeUsbTestsEnabled();
         final Context context = new Context();
-        LibUsb.handleEventsTimeoutCompleted(context, 53, IntBuffer.allocate(1));
+        LibUsb.handleEventsTimeoutCompleted(context, 53, BufferUtils.allocateIntBuffer());
     }
 
     /**
@@ -832,7 +833,7 @@ public class LibUSBTest
     {
         assumeUsbTestsEnabled();
         final Context context = new Context();
-        LibUsb.handleEventsCompleted(context, IntBuffer.allocate(1));
+        LibUsb.handleEventsCompleted(context, BufferUtils.allocateIntBuffer());
     }
 
     /**
