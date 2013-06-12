@@ -476,8 +476,8 @@ public final class LibUsb
     /**
      * pollfd listeners (to support different listeners for different contexts).
      */
-    private static final ConcurrentMap<Integer, ImmutablePair<PollfdListener, Object>> pollfdListeners =
-        new ConcurrentHashMap<Integer, ImmutablePair<PollfdListener, Object>>();
+    private static final ConcurrentMap<Long, ImmutablePair<PollfdListener, Object>> pollfdListeners =
+        new ConcurrentHashMap<Long, ImmutablePair<PollfdListener, Object>>();
 
     static
     {
@@ -1823,28 +1823,28 @@ public final class LibUsb
     public static void setPollfdNotifiers(final Context context,
         final PollfdListener listener, final Object userData)
     {
-        int contextHash;
+        long contextId;
 
         if (context == null)
         {
-            contextHash = 31; // Manual result of Context.hashCode() for 0.
+            contextId = 0; // NULL pointer has value 0.
         }
         else
         {
-            contextHash = context.hashCode();
+            contextId = context.getPointer();
         }
 
         if (listener == null)
         {
             unsetPollfdNotifiers(context);
 
-            pollfdListeners.remove(contextHash);
+            pollfdListeners.remove(contextId);
         }
         else
         {
-            setPollfdNotifiers(context, contextHash);
+            setPollfdNotifiers(context, contextId);
 
-            pollfdListeners.put(contextHash,
+            pollfdListeners.put(contextId,
                 new ImmutablePair<PollfdListener, Object>(listener, userData));
         }
     }
@@ -1857,12 +1857,14 @@ public final class LibUsb
      *            The new file descriptor,
      * @param events
      *            events to monitor for, see libusb_pollfd for a description
+     * @param contextId
+     *            A unique identifier for the originating context.
      */
     static void triggerPollfdAdded(final FileDescriptor fd, final int events,
-        final int contextHash)
+        final long contextId)
     {
         final ImmutablePair<PollfdListener, Object> listener = pollfdListeners
-            .get(contextHash);
+            .get(contextId);
 
         if (listener != null)
         {
@@ -1875,12 +1877,14 @@ public final class LibUsb
      * 
      * @param fd
      *            The removed file descriptor.
+     * @param contextId
+     *            A unique identifier for the originating context.
      */
     static void triggerPollfdRemoved(final FileDescriptor fd,
-        final int contextHash)
+        final long contextId)
     {
         final ImmutablePair<PollfdListener, Object> listener = pollfdListeners
-            .get(contextHash);
+            .get(contextId);
 
         if (listener != null)
         {
@@ -1894,9 +1898,11 @@ public final class LibUsb
      * 
      * @param context
      *            The context to operate on, or NULL for the default context
+     * @param contextId
+     *            A unique identifier for the given context.
      */
     static native void setPollfdNotifiers(final Context context,
-        final int contextHash);
+        final long contextId);
 
     /**
      * Tells libusbx to stop informing this class about pollfd additions and
