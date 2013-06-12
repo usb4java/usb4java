@@ -213,7 +213,7 @@ public final class DescriptorUtils
             descriptor.bConfigurationValue() & 0xff,
             descriptor.iConfiguration() & 0xff,
             String.format("0x%02x", descriptor.bmAttributes() & 0xff),
-            ((descriptor.bmAttributes() & 64) == 0) ? ("Bus Powered")
+            ((descriptor.bmAttributes() & 64) == 0) ? ("(Bus Powered)")
                 : ("Self Powered"),
             ((descriptor.bmAttributes() & 32) == 0) ? ("")
                 : String.format("    Remote Wakeup%n"),
@@ -319,7 +319,7 @@ public final class DescriptorUtils
      */
     public static String getSynchTypeName(final int bmAttributes)
     {
-        switch (bmAttributes & LibUsb.ISO_SYNC_TYPE_ASYNC)
+        switch ((bmAttributes & LibUsb.ISO_SYNC_TYPE_MASK) >> 2)
         {
             case LibUsb.ISO_SYNC_TYPE_NONE:
                 return "None";
@@ -343,7 +343,7 @@ public final class DescriptorUtils
      */
     public static String getUsageTypeName(final int bmAttributes)
     {
-        switch (bmAttributes & LibUsb.ISO_USAGE_TYPE_MASK)
+        switch ((bmAttributes & LibUsb.ISO_USAGE_TYPE_MASK) >> 4)
         {
             case LibUsb.ISO_USAGE_TYPE_DATA:
                 return "Data";
@@ -351,6 +351,8 @@ public final class DescriptorUtils
                 return "Feedback";
             case LibUsb.ISO_USAGE_TYPE_IMPLICIT:
                 return "Implicit Feedback Data";
+            case 3: // b11 is considered "Reserved" according to USB 3.0 spec.
+                return "Reserved";
             default:
                 return "Unknown";
         }
