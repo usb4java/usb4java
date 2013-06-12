@@ -192,7 +192,24 @@ public final class LibUsb
     // library supports a given capability by calling hasCapability().
 
     /** The hasCapability() API is available. */
-    public static final int CAP_HAS_CAPABILITY = 0x00;
+    public static final int CAP_HAS_CAPABILITY = 0x0000;
+
+    /** Hotplug support is available. */
+    public static final int CAP_HAS_HOTPLUG = 0x0001;
+
+    /**
+     * The library can access HID devices without requiring user intervention.
+     * Note that before being able to actually access an HID device, you may
+     * still have to call additional libusbx functions such as
+     * {@link #detachKernelDriver(DeviceHandle, int)}.
+     */
+    public static final int CAP_HAS_HID_ACCESS = 0x0100;
+
+    /**
+     * The library supports detaching of the default USB driver, using
+     * {@link #detachKernelDriver(DeviceHandle, int)}, if one is set by the OS.
+     */
+    public static final int CAP_SUPPORTS_DETACH_KERNEL_DRIVER = 0x0101;
 
     public static final int CONTROL_SETUP_SIZE = 8;
 
