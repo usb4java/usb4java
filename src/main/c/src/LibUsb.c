@@ -71,7 +71,8 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, exit)
 {
     if (!context)
     {
-        if (defaultContextRefcnt <= 0) {
+        if (defaultContextRefcnt <= 0)
+        {
             illegalState(env, "default context is not initialized");
             return;
         }
@@ -373,7 +374,7 @@ JNIEXPORT jobject JNICALL METHOD_NAME(LibUsb, getDevice)
     libusb_device_handle *dev_handle = unwrapDeviceHandle(env, handle);
     if (!dev_handle) return NULL;
 
-    return wrapDevice(env, libusb_ref_device(libusb_get_device(dev_handle)));
+    return wrapDevice(env, libusb_get_device(dev_handle));
 }
 
 /**

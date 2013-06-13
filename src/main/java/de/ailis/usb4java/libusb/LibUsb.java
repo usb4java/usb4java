@@ -652,6 +652,10 @@ public final class LibUsb
     /**
      * Get the the parent from the specified device [EXPERIMENTAL].
      * 
+     * Please note that the reference count of the returned device is not
+     * increased. As such, do not *ever* call {@link #unrefDevice(Device))
+     * directly on the returned Device.
+     * 
      * @param device
      *            A device
      * @return The device parent or NULL if not available. You should issue a
@@ -820,8 +824,9 @@ public final class LibUsb
     /**
      * Get the underlying device for a handle.
      * 
-     * This function does not modify the reference count of the returned device,
-     * so do not feel compelled to unreference it when you are done.
+     * Please note that the reference count of the returned device is not
+     * increased. As such, do not *ever* call {@link #unrefDevice(Device))
+     * directly on the returned Device.
      * 
      * @param handle
      *            a device handle.
