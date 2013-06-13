@@ -86,7 +86,7 @@
 
 extern JavaVM *jvm;
 
-jint illegalArgument(JNIEnv *env, char *message);
-jint illegalState(JNIEnv *env, char *message);
+jint illegalArgument(JNIEnv *env, const char *message);
+jint illegalState(JNIEnv *env, const char *message);
 
 #endif

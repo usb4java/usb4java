@@ -44,7 +44,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(EndpointDescriptor, bLength)
     struct libusb_endpoint_descriptor *ep = unwrapEndpointDescriptor(env, this);
     if (!ep) return 0;
 
-    return ep->bLength;
+    return (jbyte) ep->bLength;
 }
 
 /**
@@ -58,7 +58,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(EndpointDescriptor, bDescriptorType)
     struct libusb_endpoint_descriptor *ep = unwrapEndpointDescriptor(env, this);
     if (!ep) return 0;
 
-    return ep->bDescriptorType;
+    return (jbyte) ep->bDescriptorType;
 }
 
 /**
@@ -72,7 +72,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(EndpointDescriptor, bEndpointAddress)
     struct libusb_endpoint_descriptor *ep = unwrapEndpointDescriptor(env, this);
     if (!ep) return 0;
 
-    return ep->bEndpointAddress;
+    return (jbyte) ep->bEndpointAddress;
 }
 
 /**
@@ -86,7 +86,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(EndpointDescriptor, bmAttributes)
     struct libusb_endpoint_descriptor *ep = unwrapEndpointDescriptor(env, this);
     if (!ep) return 0;
 
-    return ep->bmAttributes;
+    return (jbyte) ep->bmAttributes;
 }
 
 /**
@@ -100,7 +100,7 @@ JNIEXPORT jshort JNICALL METHOD_NAME(EndpointDescriptor, wMaxPacketSize)
     struct libusb_endpoint_descriptor *ep = unwrapEndpointDescriptor(env, this);
     if (!ep) return 0;
 
-    return ep->wMaxPacketSize;
+    return (jshort) ep->wMaxPacketSize;
 }
 
 /**
@@ -114,7 +114,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(EndpointDescriptor, bInterval)
     struct libusb_endpoint_descriptor *ep = unwrapEndpointDescriptor(env, this);
     if (!ep) return 0;
 
-    return ep->bInterval;
+    return (jbyte) ep->bInterval;
 }
 
 /**
@@ -128,7 +128,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(EndpointDescriptor, bRefresh)
     struct libusb_endpoint_descriptor *ep = unwrapEndpointDescriptor(env, this);
     if (!ep) return 0;
 
-    return ep->bRefresh;
+    return (jbyte) ep->bRefresh;
 }
 
 /**
@@ -142,7 +142,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(EndpointDescriptor, bSynchAddress)
     struct libusb_endpoint_descriptor *ep = unwrapEndpointDescriptor(env, this);
     if (!ep) return 0;
 
-    return ep->bSynchAddress;
+    return (jbyte) ep->bSynchAddress;
 }
 
 /**

@@ -47,7 +47,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(InterfaceDescriptor, bLength)
         unwrapInterfaceDescriptor(env, this);
     if (!interface) return 0;
 
-    return interface->bLength;
+    return (jbyte) interface->bLength;
 }
 
 /**
@@ -62,7 +62,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(InterfaceDescriptor, bDescriptorType)
         unwrapInterfaceDescriptor(env, this);
     if (!interface) return 0;
 
-    return interface->bDescriptorType;
+    return (jbyte) interface->bDescriptorType;
 }
 
 /**
@@ -77,7 +77,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(InterfaceDescriptor, bInterfaceNumber)
         unwrapInterfaceDescriptor(env, this);
     if (!interface) return 0;
 
-    return interface->bInterfaceNumber;
+    return (jbyte) interface->bInterfaceNumber;
 }
 
 /**
@@ -92,7 +92,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(InterfaceDescriptor, bAlternateSetting)
         unwrapInterfaceDescriptor(env, this);
     if (!interface) return 0;
 
-    return interface->bAlternateSetting;
+    return (jbyte) interface->bAlternateSetting;
 }
 
 /**
@@ -107,7 +107,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(InterfaceDescriptor, bNumEndpoints)
         unwrapInterfaceDescriptor(env, this);
     if (!interface) return 0;
 
-    return interface->bNumEndpoints;
+    return (jbyte) interface->bNumEndpoints;
 }
 
 /**
@@ -122,7 +122,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(InterfaceDescriptor, bInterfaceClass)
         unwrapInterfaceDescriptor(env, this);
     if (!interface) return 0;
 
-    return interface->bInterfaceClass;
+    return (jbyte) interface->bInterfaceClass;
 }
 
 /**
@@ -137,7 +137,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(InterfaceDescriptor, bInterfaceSubClass)
         unwrapInterfaceDescriptor(env, this);
     if (!interface) return 0;
 
-    return interface->bInterfaceSubClass;
+    return (jbyte) interface->bInterfaceSubClass;
 }
 
 /**
@@ -152,7 +152,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(InterfaceDescriptor, bInterfaceProtocol)
         unwrapInterfaceDescriptor(env, this);
     if (!interface) return 0;
 
-    return interface->bInterfaceProtocol;
+    return (jbyte) interface->bInterfaceProtocol;
 }
 
 /**
@@ -167,7 +167,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(InterfaceDescriptor, iInterface)
         unwrapInterfaceDescriptor(env, this);
     if (!interface) return 0;
 
-    return interface->iInterface;
+    return (jbyte) interface->iInterface;
 }
 
 /**

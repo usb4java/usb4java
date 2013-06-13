@@ -6,7 +6,7 @@
 #include "DeviceList.h"
 #include "Device.h"
 
-void setDeviceList(JNIEnv* env, libusb_device* const * list, int size, jobject object)
+void setDeviceList(JNIEnv* env, libusb_device* const * list, jint size, jobject object)
 {
     SET_POINTER(env, list, object, "deviceListPointer");
 

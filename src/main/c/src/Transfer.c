@@ -40,9 +40,8 @@ JNIEXPORT void JNICALL METHOD_NAME(Transfer, setDevHandle)
     JNIEnv *env, jobject this, jobject handle
 )
 {
-    NOT_NULL(env, handle, return);
     libusb_device_handle *dev_handle = unwrapDeviceHandle(env, handle);
-    if (!dev_handle) return;
+    if (!dev_handle && handle) return;
     struct libusb_transfer *transfer = unwrapTransfer(env, this);
     if (!transfer) return;
 
@@ -74,7 +73,7 @@ JNIEXPORT void JNICALL METHOD_NAME(Transfer, setFlags)
     struct libusb_transfer *transfer = unwrapTransfer(env, this);
     if (!transfer) return;
 
-    transfer->flags = flags;
+    transfer->flags = (uint8_t) flags;
 }
 
 /**
@@ -88,7 +87,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(Transfer, flags)
     struct libusb_transfer *transfer = unwrapTransfer(env, this);
     if (!transfer) return 0;
 
-    return transfer->flags;
+    return (jbyte) transfer->flags;
 }
 
 /**
@@ -102,7 +101,7 @@ JNIEXPORT void JNICALL METHOD_NAME(Transfer, setEndpoint)
     struct libusb_transfer *transfer = unwrapTransfer(env, this);
     if (!transfer) return;
 
-    transfer->endpoint = endpoint;
+    transfer->endpoint = (unsigned char) endpoint;
 }
 
 /**
@@ -116,7 +115,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(Transfer, endpoint)
     struct libusb_transfer *transfer = unwrapTransfer(env, this);
     if (!transfer) return 0;
 
-    return transfer->endpoint;
+    return (jbyte) transfer->endpoint;
 }
 
 /**
@@ -130,7 +129,7 @@ JNIEXPORT void JNICALL METHOD_NAME(Transfer, setType)
     struct libusb_transfer *transfer = unwrapTransfer(env, this);
     if (!transfer) return;
 
-    transfer->type = type;
+    transfer->type = (unsigned char) type;
 }
 
 /**
@@ -144,7 +143,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(Transfer, type)
     struct libusb_transfer *transfer = unwrapTransfer(env, this);
     if (!transfer) return 0;
 
-    return transfer->type;
+    return (jbyte) transfer->type;
 }
 
 /**
@@ -158,7 +157,7 @@ JNIEXPORT void JNICALL METHOD_NAME(Transfer, setTimeout)
     struct libusb_transfer *transfer = unwrapTransfer(env, this);
     if (!transfer) return;
 
-    transfer->timeout = timeout;
+    transfer->timeout = (unsigned int) timeout;
 }
 
 /**
@@ -172,7 +171,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(Transfer, timeout)
     struct libusb_transfer *transfer = unwrapTransfer(env, this);
     if (!transfer) return 0;
 
-    return transfer->timeout;
+    return (jint) transfer->timeout;
 }
 
 /**
@@ -430,8 +429,13 @@ JNIEXPORT void JNICALL METHOD_NAME(Transfer, setBufferNative)
     JNIEnv *env, jobject this, jobject buffer
 )
 {
-    NOT_NULL(env, buffer, return);
-    DIRECT_BUFFER(env, buffer, buffer_ptr, return);
+    unsigned char *buffer_ptr = NULL;
+    if (buffer)
+    {
+        DIRECT_BUFFER(env, buffer, buffer_tmp, return);
+        buffer_ptr = buffer_tmp;
+    }
+
     struct libusb_transfer *transfer = unwrapTransfer(env, this);
     if (!transfer) return;
 
@@ -452,7 +456,7 @@ JNIEXPORT void JNICALL METHOD_NAME(Transfer, setNumIsoPackets)
     // Check that calls to setNumIsoPackets() never set a number exceeding
     // the maximum, which was originally set at allocTransfer() time.
     if (((struct transfer_data *) transfer->user_data)->maxNumIsoPackets
-        < numIsoPackets)
+        < (size_t) numIsoPackets)
     {
         illegalArgument(env,
             "numIsoPackets exceeds maximum allowed number set with allocTransfer()");

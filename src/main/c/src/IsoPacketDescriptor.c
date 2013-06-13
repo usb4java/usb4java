@@ -40,7 +40,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(IsoPacketDescriptor, length)
         unwrapIsoPacketDescriptor(env, this);
     if (!isopacket) return 0;
 
-    return isopacket->length;
+    return (jint) isopacket->length;
 }
 
 /**
@@ -55,7 +55,7 @@ JNIEXPORT void JNICALL METHOD_NAME(IsoPacketDescriptor, setLength)
         unwrapIsoPacketDescriptor(env, this);
     if (!isopacket) return;
 
-    isopacket->length = length;
+    isopacket->length = (unsigned int) length;
 }
 
 /**
@@ -70,7 +70,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(IsoPacketDescriptor, actualLength)
         unwrapIsoPacketDescriptor(env, this);
     if (!isopacket) return 0;
 
-    return isopacket->actual_length;
+    return (jint) isopacket->actual_length;
 }
 
 /**

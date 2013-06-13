@@ -7,13 +7,13 @@
 
 JavaVM *jvm = NULL;
 
-jint illegalArgument(JNIEnv *env, char *message)
+jint illegalArgument(JNIEnv *env, const char *message)
 {
     jclass cls = (*env)->FindClass(env, "java/lang/IllegalArgumentException");
     return (*env)->ThrowNew(env, cls, message);
 }
 
-jint illegalState(JNIEnv *env, char *message)
+jint illegalState(JNIEnv *env, const char *message)
 {
     jclass cls = (*env)->FindClass(env, "java/lang/IllegalStateException");
     return (*env)->ThrowNew(env, cls, message);

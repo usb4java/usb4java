@@ -34,7 +34,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(DeviceDescriptor, bLength)
     struct libusb_device_descriptor *device = unwrapDeviceDescriptor(env, this);
     if (!device) return 0;
 
-    return device->bLength;
+    return (jbyte) device->bLength;
 }
 
 /**
@@ -48,7 +48,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(DeviceDescriptor, bDescriptorType)
     struct libusb_device_descriptor *device = unwrapDeviceDescriptor(env, this);
     if (!device) return 0;
 
-    return device->bDescriptorType;
+    return (jbyte) device->bDescriptorType;
 }
 
 /**
@@ -62,7 +62,7 @@ JNIEXPORT jshort JNICALL METHOD_NAME(DeviceDescriptor, bcdUSB)
     struct libusb_device_descriptor *device = unwrapDeviceDescriptor(env, this);
     if (!device) return 0;
 
-    return device->bcdUSB;
+    return (jshort) device->bcdUSB;
 }
 
 /**
@@ -76,7 +76,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(DeviceDescriptor, bDeviceClass)
     struct libusb_device_descriptor *device = unwrapDeviceDescriptor(env, this);
     if (!device) return 0;
 
-    return device->bDeviceClass;
+    return (jbyte) device->bDeviceClass;
 }
 
 /**
@@ -90,7 +90,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(DeviceDescriptor, bDeviceSubClass)
     struct libusb_device_descriptor *device = unwrapDeviceDescriptor(env, this);
     if (!device) return 0;
 
-    return device->bDeviceSubClass;
+    return (jbyte) device->bDeviceSubClass;
 }
 
 /**
@@ -104,7 +104,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(DeviceDescriptor, bDeviceProtocol)
     struct libusb_device_descriptor *device = unwrapDeviceDescriptor(env, this);
     if (!device) return 0;
 
-    return device->bDeviceProtocol;
+    return (jbyte) device->bDeviceProtocol;
 }
 
 /**
@@ -118,7 +118,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(DeviceDescriptor, bMaxPacketSize0)
     struct libusb_device_descriptor *device = unwrapDeviceDescriptor(env, this);
     if (!device) return 0;
 
-    return device->bMaxPacketSize0;
+    return (jbyte) device->bMaxPacketSize0;
 }
 
 /**
@@ -132,7 +132,7 @@ JNIEXPORT jshort JNICALL METHOD_NAME(DeviceDescriptor, idVendor)
     struct libusb_device_descriptor *device = unwrapDeviceDescriptor(env, this);
     if (!device) return 0;
 
-    return device->idVendor;
+    return (jshort) device->idVendor;
 }
 
 /**
@@ -146,7 +146,7 @@ JNIEXPORT jshort JNICALL METHOD_NAME(DeviceDescriptor, idProduct)
     struct libusb_device_descriptor *device = unwrapDeviceDescriptor(env, this);
     if (!device) return 0;
 
-    return device->idProduct;
+    return (jshort) device->idProduct;
 }
 
 /**
@@ -160,7 +160,7 @@ JNIEXPORT jshort JNICALL METHOD_NAME(DeviceDescriptor, bcdDevice)
     struct libusb_device_descriptor *device = unwrapDeviceDescriptor(env, this);
     if (!device) return 0;
 
-    return device->bcdDevice;
+    return (jshort) device->bcdDevice;
 }
 
 
@@ -175,7 +175,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(DeviceDescriptor, iManufacturer)
     struct libusb_device_descriptor *device = unwrapDeviceDescriptor(env, this);
     if (!device) return 0;
 
-    return device->iManufacturer;
+    return (jbyte) device->iManufacturer;
 }
 
 /**
@@ -189,7 +189,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(DeviceDescriptor, iProduct)
     struct libusb_device_descriptor *device = unwrapDeviceDescriptor(env, this);
     if (!device) return 0;
 
-    return device->iProduct;
+    return (jbyte) device->iProduct;
 }
 
 /**
@@ -201,7 +201,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(DeviceDescriptor, iSerialNumber)
     struct libusb_device_descriptor *device = unwrapDeviceDescriptor(env, this);
     if (!device) return 0;
 
-    return device->iSerialNumber;
+    return (jbyte) device->iSerialNumber;
 }
 
 /**
@@ -215,5 +215,5 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(DeviceDescriptor, bNumConfigurations)
     struct libusb_device_descriptor *device = unwrapDeviceDescriptor(env, this);
     if (!device) return 0;
 
-    return device->bNumConfigurations;
+    return (jbyte) device->bNumConfigurations;
 }
