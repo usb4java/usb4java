@@ -156,8 +156,7 @@ JNIEXPORT jobject JNICALL METHOD_NAME(EndpointDescriptor, extra)
     struct libusb_endpoint_descriptor *ep = unwrapEndpointDescriptor(env, this);
     if (!ep) return NULL;
 
-    return (*env)->NewDirectByteBuffer(env, (void *) ep->extra,
-        ep->extra_length);
+    return NewDirectReadOnlyByteBuffer(env, ep->extra, ep->extra_length);
 }
 
 /**

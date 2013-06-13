@@ -198,7 +198,7 @@ JNIEXPORT jobject JNICALL METHOD_NAME(InterfaceDescriptor, extra)
         unwrapInterfaceDescriptor(env, this);
     if (!interface) return NULL;
 
-    return (*env)->NewDirectByteBuffer(env, (void *) interface->extra,
+    return NewDirectReadOnlyByteBuffer(env, interface->extra,
         interface->extra_length);
 }
 

@@ -88,5 +88,7 @@ extern JavaVM *jvm;
 
 jint illegalArgument(JNIEnv *env, const char *message);
 jint illegalState(JNIEnv *env, const char *message);
+jobject NewDirectReadOnlyByteBuffer(JNIEnv *env, const void *mem,
+    int mem_length);
 
 #endif
