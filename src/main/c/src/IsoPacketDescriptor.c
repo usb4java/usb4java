@@ -13,8 +13,7 @@ jobjectArray wrapIsoPacketDescriptors(JNIEnv *env, int count,
     jobjectArray array = (jobjectArray) (*env)->NewObjectArray(env, count,
         (*env)->FindClass(env, PACKAGE_DIR"/IsoPacketDescriptor"), NULL);
 
-    int i;
-    for (i = 0; i < count; i++)
+    for (int i = 0; i < count; i++)
         (*env)->SetObjectArrayElement(env, array, i,
             wrapIsoPacketDescriptor(env, &descriptors[i]));
 

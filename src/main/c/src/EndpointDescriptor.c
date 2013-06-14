@@ -18,8 +18,7 @@ jobjectArray wrapEndpointDescriptors(JNIEnv *env, int count,
     jobjectArray array = (jobjectArray) (*env)->NewObjectArray(env, count,
         (*env)->FindClass(env, PACKAGE_DIR"/EndpointDescriptor"), NULL);
 
-    int i;
-    for (i = 0; i < count; i++)
+    for (int i = 0; i < count; i++)
         (*env)->SetObjectArrayElement(env, array, i,
             wrapEndpointDescriptor(env, &descriptors[i]));
 

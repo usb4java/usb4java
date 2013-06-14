@@ -17,8 +17,7 @@ jobjectArray wrapInterfaces(JNIEnv *env, int count,
     jobjectArray array = (jobjectArray) (*env)->NewObjectArray(env, count,
         (*env)->FindClass(env, PACKAGE_DIR"/Interface"), NULL);
 
-    int i;
-    for (i = 0; i < count; i++)
+    for (int i = 0; i < count; i++)
         (*env)->SetObjectArrayElement(env, array, i,
             wrapInterface(env, &interfaces[i]));
 
