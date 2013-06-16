@@ -161,9 +161,9 @@ JNIEXPORT void JNICALL METHOD_NAME(Transfer, setTimeout)
 }
 
 /**
- * int timeout()
+ * long timeout()
  */
-JNIEXPORT jint JNICALL METHOD_NAME(Transfer, timeout)
+JNIEXPORT jlong JNICALL METHOD_NAME(Transfer, timeout)
 (
     JNIEnv *env, jobject this
 )
@@ -171,7 +171,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(Transfer, timeout)
     struct libusb_transfer *transfer = unwrapTransfer(env, this);
     if (!transfer) return 0;
 
-    return (jint) transfer->timeout;
+    return transfer->timeout;
 }
 
 /**

@@ -120,7 +120,7 @@ public final class Transfer
      * 
      * @return The timeout.
      */
-    public native int timeout();
+    public native long timeout();
 
     /**
      * Sets the timeout for this transfer in milliseconds. A value of 0
