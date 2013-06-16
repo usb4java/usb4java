@@ -239,11 +239,11 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getDeviceSpeed)
 }
 
 /**
- * int getMaxPacketSize(Device, int)
+ * int getMaxPacketSize(Device, byte)
  */
 JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getMaxPacketSize)
 (
-    JNIEnv *env, jclass class, jobject device, jint endpoint
+    JNIEnv *env, jclass class, jobject device, jbyte endpoint
 )
 {
     NOT_NULL(env, device, return 0);
@@ -254,11 +254,11 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getMaxPacketSize)
 }
 
 /**
- * int getMaxIsoPacketSize(Device, int)
+ * int getMaxIsoPacketSize(Device, byte)
  */
 JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getMaxIsoPacketSize)
 (
-    JNIEnv *env, jclass class, jobject device, jint endpoint
+    JNIEnv *env, jclass class, jobject device, jbyte endpoint
 )
 {
     NOT_NULL(env, device, return 0);
@@ -320,12 +320,12 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, open)
 }
 
 /**
- * DeviceHandle openDeviceWithVidPid(Context, int, int)
+ * DeviceHandle openDeviceWithVidPid(Context, short, short)
  */
 JNIEXPORT jobject JNICALL METHOD_NAME(LibUsb, openDeviceWithVidPid)
 (
-    JNIEnv *env, jclass class, jobject context, jint vendorId,
-    jint productId
+    JNIEnv *env, jclass class, jobject context, jshort vendorId,
+    jshort productId
 )
 {
     libusb_context *ctx = unwrapContext(env, context);
@@ -451,11 +451,11 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, setInterfaceAltSetting)
 }
 
 /**
- * int clearHalt(DeviceHandle, int)
+ * int clearHalt(DeviceHandle, byte)
  */
 JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, clearHalt)
 (
-    JNIEnv *env, jclass class, jobject handle, jint endpoint
+    JNIEnv *env, jclass class, jobject handle, jbyte endpoint
 )
 {
     NOT_NULL(env, handle, return 0);
@@ -559,25 +559,25 @@ JNIEXPORT jobject JNICALL METHOD_NAME(LibUsb, getVersion)
 }
 
 /**
- * int le16ToCpu(int)
+ * short le16ToCpu(short)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, le16ToCpu)
+JNIEXPORT jshort JNICALL METHOD_NAME(LibUsb, le16ToCpu)
 (
-    JNIEnv *env, jclass class, jint x
+    JNIEnv *env, jclass class, jshort x
 )
 {
-    return libusb_le16_to_cpu((uint16_t) x);
+    return (jshort) libusb_le16_to_cpu((uint16_t) x);
 }
 
 /**
- * int cpuToLe16(int)
+ * short cpuToLe16(short)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, cpuToLe16)
+JNIEXPORT jshort JNICALL METHOD_NAME(LibUsb, cpuToLe16)
 (
-    JNIEnv *env, jclass class, jint x
+    JNIEnv *env, jclass class, jshort x
 )
 {
-    return libusb_cpu_to_le16((uint16_t) x);
+    return (jshort) libusb_cpu_to_le16((uint16_t) x);
 }
 
 /**
@@ -646,11 +646,11 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getActiveConfigDescriptor)
 }
 
 /**
- * int getConfigDescriptor(Device, int, ConfigDescriptor)
+ * int getConfigDescriptor(Device, byte, ConfigDescriptor)
  */
 JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getConfigDescriptor)
 (
-    JNIEnv *env, jclass class, jobject device, jint index, jobject descriptor
+    JNIEnv *env, jclass class, jobject device, jbyte index, jobject descriptor
 )
 {
     NOT_NULL(env, device, return 0);
@@ -666,11 +666,11 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getConfigDescriptor)
 }
 
 /**
- * int getConfigDescriptorByValue(Device, int, ConfigDescriptor)
+ * int getConfigDescriptorByValue(Device, byte, ConfigDescriptor)
  */
 JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getConfigDescriptorByValue)
 (
-    JNIEnv *env, jclass class, jobject device, jint index, jobject descriptor
+    JNIEnv *env, jclass class, jobject device, jbyte index, jobject descriptor
 )
 {
     NOT_NULL(env, device, return 0);
@@ -704,11 +704,11 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeConfigDescriptor)
 }
 
 /**
- * int getStringDescriptorAscii(DeviceHandle, int, StringBuffer)
+ * int getStringDescriptorAscii(DeviceHandle, byte, StringBuffer)
  */
 JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getStringDescriptorAscii)
 (
-    JNIEnv *env, jclass class, jobject handle, jint index, jobject string
+    JNIEnv *env, jclass class, jobject handle, jbyte index, jobject string
 )
 {
     NOT_NULL(env, handle, return 0);
@@ -734,12 +734,12 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getStringDescriptorAscii)
 }
 
 /**
- * int controlTransfer(DeviceHandle, int, int, int, int, ByteBuffer, long)
+ * int controlTransfer(DeviceHandle, byte, byte, short, short, ByteBuffer, long)
  */
 JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, controlTransfer)
 (
-    JNIEnv *env, jclass class, jobject handle, jint bmRequestType,
-    jint bRequest, jint wValue, jint wIndex, jobject data, jlong timeout
+    JNIEnv *env, jclass class, jobject handle, jbyte bmRequestType,
+    jbyte bRequest, jshort wValue, jshort wIndex, jobject data, jlong timeout
 )
 {
     NOT_NULL(env, handle, return 0);
@@ -755,11 +755,11 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, controlTransfer)
 }
 
 /**
- * int bulkTransfer(DeviceHandle, int, ByteBuffer, IntBuffer, long)
+ * int bulkTransfer(DeviceHandle, byte, ByteBuffer, IntBuffer, long)
  */
 JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, bulkTransfer)
 (
-    JNIEnv *env, jclass class, jobject handle, jint endpoint,
+    JNIEnv *env, jclass class, jobject handle, jbyte endpoint,
     jobject data, jobject transferred, jlong timeout
 )
 {
@@ -785,11 +785,11 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, bulkTransfer)
 }
 
 /**
- * int interruptTransfer(DeviceHandle, int, ByteBuffer, IntBuffer, long)
+ * int interruptTransfer(DeviceHandle, byte, ByteBuffer, IntBuffer, long)
  */
 JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, interruptTransfer)
 (
-    JNIEnv *env, jclass class, jobject handle, jint endpoint,
+    JNIEnv *env, jclass class, jobject handle, jbyte endpoint,
     jobject data, jobject transferred, jlong timeout
 )
 {

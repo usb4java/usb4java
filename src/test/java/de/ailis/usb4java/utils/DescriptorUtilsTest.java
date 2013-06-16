@@ -26,12 +26,12 @@ import de.ailis.usb4java.libusb.LibUsb;
 public class DescriptorUtilsTest
 {
     /**
-     * Tests the {@link DescriptorUtils#decodeBCD(int)} method.
+     * Tests the {@link DescriptorUtils#decodeBCD(short)} method.
      */
     @Test
     public void testDecodeBCD()
     {
-        assertEquals("10.20", DescriptorUtils.decodeBCD(0x1020));
+        assertEquals("10.20", DescriptorUtils.decodeBCD((short) 0x1020));
     }
 
     /**
@@ -49,52 +49,52 @@ public class DescriptorUtilsTest
     }
 
     /**
-     * Tests the {@link DescriptorUtils#getSynchTypeName(int)} method.
+     * Tests the {@link DescriptorUtils#getSynchTypeName(byte)} method.
      */
     @Test
     public void testGetSynchTypeName()
     {
-        assertEquals("None", DescriptorUtils.getSynchTypeName(0));
-        assertEquals("Asynchronous", DescriptorUtils.getSynchTypeName(4));
-        assertEquals("Adaptive", DescriptorUtils.getSynchTypeName(8));
-        assertEquals("Synchronous", DescriptorUtils.getSynchTypeName(12));
+        assertEquals("None", DescriptorUtils.getSynchTypeName((byte) 0));
+        assertEquals("Asynchronous", DescriptorUtils.getSynchTypeName((byte) 4));
+        assertEquals("Adaptive", DescriptorUtils.getSynchTypeName((byte) 8));
+        assertEquals("Synchronous", DescriptorUtils.getSynchTypeName((byte) 12));
     }
 
     /**
-     * Tests the {@link DescriptorUtils#getUsageTypeName(int)} method.
+     * Tests the {@link DescriptorUtils#getUsageTypeName(byte)} method.
      */
     @Test
     public void testGetUsageTypeName()
     {
-        assertEquals("Data", DescriptorUtils.getUsageTypeName(0));
-        assertEquals("Feedback", DescriptorUtils.getUsageTypeName(16));
+        assertEquals("Data", DescriptorUtils.getUsageTypeName((byte) 0));
+        assertEquals("Feedback", DescriptorUtils.getUsageTypeName((byte) 16));
         assertEquals("Implicit Feedback Data",
-            DescriptorUtils.getUsageTypeName(32));
-        assertEquals("Reserved", DescriptorUtils.getUsageTypeName(48));
+            DescriptorUtils.getUsageTypeName((byte) 32));
+        assertEquals("Reserved", DescriptorUtils.getUsageTypeName((byte) 48));
     }
 
 
     /**
-     * Tests the {@link DescriptorUtils#getTransferTypeName(int)} method.
+     * Tests the {@link DescriptorUtils#getTransferTypeName(byte)} method.
      */
     @Test
     public void testGetTransferTypeName()
     {
-        assertEquals("Control", DescriptorUtils.getTransferTypeName(0));
-        assertEquals("Isochronous", DescriptorUtils.getTransferTypeName(1));
-        assertEquals("Bulk", DescriptorUtils.getTransferTypeName(2));
-        assertEquals("Interrupt", DescriptorUtils.getTransferTypeName(3));
+        assertEquals("Control", DescriptorUtils.getTransferTypeName((byte) 0));
+        assertEquals("Isochronous", DescriptorUtils.getTransferTypeName((byte) 1));
+        assertEquals("Bulk", DescriptorUtils.getTransferTypeName((byte) 2));
+        assertEquals("Interrupt", DescriptorUtils.getTransferTypeName((byte) 3));
     }
 
     /**
-     * Tests the {@link DescriptorUtils#getUSBClassName(int)} method.
+     * Tests the {@link DescriptorUtils#getUSBClassName(byte)} method.
      */
     @Test
     public void testGetUSBClassName()
     {
         assertEquals("Audio",
             DescriptorUtils.getUSBClassName(LibUsb.CLASS_AUDIO));
-        assertEquals("Unknown", DescriptorUtils.getUSBClassName(0x1234));
+        assertEquals("Unknown", DescriptorUtils.getUSBClassName((byte) 0xF3));
     }
 
     /**

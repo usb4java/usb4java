@@ -63,11 +63,11 @@ JNIEXPORT jobject JNICALL METHOD_NAME(Transfer, devHandle)
 }
 
 /**
- * void setFlags(int)
+ * void setFlags(byte)
  */
 JNIEXPORT void JNICALL METHOD_NAME(Transfer, setFlags)
 (
-    JNIEnv *env, jobject this, jint flags
+    JNIEnv *env, jobject this, jbyte flags
 )
 {
     struct libusb_transfer *transfer = unwrapTransfer(env, this);
@@ -91,11 +91,11 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(Transfer, flags)
 }
 
 /**
- * void setEndpoint(int)
+ * void setEndpoint(byte)
  */
 JNIEXPORT void JNICALL METHOD_NAME(Transfer, setEndpoint)
 (
-    JNIEnv *env, jobject this, jint endpoint
+    JNIEnv *env, jobject this, jbyte endpoint
 )
 {
     struct libusb_transfer *transfer = unwrapTransfer(env, this);
@@ -119,11 +119,11 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(Transfer, endpoint)
 }
 
 /**
- * void setType(int)
+ * void setType(byte)
  */
 JNIEXPORT void JNICALL METHOD_NAME(Transfer, setType)
 (
-    JNIEnv *env, jobject this, jint type
+    JNIEnv *env, jobject this, jbyte type
 )
 {
     struct libusb_transfer *transfer = unwrapTransfer(env, this);

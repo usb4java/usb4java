@@ -24,8 +24,8 @@ import de.ailis.usb4java.libusb.LibUsb;
 public final class DescriptorUtils
 {
     /** Mapping from USB class id to USB class name. */
-    private static final Map<Integer, String> CLASS_NAMES =
-        new HashMap<Integer, String>();
+    private static final Map<Byte, String> CLASS_NAMES =
+        new HashMap<Byte, String>();
 
     static
     {
@@ -66,7 +66,7 @@ public final class DescriptorUtils
      *            The numeric USB class.
      * @return The USB class name.
      */
-    public static String getUSBClassName(final int usbClass)
+    public static String getUSBClassName(final byte usbClass)
     {
         final String name = CLASS_NAMES.get(usbClass);
 
@@ -85,9 +85,9 @@ public final class DescriptorUtils
      *            The binary-coded decimal to decode.
      * @return The decoded binary-coded decimal.
      */
-    public static String decodeBCD(final int bcd)
+    public static String decodeBCD(final short bcd)
     {
-        return String.format("%x.%02x", (bcd & 0xff00) >> 8, bcd & 0xff);
+        return String.format("%x.%02x", (bcd & 0xFF00) >> 8, bcd & 0x00FF);
     }
 
     /**
@@ -169,7 +169,7 @@ public final class DescriptorUtils
             descriptor.bDescriptorType(),
             decodeBCD(descriptor.bcdUSB()),
             descriptor.bDeviceClass() & 0xff,
-            getUSBClassName(descriptor.bDeviceClass() & 0xff),
+            getUSBClassName(descriptor.bDeviceClass()),
             descriptor.bDeviceSubClass() & 0xff,
             descriptor.bDeviceProtocol() & 0xff,
             descriptor.bMaxPacketSize0() & 0xff,
@@ -246,7 +246,7 @@ public final class DescriptorUtils
             descriptor.bAlternateSetting() & 0xff,
             descriptor.bNumEndpoints() & 0xff,
             descriptor.bInterfaceClass() & 0xff,
-            getUSBClassName(descriptor.bInterfaceClass() & 0xff),
+            getUSBClassName(descriptor.bInterfaceClass()),
             descriptor.bInterfaceSubClass() & 0xff,
             descriptor.bInterfaceProtocol() & 0xff,
             descriptor.iInterface() & 0xff);
@@ -277,9 +277,9 @@ public final class DescriptorUtils
             descriptor.bEndpointAddress() & 0xf,
             ((descriptor.bEndpointAddress() & 0x80) == 0) ? ("OUT") : ("IN"),
             descriptor.bmAttributes() & 0xff,
-            getTransferTypeName(descriptor.bmAttributes() & 0xff),
-            getSynchTypeName(descriptor.bmAttributes() & 0xff),
-            getUsageTypeName(descriptor.bmAttributes() & 0xff),
+            getTransferTypeName(descriptor.bmAttributes()),
+            getSynchTypeName(descriptor.bmAttributes()),
+            getUsageTypeName(descriptor.bmAttributes()),
             descriptor.wMaxPacketSize() & 0xffff,
             descriptor.bInterval() & 0xff);
     }
@@ -292,7 +292,7 @@ public final class DescriptorUtils
      *            The endpoint attributes value.
      * @return The transfer type name.
      */
-    public static String getTransferTypeName(final int bmAttributes)
+    public static String getTransferTypeName(final byte bmAttributes)
     {
         switch (bmAttributes & LibUsb.TRANSFER_TYPE_MASK)
         {
@@ -317,7 +317,7 @@ public final class DescriptorUtils
      *            The endpoint attributes value.
      * @return The synch type name.
      */
-    public static String getSynchTypeName(final int bmAttributes)
+    public static String getSynchTypeName(final byte bmAttributes)
     {
         switch ((bmAttributes & LibUsb.ISO_SYNC_TYPE_MASK) >> 2)
         {
@@ -341,7 +341,7 @@ public final class DescriptorUtils
      *            The endpoint attributes value.
      * @return The usage type name.
      */
-    public static String getUsageTypeName(final int bmAttributes)
+    public static String getUsageTypeName(final byte bmAttributes)
     {
         switch ((bmAttributes & LibUsb.ISO_USAGE_TYPE_MASK) >> 4)
         {
