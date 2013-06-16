@@ -129,7 +129,7 @@ public final class Transfer
      * @param timeout
      *            The timeout to set.
      */
-    public native void setTimeout(final int timeout);
+    public native void setTimeout(final long timeout);
 
     /**
      * Returns the status of the transfer. Read-only, and only for use within

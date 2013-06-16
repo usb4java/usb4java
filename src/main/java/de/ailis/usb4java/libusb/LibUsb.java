@@ -571,13 +571,6 @@ public final class LibUsb
     public static native void setDebug(final Context context, final int level);
 
     /**
-     * Returns the version of the libusbx runtime.
-     * 
-     * @return The version of the libusbx runtime.
-     */
-    public static native Version getVersion();
-
-    /**
      * Returns a list of USB devices currently attached to the system.
      * 
      * This is your entry point into finding a USB device to operate.
@@ -1118,6 +1111,13 @@ public final class LibUsb
     public static native String errorName(final int errorCode);
 
     /**
+     * Returns the version of the libusbx runtime.
+     * 
+     * @return The version of the libusbx runtime.
+     */
+    public static native Version getVersion();
+
+    /**
      * Convert a 16-bit value from little-endian to host-endian format.
      * 
      * On little endian systems, this function does nothing. On big endian
@@ -1172,50 +1172,6 @@ public final class LibUsb
      */
     public static native void freeDeviceDescriptor(
         final DeviceDescriptor descriptor);
-
-    /**
-     * Retrieve a string descriptor in C style ASCII.
-     * 
-     * @param handle
-     *            A device handle.
-     * @param index
-     *            The index of the descriptor to retrieve.
-     * @param string
-     *            Output buffer for ASCII string descriptor.
-     * @return Number of bytes returned in data, or ERROR code on failure.
-     */
-    public static native int getStringDescriptorAscii(
-        final DeviceHandle handle, final int index, final StringBuffer string);
-
-    /**
-     * A simple wrapper around
-     * {@link #getStringDescriptorAscii(DeviceHandle, int, StringBuffer)}.
-     * It simply returns the string (Maximum length of 126) if possible. If not
-     * possible (NULL handle or 0-index specified or error occured) then null is
-     * returned.
-     * 
-     * This method is not part of libusb.
-     * 
-     * @param handle
-     *            The device handle.
-     * @param index
-     *            The string descriptor index.
-     * @return The string or null if it could not be read.
-     */
-    public static String getStringDescriptor(final DeviceHandle handle,
-        final int index)
-    {
-        if ((handle == null) || (index == 0))
-        {
-            return null;
-        }
-        final StringBuffer buffer = new StringBuffer();
-        if (getStringDescriptorAscii(handle, index, buffer) >= 0)
-        {
-            return buffer.toString();
-        }
-        return null;
-    }
 
     /**
      * Get the USB configuration descriptor for the currently active
@@ -1300,6 +1256,53 @@ public final class LibUsb
         final ConfigDescriptor descriptor);
 
     /**
+     * Retrieve a string descriptor in C style ASCII.
+     * 
+     * @param handle
+     *            A device handle.
+     * @param index
+     *            The index of the descriptor to retrieve.
+     * @param string
+     *            Output buffer for ASCII string descriptor.
+     * @return Number of bytes returned in data, or ERROR code on failure.
+     */
+    public static native int getStringDescriptorAscii(
+        final DeviceHandle handle, final int index, final StringBuffer string);
+
+    /**
+     * A simple wrapper around
+     * {@link #getStringDescriptorAscii(DeviceHandle, int, StringBuffer)}.
+     * It simply returns the string (maximum length of 127) if possible. If not
+     * possible (NULL handle or 0-index specified or error occured) then null is
+     * returned.
+     * 
+     * This method is not part of libusb.
+     * 
+     * @param handle
+     *            The device handle.
+     * @param index
+     *            The string descriptor index.
+     * @return The string or null if it could not be read.
+     */
+    public static String getStringDescriptor(final DeviceHandle handle,
+        final int index)
+    {
+        if ((handle == null) || (index == 0))
+        {
+            return null;
+        }
+
+        final StringBuffer buffer = new StringBuffer();
+
+        if (getStringDescriptorAscii(handle, index, buffer) >= 0)
+        {
+            return buffer.toString();
+        }
+
+        return null;
+    }
+
+    /**
      * Retrieve a descriptor from the default control pipe.
      * 
      * This is a convenience function which formulates the appropriate control
@@ -1382,7 +1385,7 @@ public final class LibUsb
      */
     public static native int controlTransfer(final DeviceHandle handle,
         final int bmRequestType, final int bRequest, final int wValue,
-        final int wIndex, final ByteBuffer data, final int timeout);
+        final int wIndex, final ByteBuffer data, final long timeout);
 
     /**
      * Perform a USB bulk transfer.
@@ -1427,7 +1430,7 @@ public final class LibUsb
      */
     public static native int bulkTransfer(final DeviceHandle handle,
         final int endpoint, final ByteBuffer data, final IntBuffer transferred,
-        final int timeout);
+        final long timeout);
 
     /**
      * Perform a USB interrupt transfer.
@@ -1473,7 +1476,7 @@ public final class LibUsb
      */
     public static native int interruptTransfer(final DeviceHandle handle,
         final int endpoint, final ByteBuffer data, final IntBuffer transferred,
-        final int timeout);
+        final long timeout);
 
     /**
      * Attempt to acquire the event handling lock.
@@ -2050,7 +2053,7 @@ public final class LibUsb
     public static void fillControlTransfer(final Transfer transfer,
         final DeviceHandle handle, final ByteBuffer buffer,
         final TransferCallback callback, final Object userData,
-        final int timeout)
+        final long timeout)
     {
         transfer.setDevHandle(handle);
         transfer.setEndpoint(0);
@@ -2068,7 +2071,7 @@ public final class LibUsb
     public static void fillBulkTransfer(final Transfer transfer,
         final DeviceHandle handle, final int endpoint, final ByteBuffer buffer,
         final TransferCallback callback, final Object userData,
-        final int timeout)
+        final long timeout)
     {
         transfer.setDevHandle(handle);
         transfer.setEndpoint(endpoint);
@@ -2082,7 +2085,7 @@ public final class LibUsb
     public static void fillInterruptTransfer(final Transfer transfer,
         final DeviceHandle handle, final int endpoint, final ByteBuffer buffer,
         final TransferCallback callback, final Object userData,
-        final int timeout)
+        final long timeout)
     {
         transfer.setDevHandle(handle);
         transfer.setEndpoint(endpoint);
@@ -2096,7 +2099,7 @@ public final class LibUsb
     public static void fillIsoTransfer(final Transfer transfer,
         final DeviceHandle handle, final int endpoint, final ByteBuffer buffer,
         final int numIsoPackets, final TransferCallback callback,
-        final Object userData, final int timeout)
+        final Object userData, final long timeout)
     {
         transfer.setDevHandle(handle);
         transfer.setEndpoint(endpoint);

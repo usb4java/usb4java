@@ -147,11 +147,11 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(Transfer, type)
 }
 
 /**
- * void setTimeout(int)
+ * void setTimeout(long)
  */
 JNIEXPORT void JNICALL METHOD_NAME(Transfer, setTimeout)
 (
-    JNIEnv *env, jobject this, jint timeout
+    JNIEnv *env, jobject this, jlong timeout
 )
 {
     struct libusb_transfer *transfer = unwrapTransfer(env, this);

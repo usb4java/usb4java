@@ -29,6 +29,9 @@ public final class IsoPacketDescriptor
 
     public native int length();
 
+    // Theoretically the right representation for a C unsigned int would be a
+    // Java long, but the maximum length for ISO Packets is 1024 bytes, so an
+    // int more than suffices to hold any possible valid values here.
     public native void setLength(final int length);
 
     public native int actualLength();
