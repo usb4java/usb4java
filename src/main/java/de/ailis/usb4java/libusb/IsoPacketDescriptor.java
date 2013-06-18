@@ -1,8 +1,5 @@
 package de.ailis.usb4java.libusb;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 public final class IsoPacketDescriptor
 {
     /** The native pointer to the descriptor structure. */
@@ -41,11 +38,11 @@ public final class IsoPacketDescriptor
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder()
-        .append(length())
-        .append(actualLength())
-        .append(status())
-        .toHashCode();
+        final int prime = 31;
+        int result = 1;
+        result = (prime * result)
+            + (int) (isoPacketDescriptorPointer ^ (isoPacketDescriptorPointer >>> 32));
+        return result;
     }
 
     @Override
@@ -63,13 +60,18 @@ public final class IsoPacketDescriptor
         {
             return false;
         }
-
         final IsoPacketDescriptor other = (IsoPacketDescriptor) obj;
+        if (isoPacketDescriptorPointer != other.isoPacketDescriptorPointer)
+        {
+            return false;
+        }
+        return true;
+    }
 
-        return new EqualsBuilder()
-        .append(length(), other.length())
-        .append(actualLength(), other.actualLength())
-        .append(status(), other.status())
-        .isEquals();
+    @Override
+    public String toString()
+    {
+        return String.format("libusb iso packet descriptor 0x%x",
+            isoPacketDescriptorPointer);
     }
 }

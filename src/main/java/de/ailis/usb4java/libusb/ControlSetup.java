@@ -81,4 +81,51 @@ public final class ControlSetup
     {
         controlSetup.putShort(6, wLength);
     }
+
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = 1;
+        result = (prime * result)
+            + ((controlSetup == null) ? 0 : controlSetup.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final ControlSetup other = (ControlSetup) obj;
+        if (controlSetup == null)
+        {
+            if (other.controlSetup != null)
+            {
+                return false;
+            }
+        }
+        else if (!controlSetup.equals(other.controlSetup))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.format("libusb control setup with buffer %s",
+            controlSetup.toString());
+    }
 }

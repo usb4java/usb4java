@@ -13,9 +13,6 @@ package de.ailis.usb4java.libusb;
 
 import java.nio.ByteBuffer;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 /**
  * The generic USB transfer structure.
  * 
@@ -193,7 +190,6 @@ public final class Transfer
      */
     public native int actualLength();
 
-
     /**
      * Returns the current callback object.
      * 
@@ -291,21 +287,11 @@ public final class Transfer
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder()
-        .append(devHandle())
-        .append(flags())
-        .append(endpoint())
-        .append(type())
-        .append(timeout())
-        .append(status())
-        .append(length())
-        .append(actualLength())
-        .append(callback())
-        .append(userData())
-        .append(buffer())
-        .append(numIsoPackets())
-        .append(isoPacketDesc())
-        .toHashCode();
+        final int prime = 31;
+        int result = 1;
+        result = (prime * result)
+            + (int) (transferPointer ^ (transferPointer >>> 32));
+        return result;
     }
 
     @Override
@@ -323,23 +309,17 @@ public final class Transfer
         {
             return false;
         }
-
         final Transfer other = (Transfer) obj;
+        if (transferPointer != other.transferPointer)
+        {
+            return false;
+        }
+        return true;
+    }
 
-        return new EqualsBuilder()
-        .append(devHandle(), other.devHandle())
-        .append(flags(), other.flags())
-        .append(endpoint(), other.endpoint())
-        .append(type(), other.type())
-        .append(timeout(), other.timeout())
-        .append(status(), other.status())
-        .append(length(), other.length())
-        .append(actualLength(), other.actualLength())
-        .append(callback(), other.callback())
-        .append(userData(), other.userData())
-        .append(buffer(), other.buffer())
-        .append(numIsoPackets(), other.numIsoPackets())
-        .append(isoPacketDesc(), other.isoPacketDesc())
-        .isEquals();
+    @Override
+    public String toString()
+    {
+        return String.format("libusb transfer 0x%x", transferPointer);
     }
 }
