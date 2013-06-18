@@ -306,15 +306,22 @@ static void LIBUSB_CALL transferCallback(struct libusb_transfer *transfer)
     // The saved reference to the Java Transfer object.
     jobject jTransfer = transferData->transferObject;
 
-    // Call back into Java.
-    (*env)->CallVoidMethod(env, jCallback, jCallbackMethod, jTransfer);
-
-    // Cleanup Java Transfer object too, if requested.
+    // Read flags before calling the Java method, as it could
+    // free the Transfer itself.
     if (transfer->flags & LIBUSB_TRANSFER_FREE_TRANSFER)
     {
+        // Call back into Java.
+        (*env)->CallVoidMethod(env, jCallback, jCallbackMethod, jTransfer);
+
+        // Cleanup Java Transfer object too, if requested.
         cleanupGlobalReferences(env, jTransfer);
         resetTransfer(env, jTransfer);
         free(transferData);
+    }
+    else
+    {
+        // Call back into Java.
+        (*env)->CallVoidMethod(env, jCallback, jCallbackMethod, jTransfer);
     }
 
     THREAD_END
