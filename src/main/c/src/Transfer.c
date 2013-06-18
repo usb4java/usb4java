@@ -219,7 +219,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(Transfer, length)
 /**
  * int actualLength()
  */
-JNIEXPORT jint JNICALL METHOD_NAME(Transfer, getActualLength)
+JNIEXPORT jint JNICALL METHOD_NAME(Transfer, actualLength)
 (
     JNIEnv *env, jobject this
 )
