@@ -34,7 +34,7 @@ jobject NewDirectReadOnlyByteBuffer(JNIEnv *env, const void *mem,
 }
 #pragma GCC diagnostic pop
 
-jint JNI_OnLoad(JavaVM *vm, void *reserved)
+jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved)
 {
     jvm = vm;
     return JNI_VERSION_1_4;

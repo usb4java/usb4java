@@ -1,6 +1,6 @@
 AC_PREREQ([2.61])
 AC_INIT([libusb4java], [1.0.0], [k@ailis.de])
-AM_INIT_AUTOMAKE([foreign -Wall -Werror -Wno-extra-portability])
+AM_INIT_AUTOMAKE([foreign -Wall -Werror])
 AM_SILENT_RULES(yes)
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
