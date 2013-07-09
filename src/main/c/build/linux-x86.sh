@@ -10,7 +10,7 @@ OS="linux"
 ARCH="x86"
 HOST="$ARCH-$OS-gnu"
 CFLAGS="-m32"
-LIBUSB_CONFIG="--disable-shared"
-USB4JAVA_LIBS="-lrt -ludev"
+LIBUSB_CONFIG="--disable-shared --disable-udev"
+USB4JAVA_LIBS="-lrt"
 
 build
