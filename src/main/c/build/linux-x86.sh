@@ -11,6 +11,6 @@ ARCH="x86"
 HOST="$ARCH-$OS-gnu"
 CFLAGS="-m32"
 LIBUSB_CONFIG="--disable-shared"
-USB4JAVA_LIBS="-lrt"
+USB4JAVA_LIBS="-lrt -ludev"
 
 build

@@ -166,23 +166,21 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getPortNumber)
 }
 
 /**
- * int getPortPath(Context, Device, byte[])
+ * int getPortNumbers(Device, byte[])
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getPortPath)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getPortNumbers)
 (
-    JNIEnv *env, jclass class, jobject context, jobject device, jbyteArray path
+    JNIEnv *env, jclass class, jobject device, jbyteArray path
 )
 {
     NOT_NULL(env, device, return 0);
     NOT_NULL(env, path, return 0);
-    struct libusb_context *ctx = unwrapContext(env, context);
-    if (!ctx && context) return 0;
     libusb_device *dev = unwrapDevice(env, device);
     if (!dev) return 0;
     jsize size = (*env)->GetArrayLength(env, path);
     unsigned char buffer[size];
     #if defined(LIBUSBX_API_VERSION)
-        int result = libusb_get_port_path(ctx, dev, buffer, size);
+        int result = libusb_get_port_numbers(dev, buffer, size);
     #else
         int result = 0;
     #endif

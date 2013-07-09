@@ -604,8 +604,6 @@ public final class LibUsb
     /**
      * Get the list of all port numbers from root for the specified device.
      * 
-     * @param context
-     *            The context to operate on, or NULL for the default context
      * @param device
      *            A device.
      * @param path
@@ -614,8 +612,8 @@ public final class LibUsb
      * @return The number of elements filled, {@link #ERROR_OVERFLOW} if the
      *         array is too small
      */
-    public static native int getPortPath(final Context context,
-        final Device device, final byte[] path);
+    public static native int getPortNumbers(final Device device, 
+        final byte[] path);
 
     /**
      * Get the the parent from the specified device [EXPERIMENTAL].
