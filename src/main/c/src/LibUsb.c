@@ -24,6 +24,8 @@
 #include "EndpointDescriptor.h"
 #include "SSEndpointCompanionDescriptor.h"
 #include "BOSDescriptor.h"
+#include "BOSDevCapabilityDescriptor.h"
+#include "Usb20ExtensionDescriptor.h"
 #include "Transfer.h"
 
 static JavaVM *jvm;
@@ -779,6 +781,45 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeBOSDescriptor)
     if (!bos_descriptor) return;
     libusb_free_bos_descriptor(bos_descriptor);
     resetBOSDescriptor(env, bosDescriptor);
+}
+
+/**
+ * int getUsb20ExtensionDescriptor(Context, BOSDevCapabilityDescriptor, Usb20ExtensionDescriptor)
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getUsb20ExtensionDescriptor)
+(
+    JNIEnv *env, jclass class, jobject context, jobject devCapDescriptor,
+    jobject extensionDescriptor
+)
+{
+    NOT_NULL(env, devCapDescriptor, return 0);
+    NOT_NULL(env, extensionDescriptor, return 0);
+    libusb_context *ctx = unwrapContext(env, context);
+    struct libusb_bos_dev_capability_descriptor *devcap_descriptor =
+        unwrapBOSDevCapabilityDescriptor(env, devCapDescriptor);
+    if (!devcap_descriptor) return 0;
+    struct libusb_usb_2_0_extension_descriptor *extension_descriptor;
+    int result = libusb_get_usb_2_0_extension_descriptor(ctx,
+        devcap_descriptor, &extension_descriptor);
+    if (!result) setUsb20ExtensionDescriptor(env, extension_descriptor,
+        extensionDescriptor);
+    return result;
+}
+
+/**
+ * void freeUsb20ExtensionDescriptor(Usb20ExtensionDescriptor)
+ */
+JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeUsb20ExtensionDescriptor)
+(
+    JNIEnv *env, jclass class, jobject extensionDescriptor
+)
+{
+    if (!extensionDescriptor) return;
+    struct libusb_usb_2_0_extension_descriptor *extension_descriptor =
+        unwrapUsb20ExtensionDescriptor(env, extensionDescriptor);
+    if (!extension_descriptor) return;
+    libusb_free_usb_2_0_extension_descriptor(extension_descriptor);
+    resetUsb20ExtensionDescriptor(env, extensionDescriptor);
 }
 
 /**

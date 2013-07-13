@@ -733,6 +733,58 @@ public class LibUSBTest
     
     /**
      * Tests the
+     * {@link LibUsb#getUsb20ExtensionDescriptor(Context, 
+     * BOSDevCapabilityDescriptor, Usb20ExtensionDescriptor)}
+     * method with uninitialized endpoint.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testGetUsb20ExtensionDescriptorWithUninitializedEndpoint()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getUsb20ExtensionDescriptor(null, 
+            new BOSDevCapabilityDescriptor(), 
+            new Usb20ExtensionDescriptor());
+    }
+
+    /**
+     * Tests the
+     * {@link LibUsb#getUsb20ExtensionDescriptor(Context, 
+     * BOSDevCapabilityDescriptor, Usb20ExtensionDescriptor)}
+     * method without descriptors.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetUsb20ExtensionDescriptorWithoutDescriptors()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getUsb20ExtensionDescriptor(null, null, null);
+    }
+
+    /**
+     * Tests the
+     * {@link LibUsb#freeUsb20ExtensionDescriptor(Usb20ExtensionDescriptor)}
+     * method with uninitialized descriptor.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testFreeUsb20ExtensionDescriptorWithUninitializedDescriptor()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.freeUsb20ExtensionDescriptor(new Usb20ExtensionDescriptor());
+    }
+
+    /**
+     * Tests the
+     * {@link LibUsb#freeUsb20ExtensionDescriptor(Usb20ExtensionDescriptor)}
+     * method with null parameter. Must do nothing.
+     */
+    @Test
+    public void testFreeUsb20ExtensionDescriptorWithNull()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.freeUsb20ExtensionDescriptor(null);
+    }
+
+    /**
+     * Tests the
      * {@link LibUsb#getDescriptor(DeviceHandle, int, int, ByteBuffer)} method
      * with uninitialized device handle.
      */

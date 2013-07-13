@@ -1495,6 +1495,40 @@ public final class LibUsb
         descriptor);
 
     /**
+     * Get an USB 2.0 Extension descriptor.
+     * 
+     * @param context
+     *            The context to operate on, or NULL for the default context.
+     * @param devCapDescriptor
+     *            Device Capability descriptor with a bDevCapabilityType of
+     *            {@link #BT_USB_2_0_EXTENSION}.
+     * @param extensionDescriptor
+     *            Output location for the USB 2.0 Extension descriptor. Only
+     *            valid if 0 was returned. Must be freed with
+     *            {@link #freeUsb20ExtensionDescriptor(
+     *            Usb20ExtensionDescriptor)} after use.
+     * @return 0 on success a LIBUSB_ERROR code on error
+     */
+    public static native int getUsb20ExtensionDescriptor(
+        final Context context,
+        final BOSDevCapabilityDescriptor devCapDescriptor,
+        final Usb20ExtensionDescriptor extensionDescriptor);
+
+    /**
+     * Free a USB 2.0 Extension descriptor obtained from
+     * {@link #getUsb20ExtensionDescriptor(Context, BOSDevCapabilityDescriptor, 
+     * Usb20ExtensionDescriptor)}.
+     * 
+     * It is safe to call this function with a NULL parameter, in which case 
+     * the function simply returns.
+     * 
+     * @param extensionDescriptor
+     *            The USB 2.0 Extension descriptor to free.
+     */
+    public static native void freeUsb20ExtensionDescriptor(
+        final Usb20ExtensionDescriptor extensionDescriptor);
+
+    /**
      * Retrieve a descriptor from the default control pipe.
      * 
      * This is a convenience function which formulates the appropriate control
