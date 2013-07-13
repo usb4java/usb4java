@@ -1564,6 +1564,40 @@ public final class LibUsb
         final SsUsbDeviceCapabilityDescriptor ssUsbDeviceCapabilityDescriptor);
     
     /**
+     * Get a Container ID descriptor.
+     * 
+     * @param context
+     *            The context to operate on, or NULL for the default context.
+     * @param devCapDescriptor
+     *            Device Capability descriptor with a bDevCapabilityType of
+     *            {@link #BT_CONTAINER_ID}.
+     * @param containerIdDescriptor
+     *            Output location for the Container ID descriptor. Only valid if
+     *            {@link #SUCCESS} was returned. Must be freed with
+     *            {@link #freeContainerIdDescriptor(ContainerIdDescriptor)}
+     *            after use.
+     * @return {@link #SUCCESS} on success or an error code on error
+     */
+    public static native int getContainerIdDescriptor(
+        final Context context,
+        final BosDevCapabilityDescriptor devCapDescriptor,
+        final ContainerIdDescriptor containerIdDescriptor);
+
+    /**
+     * Free a Container ID descriptor obtained from
+     * {@link #getContainerIdDescriptor(Context, BosDevCapabilityDescriptor, 
+     * ContainerIdDescriptor)}.
+     * 
+     * It is safe to call this function with a NULL parameter, in which case 
+     * the function simply returns.
+     * 
+     * @param containerIdDescriptor
+     *            The descriptor to free.
+     */
+    public static native void freeContainerIdDescriptor(
+        final ContainerIdDescriptor containerIdDescriptor);
+    
+    /**
      * Retrieve a descriptor from the default control pipe.
      * 
      * This is a convenience function which formulates the appropriate control

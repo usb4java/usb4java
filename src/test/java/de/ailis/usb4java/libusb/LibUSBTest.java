@@ -834,6 +834,58 @@ public class LibUSBTest
         assumeUsbTestsEnabled();
         LibUsb.freeSsUsbDeviceCapabilityDescriptor(null);
     }
+    
+    /**
+     * Tests the
+     * {@link LibUsb#getContainerIdDescriptor(Context, 
+     * BosDevCapabilityDescriptor, ContainerIdDescriptor)}
+     * method with uninitialized device capability descriptor.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testGetContainerIdDescriptorWithUninitializedEndpoint()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getContainerIdDescriptor(null, 
+            new BosDevCapabilityDescriptor(), 
+            new ContainerIdDescriptor());
+    }
+
+    /**
+     * Tests the
+     * {@link LibUsb#getContainerIdDescriptor(Context, 
+     * BosDevCapabilityDescriptor, ContainerIdDescriptor)}
+     * method without descriptors.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetContainerIdDescriptorWithoutDescriptors()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getContainerIdDescriptor(null, null, null);
+    }
+
+    /**
+     * Tests the
+     * {@link LibUsb#freeContainerIdDescriptor(ContainerIdDescriptor)}
+     * method with uninitialized descriptor.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testFreeContainerIdDescriptorWithUninitializedDescriptor()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.freeContainerIdDescriptor(new ContainerIdDescriptor());
+    }
+
+    /**
+     * Tests the
+     * {@link LibUsb#freeContainerIdDescriptor(ContainerIdDescriptor)}
+     * method with null parameter. Must do nothing.
+     */
+    @Test
+    public void testFreeContainerIdDescriptorWithNull()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.freeContainerIdDescriptor(null);
+    }
 
     /**
      * Tests the

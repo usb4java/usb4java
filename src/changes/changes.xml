@@ -29,8 +29,8 @@
       </action>
       <action dev="kayahr" type="add" date="2013-07-13">
         Implement support for BOS Descriptor, BOS Device Capability
-        Descriptor, USB 2.0 Extension Descriptor and SuperSpeed USB Device
-        Capability Descriptor. 
+        Descriptor, USB 2.0 Extension Descriptor, SuperSpeed USB Device
+        Capability Descriptor and Container ID descriptor.
       </action>
       <action dev="kayahr" type="add" date="2013-07-13">
         Using uninitialized descriptors now throw an IllegalStateException

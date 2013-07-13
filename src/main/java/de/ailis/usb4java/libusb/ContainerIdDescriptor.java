@@ -18,28 +18,34 @@
 
 package de.ailis.usb4java.libusb;
 
+import java.nio.ByteBuffer;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import de.ailis.usb4java.utils.DescriptorUtils;
+
 /**
- * A structure representing the USB 2.0 Extension descriptor. This descriptor is
- * documented in section 9.6.2.1 of the USB 3.0 specification.
+ * A structure representing the Container ID descriptor.
  * 
- * All multiple-byte fields are represented in host-endian format.
+ * This descriptor is documented in section 9.6.2.3 of the USB 3.0
+ * specification. All multiple-byte fields, except UUIDs, are represented in
+ * host-endian format.
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class Usb20ExtensionDescriptor
+public final class ContainerIdDescriptor
 {
     /** The native pointer to the descriptor structure. */
-    private long usb20ExtensionDescriptorPointer;
+    private long containerIdDescriptorPointer;
 
     /**
-     * Constructs a new USB 2.0 Extension descriptor which can be passed to the
-     * {@link LibUsb#getUsb20ExtensionDescriptor(Context, 
-     * BosDevCapabilityDescriptor, Usb20ExtensionDescriptor)} method.
+     * Constructs a new Container Id descriptor which can be passed to the
+     * {@link LibUsb#getContainerIdDescriptor(Context, 
+     * BosDevCapabilityDescriptor, ContainerIdDescriptor)}
+     * method.
      */
-    public Usb20ExtensionDescriptor()
+    public ContainerIdDescriptor()
     {
         // Empty
     }
@@ -51,7 +57,7 @@ public final class Usb20ExtensionDescriptor
      */
     public long getPointer()
     {
-        return this.usb20ExtensionDescriptorPointer;
+        return this.containerIdDescriptorPointer;
     }
 
     /**
@@ -76,11 +82,18 @@ public final class Usb20ExtensionDescriptor
     public native byte bDevCapabilityType();
 
     /**
-     * Returns the bitmap of supported device level features. 
+     * Returns the reserved field.
      * 
-     * @return The supported device level features.
+     * @return The reserved field.
      */
-    public native int bmAttributes();
+    public native byte bReserved();
+
+    /**
+     * Returns the 128 bit UUID.
+     * 
+     * @return The 128 bit UUID.
+     */
+    public native ByteBuffer containerId();
 
     /**
      * Returns a dump of this descriptor.
@@ -89,15 +102,17 @@ public final class Usb20ExtensionDescriptor
      */
     public String dump()
     {
-        return String.format("USB 2.0 Extension Descriptor:%n"
+        return String.format("Container Id Descriptor:%n"
             + "  bLength %18d%n"
             + "  bDescriptorType %10d%n"
             + "  bDevCapabilityType %7d%n"
-            + "  bmAttributes %13s%n",
+            + "  bReserved %16d%n"
+            + "  containerId:%n%s%n",
             bLength() & 0xff,
             bDescriptorType() & 0xff,
             bDevCapabilityType() & 0xff,
-            String.format("0x%08x", bmAttributes() & 0xffffffff));
+            bReserved() & 0xff,
+            DescriptorUtils.dump(containerId()).replaceAll("(?m)^", "    "));
     }
 
     @Override
@@ -106,13 +121,15 @@ public final class Usb20ExtensionDescriptor
         if (obj == null) return false;
         if (obj == this) return true;
         if (obj.getClass() != getClass()) return false;
-        final Usb20ExtensionDescriptor other =
-            (Usb20ExtensionDescriptor) obj;
+        final ContainerIdDescriptor other =
+            (ContainerIdDescriptor) obj;
         return new EqualsBuilder()
             .append(bDescriptorType(), other.bDescriptorType())
             .append(bLength(), other.bLength())
             .append(bDevCapabilityType(), other.bDevCapabilityType())
-            .append(bmAttributes(), other.bmAttributes()).isEquals();
+            .append(bReserved(), other.bReserved())
+            .append(containerId().array(), other.containerId().array())
+            .isEquals();
     }
 
     @Override
@@ -122,7 +139,8 @@ public final class Usb20ExtensionDescriptor
             .append(bLength())
             .append(bDescriptorType())
             .append(bDevCapabilityType())
-            .append(bmAttributes())
+            .append(bReserved())
+            .append(containerId())
             .toHashCode();
     }
 

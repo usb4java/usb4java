@@ -27,6 +27,7 @@
 #include "BosDevCapabilityDescriptor.h"
 #include "Usb20ExtensionDescriptor.h"
 #include "SsUsbDeviceCapabilityDescriptor.h"
+#include "ContainerIdDescriptor.h"
 #include "Transfer.h"
 
 static JavaVM *jvm;
@@ -860,6 +861,45 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeSsUsbDeviceCapabilityDescriptor)
     if (!descriptor) return;
     libusb_free_ss_usb_device_capability_descriptor(descriptor);
     resetSsUsbDeviceCapabilityDescriptor(env, ssUsbDeviceCapabilityDescriptor);
+}
+
+/**
+ * int getContainerIdDescriptor(Context, BosDevCapabilityDescriptor, ContainerIdDescriptor)
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getContainerIdDescriptor)
+(
+    JNIEnv *env, jclass class, jobject context, jobject devCapDescriptor,
+    jobject containerIdDescriptor
+)
+{
+    NOT_NULL(env, devCapDescriptor, return 0);
+    NOT_NULL(env, containerIdDescriptor, return 0);
+    libusb_context *ctx = unwrapContext(env, context);
+    struct libusb_bos_dev_capability_descriptor *devcap_descriptor =
+        unwrapBosDevCapabilityDescriptor(env, devCapDescriptor);
+    if (!devcap_descriptor) return 0;
+    struct libusb_container_id_descriptor *container_id_descriptor;
+    int result = libusb_get_container_id_descriptor(ctx,
+        devcap_descriptor, &container_id_descriptor);
+    if (!result) setContainerIdDescriptor(env, container_id_descriptor,
+        containerIdDescriptor);
+    return result;
+}
+
+/**
+ * void freeContainerIdDescriptor(ContainerIdDescriptor)
+ */
+JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeContainerIdDescriptor)
+(
+    JNIEnv *env, jclass class, jobject containerIdDescriptor
+)
+{
+    if (!containerIdDescriptor) return;
+    struct libusb_container_id_descriptor *container_id_descriptor =
+        unwrapContainerIdDescriptor(env, containerIdDescriptor);
+    if (!container_id_descriptor) return;
+    libusb_free_container_id_descriptor(container_id_descriptor);
+    resetContainerIdDescriptor(env, containerIdDescriptor);
 }
 
 /**

@@ -35,7 +35,8 @@ public final class SsUsbDeviceCapabilityDescriptor
     private long ssUsbDeviceCapabilityDescriptorPointer;
 
     /**
-     * Constructs a new BOS descriptor which can be passed to the
+     * Constructs a new SuperSpeed USB Device Capability descriptor which can be 
+     * passed to the
      * {@link LibUsb#getSsUsbDeviceCapabilityDescriptor(Context, 
      * BosDevCapabilityDescriptor, SsUsbDeviceCapabilityDescriptor)} method.
      */
