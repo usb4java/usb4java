@@ -26,6 +26,7 @@
 #include "BosDescriptor.h"
 #include "BosDevCapabilityDescriptor.h"
 #include "Usb20ExtensionDescriptor.h"
+#include "SsUsbDeviceCapabilityDescriptor.h"
 #include "Transfer.h"
 
 static JavaVM *jvm;
@@ -820,6 +821,45 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeUsb20ExtensionDescriptor)
     if (!extension_descriptor) return;
     libusb_free_usb_2_0_extension_descriptor(extension_descriptor);
     resetUsb20ExtensionDescriptor(env, extensionDescriptor);
+}
+
+/**
+ * int getSsUsbDeviceCapabilityDescriptor(Context, BosDevCapabilityDescriptor, SsUsbDeviceCapabilityDescriptor)
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getSsUsbDeviceCapabilityDescriptor)
+(
+    JNIEnv *env, jclass class, jobject context, jobject devCapDescriptor,
+    jobject ssUsbDeviceCapabilityDescriptor
+)
+{
+    NOT_NULL(env, devCapDescriptor, return 0);
+    NOT_NULL(env, ssUsbDeviceCapabilityDescriptor, return 0);
+    libusb_context *ctx = unwrapContext(env, context);
+    struct libusb_bos_dev_capability_descriptor *devcap_descriptor =
+        unwrapBosDevCapabilityDescriptor(env, devCapDescriptor);
+    if (!devcap_descriptor) return 0;
+    struct libusb_ss_usb_device_capability_descriptor *descriptor;
+    int result = libusb_get_ss_usb_device_capability_descriptor(ctx,
+        devcap_descriptor, &descriptor);
+    if (!result) setSsUsbDeviceCapabilityDescriptor(env, descriptor,
+        ssUsbDeviceCapabilityDescriptor);
+    return result;
+}
+
+/**
+ * void freeSsUsbDeviceCapabilityDescriptor(SsUsbDeviceCapabilityDescriptor)
+ */
+JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeSsUsbDeviceCapabilityDescriptor)
+(
+    JNIEnv *env, jclass class, jobject ssUsbDeviceCapabilityDescriptor
+)
+{
+    if (!ssUsbDeviceCapabilityDescriptor) return;
+    struct libusb_ss_usb_device_capability_descriptor *descriptor =
+        unwrapSsUsbDeviceCapabilityDescriptor(env, ssUsbDeviceCapabilityDescriptor);
+    if (!descriptor) return;
+    libusb_free_ss_usb_device_capability_descriptor(descriptor);
+    resetSsUsbDeviceCapabilityDescriptor(env, ssUsbDeviceCapabilityDescriptor);
 }
 
 /**

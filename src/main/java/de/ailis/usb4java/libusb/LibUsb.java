@@ -1529,6 +1529,41 @@ public final class LibUsb
         final Usb20ExtensionDescriptor extensionDescriptor);
 
     /**
+     * Get a SuperSpeed USB Device Capability descriptor.
+     * 
+     * @param context
+     *            The context to operate on, or NULL for the default context.
+     * @param devCapDescriptor
+     *            Device Capability descriptor with a bDevCapabilityType of
+     *            {@link #BT_SS_USB_DEVICE_CAPABILITY}.
+     * @param ssUsbDeviceCapabilityDescriptor
+     *            Output location for the SuperSpeed USB Device Capability
+     *            descriptor. Only valid if {@link #SUCCESS} was returned. 
+     *            Must be freed with
+     *            {@link #freeSsUsbDeviceCapabilityDescriptor(
+     *            SsUsbDeviceCapabilityDescriptor)} after use.
+     * @return {@link #SUCCESS} on success, an error code on error.
+     */
+    public static native int getSsUsbDeviceCapabilityDescriptor(
+        final Context context,
+        final BosDevCapabilityDescriptor devCapDescriptor,
+        final SsUsbDeviceCapabilityDescriptor ssUsbDeviceCapabilityDescriptor);
+
+    /**
+     * Free a SuperSpeed USB Device Capability descriptor obtained from
+     * {@link #getSsUsbDeviceCapabilityDescriptor(Context, 
+     * BosDevCapabilityDescriptor, SsUsbDeviceCapabilityDescriptor)}.
+     * 
+     * It is safe to call this function with a NULL parameter,
+     * in which case the function simply returns.
+     * 
+     * @param ssUsbDeviceCapabilityDescriptor
+     *            The descriptor to free.
+     */
+    public static native void freeSsUsbDeviceCapabilityDescriptor(
+        final SsUsbDeviceCapabilityDescriptor ssUsbDeviceCapabilityDescriptor);
+    
+    /**
      * Retrieve a descriptor from the default control pipe.
      * 
      * This is a convenience function which formulates the appropriate control

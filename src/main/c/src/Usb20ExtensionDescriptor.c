@@ -68,7 +68,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(Usb20ExtensionDescriptor,
 }
 
 /**
- * int bDevCapabilityType()
+ * int bmAttributes()
  */
 JNIEXPORT jint JNICALL METHOD_NAME(Usb20ExtensionDescriptor,
     bmAttributes)

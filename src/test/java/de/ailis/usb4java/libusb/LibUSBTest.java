@@ -735,7 +735,7 @@ public class LibUSBTest
      * Tests the
      * {@link LibUsb#getUsb20ExtensionDescriptor(Context, 
      * BosDevCapabilityDescriptor, Usb20ExtensionDescriptor)}
-     * method with uninitialized endpoint.
+     * method with uninitialized device capability descriptor.
      */
     @Test(expected = IllegalStateException.class)
     public void testGetUsb20ExtensionDescriptorWithUninitializedEndpoint()
@@ -781,6 +781,58 @@ public class LibUSBTest
     {
         assumeUsbTestsEnabled();
         LibUsb.freeUsb20ExtensionDescriptor(null);
+    }
+    
+    /**
+     * Tests the
+     * {@link LibUsb#getSsUsbDeviceCapabilityDescriptor(Context, 
+     * BosDevCapabilityDescriptor, SsUsbDeviceCapabilityDescriptor)}
+     * method with uninitialized device capability descriptor.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testGetSsUsbDeviceCapabilityDescriptorWithUninitializedEndpoint()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getSsUsbDeviceCapabilityDescriptor(null, 
+            new BosDevCapabilityDescriptor(), 
+            new SsUsbDeviceCapabilityDescriptor());
+    }
+
+    /**
+     * Tests the
+     * {@link LibUsb#getSsUsbDeviceCapabilityDescriptor(Context, 
+     * BosDevCapabilityDescriptor, SsUsbDeviceCapabilityDescriptor)}
+     * method without descriptors.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetSsUsbDeviceCapabilityDescriptorWithoutDescriptors()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getSsUsbDeviceCapabilityDescriptor(null, null, null);
+    }
+
+    /**
+     * Tests the
+     * {@link LibUsb#freeSsUsbDeviceCapabilityDescriptor(SsUsbDeviceCapabilityDescriptor)}
+     * method with uninitialized descriptor.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testFreeSsUsbDeviceCapabilityDescriptorWithUninitializedDescriptor()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.freeSsUsbDeviceCapabilityDescriptor(new SsUsbDeviceCapabilityDescriptor());
+    }
+
+    /**
+     * Tests the
+     * {@link LibUsb#freeSsUsbDeviceCapabilityDescriptor(SsUsbDeviceCapabilityDescriptor)}
+     * method with null parameter. Must do nothing.
+     */
+    @Test
+    public void testFreeSsUsbDeviceCapabilityDescriptorWithNull()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.freeSsUsbDeviceCapabilityDescriptor(null);
     }
 
     /**
