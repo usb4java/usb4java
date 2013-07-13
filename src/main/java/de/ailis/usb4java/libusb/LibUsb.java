@@ -224,7 +224,7 @@ public final class LibUsb
 
     // Capabilities supported by an instance of libusb on the current running
     // platform. Test if the loaded library supports a given capability by
-    // calling {@link #hasCapability(int)}
+    // calling hasCapability.
 
     /** The {@link #hasCapability(int)} API is available. */
     public static final int CAP_HAS_CAPABILITY = 0x0000;
@@ -705,6 +705,8 @@ public final class LibUsb
         final byte[] path);
 
     /**
+     * Get the list of all port numbers from root for the specified device.
+     * 
      * @deprecated Please use {@link #getPortNumbers(Device, byte[])} instead.
      * 
      * @param context
@@ -1424,7 +1426,7 @@ public final class LibUsb
         final ConfigDescriptor descriptor);
 
     /**
-     * Get an endpoints superspeed endpoint companion descriptor (if any)
+     * Get an endpoints superspeed endpoint companion descriptor (if any).
      * 
      * @param context
      *            The context to operate on, or NULL for the default context.
@@ -1434,7 +1436,8 @@ public final class LibUsb
      * @param companionDescriptor
      *            Output location for the superspeed endpoint companion
      *            descriptor. Only valid if 0 was returned. Must be freed with
-     *            {@link #freeSSEndpointCompanionDescriptor(SSEndpointCompanionDescriptor)}
+     *            {@link #freeSSEndpointCompanionDescriptor(
+     *            SSEndpointCompanionDescriptor)}
      *            after use.
      * @return {@link #SUCCESS} on success, {@link #ERROR_NOT_FOUND} if the
      *         descriptor does not exist, another error code on error
@@ -1445,8 +1448,8 @@ public final class LibUsb
 
     /**
      * Free a superspeed endpoint companion descriptor obtained from
-     * {@link #getSSEndpointCompanionDescriptor(Context, EndpointDescriptor, SSEndpointCompanionDescriptor)}
-     * .
+     * {@link #getSSEndpointCompanionDescriptor(Context, EndpointDescriptor, 
+     * SSEndpointCompanionDescriptor)}.
      * 
      * It is safe to call this function with a NULL parameter, in which case the
      * function simply returns.
@@ -1477,8 +1480,8 @@ public final class LibUsb
      * Free a BOS descriptor obtained from
      * {@link #getBOSDescriptor(DeviceHandle, BOSDescriptor)}.
      * 
-     * It is safe to call this function with a NULL parameter, in which case
-     * the function simply returns.
+     * It is safe to call this function with a NULL parameter, in which case the
+     * function simply returns.
      * 
      * @param descriptor
      *            The BOS descriptor to free.

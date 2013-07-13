@@ -29,7 +29,8 @@ public final class SSEndpointCompanionDescriptor
 
     /**
      * Constructs a new descriptor which can be passed to the
-     * {@link LibUsb#getSSEndpointCompanionDescriptor(Context, EndpointDescriptor, SSEndpointCompanionDescriptor)}
+     * {@link LibUsb#getSSEndpointCompanionDescriptor(Context, 
+     * EndpointDescriptor, SSEndpointCompanionDescriptor)}
      * method.
      */
     public SSEndpointCompanionDescriptor()
