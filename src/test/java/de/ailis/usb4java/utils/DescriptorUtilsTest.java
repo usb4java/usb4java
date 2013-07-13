@@ -144,7 +144,7 @@ public class DescriptorUtilsTest
             + "  iManufacturer           10\n"
             + "  iProduct                11\n"
             + "  iSerial                 12\n"
-            + "  bNumConfigurations      13",
+            + "  bNumConfigurations      13\n",
             DescriptorUtils.dump(new SimpleUsbDeviceDescriptor((byte) 0,
                 (byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5, (byte) 6,
                 (byte) 7, (byte) 8, (byte) 9, (byte) 10, (byte) 11, (byte) 12,
@@ -172,7 +172,7 @@ public class DescriptorUtilsTest
             + "  iManufacturer           10 Manufacturer\n"
             + "  iProduct                11 Product\n"
             + "  iSerial                 12 Serial\n"
-            + "  bNumConfigurations      13",
+            + "  bNumConfigurations      13\n",
             DescriptorUtils.dump(new SimpleUsbDeviceDescriptor((byte) 0,
                 (byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5, (byte) 6,
                 (byte) 7, (byte) 8, (byte) 9, (byte) 10, (byte) 11, (byte) 12,
@@ -196,7 +196,7 @@ public class DescriptorUtilsTest
             + "  iConfiguration           5\n"
             + "  bmAttributes          0x06\n"
             + "    (Bus Powered)\n"
-            + "  bMaxPower               14mA",
+            + "  bMaxPower               14mA\n",
             DescriptorUtils.dump(new SimpleUsbConfigurationDescriptor((byte) 0,
                 (byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5, (byte) 6,
                 (byte) 7)));
@@ -219,7 +219,7 @@ public class DescriptorUtilsTest
             + "  iConfiguration           5\n"
             + "  bmAttributes          0x40\n"
             + "    Self Powered\n"
-            + "  bMaxPower               14mA",
+            + "  bMaxPower               14mA\n",
             DescriptorUtils.dump(new SimpleUsbConfigurationDescriptor((byte) 0,
                 (byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5, (byte) 0x40,
                 (byte) 7)));
@@ -243,7 +243,7 @@ public class DescriptorUtilsTest
             + "  bmAttributes          0x20\n"
             + "    (Bus Powered)\n"
             + "    Remote Wakeup\n"
-            + "  bMaxPower               14mA",
+            + "  bMaxPower               14mA\n",
             DescriptorUtils.dump(new SimpleUsbConfigurationDescriptor((byte) 0,
                 (byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5, (byte) 0x20,
                 (byte) 7)));
@@ -265,7 +265,7 @@ public class DescriptorUtilsTest
             + "  bInterfaceClass          5 Unknown\n"
             + "  bInterfaceSubClass       6\n"
             + "  bInterfaceProtocol       7\n"
-            + "  iInterface               8",
+            + "  iInterface               8\n",
             DescriptorUtils.dump(new SimpleUsbInterfaceDescriptor((byte) 0,
                 (byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5, (byte) 6,
                 (byte) 7, (byte) 8)));
@@ -287,7 +287,7 @@ public class DescriptorUtilsTest
             + "    Synch Type                None\n"
             + "    Usage Type                Data\n"
             + "  wMaxPacketSize           4\n"
-            + "  bInterval                5",
+            + "  bInterval                5\n",
             DescriptorUtils.dump(new SimpleUsbEndpointDescriptor((byte) 0,
                 (byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5)));
     }
@@ -308,7 +308,7 @@ public class DescriptorUtilsTest
             + "    Synch Type                None\n"
             + "    Usage Type                Data\n"
             + "  wMaxPacketSize           4\n"
-            + "  bInterval                5",
+            + "  bInterval                5\n",
             DescriptorUtils.dump(new SimpleUsbEndpointDescriptor((byte) 0,
                 (byte) 1, (byte) 0x82, (byte) 3, (byte) 4, (byte) 5)));
     }
