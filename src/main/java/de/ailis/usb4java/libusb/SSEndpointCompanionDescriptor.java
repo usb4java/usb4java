@@ -98,7 +98,7 @@ public final class SSEndpointCompanionDescriptor
             + "  bLength %18d%n"
             + "  bDescriptorType %10d%n"
             + "  bMaxBurst %16s%n"
-            + "  bmAttributes %13d %s%n"
+            + "  bmAttributes %13d%n"
             + "  wBytesPerInterval %8d%n",
             bLength() & 0xff,
             bDescriptorType() & 0xff,
