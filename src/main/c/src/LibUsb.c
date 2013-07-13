@@ -22,9 +22,9 @@
 #include "DeviceDescriptor.h"
 #include "ConfigDescriptor.h"
 #include "EndpointDescriptor.h"
-#include "SSEndpointCompanionDescriptor.h"
-#include "BOSDescriptor.h"
-#include "BOSDevCapabilityDescriptor.h"
+#include "SsEndpointCompanionDescriptor.h"
+#include "BosDescriptor.h"
+#include "BosDevCapabilityDescriptor.h"
 #include "Usb20ExtensionDescriptor.h"
 #include "Transfer.h"
 
@@ -711,9 +711,9 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeConfigDescriptor)
 }
 
 /**
- * int getSSEndpointCompanionDescriptor(Device, int, SSEndpointCompanionDescriptor)
+ * int getSsEndpointCompanionDescriptor(Device, int, SsEndpointCompanionDescriptor)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getSSEndpointCompanionDescriptor)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getSsEndpointCompanionDescriptor)
 (
     JNIEnv *env, jclass class, jobject context, jobject endpointDescriptor,
     jobject companionDescriptor
@@ -728,31 +728,31 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getSSEndpointCompanionDescriptor)
     struct libusb_ss_endpoint_companion_descriptor *companion_descriptor;
     int result = libusb_get_ss_endpoint_companion_descriptor(ctx,
         endpoint_descriptor, &companion_descriptor);
-    if (!result) setSSEndpointCompanionDescriptor(env, companion_descriptor,
+    if (!result) setSsEndpointCompanionDescriptor(env, companion_descriptor,
         companionDescriptor);
     return result;
 }
 
 /**
- * void freeSSEndpointCompanionDescriptor(SSEndpointCompanionDescriptor)
+ * void freeSsEndpointCompanionDescriptor(SsEndpointCompanionDescriptor)
  */
-JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeSSEndpointCompanionDescriptor)
+JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeSsEndpointCompanionDescriptor)
 (
     JNIEnv *env, jclass class, jobject companionDescriptor
 )
 {
     if (!companionDescriptor) return;
     struct libusb_ss_endpoint_companion_descriptor *companion_descriptor =
-        unwrapSSEndpointCompanionDescriptor(env, companionDescriptor);
+        unwrapSsEndpointCompanionDescriptor(env, companionDescriptor);
     if (!companion_descriptor) return;
     libusb_free_ss_endpoint_companion_descriptor(companion_descriptor);
-    resetSSEndpointCompanionDescriptor(env, companionDescriptor);
+    resetSsEndpointCompanionDescriptor(env, companionDescriptor);
 }
 
 /**
- * int getBOSDescriptor(DeviceHandle, BOSDescriptor)
+ * int getBosDescriptor(DeviceHandle, BosDescriptor)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getBOSDescriptor)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getBosDescriptor)
 (
     JNIEnv *env, jclass class, jobject handle, jobject descriptor
 )
@@ -763,28 +763,28 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getBOSDescriptor)
     if (!dev_handle) return 0;
     struct libusb_bos_descriptor *bos_descriptor;
     int result = libusb_get_bos_descriptor(dev_handle, &bos_descriptor);
-    if (!result) setBOSDescriptor(env, bos_descriptor, descriptor);
+    if (!result) setBosDescriptor(env, bos_descriptor, descriptor);
     return result;
 }
 
 /**
- * void freeBOSDescriptor(BOSDescriptor)
+ * void freeBosDescriptor(BosDescriptor)
  */
-JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeBOSDescriptor)
+JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeBosDescriptor)
 (
     JNIEnv *env, jclass class, jobject bosDescriptor
 )
 {
     if (!bosDescriptor) return;
     struct libusb_bos_descriptor *bos_descriptor =
-        unwrapBOSDescriptor(env, bosDescriptor);
+        unwrapBosDescriptor(env, bosDescriptor);
     if (!bos_descriptor) return;
     libusb_free_bos_descriptor(bos_descriptor);
-    resetBOSDescriptor(env, bosDescriptor);
+    resetBosDescriptor(env, bosDescriptor);
 }
 
 /**
- * int getUsb20ExtensionDescriptor(Context, BOSDevCapabilityDescriptor, Usb20ExtensionDescriptor)
+ * int getUsb20ExtensionDescriptor(Context, BosDevCapabilityDescriptor, Usb20ExtensionDescriptor)
  */
 JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getUsb20ExtensionDescriptor)
 (
@@ -796,7 +796,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getUsb20ExtensionDescriptor)
     NOT_NULL(env, extensionDescriptor, return 0);
     libusb_context *ctx = unwrapContext(env, context);
     struct libusb_bos_dev_capability_descriptor *devcap_descriptor =
-        unwrapBOSDevCapabilityDescriptor(env, devCapDescriptor);
+        unwrapBosDevCapabilityDescriptor(env, devCapDescriptor);
     if (!devcap_descriptor) return 0;
     struct libusb_usb_2_0_extension_descriptor *extension_descriptor;
     int result = libusb_get_usb_2_0_extension_descriptor(ctx,

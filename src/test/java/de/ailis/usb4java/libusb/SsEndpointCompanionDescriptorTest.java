@@ -12,14 +12,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests the {@link BOSDevCapabilityDescriptor} class.
+ * Tests the {@link SsEndpointCompanionDescriptor} class.
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
-public class BOSDevCapabilityDescriptorTest
+public class SsEndpointCompanionDescriptorTest
 {
     /** The test subject. */
-    private BOSDevCapabilityDescriptor descriptor;
+    private SsEndpointCompanionDescriptor descriptor;
 
     /**
      * Setup test.
@@ -29,7 +29,7 @@ public class BOSDevCapabilityDescriptorTest
     {
         assumeUsbTestsEnabled();
         LibUsb.init(null);
-        this.descriptor = new BOSDevCapabilityDescriptor();
+        this.descriptor = new SsEndpointCompanionDescriptor();
     }
     
     /**
@@ -43,7 +43,7 @@ public class BOSDevCapabilityDescriptorTest
 
     /**
      * Tests uninitialized access to
-     * {@link BOSDevCapabilityDescriptor#bLength()}
+     * {@link SsEndpointCompanionDescriptor#bLength()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedLength()
@@ -54,7 +54,7 @@ public class BOSDevCapabilityDescriptorTest
 
     /**
      * Tests uninitialized access to
-     * {@link BOSDevCapabilityDescriptor#bDescriptorType()}
+     * {@link SsEndpointCompanionDescriptor#bDescriptorType()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedDescriptorType()
@@ -65,23 +65,34 @@ public class BOSDevCapabilityDescriptorTest
 
     /**
      * Tests uninitialized access to
-     * {@link BOSDevCapabilityDescriptor#bDevCapabilityType()}
+     * {@link SsEndpointCompanionDescriptor#bMaxBurst()}
      */
     @Test(expected = IllegalStateException.class)
-    public void testUninitializedDevCapabilityType()
+    public void testUninitializedDescriptorMaxBurst()
     {
         assumeUsbTestsEnabled();
-        this.descriptor.bDevCapabilityType();
+        this.descriptor.bMaxBurst();
     }
 
     /**
      * Tests uninitialized access to
-     * {@link BOSDevCapabilityDescriptor#devCapabilityData()}
+     * {@link SsEndpointCompanionDescriptor#bmAttributes()}
      */
     @Test(expected = IllegalStateException.class)
-    public void testUninitializedDevCapabilityData()
+    public void testUninitializedDescriptorAttributes()
     {
         assumeUsbTestsEnabled();
-        this.descriptor.devCapabilityData();
+        this.descriptor.bmAttributes();
+    }
+
+    /**
+     * Tests uninitialized access to
+     * {@link SsEndpointCompanionDescriptor#wBytesPerInterval()}
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testUninitializedDescriptorBytesPerInterval()
+    {
+        assumeUsbTestsEnabled();
+        this.descriptor.wBytesPerInterval();
     }
 }

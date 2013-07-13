@@ -18,28 +18,31 @@
 
 package de.ailis.usb4java.libusb;
 
+import java.nio.ByteBuffer;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import de.ailis.usb4java.utils.DescriptorUtils;
+
 /**
- * A structure representing the Binary Device Object Store (BOS) descriptor.
+ * A generic representation of a BOS Device Capability descriptor.
  * 
- * This descriptor is documented in section 9.6.2 of the USB 3.0 specification.
- * All multiple-byte fields are represented in host-endian format.
+ * It is advised to check bDevCapabilityType and call the matching
+ * get*Descriptor method to get a structure fully matching the type.
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class BOSDescriptor
+public final class BosDevCapabilityDescriptor
 {
     /** The native pointer to the descriptor structure. */
-    private long bosDescriptorPointer;
+    private long bosDevCapabilityDescriptorPointer;
 
     /**
-     * Constructs a new BOS descriptor which can be passed to the
-     * {@link LibUsb#getBOSDescriptor(DeviceHandle, BOSDescriptor)}
-     * method.
+     * Package-private constructor to prevent manual instantiation. BOS device
+     * capability descriptors are always created by JNI.
      */
-    public BOSDescriptor()
+    BosDevCapabilityDescriptor()
     {
         // Empty
     }
@@ -51,7 +54,7 @@ public final class BOSDescriptor
      */
     public long getPointer()
     {
-        return this.bosDescriptorPointer;
+        return this.bosDevCapabilityDescriptorPointer;
     }
 
     /**
@@ -69,25 +72,18 @@ public final class BOSDescriptor
     public native byte bDescriptorType();
 
     /**
-     * Returns the length of this descriptor and all of its sub descriptors. 
+     * Returns the device capability type.
      * 
-     * @return The total descriptor length.
+     * @return The device capability type.
      */
-    public native short wTotalLength();
+    public native byte bDevCapabilityType();
 
     /**
-     * Returns the number of separate device capability descriptors in the BOS. 
+     * Returns the device capability data (bLength - 3 bytes).
      * 
-     * @return The number of device capability descriptors.
+     * @return The device capability data.
      */
-    public native byte bNumDeviceCaps();
-    
-    /**
-     * Returns the array with the device capability descriptors.
-     * 
-     * @return The array with device capability descriptors.
-     */
-    public native BOSDevCapabilityDescriptor[] devCapability();
+    public native ByteBuffer devCapabilityData();
 
     /**
      * Returns a dump of this descriptor.
@@ -96,21 +92,17 @@ public final class BOSDescriptor
      */
     public String dump()
     {
-        final StringBuilder builder = new StringBuilder();
-        builder.append(String.format("BOS Descriptor:%n"
+        return String.format("BOS Device Capability Descriptor:%n"
             + "  bLength %18d%n"
             + "  bDescriptorType %10d%n"
-            + "  wTotalLength %13s%n"
-            + "  bNumDeviceCaps %11s%n",
+            + "  bDevCapabilityType %7s%n"
+            + "  devCapabilityData:%n%s%n",
             bLength() & 0xff,
             bDescriptorType() & 0xff,
-            wTotalLength() & 0xffff,
-            bNumDeviceCaps() & 0xff));
-        for (final BOSDevCapabilityDescriptor descriptor: devCapability())
-        {
-            builder.append(descriptor.dump().replaceAll("(?m)^", "  "));
-        }
-        return builder.toString();            
+            bDevCapabilityType() & 0xff,
+            DescriptorUtils.dump(devCapabilityData())
+                .replaceAll("(?m)^", "    "));
+        
     }
 
     @Override
@@ -119,14 +111,14 @@ public final class BOSDescriptor
         if (obj == null) return false;
         if (obj == this) return true;
         if (obj.getClass() != getClass()) return false;
-        final BOSDescriptor other =
-            (BOSDescriptor) obj;
+        final BosDevCapabilityDescriptor other =
+            (BosDevCapabilityDescriptor) obj;
         return new EqualsBuilder()
             .append(bDescriptorType(), other.bDescriptorType())
             .append(bLength(), other.bLength())
-            .append(wTotalLength(), other.wTotalLength())
-            .append(bNumDeviceCaps(), other.bNumDeviceCaps())
-            .append(devCapability(), other.devCapability()).isEquals();
+            .append(bDevCapabilityType(), other.bDevCapabilityType())
+            .append(devCapabilityData().array(),
+                other.devCapabilityData().array()).isEquals();
     }
 
     @Override
@@ -135,9 +127,8 @@ public final class BOSDescriptor
         return new HashCodeBuilder()
             .append(bLength())
             .append(bDescriptorType())
-            .append(wTotalLength())
-            .append(bNumDeviceCaps())
-            .append(devCapability())
+            .append(bDevCapabilityType())
+            .append(devCapabilityData())
             .toHashCode();
     }
 

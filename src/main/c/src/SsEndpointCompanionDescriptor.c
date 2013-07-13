@@ -3,24 +3,24 @@
  * See COPYING file for copying conditions
  */
 
-#include "SSEndpointCompanionDescriptor.h"
+#include "SsEndpointCompanionDescriptor.h"
 #include "Interface.h"
 
-void setSSEndpointCompanionDescriptor(JNIEnv* env,
+void setSsEndpointCompanionDescriptor(JNIEnv* env,
     struct libusb_ss_endpoint_companion_descriptor* descriptor, jobject object)
 {
     SET_POINTER(env, descriptor, object, "ssEndpointCompanionDescriptor");
 }
 
 struct libusb_ss_endpoint_companion_descriptor*
-    unwrapSSEndpointCompanionDescriptor(JNIEnv* env, jobject descriptor)
+    unwrapSsEndpointCompanionDescriptor(JNIEnv* env, jobject descriptor)
 {
     UNWRAP_POINTER(env, descriptor,
         struct libusb_ss_endpoint_companion_descriptor*,
         "ssEndpointCompanionDescriptor");
 }
 
-void resetSSEndpointCompanionDescriptor(JNIEnv* env, jobject obj)
+void resetSsEndpointCompanionDescriptor(JNIEnv* env, jobject obj)
 {
     RESET_POINTER(env, obj, "ssEndpointCompanionDescriptor");
 }
@@ -28,13 +28,13 @@ void resetSSEndpointCompanionDescriptor(JNIEnv* env, jobject obj)
 /**
  * byte bLength()
  */
-JNIEXPORT jbyte JNICALL METHOD_NAME(SSEndpointCompanionDescriptor, bLength)
+JNIEXPORT jbyte JNICALL METHOD_NAME(SsEndpointCompanionDescriptor, bLength)
 (
     JNIEnv *env, jobject this
 )
 {
     struct libusb_ss_endpoint_companion_descriptor *descriptor =
-        unwrapSSEndpointCompanionDescriptor(env, this);
+        unwrapSsEndpointCompanionDescriptor(env, this);
     if (!descriptor) return 0;
     return descriptor->bLength;
 }
@@ -42,14 +42,14 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(SSEndpointCompanionDescriptor, bLength)
 /**
  * byte bDescriptorType()
  */
-JNIEXPORT jbyte JNICALL METHOD_NAME(SSEndpointCompanionDescriptor,
+JNIEXPORT jbyte JNICALL METHOD_NAME(SsEndpointCompanionDescriptor,
     bDescriptorType)
 (
     JNIEnv *env, jobject this
 )
 {
     struct libusb_ss_endpoint_companion_descriptor *descriptor =
-        unwrapSSEndpointCompanionDescriptor(env, this);
+        unwrapSsEndpointCompanionDescriptor(env, this);
     if (!descriptor) return 0;
     return descriptor->bDescriptorType;
 }
@@ -57,13 +57,13 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(SSEndpointCompanionDescriptor,
 /**
  * byte bMaxBurst()
  */
-JNIEXPORT jbyte JNICALL METHOD_NAME(SSEndpointCompanionDescriptor, bMaxBurst)
+JNIEXPORT jbyte JNICALL METHOD_NAME(SsEndpointCompanionDescriptor, bMaxBurst)
 (
     JNIEnv *env, jobject this
 )
 {
     struct libusb_ss_endpoint_companion_descriptor *descriptor =
-        unwrapSSEndpointCompanionDescriptor(env, this);
+        unwrapSsEndpointCompanionDescriptor(env, this);
     if (!descriptor) return 0;
     return descriptor->bMaxBurst;
 }
@@ -71,13 +71,13 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(SSEndpointCompanionDescriptor, bMaxBurst)
 /**
  * byte bmAttributes()
  */
-JNIEXPORT jbyte JNICALL METHOD_NAME(SSEndpointCompanionDescriptor, bmAttributes)
+JNIEXPORT jbyte JNICALL METHOD_NAME(SsEndpointCompanionDescriptor, bmAttributes)
 (
     JNIEnv *env, jobject this
 )
 {
     struct libusb_ss_endpoint_companion_descriptor *descriptor =
-        unwrapSSEndpointCompanionDescriptor(env, this);
+        unwrapSsEndpointCompanionDescriptor(env, this);
     if (!descriptor) return 0;
     return descriptor->bmAttributes;
 }
@@ -85,13 +85,13 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(SSEndpointCompanionDescriptor, bmAttributes)
 /**
  * short wBytesPerInterval()
  */
-JNIEXPORT jshort JNICALL METHOD_NAME(SSEndpointCompanionDescriptor, wBytesPerInterval)
+JNIEXPORT jshort JNICALL METHOD_NAME(SsEndpointCompanionDescriptor, wBytesPerInterval)
 (
     JNIEnv *env, jobject this
 )
 {
     struct libusb_ss_endpoint_companion_descriptor *descriptor =
-        unwrapSSEndpointCompanionDescriptor(env, this);
+        unwrapSsEndpointCompanionDescriptor(env, this);
     if (!descriptor) return 0;
     return descriptor->wBytesPerInterval;
 }

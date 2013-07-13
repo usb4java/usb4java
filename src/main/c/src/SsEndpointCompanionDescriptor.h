@@ -8,10 +8,10 @@
 
 #include "usb4java.h"
 
-void setSSEndpointCompanionDescriptor(JNIEnv*,
+void setSsEndpointCompanionDescriptor(JNIEnv*,
     struct libusb_ss_endpoint_companion_descriptor*, jobject);
 struct libusb_ss_endpoint_companion_descriptor*
-    unwrapSSEndpointCompanionDescriptor(JNIEnv*, jobject);
-void resetSSEndpointCompanionDescriptor(JNIEnv*, jobject);
+    unwrapSsEndpointCompanionDescriptor(JNIEnv*, jobject);
+void resetSsEndpointCompanionDescriptor(JNIEnv*, jobject);
 
 #endif

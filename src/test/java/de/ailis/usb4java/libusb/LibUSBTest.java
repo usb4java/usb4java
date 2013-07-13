@@ -636,105 +636,105 @@ public class LibUSBTest
 
     /**
      * Tests the
-     * {@link LibUsb#getSSEndpointCompanionDescriptor(Context, EndpointDescriptor, SSEndpointCompanionDescriptor)}
+     * {@link LibUsb#getSsEndpointCompanionDescriptor(Context, EndpointDescriptor, SsEndpointCompanionDescriptor)}
      * method with uninitialized endpoint.
      */
     @Test(expected = IllegalStateException.class)
-    public void testGetSSEndpointCompanionDescriptorWithUninitializedEndpoint()
+    public void testGetSsEndpointCompanionDescriptorWithUninitializedEndpoint()
     {
         assumeUsbTestsEnabled();
-        LibUsb.getSSEndpointCompanionDescriptor(null, new EndpointDescriptor(), 
-            new SSEndpointCompanionDescriptor());
+        LibUsb.getSsEndpointCompanionDescriptor(null, new EndpointDescriptor(), 
+            new SsEndpointCompanionDescriptor());
     }
 
     /**
      * Tests the
-     * {@link LibUsb#getSSEndpointCompanionDescriptor(Context, EndpointDescriptor, SSEndpointCompanionDescriptor)}
+     * {@link LibUsb#getSsEndpointCompanionDescriptor(Context, EndpointDescriptor, SsEndpointCompanionDescriptor)}
      * method without descriptors.
      */
     @Test(expected = IllegalArgumentException.class)
-    public void testGetSSEndpointCompanionDescriptorWithoutDescriptors()
+    public void testGetSsEndpointCompanionDescriptorWithoutDescriptors()
     {
         assumeUsbTestsEnabled();
-        LibUsb.getSSEndpointCompanionDescriptor(null, null, null);
+        LibUsb.getSsEndpointCompanionDescriptor(null, null, null);
     }
 
     /**
      * Tests the
-     * {@link LibUsb#freeSSEndpointCompanionDescriptor(SSEndpointCompanionDescriptor)}
+     * {@link LibUsb#freeSsEndpointCompanionDescriptor(SsEndpointCompanionDescriptor)}
      * method with uninitialized descriptor.
      */
     @Test(expected = IllegalStateException.class)
-    public void testFreeSSEndpointCompanionDescriptorWithUninitializedDescriptor()
+    public void testFreeSsEndpointCompanionDescriptorWithUninitializedDescriptor()
     {
         assumeUsbTestsEnabled();
-        LibUsb.freeSSEndpointCompanionDescriptor(new SSEndpointCompanionDescriptor());
+        LibUsb.freeSsEndpointCompanionDescriptor(new SsEndpointCompanionDescriptor());
     }
 
     /**
      * Tests the
-     * {@link LibUsb#freeSSEndpointCompanionDescriptor(SSEndpointCompanionDescriptor)}
+     * {@link LibUsb#freeSsEndpointCompanionDescriptor(SsEndpointCompanionDescriptor)}
      * method with null parameter. Must do nothing.
      */
     @Test
-    public void testFreeSSEndpointCompanionDescriptorWithNull()
+    public void testFreeSsEndpointCompanionDescriptorWithNull()
     {
         assumeUsbTestsEnabled();
-        LibUsb.freeSSEndpointCompanionDescriptor(null);
+        LibUsb.freeSsEndpointCompanionDescriptor(null);
     }
     
     /**
      * Tests the
-     * {@link LibUsb#getBOSDescriptor(DeviceHandle, BOSDescriptor)}
+     * {@link LibUsb#getBosDescriptor(DeviceHandle, BosDescriptor)}
      * method with uninitialized handled.
      */
     @Test(expected = IllegalStateException.class)
-    public void testGetBOSDescriptorWithUninitializedHandle()
+    public void testGetBosDescriptorWithUninitializedHandle()
     {
         assumeUsbTestsEnabled();
-        LibUsb.getBOSDescriptor(new DeviceHandle(), new BOSDescriptor());
+        LibUsb.getBosDescriptor(new DeviceHandle(), new BosDescriptor());
     }
 
     /**
      * Tests the
-     * {@link LibUsb#getBOSDescriptor(DeviceHandle, BOSDescriptor)}
+     * {@link LibUsb#getBosDescriptor(DeviceHandle, BosDescriptor)}
      * method without handle.
      */
     @Test(expected = IllegalArgumentException.class)
-    public void testGetBOSDescriptorWithoutHandle()
+    public void testGetBosDescriptorWithoutHandle()
     {
         assumeUsbTestsEnabled();
-        LibUsb.getBOSDescriptor(null, new BOSDescriptor());
+        LibUsb.getBosDescriptor(null, new BosDescriptor());
     }
 
     /**
      * Tests the
-     * {@link LibUsb#freeBOSDescriptor(BOSDescriptor)}
+     * {@link LibUsb#freeBosDescriptor(BosDescriptor)}
      * method with uninitialized descriptor.
      */
     @Test(expected = IllegalStateException.class)
-    public void testFreeBOSDescriptorWithUninitializedDescriptor()
+    public void testFreeBosDescriptorWithUninitializedDescriptor()
     {
         assumeUsbTestsEnabled();
-        LibUsb.freeBOSDescriptor(new BOSDescriptor());
+        LibUsb.freeBosDescriptor(new BosDescriptor());
     }
 
     /**
      * Tests the
-     * {@link LibUsb#freeBOSDescriptor(BOSDescriptor)}
+     * {@link LibUsb#freeBosDescriptor(BosDescriptor)}
      * method with null parameter. Must do nothing.
      */
     @Test
-    public void testFreeBOSDescriptorWithNull()
+    public void testFreeBosDescriptorWithNull()
     {
         assumeUsbTestsEnabled();
-        LibUsb.freeBOSDescriptor(null);
+        LibUsb.freeBosDescriptor(null);
     }
     
     /**
      * Tests the
      * {@link LibUsb#getUsb20ExtensionDescriptor(Context, 
-     * BOSDevCapabilityDescriptor, Usb20ExtensionDescriptor)}
+     * BosDevCapabilityDescriptor, Usb20ExtensionDescriptor)}
      * method with uninitialized endpoint.
      */
     @Test(expected = IllegalStateException.class)
@@ -742,14 +742,14 @@ public class LibUSBTest
     {
         assumeUsbTestsEnabled();
         LibUsb.getUsb20ExtensionDescriptor(null, 
-            new BOSDevCapabilityDescriptor(), 
+            new BosDevCapabilityDescriptor(), 
             new Usb20ExtensionDescriptor());
     }
 
     /**
      * Tests the
      * {@link LibUsb#getUsb20ExtensionDescriptor(Context, 
-     * BOSDevCapabilityDescriptor, Usb20ExtensionDescriptor)}
+     * BosDevCapabilityDescriptor, Usb20ExtensionDescriptor)}
      * method without descriptors.
      */
     @Test(expected = IllegalArgumentException.class)

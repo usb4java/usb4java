@@ -18,7 +18,7 @@ libusb4java_la_SOURCES = \
     InterfaceDescriptor.c \
     EndpointDescriptor.c \
     Transfer.c \
-    SSEndpointCompanionDescriptor.c \
-    BOSDescriptor.c \
-    BOSDevCapabilityDescriptor.c \
+    SsEndpointCompanionDescriptor.c \
+    BosDescriptor.c \
+    BosDevCapabilityDescriptor.c \
     Usb20ExtensionDescriptor.c

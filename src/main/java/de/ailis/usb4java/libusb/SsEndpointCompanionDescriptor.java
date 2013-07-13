@@ -18,31 +18,29 @@
 
 package de.ailis.usb4java.libusb;
 
-import java.nio.ByteBuffer;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import de.ailis.usb4java.utils.DescriptorUtils;
-
 /**
- * A generic representation of a BOS Device Capability descriptor.
+ * A structure representing the superspeed endpoint companion descriptor.
  * 
- * It is advised to check bDevCapabilityType and call the matching
- * get*Descriptor method to get a structure fully matching the type.
+ * This descriptor is documented in section 9.6.7 of the USB 3.0 specification.
+ * All multiple-byte fields are represented in host-endian format.
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class BOSDevCapabilityDescriptor
+public final class SsEndpointCompanionDescriptor
 {
     /** The native pointer to the descriptor structure. */
-    private long bosDevCapabilityDescriptorPointer;
+    private long ssEndpointCompanionDescriptor;
 
     /**
-     * Package-private constructor to prevent manual instantiation. BOS device
-     * capability descriptors are always created by JNI.
+     * Constructs a new descriptor which can be passed to the
+     * {@link LibUsb#getSsEndpointCompanionDescriptor(Context, 
+     * EndpointDescriptor, SsEndpointCompanionDescriptor)}
+     * method.
      */
-    BOSDevCapabilityDescriptor()
+    public SsEndpointCompanionDescriptor()
     {
         // Empty
     }
@@ -54,7 +52,7 @@ public final class BOSDevCapabilityDescriptor
      */
     public long getPointer()
     {
-        return this.bosDevCapabilityDescriptorPointer;
+        return this.ssEndpointCompanionDescriptor;
     }
 
     /**
@@ -72,18 +70,30 @@ public final class BOSDevCapabilityDescriptor
     public native byte bDescriptorType();
 
     /**
-     * Returns the device capability type.
+     * Returns the maximum number of packets the endpoint can send or receive as
+     * part of a burst.
      * 
-     * @return The device capability type.
+     * @return The maximum number of packets as part of a burst.
      */
-    public native byte bDevCapabilityType();
+    public native byte bMaxBurst();
 
     /**
-     * Returns the device capability data (bLength - 3 bytes).
+     * Returns the attributes. In bulk endpoint: bits 4:0 represents the maximum
+     * number of streams the EP supports. In isochronous endpoint: bits 1:0
+     * represents the Mult - a zero based value that determines the maximum
+     * number of packets within a service interval
      * 
-     * @return The device capability data.
+     * @return The attributes.
      */
-    public native ByteBuffer devCapabilityData();
+    public native byte bmAttributes();
+
+    /**
+     * Returns the total number of bytes this endpoint will transfer every
+     * service interval. Valid only for periodic endpoints.
+     * 
+     * @return The total number of bytes per service interval.
+     */
+    public native short wBytesPerInterval();
 
     /**
      * Returns a dump of this descriptor.
@@ -92,17 +102,17 @@ public final class BOSDevCapabilityDescriptor
      */
     public String dump()
     {
-        return String.format("BOS Device Capability Descriptor:%n"
+        return String.format("Device Descriptor:%n"
             + "  bLength %18d%n"
             + "  bDescriptorType %10d%n"
-            + "  bDevCapabilityType %7s%n"
-            + "  devCapabilityData:%n%s%n",
+            + "  bMaxBurst %16s%n"
+            + "  bmAttributes %13d%n"
+            + "  wBytesPerInterval %8d%n",
             bLength() & 0xff,
             bDescriptorType() & 0xff,
-            bDevCapabilityType() & 0xff,
-            DescriptorUtils.dump(devCapabilityData())
-                .replaceAll("(?m)^", "    "));
-        
+            bMaxBurst() & 0xff,
+            bmAttributes() & 0xff,
+            wBytesPerInterval() & 0xffff);
     }
 
     @Override
@@ -111,14 +121,14 @@ public final class BOSDevCapabilityDescriptor
         if (obj == null) return false;
         if (obj == this) return true;
         if (obj.getClass() != getClass()) return false;
-        final BOSDevCapabilityDescriptor other =
-            (BOSDevCapabilityDescriptor) obj;
+        final SsEndpointCompanionDescriptor other =
+            (SsEndpointCompanionDescriptor) obj;
         return new EqualsBuilder()
             .append(bDescriptorType(), other.bDescriptorType())
             .append(bLength(), other.bLength())
-            .append(bDevCapabilityType(), other.bDevCapabilityType())
-            .append(devCapabilityData().array(),
-                other.devCapabilityData().array()).isEquals();
+            .append(bMaxBurst(), other.bMaxBurst())
+            .append(bmAttributes(), other.bmAttributes())
+            .append(wBytesPerInterval(), other.wBytesPerInterval()).isEquals();
     }
 
     @Override
@@ -127,8 +137,9 @@ public final class BOSDevCapabilityDescriptor
         return new HashCodeBuilder()
             .append(bLength())
             .append(bDescriptorType())
-            .append(bDevCapabilityType())
-            .append(devCapabilityData())
+            .append(bMaxBurst())
+            .append(bmAttributes())
+            .append(wBytesPerInterval())
             .toHashCode();
     }
 

@@ -12,14 +12,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests the {@link BOSDescriptor} class.
+ * Tests the {@link BosDevCapabilityDescriptor} class.
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
-public class BOSDescriptorTest
+public class BosDevCapabilityDescriptorTest
 {
     /** The test subject. */
-    private BOSDescriptor descriptor;
+    private BosDevCapabilityDescriptor descriptor;
 
     /**
      * Setup test.
@@ -29,7 +29,7 @@ public class BOSDescriptorTest
     {
         assumeUsbTestsEnabled();
         LibUsb.init(null);
-        this.descriptor = new BOSDescriptor();
+        this.descriptor = new BosDevCapabilityDescriptor();
     }
     
     /**
@@ -43,7 +43,7 @@ public class BOSDescriptorTest
 
     /**
      * Tests uninitialized access to
-     * {@link BOSDescriptor#bLength()}
+     * {@link BosDevCapabilityDescriptor#bLength()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedLength()
@@ -54,7 +54,7 @@ public class BOSDescriptorTest
 
     /**
      * Tests uninitialized access to
-     * {@link BOSDescriptor#bDescriptorType()}
+     * {@link BosDevCapabilityDescriptor#bDescriptorType()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedDescriptorType()
@@ -65,34 +65,23 @@ public class BOSDescriptorTest
 
     /**
      * Tests uninitialized access to
-     * {@link BOSDescriptor#wTotalLength()}
+     * {@link BosDevCapabilityDescriptor#bDevCapabilityType()}
      */
     @Test(expected = IllegalStateException.class)
-    public void testUninitializedTotalLength()
+    public void testUninitializedDevCapabilityType()
     {
         assumeUsbTestsEnabled();
-        this.descriptor.wTotalLength();
+        this.descriptor.bDevCapabilityType();
     }
 
     /**
      * Tests uninitialized access to
-     * {@link BOSDescriptor#bNumDeviceCaps()}
+     * {@link BosDevCapabilityDescriptor#devCapabilityData()}
      */
     @Test(expected = IllegalStateException.class)
-    public void testUninitializedNumDeviceCaps()
+    public void testUninitializedDevCapabilityData()
     {
         assumeUsbTestsEnabled();
-        this.descriptor.bNumDeviceCaps();
-    }
-
-    /**
-     * Tests uninitialized access to
-     * {@link BOSDescriptor#devCapability()}
-     */
-    @Test(expected = IllegalStateException.class)
-    public void testUninitializedDevCapability()
-    {
-        assumeUsbTestsEnabled();
-        this.descriptor.devCapability();
+        this.descriptor.devCapabilityData();
     }
 }

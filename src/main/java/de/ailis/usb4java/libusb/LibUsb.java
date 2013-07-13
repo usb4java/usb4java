@@ -353,14 +353,14 @@ public final class LibUsb
     /**
      * BOS descriptor.
      * 
-     * @see BOSDescriptor
+     * @see BosDescriptor
      */
     public static final int DT_BOS = 0x0f;
 
     /**
      * Device Capability descriptor.
      * 
-     * @see BOSDevCapabilityDescriptor
+     * @see BosDevCapabilityDescriptor
      */
     public static final int DT_DEVICE_CAPABILITY = 0x10;
 
@@ -382,7 +382,7 @@ public final class LibUsb
     /**
      * SuperSpeed Endpoint Companion descriptor.
      * 
-     * @see SSEndpointCompanionDescriptor
+     * @see SsEndpointCompanionDescriptor
      */
     public static final int DT_SS_ENDPOINT_COMPANION = 0x30;
 
@@ -1441,20 +1441,20 @@ public final class LibUsb
      * @param companionDescriptor
      *            Output location for the superspeed endpoint companion
      *            descriptor. Only valid if 0 was returned. Must be freed with
-     *            {@link #freeSSEndpointCompanionDescriptor(
-     *            SSEndpointCompanionDescriptor)}
+     *            {@link #freeSsEndpointCompanionDescriptor(
+     *            SsEndpointCompanionDescriptor)}
      *            after use.
      * @return {@link #SUCCESS} on success, {@link #ERROR_NOT_FOUND} if the
      *         descriptor does not exist, another error code on error
      */
-    public static native int getSSEndpointCompanionDescriptor(
+    public static native int getSsEndpointCompanionDescriptor(
         final Context context, final EndpointDescriptor endpointDescriptor,
-        final SSEndpointCompanionDescriptor companionDescriptor);
+        final SsEndpointCompanionDescriptor companionDescriptor);
 
     /**
      * Free a superspeed endpoint companion descriptor obtained from
-     * {@link #getSSEndpointCompanionDescriptor(Context, EndpointDescriptor, 
-     * SSEndpointCompanionDescriptor)}.
+     * {@link #getSsEndpointCompanionDescriptor(Context, EndpointDescriptor, 
+     * SsEndpointCompanionDescriptor)}.
      * 
      * It is safe to call this function with a NULL parameter, in which case the
      * function simply returns.
@@ -1462,8 +1462,8 @@ public final class LibUsb
      * @param companionDescriptor
      *            The superspeed endpoint companion descriptor to free
      */
-    public static native void freeSSEndpointCompanionDescriptor(
-        final SSEndpointCompanionDescriptor companionDescriptor);
+    public static native void freeSsEndpointCompanionDescriptor(
+        final SsEndpointCompanionDescriptor companionDescriptor);
 
     /**
      * Get a Binary Object Store (BOS) descriptor. This is a BLOCKING function,
@@ -1474,16 +1474,16 @@ public final class LibUsb
      * @param descriptor
      *            Output location for the BOS descriptor. Only valid if 0 was
      *            returned. Must be freed with
-     *            {@link #freeBOSDescriptor(BOSDescriptor)} after use.
+     *            {@link #freeBosDescriptor(BosDescriptor)} after use.
      * @return {@link #SUCCESS} on success, {@link #ERROR_NOT_FOUND} if the
      *         device doesn't have a BOS descriptor, another error code on error
      */
-    public static native int getBOSDescriptor(final DeviceHandle handle,
-        final BOSDescriptor descriptor);
+    public static native int getBosDescriptor(final DeviceHandle handle,
+        final BosDescriptor descriptor);
 
     /**
      * Free a BOS descriptor obtained from
-     * {@link #getBOSDescriptor(DeviceHandle, BOSDescriptor)}.
+     * {@link #getBosDescriptor(DeviceHandle, BosDescriptor)}.
      * 
      * It is safe to call this function with a NULL parameter, in which case the
      * function simply returns.
@@ -1491,7 +1491,7 @@ public final class LibUsb
      * @param descriptor
      *            The BOS descriptor to free.
      */
-    public static native void freeBOSDescriptor(final BOSDescriptor
+    public static native void freeBosDescriptor(final BosDescriptor
         descriptor);
 
     /**
@@ -1511,12 +1511,12 @@ public final class LibUsb
      */
     public static native int getUsb20ExtensionDescriptor(
         final Context context,
-        final BOSDevCapabilityDescriptor devCapDescriptor,
+        final BosDevCapabilityDescriptor devCapDescriptor,
         final Usb20ExtensionDescriptor extensionDescriptor);
 
     /**
      * Free a USB 2.0 Extension descriptor obtained from
-     * {@link #getUsb20ExtensionDescriptor(Context, BOSDevCapabilityDescriptor, 
+     * {@link #getUsb20ExtensionDescriptor(Context, BosDevCapabilityDescriptor, 
      * Usb20ExtensionDescriptor)}.
      * 
      * It is safe to call this function with a NULL parameter, in which case 
