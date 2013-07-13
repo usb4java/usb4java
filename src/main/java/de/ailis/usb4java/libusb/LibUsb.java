@@ -121,7 +121,13 @@ public final class LibUsb
     public static final int LIBUSB_HIGH_SPEED_OPERATION = 4;   
 
     /** Superspeed operation supported (5000MBit/s). */ 
-    public static final int LIBUSB_SUPER_SPEED_OPERATION = 8;    
+    public static final int LIBUSB_SUPER_SPEED_OPERATION = 8;
+    
+    // Masks for the bits of the bmAttributes field of the USB 2.0 Extension 
+    // descriptor.
+    
+    /** Supports Link Power Management (LPM). */ 
+    public static final int LIBUSB_BM_LPM_SUPPORT = 2;   
 
     // Standard requests, as defined in table 9-5 of the USB 3.0 specifications.
 
