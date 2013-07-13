@@ -23,7 +23,9 @@ JNIEXPORT jint JNICALL METHOD_NAME(Version, major)
     JNIEnv *env, jobject this
 )
 {
-    return unwrapVersion(env, this)->major;
+    const struct libusb_version *version = unwrapVersion(env, this);
+    if (!version) return 0;
+    return version->major;
 }
 
 /**
@@ -34,7 +36,9 @@ JNIEXPORT jint JNICALL METHOD_NAME(Version, minor)
     JNIEnv *env, jobject this
 )
 {
-    return unwrapVersion(env, this)->minor;
+    const struct libusb_version *version = unwrapVersion(env, this);
+    if (!version) return 0;
+    return version->minor;
 }
 
 /**
@@ -45,7 +49,9 @@ JNIEXPORT jint JNICALL METHOD_NAME(Version, micro)
     JNIEnv *env, jobject this
 )
 {
-    return unwrapVersion(env, this)->micro;
+    const struct libusb_version *version = unwrapVersion(env, this);
+    if (!version) return 0;
+    return version->micro;
 }
 
 /**
@@ -56,7 +62,9 @@ JNIEXPORT jstring JNICALL METHOD_NAME(Version, rc)
     JNIEnv *env, jobject this
 )
 {
-    return (*env)->NewStringUTF(env, unwrapVersion(env, this)->rc);
+    const struct libusb_version *version = unwrapVersion(env, this);
+    if (!version) return NULL;
+    return (*env)->NewStringUTF(env, version->rc);
 }
 
 
