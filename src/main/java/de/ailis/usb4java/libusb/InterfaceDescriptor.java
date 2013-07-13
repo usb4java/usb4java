@@ -31,7 +31,7 @@ import de.ailis.usb4java.utils.DescriptorUtils;
 public final class InterfaceDescriptor implements UsbInterfaceDescriptor
 {
     /** The native pointer to the descriptor structure. */
-    private long pointer;
+    private long interfaceDescriptorPointer;
 
     /**
      * Package-private constructor to prevent manual instantiation. Interface 
@@ -49,7 +49,7 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
      */
     public long getPointer()
     {
-        return this.pointer;
+        return this.interfaceDescriptorPointer;
     }
 
     @Override
