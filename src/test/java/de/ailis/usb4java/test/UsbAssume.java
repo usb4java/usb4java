@@ -53,10 +53,17 @@ public class UsbAssume
                         BufferedReader reader =
                             new BufferedReader(new InputStreamReader(
                                 inputStream));
-                        int lines = 0;
-                        while (reader.readLine() != null)
-                            lines++;
-                        usbTests = lines >= 2;
+                        try
+                        {
+                            int lines = 0;
+                            while (reader.readLine() != null)
+                                lines++;
+                            usbTests = lines >= 2;
+                        }
+                        finally
+                        {
+                            reader.close();
+                        }
                     }
                     finally
                     {
@@ -105,15 +112,22 @@ public class UsbAssume
                         BufferedReader reader =
                             new BufferedReader(new InputStreamReader(
                                 inputStream));
-                        String line = reader.readLine();
-                        while (line != null)
+                        try
                         {
-                            if (line.contains("0547:1002"))
+                            String line = reader.readLine();
+                            while (line != null)
                             {
-                                tckTests = true;
-                                break;
+                                if (line.contains("0547:1002"))
+                                {
+                                    tckTests = true;
+                                    break;
+                                }
+                                line = reader.readLine();
                             }
-                            line = reader.readLine();
+                        }
+                        finally
+                        {
+                            reader.close();
                         }
                     }
                     finally
