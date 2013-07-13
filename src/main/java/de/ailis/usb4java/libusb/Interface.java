@@ -21,7 +21,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public final class Interface
 {
     /** The native pointer to the descriptor structure. */
-    private long pointer;
+    private long interfacePointer;
 
     /**
      * Package-private constructor to prevent manual instantiation. Interfaces 
@@ -39,7 +39,7 @@ public final class Interface
      */
     public long getPointer()
     {
-        return this.pointer;
+        return this.interfacePointer;
     }
         
     /**
@@ -88,7 +88,7 @@ public final class Interface
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.pointer).toHashCode();
+        return new HashCodeBuilder().append(this.interfacePointer).toHashCode();
     }
 
     @Override
@@ -97,7 +97,7 @@ public final class Interface
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         final Interface other = (Interface) obj;
-        return this.pointer == other.pointer;
+        return this.interfacePointer == other.interfacePointer;
     }
     
     @Override

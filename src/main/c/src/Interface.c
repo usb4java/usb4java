@@ -8,7 +8,7 @@
 
 jobject wrapInterface(JNIEnv *env, const struct libusb_interface *iface)
 {
-    WRAP_POINTER(env, iface, "Interface", "pointer");
+    WRAP_POINTER(env, iface, "Interface", "interfacePointer");
 }
 
 jobjectArray wrapInterfaces(JNIEnv *env, int count,
@@ -27,7 +27,7 @@ jobjectArray wrapInterfaces(JNIEnv *env, int count,
 
 struct libusb_interface *unwrapInterface(JNIEnv *env, jobject obj)
 {
-    UNWRAP_POINTER(env, obj, struct libusb_interface*, "pointer");
+    UNWRAP_POINTER(env, obj, struct libusb_interface*, "interfacePointer");
 }
 
 JNIEXPORT jshort JNICALL METHOD_NAME(Interface, numAltsetting)
@@ -35,7 +35,9 @@ JNIEXPORT jshort JNICALL METHOD_NAME(Interface, numAltsetting)
     JNIEnv *env, jobject this
 )
 {
-    return (jshort) unwrapInterface(env, this)->num_altsetting;
+    struct libusb_interface* interface = unwrapInterface(env, this);
+    if (!interface) return 0;
+    return (jshort) interface->num_altsetting;
 }
 
 JNIEXPORT jobjectArray JNICALL METHOD_NAME(Interface, altsetting)
@@ -44,6 +46,7 @@ JNIEXPORT jobjectArray JNICALL METHOD_NAME(Interface, altsetting)
 )
 {
     struct libusb_interface* interface = unwrapInterface(env, this);
+    if (!interface) return NULL;
     return wrapInterfaceDescriptors(env, interface->num_altsetting,
         interface->altsetting);
 }
