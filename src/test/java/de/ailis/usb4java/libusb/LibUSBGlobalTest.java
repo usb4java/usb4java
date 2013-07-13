@@ -133,4 +133,27 @@ public class LibUSBGlobalTest
         assertEquals("LIBUSB_ERROR_IO", LibUsb.errorName(LibUsb.ERROR_IO));
         assertEquals("**UNKNOWN**", LibUsb.errorName(0x1234));
     }
+
+    /**
+     * Tests the {@link LibUsb#strError(int)} method.
+     */
+    @Test
+    public void testStrError()
+    {
+        assumeUsbTestsEnabled();
+        assertEquals("Input/Output Error", LibUsb.strError(LibUsb.ERROR_IO));
+        assertEquals("Other error", LibUsb.strError(0x1234));
+    }
+
+    /**
+     * Tests the {@link LibUsb#setLocale(String)} method.
+     */
+    @Test
+    public void testSetLocale()
+    {
+        assumeUsbTestsEnabled();
+        assertEquals(LibUsb.SUCCESS, LibUsb.setLocale("en"));
+        assertEquals(LibUsb.ERROR_NOT_FOUND, LibUsb.setLocale("zz"));
+        assertEquals(LibUsb.ERROR_INVALID_PARAM, LibUsb.setLocale("zzz"));
+    }
 }

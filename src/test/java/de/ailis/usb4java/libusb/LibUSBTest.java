@@ -166,6 +166,16 @@ public class LibUSBTest
     }
 
     /**
+     * Tests the {@link LibUsb#getApiVersion()} method.
+     */
+    @Test
+    public void testGetApiVersion()
+    {
+        assumeUsbTestsEnabled();
+        assertTrue(LibUsb.getApiVersion() >= 0x1000102);
+    }
+
+    /**
      * Tests the initialization and deinitialization of libusb with default
      * context.
      */
@@ -175,7 +185,7 @@ public class LibUSBTest
         assumeUsbTestsEnabled();
         assertEquals(LibUsb.SUCCESS, LibUsb.init(null));
         LibUsb.exit(null);
-        
+
         try
         {
             // Double-exit should throw exception
@@ -185,7 +195,7 @@ public class LibUSBTest
         catch (IllegalStateException e)
         {
             // Expected behavior
-        }            
+        }
     }
 
     /**
@@ -199,7 +209,7 @@ public class LibUSBTest
         Context context = new Context();
         assertEquals(LibUsb.SUCCESS, LibUsb.init(context));
         LibUsb.exit(context);
-        
+
         try
         {
             LibUsb.exit(context);
@@ -531,6 +541,28 @@ public class LibUSBTest
     }
 
     /**
+     * Tests the {@link LibUsb#setAutoDetachKernelDriver(DeviceHandle, boolean)}
+     * method with uninitialized device handle.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testSetAutoDetachKernelDriverWithUninitializedHandle()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.setAutoDetachKernelDriver(new DeviceHandle(), true);
+    }
+
+    /**
+     * Tests the {@link LibUsb#setAutoDetachKernelDriver(DeviceHandle, boolean)}
+     * method without a device handle.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testSetAutoDetachKernelDriverWithoutHandle()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.setAutoDetachKernelDriver(null, true);
+    }
+
+    /**
      * Tests the {@link LibUsb#getDeviceDescriptor(Device, DeviceDescriptor)}
      * method with uninitialized device.
      */
@@ -602,6 +634,56 @@ public class LibUSBTest
         LibUsb.freeConfigDescriptor(new ConfigDescriptor());
     }
 
+    /**
+     * Tests the
+     * {@link LibUsb#getSSEndpointCompanionDescriptor(Context, EndpointDescriptor, SSEndpointCompanionDescriptor)}
+     * method with uninitialized endpoint.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testGetSSEndpointCompanionDescriptorWithUninitializedEndpoint()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getSSEndpointCompanionDescriptor(null, new EndpointDescriptor(), 
+            new SSEndpointCompanionDescriptor());
+    }
+
+    /**
+     * Tests the
+     * {@link LibUsb#getSSEndpointCompanionDescriptor(Context, EndpointDescriptor, SSEndpointCompanionDescriptor)}
+     * method without descriptors.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetSSEndpointCompanionDescriptorWithoutDescriptors()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getSSEndpointCompanionDescriptor(null, null, null);
+    }
+
+    /**
+     * Tests the
+     * {@link LibUsb#freeSSEndpointCompanionDescriptor(SSEndpointCompanionDescriptor)}
+     * method with uninitialized descriptor.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testFreeSSEndpointCompanionDescriptorWithUninitializedDescriptor()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.freeSSEndpointCompanionDescriptor(new SSEndpointCompanionDescriptor());
+    }
+
+
+    /**
+     * Tests the
+     * {@link LibUsb#freeSSEndpointCompanionDescriptor(SSEndpointCompanionDescriptor)}
+     * method with null parameter. Must do nothing.
+     */
+    @Test
+    public void testFreeSSEndpointCompanionDescriptorWithNull()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.freeSSEndpointCompanionDescriptor(null);
+    }
+    
     /**
      * Tests the
      * {@link LibUsb#getDescriptor(DeviceHandle, int, int, ByteBuffer)} method

@@ -21,6 +21,8 @@
 #include "DeviceList.h"
 #include "DeviceDescriptor.h"
 #include "ConfigDescriptor.h"
+#include "EndpointDescriptor.h"
+#include "SSEndpointCompanionDescriptor.h"
 #include "Transfer.h"
 
 static JavaVM *jvm;
@@ -36,6 +38,17 @@ JNIEXPORT jobject JNICALL METHOD_NAME(LibUsb, getVersion)
 )
 {
     return wrapVersion(env, libusb_get_version());
+}
+
+/**
+ * int getApiVersion()
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getApiVersion)
+(
+    JNIEnv *env, jclass class
+)
+{
+    return LIBUSBX_API_VERSION;
 }
 
 /**
@@ -503,6 +516,20 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, attachKernelDriver)
 }
 
 /**
+ * int attachKernelDriver(DeviceHandle, int)
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, setAutoDetachKernelDriver)
+(
+    JNIEnv *env, jclass class, jobject handle, jboolean enable
+)
+{
+    NOT_NULL(env, handle, return 0);
+    libusb_device_handle *dev_handle = unwrapDeviceHandle(env, handle);
+    if (!dev_handle) return 0;
+    return libusb_set_auto_detach_kernel_driver(dev_handle, enable);
+}
+
+/**
  * boolean hasCapability(int)
  */
 JNIEXPORT jboolean JNICALL METHOD_NAME(LibUsb, hasCapability)
@@ -522,6 +549,31 @@ JNIEXPORT jstring JNICALL METHOD_NAME(LibUsb, errorName)
 )
 {
     return (*env)->NewStringUTF(env, libusb_error_name(code));
+}
+
+/**
+ * int setLocale(string)
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, setLocale)
+(
+    JNIEnv *env, jobject this, jstring locale
+)
+{
+    const char *nativeLocale = (*env)->GetStringUTFChars(env, locale, 0);
+    int result = libusb_setlocale(nativeLocale);
+    (*env)->ReleaseStringUTFChars(env, locale, nativeLocale);
+    return result;
+}
+
+/**
+ * string strError(int)
+ */
+JNIEXPORT jstring JNICALL METHOD_NAME(LibUsb, strError)
+(
+    JNIEnv *env, jobject this, jint code
+)
+{
+    return (*env)->NewStringUTF(env, libusb_strerror(code));
 }
 
 /**
@@ -661,6 +713,45 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeConfigDescriptor)
     if (!config) return;
     libusb_free_config_descriptor(config);
     resetConfigDescriptor(env, descriptor);
+}
+
+/**
+ * int getSSEndpointCompanionDescriptor(Device, int, SSEndpointCompanionDescriptor)
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getSSEndpointCompanionDescriptor)
+(
+    JNIEnv *env, jclass class, jobject context, jobject endpointDescriptor,
+    jobject companionDescriptor
+)
+{
+    NOT_NULL(env, endpointDescriptor, return 0);
+    NOT_NULL(env, companionDescriptor, return 0);
+    libusb_context *ctx = unwrapContext(env, context);
+    struct libusb_endpoint_descriptor *endpoint_descriptor =
+        unwrapEndpointDescriptor(env, endpointDescriptor);
+    if (!endpoint_descriptor) return 0;
+    struct libusb_ss_endpoint_companion_descriptor *companion_descriptor;
+    int result = libusb_get_ss_endpoint_companion_descriptor(ctx,
+        endpoint_descriptor, &companion_descriptor);
+    if (!result) setSSEndpointCompanionDescriptor(env, companion_descriptor,
+        companionDescriptor);
+    return result;
+}
+
+/**
+ * void freeSSEndpointCompanionDescriptor(SSEndpointCompanionDescriptor)
+ */
+JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeSSEndpointCompanionDescriptor)
+(
+    JNIEnv *env, jclass class, jobject companionDescriptor
+)
+{
+    if (!companionDescriptor) return;
+    struct libusb_ss_endpoint_companion_descriptor *companion_descriptor =
+        unwrapSSEndpointCompanionDescriptor(env, companionDescriptor);
+    if (!companion_descriptor) return;
+    libusb_free_ss_endpoint_companion_descriptor(companion_descriptor);
+    resetSSEndpointCompanionDescriptor(env, companionDescriptor);
 }
 
 /**

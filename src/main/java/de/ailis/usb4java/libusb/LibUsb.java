@@ -107,27 +107,47 @@ public final class LibUsb
 
     /** The device is operating at super speed (5000MBit/s). */
     public static final int SPEED_SUPER = 4;
-    
-    // Supported speeds (wSpeedSupported) bitfield. Indicates what speeds the 
-    // device supports. 
-    
+
+    // Supported speeds (wSpeedSupported) bitfield. Indicates what speeds the
+    // device supports.
+
     /** Low speed operation supported (1.5MBit/s). */
-    public static final int LIBUSB_LOW_SPEED_OPERATION = 1;
+    public static final int LOW_SPEED_OPERATION = 1;
 
     /** Full speed operation supported (12MBit/s). */
-    public static final int LIBUSB_FULL_SPEED_OPERATION = 2;
+    public static final int FULL_SPEED_OPERATION = 2;
 
     /** High speed operation supported (480MBit/s). */
-    public static final int LIBUSB_HIGH_SPEED_OPERATION = 4;   
+    public static final int HIGH_SPEED_OPERATION = 4;
 
-    /** Superspeed operation supported (5000MBit/s). */ 
-    public static final int LIBUSB_SUPER_SPEED_OPERATION = 8;
-    
-    // Masks for the bits of the bmAttributes field of the USB 2.0 Extension 
+    /** Superspeed operation supported (5000MBit/s). */
+    public static final int SUPER_SPEED_OPERATION = 8;
+
+    // Masks for the bits of the bmAttributes field of the USB 2.0 Extension
     // descriptor.
-    
-    /** Supports Link Power Management (LPM). */ 
-    public static final int LIBUSB_BM_LPM_SUPPORT = 2;   
+
+    /** Supports Link Power Management (LPM). */
+    public static final int BM_LPM_SUPPORT = 2;
+
+    // Masks for the bits of the bmAttributes field field of the SuperSpeed USB
+    // Device Capability descriptor.
+
+    /** Supports Latency Tolerance Messages (LTM). */
+    public static final int BM_LTM_SUPPORT = 2;
+
+    // USB capability types.
+
+    /** Wireless USB device capability. */
+    public static final int BT_WIRELESS_USB_DEVICE_CAPABILITY = 1;
+
+    /** USB 2.0 extensions. */
+    public static final int BT_USB_2_0_EXTENSION = 2;
+
+    /** SuperSpeed USB device capability. */
+    public static final int BT_SS_USB_DEVICE_CAPABILITY = 3;
+
+    /** Container ID type. */
+    public static final int BT_CONTAINER_ID = 4;
 
     // Standard requests, as defined in table 9-5 of the USB 3.0 specifications.
 
@@ -202,11 +222,30 @@ public final class LibUsb
     /** Other. */
     public static final int RECIPIENT_OTHER = 0x03;
 
-    // Capabilities supported by this instance of libusb. Test if the loaded
-    // library supports a given capability by calling hasCapability().
+    // Capabilities supported by an instance of libusb on the current running
+    // platform. Test if the loaded library supports a given capability by
+    // calling {@link #hasCapability(int)}
 
-    /** The hasCapability() API is available. */
-    public static final int CAP_HAS_CAPABILITY = 0x00;
+    /** The {@link #hasCapability(int)} API is available. */
+    public static final int CAP_HAS_CAPABILITY = 0x0000;
+
+    /** Hotplug support is available on this platform. */
+    public static final int CAP_HAS_HOTPLUG = 0x0001;
+
+    /**
+     * The library can access HID devices without requiring user intervention.
+     * Note that before being able to actually access an HID device, you may
+     * still have to call additional libusbx functions such as
+     * {@link #detachKernelDriver(DeviceHandle, int)}.
+     */
+    public static final int CAP_HAS_HID_ACCESS = 0x0100;
+
+    /**
+     * The library supports detaching of the default USB driver, using
+     * {@link #detachKernelDriver(DeviceHandle, int)}, if one is set by the OS
+     * kernel.
+     */
+    public static final int CAP_SUPPORTS_DETACH_KERNEL_DRIVER = 0x0101;
 
     // Device and/or Interface Class codes.
 
@@ -304,6 +343,20 @@ public final class LibUsb
      */
     public static final int DT_ENDPOINT = 0x05;
 
+    /**
+     * BOS descriptor.
+     * 
+     * @see BOSDescriptor
+     */
+    public static final int DT_BOS = 0x0f;
+
+    /**
+     * Device Capability descriptor.
+     * 
+     * @see BosDevCapabilityDescriptor
+     */
+    public static final int DT_DEVICE_CAPABILITY = 0x10;
+
     /** HID descriptor. */
     public static final int DT_HID = 0x21;
 
@@ -316,8 +369,15 @@ public final class LibUsb
     /** Hub descriptor. */
     public static final int DT_HUB = 0x29;
 
-    /** Hub descriptor. */
+    /** SuperSpeed Hub descriptor. */
     public static final int DT_SUPERSPEED_HUB = 0x2a;
+
+    /**
+     * SuperSpeed Endpoint Companion descriptor.
+     * 
+     * @see SSEndpointCompanionDescriptor
+     */
+    public static final int DT_SS_ENDPOINT_COMPANION = 0x30;
 
     // Descriptor sizes per descriptor type
 
@@ -498,6 +558,14 @@ public final class LibUsb
     }
 
     /**
+     * Returns the API version of the underlying libusb library. It is defined
+     * as follows: (major << 24) | (minor << 16) | (16 bit incremental)
+     * 
+     * @return The API version of the underlying libusb library.
+     */
+    public static native int getApiVersion();
+
+    /**
      * Initialize libusb.
      * 
      * This function must be called before calling any other libusbx function.
@@ -633,8 +701,28 @@ public final class LibUsb
      * @return The number of elements filled, {@link #ERROR_OVERFLOW} if the
      *         array is too small
      */
-    public static native int getPortNumbers(final Device device, 
+    public static native int getPortNumbers(final Device device,
         final byte[] path);
+
+    /**
+     * @deprecated Please use {@link #getPortNumbers(Device, byte[])} instead.
+     * 
+     * @param context
+     *            The context.
+     * @param device
+     *            A device.
+     * @param path
+     *            The array that should contain the port numbers. As per the USB
+     *            3.0 specs, the current maximum limit for the depth is 7.
+     * @return The number of elements filled, {@link #ERROR_OVERFLOW} if the
+     *         array is too small
+     */
+    @Deprecated
+    public static int getPortPaths(final Context context,
+        final Device device, final byte[] path)
+    {
+        return getPortNumbers(device, path);
+    }
 
     /**
      * Get the the parent from the specified device [EXPERIMENTAL].
@@ -1082,6 +1170,30 @@ public final class LibUsb
         final int interfaceNumber);
 
     /**
+     * Enable/disable libusbx's automatic kernel driver detachment.
+     * 
+     * When this is enabled libusbx will automatically detach the kernel driver
+     * on an interface when claiming the interface, and attach it when releasing
+     * the interface.
+     * 
+     * Automatic kernel driver detachment is disabled on newly opened device
+     * handles by default.
+     * 
+     * On platforms which do not have {@link #CAP_SUPPORTS_DETACH_KERNEL_DRIVER}
+     * this function will return {@link #ERROR_NOT_SUPPORTED}, and libusbx will
+     * continue as if this function was never called.
+     * 
+     * @param handle
+     *            A device handle.
+     * @param enable
+     *            Whether to enable or disable auto kernel driver detachment
+     * @return {@link #SUCCESS} on success, {@link #ERROR_NOT_SUPPORTED} on
+     *         platforms where the functionality is not available.
+     */
+    public static native int setAutoDetachKernelDriver(
+        final DeviceHandle handle, final boolean enable);
+
+    /**
      * Check at runtime if the loaded library has a given capability.
      * 
      * @param capability
@@ -1101,6 +1213,49 @@ public final class LibUsb
      *         errorCode is not a known error / status code.
      */
     public static native String errorName(final int errorCode);
+
+    /**
+     * Set the language, and only the language, not the encoding! used for
+     * translatable libusb messages.
+     * 
+     * This takes a locale string in the default setlocale format: lang[-region]
+     * or lang[_country_region][.codeset]. Only the lang part of the string is
+     * used, and only 2 letter ISO 639-1 codes are accepted for it, such as
+     * "de". The optional region, country_region or codeset parts are ignored.
+     * This means that functions which return translatable strings will NOT
+     * honor the specified encoding. All strings returned are encoded as UTF-8
+     * strings.
+     * 
+     * If {@link #setLocale(String)} is not called, all messages will be in
+     * English.
+     * 
+     * The following functions return translatable strings: libusb_strerror().
+     * Note that the libusb log messages controlled through
+     * {@link #setDebug(Context, int)} are not translated, they are always in
+     * English.
+     * 
+     * @param locale
+     *            locale-string in the form of lang[_country_region][.codeset]
+     *            or lang[-region], where lang is a 2 letter ISO 639-1 code.
+     * @return {@link #SUCCESS} on success, {@link #ERROR_INVALID_PARAM} if the
+     *         locale doesn't meet the requirements, {@link #ERROR_NOT_FOUND} if
+     *         the requested language is not supported, a error code on other
+     *         errors.
+     */
+    public static native int setLocale(final String locale);
+
+    /**
+     * Returns a string with a short description of the given error code, this
+     * description is intended for displaying to the end user and will be in the
+     * language set by {@link #setLocale(String)}.
+     * 
+     * The messages always start with a capital letter and end without any dot.
+     * 
+     * @param errcode
+     *            The error code whose description is desired.
+     * @return A short description of the error code.
+     */
+    public static native String strError(final int errcode);
 
     /**
      * Convert a 16-bit value from little-endian to host-endian format.
@@ -1267,6 +1422,40 @@ public final class LibUsb
      */
     public static native void freeConfigDescriptor(
         final ConfigDescriptor descriptor);
+
+    /**
+     * Get an endpoints superspeed endpoint companion descriptor (if any)
+     * 
+     * @param context
+     *            The context to operate on, or NULL for the default context.
+     * @param endpointDescriptor
+     *            Endpoint descriptor from which to get the superspeed endpoint
+     *            companion descriptor.
+     * @param companionDescriptor
+     *            Output location for the superspeed endpoint companion
+     *            descriptor. Only valid if 0 was returned. Must be freed with
+     *            {@link #freeSSEndpointCompanionDescriptor(SSEndpointCompanionDescriptor)}
+     *            after use.
+     * @return {@link #SUCCESS} on success, {@link #ERROR_NOT_FOUND} if the
+     *         descriptor does not exist, another error code on error
+     */
+    public static native int getSSEndpointCompanionDescriptor(
+        final Context context, final EndpointDescriptor endpointDescriptor,
+        final SSEndpointCompanionDescriptor companionDescriptor);
+
+    /**
+     * Free a superspeed endpoint companion descriptor obtained from
+     * {@link #getSSEndpointCompanionDescriptor(Context, EndpointDescriptor, SSEndpointCompanionDescriptor)}
+     * .
+     * 
+     * It is safe to call this function with a NULL parameter, in which case the
+     * function simply returns.
+     * 
+     * @param companionDescriptor
+     *            The superspeed endpoint companion descriptor to free
+     */
+    public static native void freeSSEndpointCompanionDescriptor(
+        final SSEndpointCompanionDescriptor companionDescriptor);
 
     /**
      * Retrieve a descriptor from the default control pipe.
