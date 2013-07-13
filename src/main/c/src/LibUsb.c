@@ -172,11 +172,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getPortNumber)
     NOT_NULL(env, device, return 0);
     libusb_device *dev = unwrapDevice(env, device);
     if (!dev) return 0;
-    #if defined(LIBUSBX_API_VERSION)
-        return libusb_get_port_number(dev);
-    #else
-        return 0;
-    #endif
+    return libusb_get_port_number(dev);
 }
 
 /**
@@ -193,11 +189,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getPortNumbers)
     if (!dev) return 0;
     jsize size = (*env)->GetArrayLength(env, path);
     unsigned char buffer[size];
-    #if defined(LIBUSBX_API_VERSION)
-        int result = libusb_get_port_numbers(dev, buffer, size);
-    #else
-        int result = 0;
-    #endif
+    int result = libusb_get_port_numbers(dev, buffer, size);
     if (result > 0) (*env)->SetByteArrayRegion(env, path, 0, result, (jbyte *) buffer);
     return result;
 }
