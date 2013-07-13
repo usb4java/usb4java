@@ -31,7 +31,7 @@ import de.ailis.usb4java.utils.DescriptorUtils;
 public final class DeviceDescriptor implements UsbDeviceDescriptor
 {
     /** The native data of the descriptor structure. */
-    private ByteBuffer data;
+    private ByteBuffer deviceDescriptorData;
 
     /**
      * Constructs a new device descriptor which can be passed to the
@@ -49,7 +49,7 @@ public final class DeviceDescriptor implements UsbDeviceDescriptor
      */
     public ByteBuffer getData()
     {
-        return this.data;
+        return this.deviceDescriptorData;
     }
 
     @Override

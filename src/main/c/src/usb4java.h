@@ -71,6 +71,11 @@
     jfieldID field = (*ENV)->GetFieldID(ENV, cls, FIELD, \
         "Ljava/nio/ByteBuffer;"); \
     jobject buffer = (*ENV)->GetObjectField(ENV, OBJECT, field); \
+    if (!buffer) \
+    { \
+        illegalState(ENV, FIELD" is not initialized"); \
+        return NULL; \
+    } \
     return (TYPE) (*ENV)->GetDirectBufferAddress(ENV, buffer); \
 }
 
