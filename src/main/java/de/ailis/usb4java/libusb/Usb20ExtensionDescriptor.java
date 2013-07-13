@@ -97,7 +97,7 @@ public final class Usb20ExtensionDescriptor
             bLength() & 0xff,
             bDescriptorType() & 0xff,
             bDevCapabilityType() & 0xff,
-            String.format("0x%08x", bmAttributes() & 0xffffffff));
+            String.format("0x%08x", bmAttributes()));
     }
 
     @Override
