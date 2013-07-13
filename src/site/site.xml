@@ -23,7 +23,6 @@
     <links>
       <item name="javax.usb" href="http://javax-usb.sourceforge.net/" />
       <item name="libusb" href="http://www.libusb.org/" />
-      <item name="libusbx" href="http://www.libusbx.org/" />
     </links>
     
     <menu name="usb4java">

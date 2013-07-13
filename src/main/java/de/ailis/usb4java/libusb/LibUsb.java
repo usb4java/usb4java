@@ -2,11 +2,18 @@
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
  * 
- * Based on libusbx <http://libusbx.org/>:  
+ * Based on libusb <http://www.libusb.org/>:  
  * 
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
- * Copyright 2007-2008 Daniel Drake <dsd@gentoo.org>
- * Copyright 2012 Pete Batard <pete@akeo.ie>
+ * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
+ * Copyright 2010-2012 Peter Stuge <peter@stuge.se>
+ * Copyright 2008-2011 Nathan Hjelm <hjelmn@users.sourceforge.net>
+ * Copyright 2009-2012 Pete Batard <pete@akeo.ie>
+ * Copyright 2009-2012 Ludovic Rousseau <ludovic.rousseau@gmail.com>
+ * Copyright 2010-2012 Michael Plante <michael.plante@gmail.com>
+ * Copyright 2011-2012 Hans de Goede <hdegoede@redhat.com>
+ * Copyright 2012 Martin Pieuchot <mpi@openbsd.org>
+ * Copyright 2012-2013 Toby Gray <toby.gray@realvnc.com>
  */
 
 package de.ailis.usb4java.libusb;
@@ -16,7 +23,7 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 /**
- * Static class providing the constants and functions of libusbx.
+ * Static class providing the constants and functions of libusb.
  * 
  * @author Klaus Reimer (k@ailis.de)
  */
@@ -45,7 +52,7 @@ public final class LibUsb
      */
     public static final int LOG_LEVEL_DEBUG = 4;
 
-    // Error codes. Most libusbx functions return 0 on success or one of these
+    // Error codes. Most libusb functions return 0 on success or one of these
     // codes on failure. You can call errorName() to retrieve a string
     // representation of an error code.
 
@@ -235,7 +242,7 @@ public final class LibUsb
     /**
      * The library can access HID devices without requiring user intervention.
      * Note that before being able to actually access an HID device, you may
-     * still have to call additional libusbx functions such as
+     * still have to call additional libusb functions such as
      * {@link #detachKernelDriver(DeviceHandle, int)}.
      */
     public static final int CAP_HAS_HID_ACCESS = 0x0100;
@@ -568,7 +575,7 @@ public final class LibUsb
     /**
      * Initialize libusb.
      * 
-     * This function must be called before calling any other libusbx function.
+     * This function must be called before calling any other libusb function.
      * 
      * If you do not provide an output location for a {@link Context}, a default
      * context will be created. If there was already a default context, it will
@@ -578,8 +585,6 @@ public final class LibUsb
      *            Optional output location for context pointer. Null to use
      *            default context. Only valid on return code 0.
      * @return 0 on success or a error code on failure.
-     * 
-     * @see <a href="http://libusbx.sf.net/api-1.0/contexts.html">Contexts</a>
      */
     public static native int init(final Context context);
 
@@ -603,19 +608,19 @@ public final class LibUsb
      * ensure that your application does not close the stdout/stderr file
      * descriptors.
      * 
-     * You are advised to use level {@link #LOG_LEVEL_WARNING}. libusbx is
+     * You are advised to use level {@link #LOG_LEVEL_WARNING}. libusb is
      * conservative with its message logging and most of the time, will only log
      * messages that explain error conditions and other oddities. This will help
      * you debug your software.
      * 
-     * If the {@link #LOG_LEVEL_DEBUG} environment variable was set when libusbx
+     * If the {@link #LOG_LEVEL_DEBUG} environment variable was set when libusb
      * was initialized, this function does nothing: the message verbosity is
      * fixed to the value in the environment variable.
      * 
-     * If libusbx was compiled without any message logging, this function does
+     * If libusb was compiled without any message logging, this function does
      * nothing: you'll never get any messages.
      * 
-     * If libusbx was compiled with verbose debug message logging, this function
+     * If libusb was compiled with verbose debug message logging, this function
      * does nothing: you'll always get messages from all levels.
      * 
      * @param context
@@ -628,9 +633,9 @@ public final class LibUsb
         final int level);
 
     /**
-     * Returns the version of the libusbx runtime.
+     * Returns the version of the libusb runtime.
      * 
-     * @return The version of the libusbx runtime.
+     * @return The version of the libusb runtime.
      */
     public static native Version getVersion();
 
@@ -735,7 +740,7 @@ public final class LibUsb
      *         {@link #getDeviceList(Context, DeviceList)} before calling this
      *         function and make sure that you only access the parent before
      *         issuing {@link #freeDeviceList(DeviceList, boolean)}. The reason
-     *         is that libusbx currently does not maintain a permanent list of
+     *         is that libusb currently does not maintain a permanent list of
      *         device instances, and therefore can only guarantee that parents
      *         are fully instantiated within a
      *         {@link #getDeviceList(Context, DeviceList)} -
@@ -861,7 +866,7 @@ public final class LibUsb
      * Convenience function for finding a device with a particular
      * idVendor/idProduct combination.
      * 
-     * This function is intended for those scenarios where you are using libusbx
+     * This function is intended for those scenarios where you are using libusb
      * to knock up a quick test application - it allows you to avoid calling
      * {@link #getDeviceList(Context, DeviceList)} and worrying about
      * traversing/freeing the list.
@@ -984,7 +989,7 @@ public final class LibUsb
      * on any of its endpoints.
      * 
      * It is legal to attempt to claim an already-claimed interface, in which
-     * case libusbx just returns 0 without doing anything.
+     * case libusb just returns 0 without doing anything.
      * 
      * Claiming of interfaces is a purely logical operation; it does not cause
      * any requests to be sent over the bus. Interface claiming is used to
@@ -1098,7 +1103,7 @@ public final class LibUsb
     /**
      * Determine if a kernel driver is active on an interface.
      * 
-     * If a kernel driver is active, you cannot claim the interface, and libusbx
+     * If a kernel driver is active, you cannot claim the interface, and libusb
      * will be unable to perform I/O.
      * 
      * This functionality is not available on Windows.
@@ -1125,7 +1130,7 @@ public final class LibUsb
      * 
      * This functionality is not available on Darwin or Windows.
      * 
-     * Note that libusbx itself also talks to the device through a special
+     * Note that libusb itself also talks to the device through a special
      * kernel driver, if this driver is already attached to the device, this
      * call will not detach it and return {@link #ERROR_NOT_FOUND}.
      * 
@@ -1172,9 +1177,9 @@ public final class LibUsb
         final int interfaceNumber);
 
     /**
-     * Enable/disable libusbx's automatic kernel driver detachment.
+     * Enable/disable libusb's automatic kernel driver detachment.
      * 
-     * When this is enabled libusbx will automatically detach the kernel driver
+     * When this is enabled libusb will automatically detach the kernel driver
      * on an interface when claiming the interface, and attach it when releasing
      * the interface.
      * 
@@ -1182,7 +1187,7 @@ public final class LibUsb
      * handles by default.
      * 
      * On platforms which do not have {@link #CAP_SUPPORTS_DETACH_KERNEL_DRIVER}
-     * this function will return {@link #ERROR_NOT_SUPPORTED}, and libusbx will
+     * this function will return {@link #ERROR_NOT_SUPPORTED}, and libusb will
      * continue as if this function was never called.
      * 
      * @param handle
@@ -1580,10 +1585,10 @@ public final class LibUsb
      * You should also check the transferred parameter for bulk writes. Not all
      * of the data may have been written.
      * 
-     * Also check transferred when dealing with a timeout error code. libusbx
+     * Also check transferred when dealing with a timeout error code. libusb
      * may have to split your transfer into a number of chunks to satisfy
      * underlying O/S requirements, meaning that the timeout may expire after
-     * the first few chunks have completed. libusbx is careful not to lose any
+     * the first few chunks have completed. libusb is careful not to lose any
      * data that may have been transferred; do not assume that timeout
      * conditions indicate a complete lack of I/O.
      * 
@@ -1625,10 +1630,10 @@ public final class LibUsb
      * You should also check the transferred parameter for interrupt writes. Not
      * all of the data may have been written.
      * 
-     * Also check transferred when dealing with a timeout error code. libusbx
+     * Also check transferred when dealing with a timeout error code. libusb
      * may have to split your transfer into a number of chunks to satisfy
      * underlying O/S requirements, meaning that the timeout may expire after
-     * the first few chunks have completed. libusbx is careful not to lose any
+     * the first few chunks have completed. libusb is careful not to lose any
      * data that may have been transferred; do not assume that timeout
      * conditions indicate a complete lack of I/O.
      * 
@@ -1660,12 +1665,12 @@ public final class LibUsb
     /**
      * Attempt to acquire the event handling lock.
      * 
-     * This lock is used to ensure that only one thread is monitoring libusbx
+     * This lock is used to ensure that only one thread is monitoring libusb
      * event sources at any one time.
      * 
      * You only need to use this lock if you are developing an application which
-     * calls poll() or select() on libusbx's file descriptors directly. If you
-     * stick to libusbx's event handling loop functions (e.g.
+     * calls poll() or select() on libusb's file descriptors directly. If you
+     * stick to libusb's event handling loop functions (e.g.
      * {@link #handleEvents(Context)}) then you do not need to be concerned with
      * this locking.
      * 
@@ -1684,12 +1689,12 @@ public final class LibUsb
      * Acquire the event handling lock, blocking until successful acquisition if
      * it is contended.
      * 
-     * This lock is used to ensure that only one thread is monitoring libusbx
+     * This lock is used to ensure that only one thread is monitoring libusb
      * event sources at any one time.
      * 
      * You only need to use this lock if you are developing an application which
-     * calls poll() or select() on libusbx's file descriptors directly. If you
-     * stick to libusbx's event handling loop functions (e.g.
+     * calls poll() or select() on libusb's file descriptors directly. If you
+     * stick to libusb's event handling loop functions (e.g.
      * {@link #handleEvents(Context)}) then you do not need to be concerned with
      * this locking.
      * 
@@ -1717,7 +1722,7 @@ public final class LibUsb
     /**
      * Determine if it is still OK for this thread to be doing event handling.
      * 
-     * Sometimes, libusbx needs to temporarily pause all event handlers, and
+     * Sometimes, libusb needs to temporarily pause all event handlers, and
      * this is the function you should use before polling file descriptors to
      * see if this is the case.
      * 
@@ -1760,9 +1765,9 @@ public final class LibUsb
      * events, then call {@link #waitForEvent(Context, long)}.
      * 
      * You only need to use this lock if you are developing an application which
-     * calls poll() or select() on libusbx's file descriptors directly, and may
+     * calls poll() or select() on libusb's file descriptors directly, and may
      * potentially be handling events from 2 threads simultaenously. If you
-     * stick to libusbx's event handling loop functions (e.g.
+     * stick to libusb's event handling loop functions (e.g.
      * {@link #handleEvents(Context)}) then you do not need to be concerned with
      * this locking.
      * 
@@ -1813,7 +1818,7 @@ public final class LibUsb
     /**
      * Handle any pending events.
      * 
-     * libusbx determines "pending events" by checking if any timeouts have
+     * libusb determines "pending events" by checking if any timeouts have
      * expired and by checking the set of file descriptors for activity.
      * 
      * If a zero timeval is passed, this function will handle any
@@ -1911,9 +1916,9 @@ public final class LibUsb
      * 
      * This function is designed to be called under the situation where you have
      * taken the event lock and are calling poll()/select() directly on
-     * libusbx's file descriptors (as opposed to using
+     * libusb's file descriptors (as opposed to using
      * {@link #handleEvents(Context)} or similar). You detect events on
-     * libusbx's descriptors, so you then call this function with a zero timeout
+     * libusb's descriptors, so you then call this function with a zero timeout
      * value (while still holding the event lock).
      * 
      * @param context
@@ -1928,20 +1933,20 @@ public final class LibUsb
 
     /**
      * Determines whether your application must apply special timing
-     * considerations when monitoring libusbx's file descriptors.
+     * considerations when monitoring libusb's file descriptors.
      * 
      * This function is only useful for applications which retrieve and poll
-     * libusbx's file descriptors in their own main loop (The more advanced
+     * libusb's file descriptors in their own main loop (The more advanced
      * option).
      * 
-     * Ordinarily, libusbx's event handler needs to be called into at specific
+     * Ordinarily, libusb's event handler needs to be called into at specific
      * moments in time (in addition to times when there is activity on the file
      * descriptor set). The usual approach is to use
      * {@link #getNextTimeout(Context, IntBuffer)} to learn about when the next
      * timeout occurs, and to adjust your poll()/select() timeout accordingly so
      * that you can make a call into the library at that time.
      * 
-     * Some platforms supported by libusbx do not come with this baggage - any
+     * Some platforms supported by libusb do not come with this baggage - any
      * events relevant to timing will be represented by activity on the file
      * descriptor set, and {@link #getNextTimeout(Context, IntBuffer)} will
      * always return 0. This function allows you to detect whether you are
@@ -1949,7 +1954,7 @@ public final class LibUsb
      * 
      * @param context
      *            The context to operate on, or NULL for the default context
-     * @return 0 if you must call into libusbx at times determined by
+     * @return 0 if you must call into libusb at times determined by
      *         {@link #getNextTimeout(Context, IntBuffer)}, or 1 if all timeout
      *         events are handled internally or through regular activity on the
      *         file descriptors.
@@ -1957,24 +1962,24 @@ public final class LibUsb
     public static native int pollfdsHandleTimeouts(final Context context);
 
     /**
-     * Determine the next internal timeout that libusbx needs to handle.
+     * Determine the next internal timeout that libusb needs to handle.
      * 
      * You only need to use this function if you are calling poll() or select()
-     * or similar on libusbx's file descriptors yourself - you do not need to
+     * or similar on libusb's file descriptors yourself - you do not need to
      * use it if you are calling {@link #handleEvents(Context)} or a variant
      * directly.
      * 
      * You should call this function in your main loop in order to determine how
-     * long to wait for select() or poll() to return results. libusbx needs to
+     * long to wait for select() or poll() to return results. libusb needs to
      * be called into at this timeout, so you should use it as an upper bound on
      * your select() or poll() call.
      * 
      * When the timeout has expired, call into
      * {@link #handleEventsTimeout(Context, long)} (perhaps in non-blocking
-     * mode) so that libusbx can handle the timeout.
+     * mode) so that libusb can handle the timeout.
      * 
      * This function may return 1 (success) and an all-zero timeval. If this is
-     * the case, it indicates that libusbx has a timeout that has already
+     * the case, it indicates that libusb has a timeout that has already
      * expired so you should call {@link #handleEventsTimeout(Context, long)} or
      * similar immediately. A return code of 0 indicates that there are no
      * pending timeouts.
@@ -1986,7 +1991,7 @@ public final class LibUsb
      *            The context to operate on, or NULL for the default context
      * @param timeout
      *            Output location for a relative time against the current clock
-     *            in which libusbx must be called into in order to process
+     *            in which libusb must be called into in order to process
      *            timeout events
      * @return 0 if there are no pending timeouts, 1 if a timeout was returned,
      *         or {@link #ERROR_OTHER} failure
@@ -1998,7 +2003,7 @@ public final class LibUsb
      * Register notification functions for file descriptor additions/removals.
      * 
      * These functions will be invoked for every new or removed file descriptor
-     * that libusbx uses as an event source.
+     * that libusb uses as an event source.
      * 
      * To remove notifiers, pass NULL values for the function pointers.
      * 
@@ -2058,7 +2063,7 @@ public final class LibUsb
     }
 
     /**
-     * Configures libusbx to inform this class about pollfd additions and
+     * Configures libusb to inform this class about pollfd additions and
      * removals.
      * 
      * @param context
@@ -2067,7 +2072,7 @@ public final class LibUsb
     static native void setPollfdNotifiers(final Context context);
 
     /**
-     * Tells libusbx to stop informing this class about pollfd additions and
+     * Tells libusb to stop informing this class about pollfd additions and
      * removals.
      * 
      * @param context
@@ -2076,7 +2081,7 @@ public final class LibUsb
     static native void unsetPollfdNotifiers(final Context context);
 
     /**
-     * Allocate a libusbx transfer with a specified number of isochronous packet
+     * Allocate a libusb transfer with a specified number of isochronous packet
      * descriptors.
      * 
      * The returned transfer is pre-initialized for you. When the new transfer
