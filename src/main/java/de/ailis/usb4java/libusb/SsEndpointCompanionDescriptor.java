@@ -78,10 +78,10 @@ public final class SsEndpointCompanionDescriptor
     public native byte bMaxBurst();
 
     /**
-     * Returns the attributes. In bulk endpoint: bits 4:0 represents the maximum
-     * number of streams the EP supports. In isochronous endpoint: bits 1:0
-     * represents the Mult - a zero based value that determines the maximum
-     * number of packets within a service interval
+     * Returns the attributes. In bulk endpoint: bits 4:0 represents the 
+     * maximum number of streams the EP supports. In isochronous endpoint: 
+     * bits 1:0 represents the Mult - a zero based value that determines the 
+     * maximum number of packets within a service interval.
      * 
      * @return The attributes.
      */

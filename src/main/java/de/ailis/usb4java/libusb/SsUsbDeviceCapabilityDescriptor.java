@@ -22,8 +22,9 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
- * A structure representing the SuperSpeed USB Device Capability descriptor This
- * descriptor is documented in section 9.6.2.2 of the USB 3.0 specification.
+ * A structure representing the SuperSpeed USB Device Capability descriptor.
+ * This descriptor is documented in section 9.6.2.2 of the USB 3.0 
+ * specification.
  * 
  * All multiple-byte fields are represented in host-endian format.
  * 
@@ -35,8 +36,8 @@ public final class SsUsbDeviceCapabilityDescriptor
     private long ssUsbDeviceCapabilityDescriptorPointer;
 
     /**
-     * Constructs a new SuperSpeed USB Device Capability descriptor which can be 
-     * passed to the
+     * Constructs a new SuperSpeed USB Device Capability descriptor which can 
+     * be passed to the
      * {@link LibUsb#getSsUsbDeviceCapabilityDescriptor(Context, 
      * BosDevCapabilityDescriptor, SsUsbDeviceCapabilityDescriptor)} method.
      */
