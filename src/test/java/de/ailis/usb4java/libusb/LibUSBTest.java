@@ -671,7 +671,6 @@ public class LibUSBTest
         LibUsb.freeSSEndpointCompanionDescriptor(new SSEndpointCompanionDescriptor());
     }
 
-
     /**
      * Tests the
      * {@link LibUsb#freeSSEndpointCompanionDescriptor(SSEndpointCompanionDescriptor)}
@@ -682,6 +681,54 @@ public class LibUSBTest
     {
         assumeUsbTestsEnabled();
         LibUsb.freeSSEndpointCompanionDescriptor(null);
+    }
+    
+    /**
+     * Tests the
+     * {@link LibUsb#getBOSDescriptor(DeviceHandle, BOSDescriptor)}
+     * method with uninitialized handled.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testGetBOSDescriptorWithUninitializedHandle()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getBOSDescriptor(new DeviceHandle(), new BOSDescriptor());
+    }
+
+    /**
+     * Tests the
+     * {@link LibUsb#getBOSDescriptor(DeviceHandle, BOSDescriptor)}
+     * method without handle.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetBOSDescriptorWithoutHandle()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getBOSDescriptor(null, new BOSDescriptor());
+    }
+
+    /**
+     * Tests the
+     * {@link LibUsb#freeBOSDescriptor(BOSDescriptor)}
+     * method with uninitialized descriptor.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testFreeBOSDescriptorWithUninitializedDescriptor()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.freeBOSDescriptor(new BOSDescriptor());
+    }
+
+    /**
+     * Tests the
+     * {@link LibUsb#freeBOSDescriptor(BOSDescriptor)}
+     * method with null parameter. Must do nothing.
+     */
+    @Test
+    public void testFreeBOSDescriptorWithNull()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.freeBOSDescriptor(null);
     }
     
     /**

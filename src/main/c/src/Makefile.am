@@ -18,4 +18,6 @@ libusb4java_la_SOURCES = \
     InterfaceDescriptor.c \
     EndpointDescriptor.c \
     Transfer.c \
-    SSEndpointCompanionDescriptor.c
+    SSEndpointCompanionDescriptor.c \
+    BOSDescriptor.c \
+    BOSDevCapabilityDescriptor.c

@@ -23,6 +23,7 @@
 #include "ConfigDescriptor.h"
 #include "EndpointDescriptor.h"
 #include "SSEndpointCompanionDescriptor.h"
+#include "BOSDescriptor.h"
 #include "Transfer.h"
 
 static JavaVM *jvm;
@@ -752,6 +753,40 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeSSEndpointCompanionDescriptor)
     if (!companion_descriptor) return;
     libusb_free_ss_endpoint_companion_descriptor(companion_descriptor);
     resetSSEndpointCompanionDescriptor(env, companionDescriptor);
+}
+
+/**
+ * int getBOSDescriptor(DeviceHandle, BOSDescriptor)
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getBOSDescriptor)
+(
+    JNIEnv *env, jclass class, jobject handle, jobject descriptor
+)
+{
+    NOT_NULL(env, handle, return 0);
+    NOT_NULL(env, descriptor, return 0);
+    libusb_device_handle *dev_handle = unwrapDeviceHandle(env, handle);
+    if (!dev_handle) return 0;
+    struct libusb_bos_descriptor *bos_descriptor;
+    int result = libusb_get_bos_descriptor(dev_handle, &bos_descriptor);
+    if (!result) setBOSDescriptor(env, bos_descriptor, descriptor);
+    return result;
+}
+
+/**
+ * void freeBOSDescriptor(BOSDescriptor)
+ */
+JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeBOSDescriptor)
+(
+    JNIEnv *env, jclass class, jobject bosDescriptor
+)
+{
+    if (!bosDescriptor) return;
+    struct libusb_bos_descriptor *bos_descriptor =
+        unwrapBOSDescriptor(env, bosDescriptor);
+    if (!bos_descriptor) return;
+    libusb_free_bos_descriptor(bos_descriptor);
+    resetBOSDescriptor(env, bosDescriptor);
 }
 
 /**

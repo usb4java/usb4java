@@ -154,7 +154,7 @@ public final class DescriptorUtils
             + "  iManufacturer %12d%s%n"
             + "  iProduct %17d%s%n"
             + "  iSerial %18d%s%n"
-            + "  bNumConfigurations %7d",
+            + "  bNumConfigurations %7d%n",
             descriptor.bLength(),
             descriptor.bDescriptorType(),
             decodeBCD(descriptor.bcdUSB()),
@@ -195,7 +195,7 @@ public final class DescriptorUtils
             + "  bmAttributes %13s%n"
             + "    %s%n"
             + "%s"
-            + "  bMaxPower %16smA",
+            + "  bMaxPower %16smA%n",
             descriptor.bLength(),
             descriptor.bDescriptorType(),
             descriptor.wTotalLength() & 0xffff,
@@ -229,7 +229,7 @@ public final class DescriptorUtils
             + "  bInterfaceClass %10d %s%n"
             + "  bInterfaceSubClass %7d%n"
             + "  bInterfaceProtocol %7d%n"
-            + "  iInterface %15d",
+            + "  iInterface %15d%n",
             descriptor.bLength(),
             descriptor.bDescriptorType(),
             descriptor.bInterfaceNumber() & 0xff,
@@ -261,7 +261,7 @@ public final class DescriptorUtils
             + "    Synch Type                %s%n"
             + "    Usage Type                %s%n"
             + "  wMaxPacketSize %11d%n"
-            + "  bInterval %16d",
+            + "  bInterval %16d%n",
             descriptor.bLength(),
             descriptor.bDescriptorType(),
             String.format("0x%02x", descriptor.bEndpointAddress() & 0xff),

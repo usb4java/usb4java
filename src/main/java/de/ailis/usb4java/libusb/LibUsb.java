@@ -353,7 +353,7 @@ public final class LibUsb
     /**
      * Device Capability descriptor.
      * 
-     * @see BosDevCapabilityDescriptor
+     * @see BOSDevCapabilityDescriptor
      */
     public static final int DT_DEVICE_CAPABILITY = 0x10;
 
@@ -1456,6 +1456,35 @@ public final class LibUsb
      */
     public static native void freeSSEndpointCompanionDescriptor(
         final SSEndpointCompanionDescriptor companionDescriptor);
+
+    /**
+     * Get a Binary Object Store (BOS) descriptor. This is a BLOCKING function,
+     * which will send requests to the device.
+     * 
+     * @param handle
+     *            The handle of an open libusb device.
+     * @param descriptor
+     *            Output location for the BOS descriptor. Only valid if 0 was
+     *            returned. Must be freed with
+     *            {@link #freeBOSDescriptor(BOSDescriptor)} after use.
+     * @return {@link #SUCCESS} on success, {@link #ERROR_NOT_FOUND} if the
+     *         device doesn't have a BOS descriptor, another error code on error
+     */
+    public static native int getBOSDescriptor(final DeviceHandle handle,
+        final BOSDescriptor descriptor);
+
+    /**
+     * Free a BOS descriptor obtained from
+     * {@link #getBOSDescriptor(DeviceHandle, BOSDescriptor)}.
+     * 
+     * It is safe to call this function with a NULL parameter, in which case
+     * the function simply returns.
+     * 
+     * @param descriptor
+     *            The BOS descriptor to free.
+     */
+    public static native void freeBOSDescriptor(final BOSDescriptor
+        descriptor);
 
     /**
      * Retrieve a descriptor from the default control pipe.

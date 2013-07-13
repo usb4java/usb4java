@@ -27,6 +27,13 @@
       <action dev="kayahr" type="add" date="2013-07-13">
         Implement support for SuperSpeed Endpoint Companion Descriptor.
       </action>
+      <action dev="kayahr" type="add" date="2013-07-13">
+        Implement support for BOS Descriptor.
+      </action>
+      <action dev="kayahr" type="add" date="2013-07-13">
+        Using uninitialized descriptors now throw an IllegalStateException
+        instead of crashing.
+      </action>
     </release>
     <release version="1.0.0" date="2013-05-01" description="Major update">
       <action dev="kayahr" type="add" date="2013-05-01">

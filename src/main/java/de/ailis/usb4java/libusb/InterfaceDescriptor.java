@@ -127,10 +127,10 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
         final int iInterface = iInterface();
         String sInterface = LibUsb.getStringDescriptor(handle, iInterface);
         if (sInterface == null) sInterface = "";
-        builder.append(String.format("%s%n"
+        builder.append(String.format("%s"
             + "  extralen %17d%n"
             + "  extra:%n"
-            + "%s",
+            + "%s%n",
             DescriptorUtils.dump(this),
             extraLength(),
             DescriptorUtils.dump(extra()).replaceAll("(?m)^", "    ")));

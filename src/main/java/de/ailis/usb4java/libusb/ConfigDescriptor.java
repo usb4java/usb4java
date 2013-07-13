@@ -122,10 +122,10 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
     {
         final StringBuilder builder = new StringBuilder();
         builder
-            .append(String.format("%s%n"
+            .append(String.format("%s"
                 + "  extralen %17d%n"
                 + "  extra:%n"
-                + "%s",
+                + "%s%n",
                 DescriptorUtils.dump(this),
                 extraLength(),
                 DescriptorUtils.dump(extra()).replaceAll("(?m)^", "    ")));

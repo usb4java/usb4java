@@ -109,10 +109,10 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
      */
     public String dump()
     {
-        return String.format("%s%n"
+        return String.format("%s"
             + "  extralen %17d%n"
             + "  extra:%n"
-            + "%s",
+            + "%s%n",
             DescriptorUtils.dump(this),
             extraLength(),
             DescriptorUtils.dump(extra()).replaceAll("(?m)^", "    "));
