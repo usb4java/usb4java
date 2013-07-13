@@ -107,6 +107,21 @@ public final class LibUsb
 
     /** The device is operating at super speed (5000MBit/s). */
     public static final int SPEED_SUPER = 4;
+    
+    // Supported speeds (wSpeedSupported) bitfield. Indicates what speeds the 
+    // device supports. 
+    
+    /** Low speed operation supported (1.5MBit/s). */
+    public static final int LIBUSB_LOW_SPEED_OPERATION = 1;
+
+    /** Full speed operation supported (12MBit/s). */
+    public static final int LIBUSB_FULL_SPEED_OPERATION = 2;
+
+    /** High speed operation supported (480MBit/s). */
+    public static final int LIBUSB_HIGH_SPEED_OPERATION = 4;   
+
+    /** Superspeed operation supported (5000MBit/s). */ 
+    public static final int LIBUSB_SUPER_SPEED_OPERATION = 8;    
 
     // Standard requests, as defined in table 9-5 of the USB 3.0 specifications.
 
