@@ -114,52 +114,18 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
      */
     public String dump()
     {
-        return dump(null);
-    }
-
-    /**
-     * Returns a dump of this descriptor.
-     * 
-     * @param handle
-     *            The USB device handle for resolving string descriptors. If
-     *            null then no strings are resolved.
-     * @return The descriptor dump.
-     */
-    public String dump(final DeviceHandle handle)
-    {
         final StringBuilder builder = new StringBuilder();
-        builder
-            .append(String.format("%s"
-                + "  extralen %17d%n"
-                + "  extra:%n"
-                + "%s%n",
-                DescriptorUtils.dump(this),
-                extraLength(),
-                DescriptorUtils.dump(extra()).replaceAll("(?m)^", "    ")));
-        for (final Interface descriptor: iface())
-        {
-            builder.append(descriptor.dump(handle)
-                .replaceAll("(?m)^", "  "));
-        }
-        return builder.toString();
-    }
 
-    @Override
-    public boolean equals(final Object obj)
-    {
-        if (obj == null) return false;
-        if (obj == this) return true;
-        if (obj.getClass() != getClass()) return false;
-        final ConfigDescriptor other = (ConfigDescriptor) obj;
-        return new EqualsBuilder()
-            .append(bDescriptorType(), other.bDescriptorType())
-            .append(bLength(), other.bLength())
-            .append(bConfigurationValue(), other.bConfigurationValue())
-            .append(bmAttributes(), other.bmAttributes())
-            .append(bNumInterfaces(), other.bNumInterfaces())
-            .append(iConfiguration(), other.iConfiguration())
-            .append(bMaxPower(), other.bMaxPower())
-            .append(wTotalLength(), other.wTotalLength()).isEquals();
+        builder.append(String.format("%s%n" + "  extralen %17d%n"
+            + "  extra:%n" + "%s", DescriptorUtils.dump(this), extraLength(),
+            DescriptorUtils.dump(extra()).replaceAll("(?m)^", "    ")));
+
+        for (final Interface iface : iface())
+        {
+            builder.append("%n" + iface.dump());
+        }
+
+        return builder.toString();
     }
 
     @Override
@@ -174,9 +140,43 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
             .append(iConfiguration())
             .append(bmAttributes())
             .append(bMaxPower())
+            .append(iface())
             .append(extra())
             .append(extraLength())
             .toHashCode();
+    }
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+
+        final ConfigDescriptor other = (ConfigDescriptor) obj;
+
+        return new EqualsBuilder()
+            .append(bLength(), other.bLength())
+            .append(bDescriptorType(), other.bDescriptorType())
+            .append(wTotalLength(), other.wTotalLength())
+            .append(bNumInterfaces(), other.bNumInterfaces())
+            .append(bConfigurationValue(), other.bConfigurationValue())
+            .append(iConfiguration(), other.iConfiguration())
+            .append(bmAttributes(), other.bmAttributes())
+            .append(bMaxPower(), other.bMaxPower())
+            .append(iface(), other.iface())
+            .append(extra(), other.extra())
+            .append(extraLength(), other.extraLength())
+            .isEquals();
     }
 
     @Override

@@ -8,7 +8,10 @@
 
 #include "usb4java.h"
 
+jobject wrapInterfaceDescriptor(JNIEnv*,
+    const struct libusb_interface_descriptor*);
 jobjectArray wrapInterfaceDescriptors(JNIEnv*, int,
     const struct libusb_interface_descriptor*);
+struct libusb_interface_descriptor *unwrapInterfaceDescriptor(JNIEnv*, jobject);
 
 #endif

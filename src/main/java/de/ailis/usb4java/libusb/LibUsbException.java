@@ -22,7 +22,7 @@ import javax.usb.UsbException;
 
 /**
  * libusb-specific USB exception.
- *
+ * 
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class LibUsbException extends UsbException
@@ -35,7 +35,7 @@ public final class LibUsbException extends UsbException
 
     /**
      * Constructor.
-     *
+     * 
      * @param message
      *            The error message.
      * @param errorCode
@@ -50,11 +50,11 @@ public final class LibUsbException extends UsbException
 
     /**
      * Returns the error code.
-     *
+     * 
      * @return The error code
      */
     public int getErrorCode()
     {
-        return this.errorCode;
+        return errorCode;
     }
 }

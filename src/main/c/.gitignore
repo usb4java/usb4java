@@ -24,3 +24,5 @@ install-sh
 ltmain.sh
 m4
 missing
+ar-lib
+compile

@@ -20,8 +20,6 @@ package de.ailis.usb4java.libusb;
 
 import java.util.Iterator;
 
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 /**
  * List of devices as returned by
  * {@link LibUsb#getDeviceList(Context, DeviceList)}.
@@ -43,7 +41,7 @@ public final class DeviceList implements Iterable<Device>
     public DeviceList()
     {
         // Empty
-    }       
+    }
 
     /**
      * Returns the native pointer.
@@ -54,7 +52,7 @@ public final class DeviceList implements Iterable<Device>
     {
         return this.deviceListPointer;
     }
-        
+
     /**
      * Returns the number of devices in the list.
      * 
@@ -83,16 +81,45 @@ public final class DeviceList implements Iterable<Device>
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.deviceListPointer)
-            .toHashCode();
+        final int prime = 31;
+        int result = 1;
+        result = (prime * result)
+            + (int) (deviceListPointer ^ (deviceListPointer >>> 32));
+        result = (prime * result) + size;
+        return result;
     }
 
     @Override
     public boolean equals(final Object obj)
     {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
         final DeviceList other = (DeviceList) obj;
-        return this.deviceListPointer == other.deviceListPointer;
+        if (deviceListPointer != other.deviceListPointer)
+        {
+            return false;
+        }
+        if (size != other.size)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.format("libusb device list 0x%x with size %d",
+            deviceListPointer, size);
     }
 }

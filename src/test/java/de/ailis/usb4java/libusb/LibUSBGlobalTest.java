@@ -16,7 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests the global-scope methods of the {@link LibUsb} class which need a 
+ * Tests the global-scope methods of the {@link LibUsb} class which need a
  * open USB context.
  * 
  * @author Klaus Reimer (k@ailis.de)
@@ -32,14 +32,14 @@ public class LibUSBGlobalTest
     @Before
     public void setUp()
     {
-        this.context = new Context();
+        context = new Context();
         try
         {
-            LibUsb.init(this.context);
+            LibUsb.init(context);
         }
         catch (Throwable e)
         {
-            this.context = null;
+            context = null;
         }
     }
 
@@ -49,7 +49,10 @@ public class LibUSBGlobalTest
     @After
     public void tearDown()
     {
-        if (this.context != null) LibUsb.exit(this.context);
+        if (context != null)
+        {
+            LibUsb.exit(context);
+        }
     }
 
     /**
@@ -59,11 +62,11 @@ public class LibUSBGlobalTest
     public void testSetDebug()
     {
         assumeUsbTestsEnabled();
-        LibUsb.setDebug(this.context, LibUsb.LOG_LEVEL_DEBUG);
-        LibUsb.setDebug(this.context, LibUsb.LOG_LEVEL_INFO);
-        LibUsb.setDebug(this.context, LibUsb.LOG_LEVEL_WARNING);
-        LibUsb.setDebug(this.context, LibUsb.LOG_LEVEL_ERROR);
-        LibUsb.setDebug(this.context, LibUsb.LOG_LEVEL_NONE);
+        LibUsb.setDebug(context, LibUsb.LOG_LEVEL_DEBUG);
+        LibUsb.setDebug(context, LibUsb.LOG_LEVEL_INFO);
+        LibUsb.setDebug(context, LibUsb.LOG_LEVEL_WARNING);
+        LibUsb.setDebug(context, LibUsb.LOG_LEVEL_ERROR);
+        LibUsb.setDebug(context, LibUsb.LOG_LEVEL_NONE);
     }
 
     /**
@@ -74,7 +77,7 @@ public class LibUSBGlobalTest
     {
         assumeUsbTestsEnabled();
         final DeviceList list = new DeviceList();
-        final int result = LibUsb.getDeviceList(this.context, list);
+        final int result = LibUsb.getDeviceList(context, list);
         assertTrue(
             "At least one USB device must be present for the simple unit tests",
             result > 0);
@@ -98,7 +101,7 @@ public class LibUSBGlobalTest
     public void testGetDeviceListWithoutList()
     {
         assumeUsbTestsEnabled();
-        LibUsb.getDeviceList(this.context, null);
+        LibUsb.getDeviceList(context, null);
     }
 
     /**
@@ -109,7 +112,7 @@ public class LibUSBGlobalTest
     public void testEndianConversion()
     {
         assumeUsbTestsEnabled();
-        assertEquals(0x1234, LibUsb.le16ToCpu(LibUsb.cpuToLe16(0x1234)));
+        assertEquals(0x1234, LibUsb.le16ToCpu(LibUsb.cpuToLe16((short) 0x1234)));
     }
 
     /**

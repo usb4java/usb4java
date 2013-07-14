@@ -30,8 +30,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public final class Version implements Comparable<Version>
 {
     /** The native pointer to the version structure. */
-    private long pointer;
-    
+    private long versionPointer;
+
     /**
      * Package-private constructor to prevent manual instantiation. An instance
      * is only returned by the JNI method {@link LibUsb#getVersion()}.
@@ -48,7 +48,7 @@ public final class Version implements Comparable<Version>
      */
     public long getPointer()
     {
-        return this.pointer;
+        return versionPointer;
     }
 
     /**
@@ -73,6 +73,13 @@ public final class Version implements Comparable<Version>
     public native int micro();
 
     /**
+     * Returns the library nano version.
+     * 
+     * @return The library nano version.
+     */
+    public native int nano();
+
+    /**
      * Returns the release candidate suffix string, e.g. "-rc4".
      * 
      * @return The release candidate suffix string.
@@ -80,28 +87,40 @@ public final class Version implements Comparable<Version>
     public native String rc();
 
     @Override
-    public String toString()
-    {
-        return major() + "." + minor() + "." + micro() + rc();
-    }
-
-    @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.pointer).toHashCode();
+        return new HashCodeBuilder()
+        .append(major())
+        .append(minor())
+        .append(micro())
+        .append(nano())
+        .append(rc())
+        .toHashCode();
     }
 
     @Override
     public boolean equals(final Object obj)
     {
-        if (obj == null) return false;
-        if (obj == this) return true;
-        if (obj.getClass() != getClass()) return false;
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+
         final Version other = (Version) obj;
+
         return new EqualsBuilder()
             .append(major(), other.major())
             .append(minor(), other.minor())
             .append(micro(), other.micro())
+            .append(nano(), other.nano())
             .append(rc(), other.rc())
             .isEquals();
     }
@@ -109,11 +128,27 @@ public final class Version implements Comparable<Version>
     @Override
     public int compareTo(final Version other)
     {
+        if (this == other)
+        {
+            return 0;
+        }
+        if (other == null)
+        {
+            return 1;
+        }
+
         return new CompareToBuilder()
             .append(major(), other.major())
             .append(minor(), other.minor())
             .append(micro(), other.micro())
+            .append(nano(), other.nano())
             .append(rc(), other.rc())
             .toComparison();
+    }
+
+    @Override
+    public String toString()
+    {
+        return major() + "." + minor() + "." + micro() + "." + nano() + rc();
     }
 }

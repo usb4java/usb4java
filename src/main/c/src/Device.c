@@ -5,7 +5,7 @@
 
 #include "Device.h"
 
-jobject wrapDevice(JNIEnv* env, libusb_device* device)
+jobject wrapDevice(JNIEnv* env, const libusb_device* device)
 {
     WRAP_POINTER(env, device, "Device", "devicePointer");
 }
@@ -13,4 +13,9 @@ jobject wrapDevice(JNIEnv* env, libusb_device* device)
 libusb_device* unwrapDevice(JNIEnv* env, jobject device)
 {
     UNWRAP_POINTER(env, device, libusb_device*, "devicePointer");
+}
+
+void resetDevice(JNIEnv* env, jobject object)
+{
+    RESET_POINTER(env, object, "devicePointer");
 }

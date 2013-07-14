@@ -14,14 +14,14 @@ jobject wrapEndpointDescriptor(JNIEnv *env,
 jobjectArray wrapEndpointDescriptors(JNIEnv *env, int count,
     const struct libusb_endpoint_descriptor *descriptors)
 {
-    int i;
-
     jobjectArray array = (jobjectArray) (*env)->NewObjectArray(env,
         count, (*env)->FindClass(env, PACKAGE_DIR"/EndpointDescriptor"),
         NULL);
-    for (i = 0; i < count; i++)
+
+    for (int i = 0; i < count; i++)
         (*env)->SetObjectArrayElement(env, array, i,
             wrapEndpointDescriptor(env, &descriptors[i]));
+
     return array;
 }
 
@@ -42,7 +42,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(EndpointDescriptor, bLength)
     struct libusb_endpoint_descriptor* descriptor =
         unwrapEndpointDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bLength;
+    return (jbyte) descriptor->bLength;
 }
 
 /**
@@ -56,7 +56,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(EndpointDescriptor, bDescriptorType)
     struct libusb_endpoint_descriptor* descriptor =
         unwrapEndpointDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bDescriptorType;
+    return (jbyte) descriptor->bDescriptorType;
 }
 
 /**
@@ -70,7 +70,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(EndpointDescriptor, bEndpointAddress)
     struct libusb_endpoint_descriptor* descriptor =
         unwrapEndpointDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bEndpointAddress;
+    return (jbyte) descriptor->bEndpointAddress;
 }
 
 /**
@@ -84,7 +84,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(EndpointDescriptor, bmAttributes)
     struct libusb_endpoint_descriptor* descriptor =
         unwrapEndpointDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bmAttributes;
+    return (jbyte) descriptor->bmAttributes;
 }
 
 /**
@@ -98,7 +98,7 @@ JNIEXPORT jshort JNICALL METHOD_NAME(EndpointDescriptor, wMaxPacketSize)
     struct libusb_endpoint_descriptor* descriptor =
         unwrapEndpointDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->wMaxPacketSize;
+    return (jshort) descriptor->wMaxPacketSize;
 }
 
 /**
@@ -112,7 +112,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(EndpointDescriptor, bInterval)
     struct libusb_endpoint_descriptor* descriptor =
         unwrapEndpointDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bInterval;
+    return (jbyte) descriptor->bInterval;
 }
 
 /**
@@ -126,13 +126,13 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(EndpointDescriptor, bRefresh)
     struct libusb_endpoint_descriptor* descriptor =
         unwrapEndpointDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bRefresh;
+    return (jbyte) descriptor->bRefresh;
 }
 
 /**
  * byte bSynchAddress()
  */
-JNIEXPORT jint JNICALL METHOD_NAME(EndpointDescriptor, bSynchAddress)
+JNIEXPORT jbyte JNICALL METHOD_NAME(EndpointDescriptor, bSynchAddress)
 (
     JNIEnv *env, jobject this
 )
@@ -140,7 +140,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(EndpointDescriptor, bSynchAddress)
     struct libusb_endpoint_descriptor* descriptor =
         unwrapEndpointDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bSynchAddress;
+    return (jbyte) descriptor->bSynchAddress;
 }
 
 /**
@@ -154,8 +154,7 @@ JNIEXPORT jobject JNICALL METHOD_NAME(EndpointDescriptor, extra)
     struct libusb_endpoint_descriptor *descriptor =
         unwrapEndpointDescriptor(env, this);
     if (!descriptor) return NULL;
-    return (*env)->NewDirectByteBuffer(env, (void *) descriptor->extra,
-        descriptor->extra_length);
+    return NewDirectReadOnlyByteBuffer(env, descriptor->extra, descriptor->extra_length);
 }
 
 /**

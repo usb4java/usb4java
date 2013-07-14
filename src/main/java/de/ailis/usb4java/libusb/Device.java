@@ -18,8 +18,6 @@
 
 package de.ailis.usb4java.libusb;
 
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 /**
  * Structure representing a USB device detected on the system.
  * 
@@ -54,7 +52,7 @@ public final class Device
     {
         // Empty
     }
-    
+
     /**
      * Returns the native pointer to the device structure.
      * 
@@ -64,25 +62,43 @@ public final class Device
     {
         return this.devicePointer;
     }
-        
+
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.devicePointer).toHashCode();
+        final int prime = 31;
+        int result = 1;
+        result = (prime * result)
+            + (int) (devicePointer ^ (devicePointer >>> 32));
+        return result;
     }
 
     @Override
     public boolean equals(final Object obj)
     {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
         final Device other = (Device) obj;
-        return this.devicePointer == other.devicePointer;
+        if (devicePointer != other.devicePointer)
+        {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString()
     {
-        return String.format("libusb device 0x%x", this.devicePointer);
+        return String.format("libusb device 0x%x", devicePointer);
     }
 }

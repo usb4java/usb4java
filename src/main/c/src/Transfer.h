@@ -8,7 +8,19 @@
 
 #include "usb4java.h"
 
-jobject wrapTransfer(JNIEnv*, struct libusb_transfer*);
+struct transfer_data
+{
+    jobject transferObject;
+    jobject callbackObject;
+    jmethodID callbackObjectMethod;
+    jobject callbackUserDataObject;
+    size_t maxNumIsoPackets;
+};
+
+void cleanupGlobalReferences(JNIEnv*, jobject);
+void cleanupCallbackEnable(JNIEnv*, jobject);
+
+jobject wrapTransfer(JNIEnv*, const struct libusb_transfer*);
 struct libusb_transfer* unwrapTransfer(JNIEnv*, jobject);
 void resetTransfer(JNIEnv*, jobject);
 

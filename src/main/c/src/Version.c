@@ -7,12 +7,12 @@
 
 jobject wrapVersion(JNIEnv* env, const struct libusb_version* pointer)
 {
-    WRAP_POINTER(env, pointer, "Version", "pointer");
+    WRAP_POINTER(env, pointer, "Version", "versionPointer");
 }
 
 const struct libusb_version* unwrapVersion(JNIEnv* env, jobject object)
 {
-    UNWRAP_POINTER(env, object, struct libusb_version*, "pointer");
+    UNWRAP_POINTER(env, object, const struct libusb_version*, "versionPointer");
 }
 
 /**
@@ -55,7 +55,20 @@ JNIEXPORT jint JNICALL METHOD_NAME(Version, micro)
 }
 
 /**
- * string rc()
+ * int nano()
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(Version, nano)
+(
+    JNIEnv *env, jobject this
+)
+{
+    const struct libusb_version *version = unwrapVersion(env, this);
+    if (!version) return 0;
+    return version->nano;
+}
+
+/**
+ * String rc()
  */
 JNIEXPORT jstring JNICALL METHOD_NAME(Version, rc)
 (

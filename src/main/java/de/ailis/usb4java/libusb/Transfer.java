@@ -32,12 +32,18 @@ import java.nio.ByteBuffer;
 public final class Transfer
 {
     /** The native pointer to the transfer structure. */
-    private long pointer;
+    private long transferPointer;
+
+    // Keeping a reference to the buffer has multiple benefits: faster get(), GC
+    // prevention (while Transfer is alive) and you can check the buffer's
+    // original capacity (needed to check setLength() properly).
+    private ByteBuffer transferBuffer;
 
     /**
-     * Constructs a new transfer structure.
+     * Package-private constructor to prevent manual instantiation.
+     * Transfers are always created by JNI with allocTransfer().
      */
-    public Transfer()
+    Transfer()
     {
         // Empty
     }
@@ -49,7 +55,7 @@ public final class Transfer
      */
     public long getPointer()
     {
-        return this.pointer;
+        return transferPointer;
     }
 
     /**
@@ -57,7 +63,7 @@ public final class Transfer
      * 
      * @return The handle of the device.
      */
-    public native DeviceHandle getDevHandle();
+    public native DeviceHandle devHandle();
 
     /**
      * Sets the handle of the device that this transfer will be submitted to.
@@ -72,7 +78,7 @@ public final class Transfer
      * 
      * @return The transfer flags.
      */
-    public native int getFlags();
+    public native byte flags();
 
     /**
      * Sets the bitwise OR combination of libusb transfer flags.
@@ -80,14 +86,14 @@ public final class Transfer
      * @param flags
      *            The transfer flags to set.
      */
-    public native void setFlags(final int flags);
+    public native void setFlags(final byte flags);
 
     /**
      * Returns the address of the endpoint where this transfer will be sent.
      * 
      * @return The endpoint address.
      */
-    public native int getEndpoint();
+    public native byte endpoint();
 
     /**
      * Sets the address of the endpoint where this transfer will be sent.
@@ -95,14 +101,14 @@ public final class Transfer
      * @param endpoint
      *            The endpoint address to set
      */
-    public native void setEndpoint(final int endpoint);
+    public native void setEndpoint(final byte endpoint);
 
     /**
      * Returns the type of the endpoint.
      * 
      * @return The endpoint type.
      */
-    public native int getType();
+    public native byte type();
 
     /**
      * Sets the type of the endpoint.
@@ -110,7 +116,7 @@ public final class Transfer
      * @param type
      *            The endpoint type to set.
      */
-    public native void setType(final int type);
+    public native void setType(final byte type);
 
     /**
      * Returns the timeout for this transfer in milliseconds. A value of 0
@@ -118,7 +124,7 @@ public final class Transfer
      * 
      * @return The timeout.
      */
-    public native long getTimeout();
+    public native long timeout();
 
     /**
      * Sets the timeout for this transfer in milliseconds. A value of 0
@@ -127,7 +133,7 @@ public final class Transfer
      * @param timeout
      *            The timeout to set.
      */
-    public native void setTimeout(final int timeout);
+    public native void setTimeout(final long timeout);
 
     /**
      * Returns the status of the transfer. Read-only, and only for use within
@@ -140,22 +146,47 @@ public final class Transfer
      * 
      * @return The transfer status.
      */
-    public native int getStatus();
+    public native int status();
 
     /**
      * Returns the length of the data buffer.
      * 
      * @return The data buffer length.
      */
-    public native int getLength();
+    public native int length();
 
     /**
      * Sets the length of the data buffer.
      * 
+     * This is checked against the maximum capacity of the supplied ByteBuffer.
+     * 
      * @param length
      *            The data buffer length to set.
      */
-    public native void setLength(final int length);
+    public void setLength(final int length)
+    {
+        // Verify that the new length doesn't exceed the current buffer's
+        // maximum capacity.
+        if (length != 0)
+        {
+            if (transferBuffer == null)
+            {
+                throw new IllegalArgumentException(
+                    "buffer is null, only a length of 0 is allowed");
+            }
+
+            if (transferBuffer.capacity() < length)
+            {
+                throw new IllegalArgumentException(
+                    "buffer too small for requested length");
+            }
+        }
+
+        // Native call.
+        setLengthNative(length);
+    }
+
+    native void setLengthNative(final int length);
 
     /**
      * Returns the actual length of data that was transferred. Read-only, and
@@ -164,14 +195,50 @@ public final class Transfer
      * 
      * @return The actual length of the transferred data.
      */
-    public native int getActualLength();
+    public native int actualLength();
+
+    /**
+     * Returns the current callback object.
+     * 
+     * @return The current callback object.
+     */
+    public native TransferCallback callback();
+
+    /**
+     * Sets the callback object.
+     * 
+     * This will be invoked when the transfer completes, fails, or is cancelled.
+     * 
+     * @param callback
+     *            The callback object to use.
+     */
+    public native void setCallback(final TransferCallback callback);
+
+    /**
+     * Returns the current user data object.
+     * 
+     * @return The current user data object.
+     */
+    public native Object userData();
+
+    /**
+     * Sets the user data object, representing user context data to pass to
+     * the callback function and that can be accessed from there.
+     * 
+     * @param userData
+     *            The user data object to set.
+     */
+    public native void setUserData(final Object userData);
 
     /**
      * Returns the data buffer.
      * 
      * @return The data buffer.
      */
-    public native ByteBuffer getBuffer();
+    public ByteBuffer buffer()
+    {
+        return transferBuffer;
+    }
 
     /**
      * Sets the data buffer.
@@ -179,7 +246,27 @@ public final class Transfer
      * @param buffer
      *            The data buffer to set.
      */
-    public native void setBuffer(final ByteBuffer buffer);
+    public void setBuffer(final ByteBuffer buffer)
+    {
+        // Native call.
+        setBufferNative(buffer);
+
+        if (buffer != null)
+        {
+            // Set new length based on buffer's capacity.
+            setLengthNative(buffer.capacity());
+        }
+        else
+        {
+            setLengthNative(0);
+        }
+
+        // Once we know the native calls have gone through, update the
+        // reference.
+        transferBuffer = buffer;
+    }
+
+    native void setBufferNative(final ByteBuffer buffer);
 
     /**
      * Returns the number of isochronous packets. Only used for I/O with
@@ -187,7 +274,7 @@ public final class Transfer
      * 
      * @return The number of isochronous packets.
      */
-    public native int getNumIsoPackets();
+    public native int numIsoPackets();
 
     /**
      * Sets the number of isochronous packets.
@@ -196,4 +283,50 @@ public final class Transfer
      *            The number of isochronous packets to set.
      */
     public native void setNumIsoPackets(final int numIsoPackets);
+
+    /**
+     * Array of isochronous packet descriptors, for isochronous transfers only.
+     * 
+     * @return The array of isochronous packet descriptors.
+     */
+    public native IsoPacketDescriptor[] isoPacketDesc();
+
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = 1;
+        result = (prime * result)
+            + (int) (transferPointer ^ (transferPointer >>> 32));
+        return result;
+    }
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final Transfer other = (Transfer) obj;
+        if (transferPointer != other.transferPointer)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.format("libusb transfer 0x%x", transferPointer);
+    }
 }

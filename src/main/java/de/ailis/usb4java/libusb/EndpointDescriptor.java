@@ -41,14 +41,14 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
     private long endpointDescriptorPointer;
 
     /**
-     * Package-private constructor to prevent manual instantiation. Endpoint 
+     * Package-private constructor to prevent manual instantiation. Endpoint
      * descriptors are always created by JNI.
      */
     EndpointDescriptor()
     {
         // Empty
     }
-    
+
     /**
      * Returns the native pointer.
      * 
@@ -116,33 +116,13 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
      */
     public String dump()
     {
-        return String.format("%s"
+        return String.format("%s%n"
             + "  extralen %17d%n"
             + "  extra:%n"
-            + "%s%n",
+            + "%s",
             DescriptorUtils.dump(this),
             extraLength(),
             DescriptorUtils.dump(extra()).replaceAll("(?m)^", "    "));
-    }
-
-    @Override
-    public boolean equals(final Object obj)
-    {
-        if (obj == null) return false;
-        if (obj == this) return true;
-        if (obj.getClass() != getClass()) return false;
-        final EndpointDescriptor other = (EndpointDescriptor) obj;
-        return new EqualsBuilder()
-            .append(bDescriptorType(), other.bDescriptorType())
-            .append(bLength(), other.bLength())
-            .append(bEndpointAddress(), other.bEndpointAddress())
-            .append(bmAttributes(), other.bmAttributes())
-            .append(bInterval(), other.bInterval())
-            .append(bSynchAddress(), other.bSynchAddress())
-            .append(wMaxPacketSize(), other.wMaxPacketSize())
-            .append(extraLength(), other.extraLength())
-            .append(extra(), other.extra())
-            .isEquals();
     }
 
     @Override
@@ -160,6 +140,38 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
             .append(extra())
             .append(extraLength())
             .toHashCode();
+    }
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+
+        final EndpointDescriptor other = (EndpointDescriptor) obj;
+
+        return new EqualsBuilder()
+            .append(bLength(), other.bLength())
+            .append(bDescriptorType(), other.bDescriptorType())
+            .append(bEndpointAddress(), other.bEndpointAddress())
+            .append(bmAttributes(), other.bmAttributes())
+            .append(wMaxPacketSize(), other.wMaxPacketSize())
+            .append(bInterval(), other.bInterval())
+            .append(bRefresh(), other.bRefresh())
+            .append(bSynchAddress(), other.bSynchAddress())
+            .append(extra(), other.extra())
+            .append(extraLength(), other.extraLength())
+            .isEquals();
     }
 
     @Override

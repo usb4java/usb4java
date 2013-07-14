@@ -8,7 +8,7 @@
 
 #include "usb4java.h"
 
-void setDeviceList(JNIEnv*, libusb_device**, int, jobject);
+void setDeviceList(JNIEnv*, libusb_device* const *, jint, jobject);
 libusb_device** unwrapDeviceList(JNIEnv*, jobject);
 void resetDeviceList(JNIEnv*, jobject);
 

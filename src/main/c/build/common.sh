@@ -2,27 +2,28 @@ cd "$(dirname $0)"
 SRCDIR="$(pwd)/.."
 TMPDIR="$SRCDIR/tmp"
 DOWNLOADS="$SRCDIR/downloads"
-LIBUSB="libusbx"
-LIBUSB_VERSION="1.0.16"
-LIBUSB_RC="-rc8"
-LIBUSBX_VERSION="1.0.16"
-LIBUSBX_RC=""
+
+LIBUSB="stable"
+LIBUSB_STABLE_VERSION="1.0.16"
+LIBUSB_STABLE_RC=""
+LIBUSB_BETA_VERSION="1.0.16"
+LIBUSB_BETA_RC="-rc3"
 
 build()
 {
-    if [ "$LIBUSB" = "libusbx" ]
+    if [ "$LIBUSB" = "stable" ]
     then
-        LIBUSB_NAME="libusbx-$LIBUSBX_VERSION$LIBUSBX_RC"
+        LIBUSB_NAME="libusbx-$LIBUSB_STABLE_VERSION$LIBUSB_STABLE_RC"
         LIBUSB_ARCHIVE="$LIBUSB_NAME.tar.bz2"
-        LIBUSB_URL="http://downloads.sf.net/project/libusbx/releases/$LIBUSBX_VERSION/source/$LIBUSB_ARCHIVE"
+        LIBUSB_URL="http://downloads.sf.net/project/libusbx/releases/$LIBUSB_STABLE_VERSION/source/$LIBUSB_ARCHIVE"
     else
-        LIBUSB_NAME="libusb-$LIBUSB_VERSION$LIBUSB_RC"
+        LIBUSB_NAME="libusbx-$LIBUSB_BETA_VERSION$LIBUSB_BETA_RC"
         LIBUSB_ARCHIVE="$LIBUSB_NAME.tar.bz2"
-        LIBUSB_URL="http://downloads.sf.net/project/libusb/libusb-1.0/libusb-$LIBUSB_VERSION$LIBUSB_RC/$LIBUSB_ARCHIVE"
+        LIBUSB_URL="http://downloads.sf.net/project/libusbx/releases/$LIBUSB_BETA_VERSION/source/$LIBUSB_ARCHIVE"
     fi
 
     DISTDIR="$SRCDIR/../resources/de/ailis/usb4java/libusb/$OS-$ARCH"
-    
+
     # Clean up
     rm -rf "$TMPDIR"
     rm -rf "$DISTDIR"
@@ -62,7 +63,7 @@ build()
     CFLAGS="$CFLAGS $USB4JAVA_CFLAGS" \
     ./configure --prefix=/ --host="$HOST" $USB4JAVA_CONFIG
     make clean install-strip DESTDIR="$TMPDIR"
-    
+
     # Copy dist files to java resources directory
     mkdir -p "$DISTDIR"
     cp -faL 2>/dev/null \

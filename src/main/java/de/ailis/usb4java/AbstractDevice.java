@@ -121,7 +121,7 @@ abstract class AbstractDevice implements UsbDevice
         for (int i = 0; i < numConfigurations; i += 1)
         {
             final ConfigDescriptor configDescriptor = new ConfigDescriptor();
-            final int result = LibUsb.getConfigDescriptor(device, i, 
+            final int result = LibUsb.getConfigDescriptor(device, (byte) i,
                 configDescriptor);
             if (result < 0)
             {
@@ -521,8 +521,8 @@ abstract class AbstractDevice implements UsbDevice
     {
         final DeviceHandle handle = open();
         final ByteBuffer buffer = ByteBuffer.allocateDirect(256);
-        final int result = LibUsb.getDescriptor(handle, LibUsb.DT_STRING, 0,
-            buffer);
+        final int result = LibUsb.getDescriptor(handle, LibUsb.DT_STRING,
+            (byte) 0, buffer);
         if (result < 0)
             throw new LibUsbException(
                 "Unable to get string descriptor languages", result);

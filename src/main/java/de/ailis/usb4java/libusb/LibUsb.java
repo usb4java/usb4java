@@ -21,6 +21,13 @@ package de.ailis.usb4java.libusb;
 import java.io.FileDescriptor;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.nio.LongBuffer;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
+import org.apache.commons.lang3.tuple.ImmutablePair;
+
+import de.ailis.usb4java.utils.BufferUtils;
 
 /**
  * Static class providing the constants and functions of libusb.
@@ -159,75 +166,75 @@ public final class LibUsb
     // Standard requests, as defined in table 9-5 of the USB 3.0 specifications.
 
     /** Request status of the specific recipient. */
-    public static final int REQUEST_GET_STATUS = 0x00;
+    public static final byte REQUEST_GET_STATUS = 0x00;
 
     /** Clear or disable a specific feature. */
-    public static final int REQUEST_CLEAR_FEATURE = 0x01;
+    public static final byte REQUEST_CLEAR_FEATURE = 0x01;
 
     /** Set or enable a specific feature. */
-    public static final int REQUEST_SET_FEATURE = 0x03;
+    public static final byte REQUEST_SET_FEATURE = 0x03;
 
     /** Set device address for all future accesses. */
-    public static final int REQUEST_SET_ADDRESS = 0x05;
+    public static final byte REQUEST_SET_ADDRESS = 0x05;
 
     /** Set device address for all future accesses. */
-    public static final int REQUEST_GET_DESCRIPTOR = 0x06;
+    public static final byte REQUEST_GET_DESCRIPTOR = 0x06;
 
     /** Set device address for all future accesses. */
-    public static final int REQUEST_SET_DESCRIPTOR = 0x07;
+    public static final byte REQUEST_SET_DESCRIPTOR = 0x07;
 
     /** Get the current device configuration value. */
-    public static final int REQUEST_GET_CONFIGURATION = 0x08;
+    public static final byte REQUEST_GET_CONFIGURATION = 0x08;
 
     /** Get the current device configuration value. */
-    public static final int REQUEST_SET_CONFIGURATION = 0x09;
+    public static final byte REQUEST_SET_CONFIGURATION = 0x09;
 
     /** Return the selected alternate setting for the specified interface. */
-    public static final int REQUEST_GET_INTERFACE = 0x0a;
+    public static final byte REQUEST_GET_INTERFACE = 0x0A;
 
     /** Select an alternate interface for the specified interface. */
-    public static final int REQUEST_SET_INTERFACE = 0x0b;
+    public static final byte REQUEST_SET_INTERFACE = 0x0B;
 
     /** Set then report an endpoint's synchronization frame. */
-    public static final int REQUEST_SYNCH_FRAME = 0x0c;
+    public static final byte REQUEST_SYNCH_FRAME = 0x0C;
 
     /** Sets both the U1 and U2 Exit Latency. */
-    public static final int REQUEST_SET_SEL = 0x30;
+    public static final byte REQUEST_SET_SEL = 0x30;
 
     /**
      * Delay from the time a host transmits a packet to the time it is received
      * by the device.
      */
-    public static final int SET_ISOCH_DELAY = 0x31;
+    public static final byte SET_ISOCH_DELAY = 0x31;
 
     // Request type bits of the bmRequestType field in control transfers.
 
     /** Standard. */
-    public static final int REQUEST_TYPE_STANDARD = 0;
+    public static final byte REQUEST_TYPE_STANDARD = 0;
 
     /** Class. */
-    public static final int REQUEST_TYPE_CLASS = 32;
+    public static final byte REQUEST_TYPE_CLASS = 32;
 
     /** Vendor. */
-    public static final int REQUEST_TYPE_VENDOR = 64;
+    public static final byte REQUEST_TYPE_VENDOR = 64;
 
     /** Reserved. */
-    public static final int REQUEST_TYPE_RESERVED = 96;
+    public static final byte REQUEST_TYPE_RESERVED = 96;
 
     // Recipient bits of the bmRequestType field in control transfers.
     // Values 4 through 31 are reserved.
 
     /** Device. */
-    public static final int RECIPIENT_DEVICE = 0x00;
+    public static final byte RECIPIENT_DEVICE = 0x00;
 
     /** Interface. */
-    public static final int RECIPIENT_INTERFACE = 0x01;
+    public static final byte RECIPIENT_INTERFACE = 0x01;
 
     /** Endpoint. */
-    public static final int RECIPIENT_ENDPOINT = 0x02;
+    public static final byte RECIPIENT_ENDPOINT = 0x02;
 
     /** Other. */
-    public static final int RECIPIENT_OTHER = 0x03;
+    public static final byte RECIPIENT_OTHER = 0x03;
 
     // Capabilities supported by an instance of libusb on the current running
     // platform. Test if the loaded library supports a given capability by
@@ -254,6 +261,8 @@ public final class LibUsb
      */
     public static final int CAP_SUPPORTS_DETACH_KERNEL_DRIVER = 0x0101;
 
+    public static final short CONTROL_SETUP_SIZE = 8;
+
     // Device and/or Interface Class codes.
 
     /**
@@ -261,61 +270,61 @@ public final class LibUsb
      * that each interface specifies its own class information and all
      * interfaces operate independently.
      */
-    public static final int CLASS_PER_INTERFACE = 0;
+    public static final byte CLASS_PER_INTERFACE = 0;
 
     /** Audio class. */
-    public static final int CLASS_AUDIO = 1;
+    public static final byte CLASS_AUDIO = 1;
 
     /** Communications class. */
-    public static final int CLASS_COMM = 2;
+    public static final byte CLASS_COMM = 2;
 
     /** Human Interface Device class. */
-    public static final int CLASS_HID = 3;
+    public static final byte CLASS_HID = 3;
 
     /** Physical. */
-    public static final int CLASS_PHYSICAL = 5;
+    public static final byte CLASS_PHYSICAL = 5;
 
     /** Image class. */
-    public static final int CLASS_PTP = 6;
+    public static final byte CLASS_PTP = 6;
 
     /** Image class. */
-    public static final int CLASS_IMAGE = 6;
+    public static final byte CLASS_IMAGE = 6;
 
     /** Printer class. */
-    public static final int CLASS_PRINTER = 7;
+    public static final byte CLASS_PRINTER = 7;
 
     /** Mass storage class. */
-    public static final int CLASS_MASS_STORAGE = 8;
+    public static final byte CLASS_MASS_STORAGE = 8;
 
     /** Hub class. */
-    public static final int CLASS_HUB = 9;
+    public static final byte CLASS_HUB = 9;
 
     /** Data class. */
-    public static final int CLASS_DATA = 10;
+    public static final byte CLASS_DATA = 10;
 
     /** Smart Card. */
-    public static final int CLASS_SMART_CARD = 0x0b;
+    public static final byte CLASS_SMART_CARD = 0x0B;
 
     /** Content Security. */
-    public static final int CLASS_CONTENT_SECURITY = 0x0d;
+    public static final byte CLASS_CONTENT_SECURITY = 0x0D;
 
     /** Video. */
-    public static final int CLASS_VIDEO = 0x0e;
+    public static final byte CLASS_VIDEO = 0x0E;
 
     /** Personal Healthcare. */
-    public static final int CLASS_PERSONAL_HEALTHCARE = 0x0f;
+    public static final byte CLASS_PERSONAL_HEALTHCARE = 0x0F;
 
     /** Diagnostic Device. */
-    public static final int CLASS_DIAGNOSTIC_DEVICE = 0xdc;
+    public static final byte CLASS_DIAGNOSTIC_DEVICE = (byte) 0xDC;
 
     /** Wireless class. */
-    public static final int CLASS_WIRELESS = 0xe0;
+    public static final byte CLASS_WIRELESS = (byte) 0xE0;
 
     /** Application class. */
-    public static final int CLASS_APPLICATION = 0xfe;
+    public static final byte CLASS_APPLICATION = (byte) 0xFE;
 
     /** Class is vendor-specific. */
-    public static final int CLASS_VENDOR_SPEC = 0xff;
+    public static final byte CLASS_VENDOR_SPEC = (byte) 0xFF;
 
     // Descriptor types as defined by the USB specification.
 
@@ -324,160 +333,170 @@ public final class LibUsb
      * 
      * @see DeviceDescriptor
      */
-    public static final int DT_DEVICE = 0x01;
+    public static final byte DT_DEVICE = 0x01;
 
     /**
      * Configuration descriptor.
      * 
      * @see ConfigDescriptor
      */
-    public static final int DT_CONFIG = 0x02;
+    public static final byte DT_CONFIG = 0x02;
 
     /** String descriptor. */
-    public static final int DT_STRING = 0x03;
+    public static final byte DT_STRING = 0x03;
 
     /**
      * Interface descriptor.
      * 
      * @see InterfaceDescriptor
      */
-    public static final int DT_INTERFACE = 0x04;
+    public static final byte DT_INTERFACE = 0x04;
 
     /**
      * Endpoint descriptor.
      * 
      * @see EndpointDescriptor
      */
-    public static final int DT_ENDPOINT = 0x05;
+    public static final byte DT_ENDPOINT = 0x05;
 
     /**
      * BOS descriptor.
      * 
      * @see BosDescriptor
      */
-    public static final int DT_BOS = 0x0f;
+    public static final byte DT_BOS = 0x0F;
 
     /**
      * Device Capability descriptor.
      * 
      * @see BosDevCapabilityDescriptor
      */
-    public static final int DT_DEVICE_CAPABILITY = 0x10;
+    public static final byte DT_DEVICE_CAPABILITY = 0x10;
 
     /** HID descriptor. */
-    public static final int DT_HID = 0x21;
+    public static final byte DT_HID = 0x21;
 
     /** HID report descriptor. */
-    public static final int DT_REPORT = 0x22;
+    public static final byte DT_REPORT = 0x22;
 
     /** Physical descriptor. */
-    public static final int DT_PHYSICAL = 0x23;
+    public static final byte DT_PHYSICAL = 0x23;
 
     /** Hub descriptor. */
-    public static final int DT_HUB = 0x29;
+    public static final byte DT_HUB = 0x29;
 
     /** SuperSpeed Hub descriptor. */
-    public static final int DT_SUPERSPEED_HUB = 0x2a;
+    public static final byte DT_SUPERSPEED_HUB = 0x2A;
 
     /**
      * SuperSpeed Endpoint Companion descriptor.
      * 
      * @see SsEndpointCompanionDescriptor
      */
-    public static final int DT_SS_ENDPOINT_COMPANION = 0x30;
+    public static final byte DT_SS_ENDPOINT_COMPANION = 0x30;
 
     // Descriptor sizes per descriptor type
 
     /** Size of a device descriptor. */
-    public static final int DT_DEVICE_SIZE = 18;
+    public static final byte DT_DEVICE_SIZE = 18;
 
     /** Size of a config descriptor. */
-    public static final int DT_CONFIG_SIZE = 9;
+    public static final byte DT_CONFIG_SIZE = 9;
 
     /** Size of an interface descriptor. */
-    public static final int DT_INTERFACE_SIZE = 9;
+    public static final byte DT_INTERFACE_SIZE = 9;
 
     /** Size of an interface descriptor. */
-    public static final int DT_ENDPOINT_SIZE = 7;
+    public static final byte DT_ENDPOINT_SIZE = 7;
 
     /** Size of an interface descriptor. */
-    public static final int DT_ENDPOINT_AUDIO_SIZE = 9;
+    public static final byte DT_ENDPOINT_AUDIO_SIZE = 9;
 
     /** Size of an interface descriptor. */
-    public static final int DT_HUB_NONVAR_SIZE = 7;
+    public static final byte DT_HUB_NONVAR_SIZE = 7;
 
     // Endpoint direction. Values for bit 7 of the endpoint address scheme.
 
     /** In: device-to-host. */
-    public static final int ENDPOINT_IN = 0x80;
+    public static final byte ENDPOINT_IN = (byte) 0x80;
 
     /** Out: host-to-device. */
-    public static final int ENDPOINT_OUT = 0x00;
+    public static final byte ENDPOINT_OUT = 0x00;
 
     // === Masks =============================================================
 
     /** Endpoint address mask. */
-    public static final int ENDPOINT_ADDRESS_MASK = 0x0f;
+    public static final byte ENDPOINT_ADDRESS_MASK = 0x0F;
 
     /** Endpoint direction mask. */
-    public static final int ENDPOINT_DIR_MASK = 0x80;
+    public static final byte ENDPOINT_DIR_MASK = (byte) 0x80;
 
     /** Transfer type mask. */
-    public static final int TRANSFER_TYPE_MASK = 0x03;
+    public static final byte TRANSFER_TYPE_MASK = 0x03;
 
     // Endpoint transfer type. Values for bits 0:1 of the endpoint attributes
     // field.
 
     /** Control endpoint. */
-    public static final int TRANSFER_TYPE_CONTROL = 0;
+    public static final byte TRANSFER_TYPE_CONTROL = 0;
 
     /** Isochronous endpoint. */
-    public static final int TRANSFER_TYPE_ISOCHRONOUS = 1;
+    public static final byte TRANSFER_TYPE_ISOCHRONOUS = 1;
 
     /** Bulk endpoint. */
-    public static final int TRANSFER_TYPE_BULK = 2;
+    public static final byte TRANSFER_TYPE_BULK = 2;
 
     /** Interrupt endpoint. */
-    public static final int TRANSFER_TYPE_INTERRUPT = 3;
+    public static final byte TRANSFER_TYPE_INTERRUPT = 3;
 
     // Synchronization type for isochronous endpoints.
     // Values for bits 2:3 of the bmAttributes field in
     // EndpointDescriptor.
 
+    public static final byte ISO_SYNC_TYPE_MASK = 0x0C;
+
     /** No synchronization. */
-    public static final int ISO_SYNC_TYPE_NONE = 0;
+    public static final byte ISO_SYNC_TYPE_NONE = 0;
 
     /** Asynchronous. */
-    public static final int ISO_SYNC_TYPE_ASYNC = 1;
+    public static final byte ISO_SYNC_TYPE_ASYNC = 1;
 
     /** Adaptive. */
-    public static final int ISO_SYNC_TYPE_ADAPTIVE = 2;
+    public static final byte ISO_SYNC_TYPE_ADAPTIVE = 2;
 
     /** Synchronous. */
-    public static final int ISO_SYNC_TYPE_SYNC = 3;
+    public static final byte ISO_SYNC_TYPE_SYNC = 3;
 
     // Usage type for isochronous endpoints. Values for bits 4:5 of the
     // bmAttributes field in EndpointDescriptor.
 
+    public static final byte ISO_USAGE_TYPE_MASK = 0x30;
+
     /** Data endpoint. */
-    public static final int ISO_USAGE_TYPE_DATA = 0;
+    public static final byte ISO_USAGE_TYPE_DATA = 0;
 
     /** Feedback endpoint. */
-    public static final int ISO_USAGE_TYPE_FEEDBACK = 1;
+    public static final byte ISO_USAGE_TYPE_FEEDBACK = 1;
 
     /** Implicit feedback Data endpoint. */
-    public static final int ISO_USAGE_TYPE_IMPLICIT = 2;
+    public static final byte ISO_USAGE_TYPE_IMPLICIT = 2;
 
     /** Report short frames as errors. */
-    public static final int TRANSFER_SHORT_NOT_OK = 1;
+    public static final byte TRANSFER_SHORT_NOT_OK = 1;
 
     // Transfer flags
 
     /**
      * Automatically free transfer buffer during {@link #freeTransfer(Transfer)}
-     * TODO Not sure how to do this memory management between Java and C.
+     * 
+     * Please note that this flag is effectively a no-op (set to zero) here in
+     * the Java wrapper, since the ByteBuffer that acts as a buffer for
+     * transfers is allocated by the JVM and is subject to garbage collection
+     * like any other object at some point. Nulling the reference is the only
+     * needed action to take, and it is already done by the
+     * TRANSFER_FREE_TRANSFER flag.
      */
-    public static final int TRANSFER_FREE_BUFFER = 2;
+    public static final byte TRANSFER_FREE_BUFFER = 0; // Originally 2
 
     /**
      * Automatically call {@link #freeTransfer(Transfer)} after callback
@@ -487,7 +506,7 @@ public final class LibUsb
      * {@link #freeTransfer(Transfer)} from your transfer callback, as this will
      * result in a double-free when this flag is acted upon.
      */
-    public static final int TRANSFER_FREE_TRANSFER = 4;
+    public static final byte TRANSFER_FREE_TRANSFER = 4;
 
     /**
      * Terminate transfers that are a multiple of the endpoint's wMaxPacketSize
@@ -511,7 +530,7 @@ public final class LibUsb
      * libusb_submit_transfer() will return {@link #ERROR_NOT_SUPPORTED} for
      * every transfer where this flag is set.
      */
-    public static final int TRANSFER_ADD_ZERO_PACKET = 8;
+    public static final byte TRANSFER_ADD_ZERO_PACKET = 8;
 
     // Transfer status codes
 
@@ -542,14 +561,11 @@ public final class LibUsb
     /** Device sent more data than requested. */
     public static final int TRANSFER_OVERFLOW = 6;
 
-    /** The maximum size of a string (Unicode). */
-    private static final int MAX_STRING_SIZE = 126;
-
-    /** The currently set pollfd listener. */
-    private static PollfdListener pollfdListener;
-
-    /** The currently set pollfd listener user data. */
-    private static Object pollfdListenerUserData;
+    /**
+     * pollfd listeners (to support different listeners for different contexts).
+     */
+    private static final ConcurrentMap<Long, ImmutablePair<PollfdListener, Object>> pollfdListeners =
+        new ConcurrentHashMap<Long, ImmutablePair<PollfdListener, Object>>();
 
     static
     {
@@ -586,7 +602,7 @@ public final class LibUsb
      *            default context. Only valid on return code 0.
      * @return 0 on success or a error code on failure.
      */
-    public static native int init(final Context context);
+    public static synchronized native int init(final Context context);
 
     /**
      * Deinitialize libusb.
@@ -598,7 +614,7 @@ public final class LibUsb
      *            The {@link Context} to deinitialize, or NULL for the default
      *            context.
      */
-    public static native void exit(final Context context);
+    public static synchronized native void exit(final Context context);
 
     /**
      * Set log message verbosity.
@@ -707,12 +723,12 @@ public final class LibUsb
      *         array is too small
      */
     public static native int getPortNumbers(final Device device,
-        final byte[] path);
+        final ByteBuffer path);
 
     /**
      * Get the list of all port numbers from root for the specified device.
      * 
-     * @deprecated Please use {@link #getPortNumbers(Device, byte[])} instead.
+     * @deprecated Please use {@link #getPortNumbers(Device, ByteBuffer)} instead.
      * 
      * @param context
      *            The context.
@@ -725,14 +741,18 @@ public final class LibUsb
      *         array is too small
      */
     @Deprecated
-    public static int getPortPaths(final Context context,
-        final Device device, final byte[] path)
+    public static int getPortPath(final Context context,
+        final Device device, final ByteBuffer path)
     {
         return getPortNumbers(device, path);
     }
 
     /**
      * Get the the parent from the specified device [EXPERIMENTAL].
+     * 
+     * Please note that the reference count of the returned device is not
+     * increased. As such, do not *ever* call {@link #unrefDevice(Device))
+     * directly on the returned Device.
      * 
      * @param device
      *            A device
@@ -785,7 +805,7 @@ public final class LibUsb
      *         does not exist {@link #ERROR_OTHER} on other failure
      */
     public static native int getMaxPacketSize(final Device device,
-        final int endpoint);
+        final byte endpoint);
 
     /**
      * Calculate the maximum packet size which a specific endpoint is capable
@@ -802,10 +822,8 @@ public final class LibUsb
      * 
      * This function is useful for setting up isochronous transfers, for example
      * you might pass the return value from this function to
-     * libusb_set_iso_packet_lengths() in order to set the length field of every
-     * isochronous packet in a transfer.
-     * 
-     * TODO Link to libusb_set_iso_packet_lengths when implemented
+     * {@link #setIsoPacketLengths(Transfer, int)} in order to set the length
+     * field of every isochronous packet in a transfer.
      * 
      * @param device
      *            A device.
@@ -816,7 +834,7 @@ public final class LibUsb
      *         {@link #ERROR_OTHER} on other failure.
      */
     public static native int getMaxIsoPacketSize(final Device device,
-        final int endpoint);
+        final byte endpoint);
 
     /**
      * Increment the reference count of a device.
@@ -885,7 +903,7 @@ public final class LibUsb
      *         device could not be found.
      */
     public static native DeviceHandle openDeviceWithVidPid(
-        final Context context, final int vendorId, final int productId);
+        final Context context, final short vendorId, final short productId);
 
     /**
      * Close a device handle.
@@ -905,8 +923,9 @@ public final class LibUsb
     /**
      * Get the underlying device for a handle.
      * 
-     * This function does not modify the reference count of the returned device,
-     * so do not feel compelled to unreference it when you are done.
+     * Please note that the reference count of the returned device is not
+     * increased. As such, do not *ever* call {@link #unrefDevice(Device))
+     * directly on the returned Device.
      * 
      * @param handle
      *            a device handle.
@@ -1076,7 +1095,7 @@ public final class LibUsb
      *         disconnected, another ERROR code on other failure.
      */
     public static native int clearHalt(final DeviceHandle handle,
-        final int endpoint);
+        final byte endpoint);
 
     /**
      * Perform a USB port reset to reinitialize a device.
@@ -1274,7 +1293,7 @@ public final class LibUsb
      *            The little-endian value to convert
      * @return the value in host-endian byte order
      */
-    public static native int le16ToCpu(final int x);
+    public static native short le16ToCpu(final short x);
 
     /**
      * Convert a 16-bit value from host-endian to little-endian format.
@@ -1286,7 +1305,7 @@ public final class LibUsb
      *            The host-endian value to convert
      * @return the value in little-endian byte order
      */
-    public static native int cpuToLe16(final int x);
+    public static native short cpuToLe16(final short x);
 
     /**
      * Get the USB device descriptor for a given device.
@@ -1304,6 +1323,23 @@ public final class LibUsb
         final DeviceDescriptor descriptor);
 
     /**
+     * Free a device descriptor obtained from
+     * {@link #getDeviceDescriptor(Device, DeviceDescriptor)}.
+     * 
+     * It is safe to call this function with a NULL device parameter, in which
+     * case the function simply returns.
+     * 
+     * This function is not present in the libusb-1.0 API, but since
+     * getDeviceDescriptor() requires memory to be allocated manually,
+     * a way to deallocate it from Java is required to avoid a memory leak.
+     * 
+     * @param descriptor
+     *            The device descriptor to free
+     */
+    public static native void freeDeviceDescriptor(
+        final DeviceDescriptor descriptor);
+
+    /**
      * Retrieve a string descriptor in C style ASCII.
      * 
      * @param handle
@@ -1312,18 +1348,15 @@ public final class LibUsb
      *            The index of the descriptor to retrieve.
      * @param string
      *            Output buffer for ASCII string descriptor.
-     * @param length
-     *            Maximum number of bytes to read.
      * @return Number of bytes returned in data, or ERROR code on failure.
      */
     public static native int getStringDescriptorAscii(
-        final DeviceHandle handle, final int index, final StringBuffer string,
-        final int length);
+        final DeviceHandle handle, final byte index, final StringBuffer string);
 
     /**
      * A simple wrapper around
-     * {@link #getStringDescriptorAscii(DeviceHandle, int, StringBuffer, int)}
-     * Simply returns the string (Maximum length of 126) if possible. If not
+     * {@link #getStringDescriptorAscii(DeviceHandle, int, StringBuffer)}.
+     * It simply returns the string (maximum length of 127) if possible. If not
      * possible (NULL handle or 0-index specified or error occured) then null is
      * returned.
      * 
@@ -1336,15 +1369,20 @@ public final class LibUsb
      * @return The string or null if it could not be read.
      */
     public static String getStringDescriptor(final DeviceHandle handle,
-        final int index)
+        final byte index)
     {
-        if (handle == null || index == 0) return null;
+        if ((handle == null) || (index == 0))
+        {
+            return null;
+        }
+
         final StringBuffer buffer = new StringBuffer();
-        if (getStringDescriptorAscii(handle, index, buffer,
-            MAX_STRING_SIZE) >= 0)
+
+        if (getStringDescriptorAscii(handle, index, buffer) >= 0)
         {
             return buffer.toString();
         }
+
         return null;
     }
 
@@ -1390,7 +1428,7 @@ public final class LibUsb
      * @see #getConfigDescriptorByValue(Device, int, ConfigDescriptor)
      */
     public static native int getConfigDescriptor(final Device device,
-        final int index, final ConfigDescriptor descriptor);
+        final byte index, final ConfigDescriptor descriptor);
 
     /**
      * Get a USB configuration descriptor with a specific bConfigurationValue.
@@ -1414,7 +1452,7 @@ public final class LibUsb
      * @see #getConfigDescriptor(Device, int, ConfigDescriptor)
      */
     public static native int getConfigDescriptorByValue(final Device device,
-        final int value, final ConfigDescriptor descriptor);
+        final byte value, final ConfigDescriptor descriptor);
 
     /**
      * Free a configuration descriptor obtained from
@@ -1614,8 +1652,12 @@ public final class LibUsb
      * @return number of bytes returned in data, or ERROR code on failure
      * 
      */
-    public static native int getDescriptor(final DeviceHandle handle,
-        final int type, final int index, final ByteBuffer data);
+    public static int getDescriptor(final DeviceHandle handle, final byte type,
+        final byte index, final ByteBuffer data)
+    {
+        return controlTransfer(handle, ENDPOINT_IN, REQUEST_GET_DESCRIPTOR,
+            (short)((type << 8) | index), (short) 0, data, 1000);
+    }
 
     /**
      * Retrieve a descriptor from a device.
@@ -1633,10 +1675,14 @@ public final class LibUsb
      * @param data
      *            Output buffer for descriptor.
      * @return number of bytes returned in data, or LIBUSB_ERROR code on failure
-     * @see #getStringDescriptorAscii(DeviceHandle, int, StringBuffer, int)
+     * @see #getStringDescriptorAscii(DeviceHandle, int, StringBuffer)
      */
-    public static native int getStringDescriptor(final DeviceHandle handle,
-        final int index, final int langId, final ByteBuffer data);
+    public static int getStringDescriptor(final DeviceHandle handle,
+        final byte index, final short langId, final ByteBuffer data)
+    {
+        return controlTransfer(handle, ENDPOINT_IN, REQUEST_GET_DESCRIPTOR,
+            (short)((DT_STRING << 8) | index), langId, data, 1000);
+    }
 
     /**
      * Perform a USB control transfer.
@@ -1671,8 +1717,8 @@ public final class LibUsb
      *         disconnected, another ERROR code on other failures
      */
     public static native int controlTransfer(final DeviceHandle handle,
-        final int bmRequestType, final int bRequest, final int wValue,
-        final int wIndex, final ByteBuffer data, final int timeout);
+        final byte bmRequestType, final byte bRequest, final short wValue,
+        final short wIndex, final ByteBuffer data, final long timeout);
 
     /**
      * Perform a USB bulk transfer.
@@ -1716,8 +1762,8 @@ public final class LibUsb
      *         been disconnected, another ERROR code on other failures.
      */
     public static native int bulkTransfer(final DeviceHandle handle,
-        final int endpoint, final ByteBuffer data, final IntBuffer transferred,
-        final int timeout);
+        final byte endpoint, final ByteBuffer data, final IntBuffer transferred,
+        final long timeout);
 
     /**
      * Perform a USB interrupt transfer.
@@ -1762,8 +1808,8 @@ public final class LibUsb
      *         has been disconnected, another ERROR code on other error
      */
     public static native int interruptTransfer(final DeviceHandle handle,
-        final int endpoint, final ByteBuffer data, final IntBuffer transferred,
-        final int timeout);
+        final byte endpoint, final ByteBuffer data, final IntBuffer transferred,
+        final long timeout);
 
     /**
      * Attempt to acquire the event handling lock.
@@ -1937,6 +1983,11 @@ public final class LibUsb
      * pointed to is not 0. This allows for race free waiting for the completion
      * of a specific transfer.
      * 
+     * The only way to implement this in Java is by passing a direct buffer, and
+     * then accessing memory directly. IntBuffers can be direct, if they are
+     * created as a view of a direct ByteBuffer, as in the following code:
+     * ByteBuffer.allocateDirect(Integer.SIZE / Byte.SIZE).asIntBuffer()
+     * 
      * @param context
      *            the context to operate on, or NULL for the default context
      * @param timeout
@@ -2100,7 +2151,7 @@ public final class LibUsb
      *         or {@link #ERROR_OTHER} failure
      */
     public static native int getNextTimeout(final Context context,
-        final IntBuffer timeout);
+        final LongBuffer timeout);
 
     /**
      * Register notification functions for file descriptor additions/removals.
@@ -2130,12 +2181,30 @@ public final class LibUsb
     public static void setPollfdNotifiers(final Context context,
         final PollfdListener listener, final Object userData)
     {
-        pollfdListener = listener;
-        pollfdListenerUserData = userData;
-        if (listener == null)
-            unsetPollfdNotifiers(context);
+        long contextId;
+
+        if (context == null)
+        {
+            contextId = 0; // NULL pointer has value 0.
+        }
         else
-            setPollfdNotifiers(context);
+        {
+            contextId = context.getPointer();
+        }
+
+        if (listener == null)
+        {
+            unsetPollfdNotifiers(context);
+
+            pollfdListeners.remove(contextId);
+        }
+        else
+        {
+            setPollfdNotifiers(context, contextId);
+
+            pollfdListeners.put(contextId,
+                new ImmutablePair<PollfdListener, Object>(listener, userData));
+        }
     }
 
     /**
@@ -2146,11 +2215,19 @@ public final class LibUsb
      *            The new file descriptor,
      * @param events
      *            events to monitor for, see libusb_pollfd for a description
+     * @param contextId
+     *            A unique identifier for the originating context.
      */
-    static void triggerPollfdAdded(final FileDescriptor fd, final int events)
+    static void triggerPollfdAdded(final FileDescriptor fd, final int events,
+        final long contextId)
     {
-        if (pollfdListener != null)
-            pollfdListener.pollfdAdded(fd, events, pollfdListenerUserData);
+        final ImmutablePair<PollfdListener, Object> listener = pollfdListeners
+            .get(contextId);
+
+        if (listener != null)
+        {
+            listener.left.pollfdAdded(fd, events, listener.right);
+        }
     }
 
     /**
@@ -2158,11 +2235,19 @@ public final class LibUsb
      * 
      * @param fd
      *            The removed file descriptor.
+     * @param contextId
+     *            A unique identifier for the originating context.
      */
-    static void triggerPollfdRemoved(final FileDescriptor fd)
+    static void triggerPollfdRemoved(final FileDescriptor fd,
+        final long contextId)
     {
-        if (pollfdListener != null)
-            pollfdListener.pollfdRemoved(fd, pollfdListenerUserData);
+        final ImmutablePair<PollfdListener, Object> listener = pollfdListeners
+            .get(contextId);
+
+        if (listener != null)
+        {
+            listener.left.pollfdRemoved(fd, listener.right);
+        }
     }
 
     /**
@@ -2171,8 +2256,11 @@ public final class LibUsb
      * 
      * @param context
      *            The context to operate on, or NULL for the default context
+     * @param contextId
+     *            A unique identifier for the given context.
      */
-    static native void setPollfdNotifiers(final Context context);
+    static native void setPollfdNotifiers(final Context context,
+        final long contextId);
 
     /**
      * Tells libusb to stop informing this class about pollfd additions and
@@ -2182,6 +2270,20 @@ public final class LibUsb
      *            The context to operate on, or NULL for the default context
      */
     static native void unsetPollfdNotifiers(final Context context);
+
+    /**
+     * Allocate a libusb transfer without support for isochronous transfers.
+     * 
+     * The returned transfer is pre-initialized for you. When the new transfer
+     * is no longer needed, it should be freed with
+     * {@link #freeTransfer(Transfer)}.
+     * 
+     * @return A newly allocated transfer, or NULL on error
+     */
+    public static Transfer allocTransfer()
+    {
+        return allocTransfer(0);
+    }
 
     /**
      * Allocate a libusb transfer with a specified number of isochronous packet
@@ -2216,9 +2318,8 @@ public final class LibUsb
      * This should be called for all transfers allocated with
      * {@link #allocTransfer(int)}.
      * 
-     * If the LIBUSB_TRANSFER_FREE_BUFFER flag is set and the transfer buffer is
-     * non-NULL, this function will also free the transfer buffer using the
-     * standard system memory allocator (e.g. free()).
+     * Please refer to {@link #TRANSFER_FREE_BUFFER} for an explanation
+     * of how buffers are freed.
      * 
      * It is legal to call this function with a NULL transfer. In this case, the
      * function will simply return safely.
@@ -2230,4 +2331,160 @@ public final class LibUsb
      *            The transfer to free
      */
     public static native void freeTransfer(final Transfer transfer);
+
+    /**
+     * Submit a transfer.
+     * 
+     * This function will fire off the USB transfer and then return immediately.
+     * 
+     * @param transfer
+     *           The transfer to submit
+     * @return 0 on success, {@link #LIBUSB_ERROR_NO_DEVICE} if the device has been
+     * disconnected, {@link #LIBUSB_ERROR_BUSY} if the transfer has already been
+     * submitted. {@link #LIBUSB_ERROR_NOT_SUPPORTED} if the transfer flags are
+     * not supported by the operating system. Another LIBUSB_ERROR code on failure.
+     */
+    public static native int submitTransfer(final Transfer transfer);
+
+    /**
+     * Asynchronously cancel a previously submitted transfer.
+     * 
+     * This function returns immediately, but this does not indicate cancellation
+     * is complete. Your callback function will be invoked at some later time
+     * with a transfer status of {@link #LIBUSB_TRANSFER_CANCELLED}.
+     * 
+     * @param transfer
+     *            The transfer to cancel
+     * @return 0 on success, {@link #LIBUSB_ERROR_NOT_FOUND} if the transfer is
+     * already complete or cancelled. Another LIBUSB_ERROR code on failure.
+     */
+    public static native int cancelTransfer(final Transfer transfer);
+
+    public static ByteBuffer controlTransferGetData(final Transfer transfer)
+    {
+        return BufferUtils.slice(transfer.buffer(), CONTROL_SETUP_SIZE,
+            transfer.buffer().limit() - CONTROL_SETUP_SIZE);
+    }
+
+    public static ControlSetup controlTransferGetSetup(final Transfer transfer)
+    {
+        return new ControlSetup(transfer.buffer());
+    }
+
+    public static void fillControlSetup(final ByteBuffer buffer,
+        final byte bmRequestType, final byte bRequest, final short wValue,
+        final short wIndex, final short wLength)
+    {
+        final ControlSetup setup = new ControlSetup(buffer);
+        setup.setBmRequestType(bmRequestType);
+        setup.setBRequest(bRequest);
+        setup.setWValue(wValue);
+        setup.setWIndex(wIndex);
+        setup.setWLength(wLength);
+    }
+
+    public static void fillControlTransfer(final Transfer transfer,
+        final DeviceHandle handle, final ByteBuffer buffer,
+        final TransferCallback callback, final Object userData,
+        final long timeout)
+    {
+        transfer.setDevHandle(handle);
+        transfer.setEndpoint((byte) 0);
+        transfer.setType(TRANSFER_TYPE_CONTROL);
+        transfer.setTimeout(timeout);
+        transfer.setBuffer(buffer);
+        transfer.setUserData(userData);
+        transfer.setCallback(callback);
+
+        // Set length based on wLength from Control Setup.
+        final ControlSetup setup = new ControlSetup(buffer);
+        transfer.setLength(CONTROL_SETUP_SIZE + (setup.wLength() & 0xFFFF));
+    }
+
+    public static void fillBulkTransfer(final Transfer transfer,
+        final DeviceHandle handle, final byte endpoint, final ByteBuffer buffer,
+        final TransferCallback callback, final Object userData,
+        final long timeout)
+    {
+        transfer.setDevHandle(handle);
+        transfer.setEndpoint(endpoint);
+        transfer.setType(TRANSFER_TYPE_BULK);
+        transfer.setTimeout(timeout);
+        transfer.setBuffer(buffer);
+        transfer.setUserData(userData);
+        transfer.setCallback(callback);
+    }
+
+    public static void fillInterruptTransfer(final Transfer transfer,
+        final DeviceHandle handle, final byte endpoint, final ByteBuffer buffer,
+        final TransferCallback callback, final Object userData,
+        final long timeout)
+    {
+        transfer.setDevHandle(handle);
+        transfer.setEndpoint(endpoint);
+        transfer.setType(TRANSFER_TYPE_INTERRUPT);
+        transfer.setTimeout(timeout);
+        transfer.setBuffer(buffer);
+        transfer.setUserData(userData);
+        transfer.setCallback(callback);
+    }
+
+    public static void fillIsoTransfer(final Transfer transfer,
+        final DeviceHandle handle, final byte endpoint, final ByteBuffer buffer,
+        final int numIsoPackets, final TransferCallback callback,
+        final Object userData, final long timeout)
+    {
+        transfer.setDevHandle(handle);
+        transfer.setEndpoint(endpoint);
+        transfer.setType(TRANSFER_TYPE_ISOCHRONOUS);
+        transfer.setTimeout(timeout);
+        transfer.setBuffer(buffer);
+        transfer.setNumIsoPackets(numIsoPackets);
+        transfer.setUserData(userData);
+        transfer.setCallback(callback);
+    }
+
+    public static void setIsoPacketLengths(final Transfer transfer,
+        final int length)
+    {
+        for (final IsoPacketDescriptor isoDesc : transfer.isoPacketDesc())
+        {
+            isoDesc.setLength(length);
+        }
+    }
+
+    public static ByteBuffer getIsoPacketBuffer(final Transfer transfer,
+        final int packet)
+    {
+        if (packet >= transfer.numIsoPackets())
+        {
+            return null;
+        }
+
+        final IsoPacketDescriptor isoDescriptors[] = transfer.isoPacketDesc();
+        int offset = 0;
+
+        for (int i = 0; i < packet; i++)
+        {
+            offset += isoDescriptors[i].length();
+        }
+
+        return BufferUtils.slice(transfer.buffer(), offset,
+            isoDescriptors[packet].length());
+    }
+
+    public static ByteBuffer getIsoPacketBufferSimple(final Transfer transfer,
+        final int packet)
+    {
+        if (packet >= transfer.numIsoPackets())
+        {
+            return null;
+        }
+
+        final IsoPacketDescriptor isoDescriptors[] = transfer.isoPacketDesc();
+        final int offset = isoDescriptors[0].length() * packet;
+
+        return BufferUtils.slice(transfer.buffer(), offset,
+            isoDescriptors[packet].length());
+    }
 }

@@ -41,14 +41,14 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
     private long interfaceDescriptorPointer;
 
     /**
-     * Package-private constructor to prevent manual instantiation. Interface 
+     * Package-private constructor to prevent manual instantiation. Interface
      * descriptors are always created by JNI.
      */
     InterfaceDescriptor()
     {
         // Empty
     }
-    
+
     /**
      * Returns the native pointer.
      * 
@@ -117,58 +117,18 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
      */
     public String dump()
     {
-        return dump(null);
-    }
-
-    /**
-     * Returns a dump of this descriptor.
-     * 
-     * @param handle
-     *            The USB device handle for resolving string descriptors. If
-     *            null then no strings are resolved.
-     * @return The descriptor dump.
-     */
-    public String dump(final DeviceHandle handle)
-    {
         final StringBuilder builder = new StringBuilder();
-        final int iInterface = iInterface();
-        String sInterface = LibUsb.getStringDescriptor(handle, iInterface);
-        if (sInterface == null) sInterface = "";
-        builder.append(String.format("%s"
-            + "  extralen %17d%n"
-            + "  extra:%n"
-            + "%s%n",
-            DescriptorUtils.dump(this),
-            extraLength(),
-            DescriptorUtils.dump(extra()).replaceAll("(?m)^", "    ")));
-        if (extraLength() != 0) return builder.toString();
-        for (final EndpointDescriptor edesc: endpoint())
-        {
-            builder.append(edesc.dump().replaceAll("(?m)^", "  "));
-        }
-        return builder.toString();
-    }
 
-    @Override
-    public boolean equals(final Object obj)
-    {
-        if (obj == null) return false;
-        if (obj == this) return true;
-        if (obj.getClass() != getClass()) return false;
-        final InterfaceDescriptor other = (InterfaceDescriptor) obj;
-        return new EqualsBuilder()
-            .append(bDescriptorType(), other.bDescriptorType())
-            .append(bLength(), other.bLength())
-            .append(bAlternateSetting(), other.bAlternateSetting())
-            .append(bInterfaceClass(), other.bInterfaceClass())
-            .append(bInterfaceNumber(), other.bInterfaceNumber())
-            .append(bInterfaceProtocol(), other.bInterfaceProtocol())
-            .append(bInterfaceSubClass(), other.bInterfaceSubClass())
-            .append(bNumEndpoints(), other.bNumEndpoints())
-            .append(iInterface(), other.iInterface())
-            .append(extraLength(), other.extraLength())
-            .append(extra(), other.extra())
-            .isEquals();
+        builder.append(String.format("%s%n" + "  extralen %17d%n"
+            + "  extra:%n" + "%s", DescriptorUtils.dump(this), extraLength(),
+            DescriptorUtils.dump(extra()).replaceAll("(?m)^", "    ")));
+
+        for (final EndpointDescriptor epDesc : endpoint())
+        {
+            builder.append("%n" + epDesc.dump());
+        }
+
+        return builder.toString();
     }
 
     @Override
@@ -184,9 +144,44 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
             .append(bInterfaceSubClass())
             .append(bInterfaceProtocol())
             .append(iInterface())
+            .append(endpoint())
             .append(extra())
             .append(extraLength())
             .toHashCode();
+    }
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+
+        final InterfaceDescriptor other = (InterfaceDescriptor) obj;
+
+        return new EqualsBuilder()
+            .append(bLength(), other.bLength())
+            .append(bDescriptorType(), other.bDescriptorType())
+            .append(bInterfaceNumber(), other.bInterfaceNumber())
+            .append(bAlternateSetting(), other.bAlternateSetting())
+            .append(bNumEndpoints(), other.bNumEndpoints())
+            .append(bInterfaceClass(), other.bInterfaceClass())
+            .append(bInterfaceSubClass(), other.bInterfaceSubClass())
+            .append(bInterfaceProtocol(), other.bInterfaceProtocol())
+            .append(iInterface(), other.iInterface())
+            .append(endpoint(), other.endpoint())
+            .append(extra(), other.extra())
+            .append(extraLength(), other.extraLength())
+            .isEquals();
     }
 
     @Override

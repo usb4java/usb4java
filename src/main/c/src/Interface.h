@@ -8,7 +8,8 @@
 
 #include "usb4java.h"
 
-extern jobject wrapInterface(JNIEnv *, const struct libusb_interface *);
-extern jobjectArray wrapInterfaces(JNIEnv *, int, const struct libusb_interface *);
+jobject wrapInterface(JNIEnv *, const struct libusb_interface *);
+jobjectArray wrapInterfaces(JNIEnv *, int, const struct libusb_interface *);
+struct libusb_interface *unwrapInterface(JNIEnv *, jobject);
 
 #endif
