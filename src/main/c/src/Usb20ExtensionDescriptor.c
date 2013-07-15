@@ -6,7 +6,7 @@
 #include "Usb20ExtensionDescriptor.h"
 
 void setUsb20ExtensionDescriptor(JNIEnv* env,
-    struct libusb_usb_2_0_extension_descriptor* descriptor, jobject object)
+    const struct libusb_usb_2_0_extension_descriptor* descriptor, jobject object)
 {
     SET_POINTER(env, descriptor, object, "usb20ExtensionDescriptorPointer");
 }
@@ -35,7 +35,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(Usb20ExtensionDescriptor, bLength)
     struct libusb_usb_2_0_extension_descriptor *descriptor =
         unwrapUsb20ExtensionDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bLength;
+    return (jbyte) descriptor->bLength;
 }
 
 /**
@@ -49,7 +49,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(Usb20ExtensionDescriptor, bDescriptorType)
     struct libusb_usb_2_0_extension_descriptor *descriptor =
         unwrapUsb20ExtensionDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bDescriptorType;
+    return (jbyte) descriptor->bDescriptorType;
 }
 
 /**
@@ -64,7 +64,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(Usb20ExtensionDescriptor,
     struct libusb_usb_2_0_extension_descriptor *descriptor =
         unwrapUsb20ExtensionDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bDevCapabilityType;
+    return (jbyte) descriptor->bDevCapabilityType;
 }
 
 /**
@@ -79,5 +79,5 @@ JNIEXPORT jint JNICALL METHOD_NAME(Usb20ExtensionDescriptor,
     struct libusb_usb_2_0_extension_descriptor *descriptor =
         unwrapUsb20ExtensionDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bmAttributes;
+    return (jint) descriptor->bmAttributes;
 }

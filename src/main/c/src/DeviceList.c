@@ -6,7 +6,7 @@
 #include "DeviceList.h"
 #include "Device.h"
 
-void setDeviceList(JNIEnv* env, libusb_device* const * list, jint size, jobject object)
+void setDeviceList(JNIEnv* env, libusb_device* const *list, jint size, jobject object)
 {
     SET_POINTER(env, list, object, "deviceListPointer");
 
@@ -38,7 +38,7 @@ JNIEXPORT jobject JNICALL METHOD_NAME(DeviceList, get)
     JNIEnv *env, jobject this, jint index
 )
 {
-    libusb_device **list = unwrapDeviceList(env, this);
+    libusb_device* const *list = unwrapDeviceList(env, this);
     if (!list) return NULL;
 
     jclass cls = (*env)->GetObjectClass(env, this);

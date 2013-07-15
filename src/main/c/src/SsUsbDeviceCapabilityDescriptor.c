@@ -6,7 +6,7 @@
 #include "SsUsbDeviceCapabilityDescriptor.h"
 
 void setSsUsbDeviceCapabilityDescriptor(JNIEnv* env,
-    struct libusb_ss_usb_device_capability_descriptor* descriptor, jobject object)
+    const struct libusb_ss_usb_device_capability_descriptor* descriptor, jobject object)
 {
     SET_POINTER(env, descriptor, object, "ssUsbDeviceCapabilityDescriptorPointer");
 }
@@ -35,7 +35,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(SsUsbDeviceCapabilityDescriptor, bLength)
     struct libusb_ss_usb_device_capability_descriptor *descriptor =
         unwrapSsUsbDeviceCapabilityDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bLength;
+    return (jbyte) descriptor->bLength;
 }
 
 /**
@@ -49,7 +49,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(SsUsbDeviceCapabilityDescriptor, bDescriptor
     struct libusb_ss_usb_device_capability_descriptor *descriptor =
         unwrapSsUsbDeviceCapabilityDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bDescriptorType;
+    return (jbyte) descriptor->bDescriptorType;
 }
 
 /**
@@ -64,11 +64,11 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(SsUsbDeviceCapabilityDescriptor,
     struct libusb_ss_usb_device_capability_descriptor *descriptor =
         unwrapSsUsbDeviceCapabilityDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bDevCapabilityType;
+    return (jbyte) descriptor->bDevCapabilityType;
 }
 
 /**
- * int bmAttributes()
+ * byte bmAttributes()
  */
 JNIEXPORT jbyte JNICALL METHOD_NAME(SsUsbDeviceCapabilityDescriptor,
     bmAttributes)
@@ -79,7 +79,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(SsUsbDeviceCapabilityDescriptor,
     struct libusb_ss_usb_device_capability_descriptor *descriptor =
         unwrapSsUsbDeviceCapabilityDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bmAttributes;
+    return (jbyte) descriptor->bmAttributes;
 }
 
 /**
@@ -94,7 +94,7 @@ JNIEXPORT jshort JNICALL METHOD_NAME(SsUsbDeviceCapabilityDescriptor,
     struct libusb_ss_usb_device_capability_descriptor *descriptor =
         unwrapSsUsbDeviceCapabilityDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->wSpeedSupported;
+    return (jshort) descriptor->wSpeedSupported;
 }
 
 /**
@@ -109,7 +109,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(SsUsbDeviceCapabilityDescriptor,
     struct libusb_ss_usb_device_capability_descriptor *descriptor =
         unwrapSsUsbDeviceCapabilityDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bFunctionalitySupport;
+    return (jbyte) descriptor->bFunctionalitySupport;
 }
 
 /**
@@ -124,7 +124,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(SsUsbDeviceCapabilityDescriptor,
     struct libusb_ss_usb_device_capability_descriptor *descriptor =
         unwrapSsUsbDeviceCapabilityDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bU1DevExitLat;
+    return (jbyte) descriptor->bU1DevExitLat;
 }
 
 /**
@@ -139,5 +139,5 @@ JNIEXPORT jshort JNICALL METHOD_NAME(SsUsbDeviceCapabilityDescriptor,
     struct libusb_ss_usb_device_capability_descriptor *descriptor =
         unwrapSsUsbDeviceCapabilityDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bU2DevExitLat;
+    return (jshort) descriptor->bU2DevExitLat;
 }

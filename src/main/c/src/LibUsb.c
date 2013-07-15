@@ -198,7 +198,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getPortNumbers)
     libusb_device *dev = unwrapDevice(env, device);
     if (!dev) return 0;
     jlong path_size = (*env)->GetDirectBufferCapacity(env, path);
-    return libusb_get_port_numbers(dev, path_ptr, path_size);
+    return libusb_get_port_numbers(dev, path_ptr, (int) path_size);
 }
 
 /**
@@ -254,7 +254,6 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getMaxPacketSize)
     NOT_NULL(env, device, return 0);
     libusb_device *dev = unwrapDevice(env, device);
     if (!dev) return 0;
-
     return libusb_get_max_packet_size(dev, (unsigned char) endpoint);
 }
 
@@ -269,7 +268,6 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getMaxIsoPacketSize)
     NOT_NULL(env, device, return 0);
     libusb_device *dev = unwrapDevice(env, device);
     if (!dev) return 0;
-
     return libusb_get_max_iso_packet_size(dev, (unsigned char) endpoint);
 }
 
@@ -284,7 +282,6 @@ JNIEXPORT jobject JNICALL METHOD_NAME(LibUsb, refDevice)
     NOT_NULL(env, device, return NULL);
     libusb_device *dev = unwrapDevice(env, device);
     if (!dev) return NULL;
-
     return wrapDevice(env, libusb_ref_device(dev));
 }
 
@@ -456,7 +453,6 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, clearHalt)
     NOT_NULL(env, handle, return 0);
     libusb_device_handle *dev_handle = unwrapDeviceHandle(env, handle);
     if (!dev_handle) return 0;
-
     return libusb_clear_halt(dev_handle, (unsigned char) endpoint);
 }
 
@@ -624,6 +620,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getDeviceDescriptor)
     }
     else
     {
+        // Free memory again on error.
     	free(dev_desc);
     }
     return result;
@@ -761,7 +758,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getSsEndpointCompanionDescriptor)
     if (!ctx && context) return 0;
     NOT_NULL(env, endpointDescriptor, return 0);
     NOT_NULL(env, companionDescriptor, return 0);
-    NOT_SET(env, companionDescriptor, "ssEndpointCompanionDescriptor", return 0);
+    NOT_SET(env, companionDescriptor, "ssEndpointCompanionDescriptorPointer", return 0);
 
     struct libusb_endpoint_descriptor *endpoint_descriptor =
         unwrapEndpointDescriptor(env, endpointDescriptor);

@@ -9,7 +9,7 @@
 #include "usb4java.h"
 
 void setContainerIdDescriptor(JNIEnv*,
-    struct libusb_container_id_descriptor*, jobject);
+    const struct libusb_container_id_descriptor*, jobject);
 struct libusb_container_id_descriptor*
     unwrapContainerIdDescriptor(JNIEnv*, jobject);
 void resetContainerIdDescriptor(JNIEnv*, jobject);

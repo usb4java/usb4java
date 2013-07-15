@@ -9,7 +9,7 @@
 #include "usb4java.h"
 
 void setSsUsbDeviceCapabilityDescriptor(JNIEnv*,
-    struct libusb_ss_usb_device_capability_descriptor*, jobject);
+    const struct libusb_ss_usb_device_capability_descriptor*, jobject);
 struct libusb_ss_usb_device_capability_descriptor*
     unwrapSsUsbDeviceCapabilityDescriptor(JNIEnv*, jobject);
 void resetSsUsbDeviceCapabilityDescriptor(JNIEnv*, jobject);

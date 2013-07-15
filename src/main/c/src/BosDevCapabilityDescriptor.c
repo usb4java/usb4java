@@ -13,21 +13,21 @@ jobject wrapBosDevCapabilityDescriptor(JNIEnv *env,
 }
 
 jobjectArray wrapBosDevCapabilityDescriptors(JNIEnv *env, int count,
-    struct libusb_bos_dev_capability_descriptor **descriptors)
+    struct libusb_bos_dev_capability_descriptor * const *descriptors)
 {
-    int i;
-
     jobjectArray array = (jobjectArray) (*env)->NewObjectArray(env,
         count, (*env)->FindClass(env, PACKAGE_DIR"/BosDevCapabilityDescriptor"),
         NULL);
-    for (i = 0; i < count; i++)
+
+    for (int i = 0; i < count; i++)
         (*env)->SetObjectArrayElement(env, array, i,
             wrapBosDevCapabilityDescriptor(env, descriptors[i]));
+
     return array;
 }
 
-struct libusb_bos_dev_capability_descriptor
-    *unwrapBosDevCapabilityDescriptor(JNIEnv *env, jobject obj)
+struct libusb_bos_dev_capability_descriptor*
+    unwrapBosDevCapabilityDescriptor(JNIEnv *env, jobject obj)
 {
     UNWRAP_POINTER(env, obj, struct libusb_bos_dev_capability_descriptor*,
         "bosDevCapabilityDescriptorPointer");
@@ -44,7 +44,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(BosDevCapabilityDescriptor, bLength)
     struct libusb_bos_dev_capability_descriptor* descriptor =
         unwrapBosDevCapabilityDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bLength;
+    return (jbyte) descriptor->bLength;
 }
 
 /**
@@ -59,7 +59,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(BosDevCapabilityDescriptor,
     struct libusb_bos_dev_capability_descriptor* descriptor =
         unwrapBosDevCapabilityDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bDescriptorType;
+    return (jbyte) descriptor->bDescriptorType;
 }
 
 /**
@@ -74,7 +74,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(BosDevCapabilityDescriptor,
     struct libusb_bos_dev_capability_descriptor* descriptor =
         unwrapBosDevCapabilityDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bDevCapabilityType;
+    return (jbyte) descriptor->bDevCapabilityType;
 }
 
 /**
@@ -89,6 +89,5 @@ JNIEXPORT jobject JNICALL METHOD_NAME(BosDevCapabilityDescriptor,
     struct libusb_bos_dev_capability_descriptor *descriptor =
         unwrapBosDevCapabilityDescriptor(env, this);
     if (!descriptor) return NULL;
-    return (*env)->NewDirectByteBuffer(env, (void *)
-        descriptor->dev_capability_data, descriptor->bLength - 3);
+    return NewDirectReadOnlyByteBuffer(env, descriptor->dev_capability_data, descriptor->bLength - 3);
 }

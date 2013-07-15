@@ -32,7 +32,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public final class SsEndpointCompanionDescriptor
 {
     /** The native pointer to the descriptor structure. */
-    private long ssEndpointCompanionDescriptor;
+    private long ssEndpointCompanionDescriptorPointer;
 
     /**
      * Constructs a new descriptor which can be passed to the
@@ -52,7 +52,7 @@ public final class SsEndpointCompanionDescriptor
      */
     public long getPointer()
     {
-        return this.ssEndpointCompanionDescriptor;
+        return this.ssEndpointCompanionDescriptorPointer;
     }
 
     /**

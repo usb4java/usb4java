@@ -51,11 +51,11 @@
 // GetDirectBufferAddress returns NULL if called on a non-direct buffer.
 #define DIRECT_BUFFER(ENV, VAR, BUFFER, ACTION) \
     unsigned char *BUFFER = (*ENV)->GetDirectBufferAddress(ENV, VAR); \
-	if (!BUFFER) \
-	{ \
-	    illegalArgument(ENV, #VAR" must be a direct buffer"); \
-	    ACTION; \
-	}
+    if (!BUFFER) \
+    { \
+        illegalArgument(ENV, #VAR" must be a direct buffer"); \
+        ACTION; \
+    }
 
 #define NOT_NULL(ENV, VAR, ACTION) \
     if (!VAR) \

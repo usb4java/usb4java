@@ -8,7 +8,7 @@
 
 #include "usb4java.h"
 
-void setBosDescriptor(JNIEnv*, struct libusb_bos_descriptor*, jobject);
+void setBosDescriptor(JNIEnv*, const struct libusb_bos_descriptor*, jobject);
 struct libusb_bos_descriptor* unwrapBosDescriptor(JNIEnv*, jobject);
 void resetBosDescriptor(JNIEnv*, jobject);
 
