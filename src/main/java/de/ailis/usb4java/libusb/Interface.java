@@ -1,9 +1,9 @@
 /*
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
- * 
+ *
  * Based on libusb <http://www.libusb.org/>:
- * 
+ *
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
  * Copyright 2010-2012 Peter Stuge <peter@stuge.se>
@@ -23,7 +23,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * A collection of alternate settings for a particular USB interface.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class Interface
@@ -42,7 +42,7 @@ public final class Interface
 
     /**
      * Returns the native pointer.
-     * 
+     *
      * @return The native pointer.
      */
     public long getPointer()
@@ -53,21 +53,21 @@ public final class Interface
     /**
      * Returns the array with interface descriptors. The length of this array is
      * determined by the {@link #numAltsetting()} field.
-     * 
+     *
      * @return The array with interface descriptors.
      */
     public native InterfaceDescriptor[] altsetting();
 
     /**
      * Returns the number of alternate settings that belong to this interface.
-     * 
+     *
      * @return The number of alternate settings.
      */
     public native int numAltsetting();
 
     /**
      * Returns a dump of this interface.
-     * 
+     *
      * @return The interface dump.
      */
     public String dump()
@@ -111,8 +111,8 @@ public final class Interface
         final Interface other = (Interface) obj;
 
         return new EqualsBuilder()
-        .append(this.altsetting(), other.altsetting())
-        .append(this.numAltsetting(), other.numAltsetting()).isEquals();
+            .append(this.altsetting(), other.altsetting())
+            .append(this.numAltsetting(), other.numAltsetting()).isEquals();
     }
 
     @Override

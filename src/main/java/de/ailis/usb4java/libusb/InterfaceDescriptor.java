@@ -1,9 +1,9 @@
 /*
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
- * 
+ *
  * Based on libusb <http://www.libusb.org/>:
- * 
+ *
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
  * Copyright 2010-2012 Peter Stuge <peter@stuge.se>
@@ -29,10 +29,10 @@ import de.ailis.usb4java.utils.DescriptorUtils;
 
 /**
  * A structure representing the standard USB interface descriptor.
- * 
+ *
  * This descriptor is documented in section 9.6.5 of the USB 3.0 specification.
  * All multiple-byte fields are represented in host-endian format.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class InterfaceDescriptor implements UsbInterfaceDescriptor
@@ -51,7 +51,7 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
 
     /**
      * Returns the native pointer.
-     * 
+     *
      * @return The native pointer.
      */
     public long getPointer()
@@ -88,31 +88,31 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
 
     /**
      * Returns the array with endpoints.
-     * 
+     *
      * @return The array with endpoints.
      */
     public native EndpointDescriptor[] endpoint();
 
     /**
      * Extra descriptors.
-     * 
+     *
      * If libusb encounters unknown interface descriptors, it will store them
      * here, should you wish to parse them.
-     * 
+     *
      * @return The extra descriptors.
      */
     public native ByteBuffer extra();
 
     /**
      * Length of the extra descriptors, in bytes.
-     * 
+     *
      * @return The extra descriptors length.
      */
     public native int extraLength();
 
     /**
      * Returns a dump of this descriptor.
-     * 
+     *
      * @return The descriptor dump.
      */
     public String dump()

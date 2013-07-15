@@ -1,9 +1,9 @@
 /*
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
- * 
+ *
  * Based on libusb <http://www.libusb.org/>:
- * 
+ *
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
  * Copyright 2010-2012 Peter Stuge <peter@stuge.se>
@@ -23,10 +23,10 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * A structure representing the Binary Device Object Store (BOS) descriptor.
- * 
+ *
  * This descriptor is documented in section 9.6.2 of the USB 3.0 specification.
  * All multiple-byte fields are represented in host-endian format.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class BosDescriptor
@@ -45,7 +45,7 @@ public final class BosDescriptor
 
     /**
      * Returns the native pointer.
-     * 
+     *
      * @return The native pointer.
      */
     public long getPointer()
@@ -55,42 +55,42 @@ public final class BosDescriptor
 
     /**
      * Returns the size of this descriptor (in bytes).
-     * 
+     *
      * @return The descriptor size in bytes;
      */
     public native byte bLength();
 
     /**
      * Returns the descriptor type.
-     * 
+     *
      * @return The descriptor type.
      */
     public native byte bDescriptorType();
 
     /**
      * Returns the length of this descriptor and all of its sub descriptors.
-     * 
+     *
      * @return The total descriptor length.
      */
     public native short wTotalLength();
 
     /**
      * Returns the number of separate device capability descriptors in the BOS.
-     * 
+     *
      * @return The number of device capability descriptors.
      */
     public native byte bNumDeviceCaps();
 
     /**
      * Returns the array with the device capability descriptors.
-     * 
+     *
      * @return The array with device capability descriptors.
      */
     public native BosDevCapabilityDescriptor[] devCapability();
 
     /**
      * Returns a dump of this descriptor.
-     * 
+     *
      * @return The descriptor dump.
      */
     public String dump()
@@ -125,11 +125,11 @@ public final class BosDescriptor
         }
         final BosDescriptor other = (BosDescriptor) obj;
         return new EqualsBuilder()
-        .append(this.bDescriptorType(), other.bDescriptorType())
-        .append(this.bLength(), other.bLength())
-        .append(this.wTotalLength(), other.wTotalLength())
-        .append(this.bNumDeviceCaps(), other.bNumDeviceCaps())
-        .append(this.devCapability(), other.devCapability()).isEquals();
+            .append(this.bDescriptorType(), other.bDescriptorType())
+            .append(this.bLength(), other.bLength())
+            .append(this.wTotalLength(), other.wTotalLength())
+            .append(this.bNumDeviceCaps(), other.bNumDeviceCaps())
+            .append(this.devCapability(), other.devCapability()).isEquals();
     }
 
     @Override

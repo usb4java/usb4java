@@ -1,9 +1,9 @@
 /*
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
- * 
+ *
  * Based on libusb <http://www.libusb.org/>:
- * 
+ *
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
  * Copyright 2010-2012 Peter Stuge <peter@stuge.se>
@@ -20,13 +20,13 @@ package de.ailis.usb4java.libusb;
 
 /**
  * Structure representing a handle on a USB device.
- * 
+ *
  * This is an opaque type for which you are only ever provided with a pointer,
  * usually originating from {@link LibUsb#open(Device, DeviceHandle)}.
- * 
+ *
  * A device handle is used to perform I/O and other operations. When finished
  * with a device handle, you should call {@link LibUsb#close(DeviceHandle)}.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class DeviceHandle
@@ -46,7 +46,7 @@ public final class DeviceHandle
 
     /**
      * Returns the native pointer to the device handle structure.
-     * 
+     *
      * @return The native pointer to the device handle structure.
      */
     public long getPointer()

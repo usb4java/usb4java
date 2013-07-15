@@ -1,9 +1,9 @@
 /*
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
- * 
+ *
  * Based on libusb <http://www.libusb.org/>:
- * 
+ *
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
  * Copyright 2010-2012 Peter Stuge <peter@stuge.se>
@@ -25,9 +25,9 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * A structure representing the SuperSpeed USB Device Capability descriptor.
  * This descriptor is documented in section 9.6.2.2 of the USB 3.0
  * specification.
- * 
+ *
  * All multiple-byte fields are represented in host-endian format.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class SsUsbDeviceCapabilityDescriptor
@@ -48,7 +48,7 @@ public final class SsUsbDeviceCapabilityDescriptor
 
     /**
      * Returns the native pointer.
-     * 
+     *
      * @return The native pointer.
      */
     public long getPointer()
@@ -58,28 +58,28 @@ public final class SsUsbDeviceCapabilityDescriptor
 
     /**
      * Returns the size of this descriptor (in bytes).
-     * 
+     *
      * @return The descriptor size in bytes;
      */
     public native byte bLength();
 
     /**
      * Returns the descriptor type.
-     * 
+     *
      * @return The descriptor type.
      */
     public native byte bDescriptorType();
 
     /**
      * Returns the device capability type.
-     * 
+     *
      * @return The device capability type.
      */
     public native byte bDevCapabilityType();
 
     /**
      * Returns the bitmap of supported device level features.
-     * 
+     *
      * @return The supported device level features.
      */
     public native byte bmAttributes();
@@ -87,7 +87,7 @@ public final class SsUsbDeviceCapabilityDescriptor
     /**
      * Returns the bitmap encoding of the speed supported by this device when
      * operating in SuperSpeed mode.
-     * 
+     *
      * @return The supported speed.
      */
     public native short wSpeedSupported();
@@ -95,28 +95,28 @@ public final class SsUsbDeviceCapabilityDescriptor
     /**
      * Returns the lowest speed at which all the functionality supported by the
      * device is available to the user.
-     * 
+     *
      * @return The lowest speed.
      */
     public native byte bFunctionalitySupport();
 
     /**
      * Returns the U1 Device Exit Latency.
-     * 
+     *
      * @return The U1 Device Exit Latency.
      */
     public native byte bU1DevExitLat();
 
     /**
      * Returns the U2 Device Exit Latency.
-     * 
+     *
      * @return The U2 Device Exit Latency.
      */
     public native short bU2DevExitLat();
 
     /**
      * Returns a dump of this descriptor.
-     * 
+     *
      * @return The descriptor dump.
      */
     public String dump()
@@ -151,14 +151,14 @@ public final class SsUsbDeviceCapabilityDescriptor
         }
         final SsUsbDeviceCapabilityDescriptor other = (SsUsbDeviceCapabilityDescriptor) obj;
         return new EqualsBuilder()
-        .append(this.bDescriptorType(), other.bDescriptorType())
-        .append(this.bLength(), other.bLength())
-        .append(this.bDevCapabilityType(), other.bDevCapabilityType())
-        .append(this.bmAttributes(), other.bmAttributes())
-        .append(this.wSpeedSupported(), other.wSpeedSupported())
-        .append(this.bFunctionalitySupport(), other.bFunctionalitySupport())
-        .append(this.bU1DevExitLat(), other.bU1DevExitLat())
-        .append(this.bU2DevExitLat(), other.bU2DevExitLat()).isEquals();
+            .append(this.bDescriptorType(), other.bDescriptorType())
+            .append(this.bLength(), other.bLength())
+            .append(this.bDevCapabilityType(), other.bDevCapabilityType())
+            .append(this.bmAttributes(), other.bmAttributes())
+            .append(this.wSpeedSupported(), other.wSpeedSupported())
+            .append(this.bFunctionalitySupport(), other.bFunctionalitySupport())
+            .append(this.bU1DevExitLat(), other.bU1DevExitLat())
+            .append(this.bU2DevExitLat(), other.bU2DevExitLat()).isEquals();
     }
 
     @Override

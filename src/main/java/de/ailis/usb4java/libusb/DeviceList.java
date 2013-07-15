@@ -1,9 +1,9 @@
 /*
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
- * 
+ *
  * Based on libusb <http://www.libusb.org/>:
- * 
+ *
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
  * Copyright 2010-2012 Peter Stuge <peter@stuge.se>
@@ -23,7 +23,7 @@ import java.util.Iterator;
 /**
  * List of devices as returned by
  * {@link LibUsb#getDeviceList(Context, DeviceList)}.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class DeviceList implements Iterable<Device>
@@ -45,7 +45,7 @@ public final class DeviceList implements Iterable<Device>
 
     /**
      * Returns the native pointer.
-     * 
+     *
      * @return The native pointer.
      */
     public long getPointer()
@@ -55,7 +55,7 @@ public final class DeviceList implements Iterable<Device>
 
     /**
      * Returns the number of devices in the list.
-     * 
+     *
      * @return The number of devices in the list.
      */
     public int getSize()
@@ -65,7 +65,7 @@ public final class DeviceList implements Iterable<Device>
 
     /**
      * Returns the device with the specified index.
-     * 
+     *
      * @param index
      *            The device index.
      * @return The device or null when index is out of bounds.

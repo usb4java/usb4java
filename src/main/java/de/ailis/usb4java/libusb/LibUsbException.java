@@ -1,9 +1,9 @@
 /*
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
- * 
+ *
  * Based on libusb <http://www.libusb.org/>:
- * 
+ *
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
  * Copyright 2010-2012 Peter Stuge <peter@stuge.se>
@@ -22,7 +22,7 @@ import javax.usb.UsbException;
 
 /**
  * libusb-specific USB exception.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class LibUsbException extends UsbException
@@ -35,7 +35,7 @@ public final class LibUsbException extends UsbException
 
     /**
      * Constructor.
-     * 
+     *
      * @param message
      *            The error message.
      * @param errorCode
@@ -50,7 +50,7 @@ public final class LibUsbException extends UsbException
 
     /**
      * Returns the error code.
-     * 
+     *
      * @return The error code
      */
     public int getErrorCode()

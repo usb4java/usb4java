@@ -1,9 +1,9 @@
 /*
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
- * 
+ *
  * Based on libusb <http://www.libusb.org/>:
- * 
+ *
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
  * Copyright 2010-2012 Peter Stuge <peter@stuge.se>
@@ -20,14 +20,14 @@ package de.ailis.usb4java.libusb;
 
 /**
  * Structure representing a USB device detected on the system.
- * 
+ *
  * This is an opaque type for which you are only ever provided with a pointer,
  * usually originating from {@link LibUsb#getDeviceList(Context, DeviceList)}.
- * 
+ *
  * Certain operations can be performed on a device, but in order to do any I/O
  * you will have to first obtain a device handle using
  * {@link LibUsb#open(Device, DeviceHandle)}.
- * 
+ *
  * Devices are reference counted with {@link LibUsb#refDevice(Device)} and
  * {@link LibUsb#unrefDevice(Device)}, and are freed when the reference count
  * reaches 0. New devices presented by
@@ -36,7 +36,7 @@ package de.ailis.usb4java.libusb;
  * decrease the reference count on all devices in the list.
  * {@link LibUsb#open(Device, DeviceHandle)} adds another reference which is
  * later destroyed by {@link LibUsb#close(DeviceHandle)}.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class Device
@@ -55,7 +55,7 @@ public final class Device
 
     /**
      * Returns the native pointer to the device structure.
-     * 
+     *
      * @return The native pointer to the device structure.
      */
     public long getPointer()

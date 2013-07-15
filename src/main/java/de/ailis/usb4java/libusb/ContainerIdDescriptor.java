@@ -1,9 +1,9 @@
 /*
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
- * 
+ *
  * Based on libusb <http://www.libusb.org/>:
- * 
+ *
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
  * Copyright 2010-2012 Peter Stuge <peter@stuge.se>
@@ -27,11 +27,11 @@ import de.ailis.usb4java.utils.DescriptorUtils;
 
 /**
  * A structure representing the Container ID descriptor.
- * 
+ *
  * This descriptor is documented in section 9.6.2.3 of the USB 3.0
  * specification. All multiple-byte fields, except UUIDs, are represented in
  * host-endian format.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class ContainerIdDescriptor
@@ -51,7 +51,7 @@ public final class ContainerIdDescriptor
 
     /**
      * Returns the native pointer.
-     * 
+     *
      * @return The native pointer.
      */
     public long getPointer()
@@ -61,42 +61,42 @@ public final class ContainerIdDescriptor
 
     /**
      * Returns the size of this descriptor (in bytes).
-     * 
+     *
      * @return The descriptor size in bytes;
      */
     public native byte bLength();
 
     /**
      * Returns the descriptor type.
-     * 
+     *
      * @return The descriptor type.
      */
     public native byte bDescriptorType();
 
     /**
      * Returns the device capability type.
-     * 
+     *
      * @return The device capability type.
      */
     public native byte bDevCapabilityType();
 
     /**
      * Returns the reserved field.
-     * 
+     *
      * @return The reserved field.
      */
     public native byte bReserved();
 
     /**
      * Returns the 128 bit UUID.
-     * 
+     *
      * @return The 128 bit UUID.
      */
     public native ByteBuffer containerId();
 
     /**
      * Returns a dump of this descriptor.
-     * 
+     *
      * @return The descriptor dump.
      */
     public String dump()
@@ -105,9 +105,9 @@ public final class ContainerIdDescriptor
             + "  bDescriptorType %10d%n" + "  bDevCapabilityType %7d%n"
             + "  bReserved %16d%n" + "  containerId:%n%s%n",
             this.bLength() & 0xff, this.bDescriptorType() & 0xff, this
-            .bDevCapabilityType() & 0xff, this.bReserved() & 0xff,
+                .bDevCapabilityType() & 0xff, this.bReserved() & 0xff,
             DescriptorUtils.dump(this.containerId())
-            .replaceAll("(?m)^", "    "));
+                .replaceAll("(?m)^", "    "));
     }
 
     @Override
@@ -127,12 +127,12 @@ public final class ContainerIdDescriptor
         }
         final ContainerIdDescriptor other = (ContainerIdDescriptor) obj;
         return new EqualsBuilder()
-        .append(this.bDescriptorType(), other.bDescriptorType())
-        .append(this.bLength(), other.bLength())
-        .append(this.bDevCapabilityType(), other.bDevCapabilityType())
-        .append(this.bReserved(), other.bReserved())
-        .append(this.containerId().array(), other.containerId().array())
-        .isEquals();
+            .append(this.bDescriptorType(), other.bDescriptorType())
+            .append(this.bLength(), other.bLength())
+            .append(this.bDevCapabilityType(), other.bDevCapabilityType())
+            .append(this.bReserved(), other.bReserved())
+            .append(this.containerId().array(), other.containerId().array())
+            .isEquals();
     }
 
     @Override

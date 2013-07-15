@@ -1,9 +1,9 @@
 /*
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
- * 
+ *
  * Based on libusb <http://www.libusb.org/>:
- * 
+ *
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
  * Copyright 2010-2012 Peter Stuge <peter@stuge.se>
@@ -27,10 +27,10 @@ import de.ailis.usb4java.utils.DescriptorUtils;
 
 /**
  * A generic representation of a BOS Device Capability descriptor.
- * 
+ *
  * It is advised to check bDevCapabilityType and call the matching
  * get*Descriptor method to get a structure fully matching the type.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class BosDevCapabilityDescriptor
@@ -49,7 +49,7 @@ public final class BosDevCapabilityDescriptor
 
     /**
      * Returns the native pointer.
-     * 
+     *
      * @return The native pointer.
      */
     public long getPointer()
@@ -59,35 +59,35 @@ public final class BosDevCapabilityDescriptor
 
     /**
      * Returns the size of this descriptor (in bytes).
-     * 
+     *
      * @return The descriptor size in bytes;
      */
     public native byte bLength();
 
     /**
      * Returns the descriptor type.
-     * 
+     *
      * @return The descriptor type.
      */
     public native byte bDescriptorType();
 
     /**
      * Returns the device capability type.
-     * 
+     *
      * @return The device capability type.
      */
     public native byte bDevCapabilityType();
 
     /**
      * Returns the device capability data (bLength - 3 bytes).
-     * 
+     *
      * @return The device capability data.
      */
     public native ByteBuffer devCapabilityData();
 
     /**
      * Returns a dump of this descriptor.
-     * 
+     *
      * @return The descriptor dump.
      */
     public String dump()
@@ -96,11 +96,11 @@ public final class BosDevCapabilityDescriptor
             "BOS Device Capability Descriptor:%n" + "  bLength %18d%n"
                 + "  bDescriptorType %10d%n" + "  bDevCapabilityType %7s%n"
                 + "  devCapabilityData:%n%s%n",
-                this.bLength() & 0xff,
-                this.bDescriptorType() & 0xff,
-                this.bDevCapabilityType() & 0xff,
-                DescriptorUtils.dump(this.devCapabilityData()).replaceAll("(?m)^",
-                    "    "));
+            this.bLength() & 0xff,
+            this.bDescriptorType() & 0xff,
+            this.bDevCapabilityType() & 0xff,
+            DescriptorUtils.dump(this.devCapabilityData()).replaceAll("(?m)^",
+                "    "));
 
     }
 
@@ -121,11 +121,11 @@ public final class BosDevCapabilityDescriptor
         }
         final BosDevCapabilityDescriptor other = (BosDevCapabilityDescriptor) obj;
         return new EqualsBuilder()
-        .append(this.bDescriptorType(), other.bDescriptorType())
-        .append(this.bLength(), other.bLength())
-        .append(this.bDevCapabilityType(), other.bDevCapabilityType())
-        .append(this.devCapabilityData().array(),
-            other.devCapabilityData().array()).isEquals();
+            .append(this.bDescriptorType(), other.bDescriptorType())
+            .append(this.bLength(), other.bLength())
+            .append(this.bDevCapabilityType(), other.bDevCapabilityType())
+            .append(this.devCapabilityData().array(),
+                other.devCapabilityData().array()).isEquals();
     }
 
     @Override

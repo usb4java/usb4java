@@ -1,9 +1,9 @@
 /*
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
- * 
+ *
  * Based on libusb <http://www.libusb.org/>:
- * 
+ *
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
  * Copyright 2010-2012 Peter Stuge <peter@stuge.se>
@@ -26,13 +26,13 @@ package de.ailis.usb4java.libusb;
  * {@link LibUsb#setDebug(Context, int)} will not affect the other user of the
  * library, and {@link LibUsb#exit(Context)} will not destroy resources that the
  * other user is still using.
- * 
+ *
  * Sessions are created by {@link LibUsb#init(Context)} and destroyed through
  * {@link LibUsb#exit(Context)}. If your application is guaranteed to only ever
  * include a single libusb user (i.e. you), you do not have to worry about
  * contexts: pass NULL in every function call where a context is required. The
  * default context will be used.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class Context
@@ -51,7 +51,7 @@ public final class Context
 
     /**
      * Returns the native pointer to the context structure.
-     * 
+     *
      * @return The native pointer to the context structure.
      */
     public long getPointer()

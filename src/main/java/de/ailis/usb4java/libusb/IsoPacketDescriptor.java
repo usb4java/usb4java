@@ -16,7 +16,7 @@ public final class IsoPacketDescriptor
 
     /**
      * Returns the native pointer.
-     * 
+     *
      * @return The native pointer.
      */
     public long getPointer()
