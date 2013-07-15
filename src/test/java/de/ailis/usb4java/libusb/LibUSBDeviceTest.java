@@ -917,7 +917,7 @@ public class LibUSBDeviceTest
      * Tests the {@link LibUsb#freeConfigDescriptor(ConfigDescriptor)} method
      * without a descriptor.
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testFreeConfigDescriptorWithoutDescriptor()
     {
         assumeUsbTestsEnabled();

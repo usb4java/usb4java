@@ -273,7 +273,7 @@ public class LibUSBTest
      * Tests {@link LibUsb#freeDeviceList(DeviceList, boolean)} method without
      * list.
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testFreeDeviceListWithoutList()
     {
         assumeUsbTestsEnabled();
@@ -636,6 +636,17 @@ public class LibUSBTest
     {
         assumeUsbTestsEnabled();
         LibUsb.freeConfigDescriptor(new ConfigDescriptor());
+    }
+
+    /**
+     * Tests the {@link LibUsb#freeConfigDescriptor(ConfigDescriptor)} method
+     * with null parameter. Must do nothing.
+     */
+    @Test
+    public void testFreeConfigDescriptorWithNull()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.freeConfigDescriptor(null);
     }
 
     /**
