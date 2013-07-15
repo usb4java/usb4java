@@ -149,7 +149,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeDeviceList)
     JNIEnv *env, jclass class, jobject deviceList, jboolean unrefDevices
 )
 {
-    NOT_NULL(env, deviceList, return);
+    if (!deviceList) return;
     libusb_device **list = unwrapDeviceList(env, deviceList);
     if (!list) return;
     libusb_free_device_list(list, unrefDevices);
@@ -634,7 +634,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeDeviceDescriptor)
     JNIEnv *env, jclass class, jobject descriptor
 )
 {
-    NOT_NULL(env, descriptor, return);
+    if (!descriptor) return;
     struct libusb_device_descriptor *dev_desc = unwrapDeviceDescriptor(env,
         descriptor);
     if (!dev_desc) return;
@@ -737,7 +737,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeConfigDescriptor)
     JNIEnv *env, jclass class, jobject descriptor
 )
 {
-    NOT_NULL(env, descriptor, return);
+    if (!descriptor) return;
     struct libusb_config_descriptor *config = unwrapConfigDescriptor(env,
         descriptor);
     if (!config) return;
@@ -779,7 +779,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeSsEndpointCompanionDescriptor)
     JNIEnv *env, jclass class, jobject companionDescriptor
 )
 {
-    NOT_NULL(env, companionDescriptor, return);
+    if (!companionDescriptor) return;
     struct libusb_ss_endpoint_companion_descriptor *companion_descriptor =
         unwrapSsEndpointCompanionDescriptor(env, companionDescriptor);
     if (!companion_descriptor) return;
@@ -815,7 +815,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeBosDescriptor)
     JNIEnv *env, jclass class, jobject bosDescriptor
 )
 {
-    NOT_NULL(env, bosDescriptor, return);
+    if (!bosDescriptor) return;
     struct libusb_bos_descriptor *bos_descriptor =
         unwrapBosDescriptor(env, bosDescriptor);
     if (!bos_descriptor) return;
@@ -857,7 +857,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeUsb20ExtensionDescriptor)
     JNIEnv *env, jclass class, jobject extensionDescriptor
 )
 {
-    NOT_NULL(env, extensionDescriptor, return);
+    if (!extensionDescriptor) return;
     struct libusb_usb_2_0_extension_descriptor *extension_descriptor =
         unwrapUsb20ExtensionDescriptor(env, extensionDescriptor);
     if (!extension_descriptor) return;
@@ -899,7 +899,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeSsUsbDeviceCapabilityDescriptor)
     JNIEnv *env, jclass class, jobject ssUsbDeviceCapabilityDescriptor
 )
 {
-    NOT_NULL(env, ssUsbDeviceCapabilityDescriptor, return);
+    if (!ssUsbDeviceCapabilityDescriptor) return;
     struct libusb_ss_usb_device_capability_descriptor *descriptor =
         unwrapSsUsbDeviceCapabilityDescriptor(env, ssUsbDeviceCapabilityDescriptor);
     if (!descriptor) return;
@@ -941,7 +941,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeContainerIdDescriptor)
     JNIEnv *env, jclass class, jobject containerIdDescriptor
 )
 {
-    NOT_NULL(env, containerIdDescriptor, return);
+    if (!containerIdDescriptor) return;
     struct libusb_container_id_descriptor *container_id_descriptor =
         unwrapContainerIdDescriptor(env, containerIdDescriptor);
     if (!container_id_descriptor) return;
@@ -1366,7 +1366,7 @@ JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeTransfer)
     JNIEnv *env, jclass class, jobject trans
 )
 {
-    NOT_NULL(env, trans, return);
+    if (!trans) return;
     struct libusb_transfer *transfer = unwrapTransfer(env, trans);
     if (!transfer) return;
 
