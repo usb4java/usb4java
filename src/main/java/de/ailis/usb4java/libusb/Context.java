@@ -2,7 +2,7 @@
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
  * 
- * Based on libusb <http://www.libusb.org/>:  
+ * Based on libusb <http://www.libusb.org/>:
  * 
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
@@ -65,7 +65,7 @@ public final class Context
         final int prime = 31;
         int result = 1;
         result = (prime * result)
-            + (int) (contextPointer ^ (contextPointer >>> 32));
+            + (int) (this.contextPointer ^ (this.contextPointer >>> 32));
         return result;
     }
 
@@ -80,12 +80,12 @@ public final class Context
         {
             return false;
         }
-        if (getClass() != obj.getClass())
+        if (this.getClass() != obj.getClass())
         {
             return false;
         }
         final Context other = (Context) obj;
-        if (contextPointer != other.contextPointer)
+        if (this.contextPointer != other.contextPointer)
         {
             return false;
         }
@@ -95,6 +95,6 @@ public final class Context
     @Override
     public String toString()
     {
-        return String.format("libusb context 0x%x", contextPointer);
+        return String.format("libusb context 0x%x", this.contextPointer);
     }
 }

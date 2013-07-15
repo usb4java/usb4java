@@ -2,7 +2,7 @@
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
  * 
- * Based on libusb <http://www.libusb.org/>:  
+ * Based on libusb <http://www.libusb.org/>:
  * 
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
@@ -55,6 +55,6 @@ public final class LibUsbException extends UsbException
      */
     public int getErrorCode()
     {
-        return errorCode;
+        return this.errorCode;
     }
 }

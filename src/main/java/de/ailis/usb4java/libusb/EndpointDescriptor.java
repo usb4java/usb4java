@@ -2,7 +2,7 @@
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
  * 
- * Based on libusb <http://www.libusb.org/>:  
+ * Based on libusb <http://www.libusb.org/>:
  * 
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
@@ -32,7 +32,7 @@ import de.ailis.usb4java.utils.DescriptorUtils;
  * 
  * This descriptor is documented in section 9.6.6 of the USB 3.0 specification.
  * All multiple-byte fields are represented in host-endian format.
- *
+ * 
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class EndpointDescriptor implements UsbEndpointDescriptor
@@ -116,30 +116,21 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
      */
     public String dump()
     {
-        return String.format("%s%n"
-            + "  extralen %17d%n"
-            + "  extra:%n"
-            + "%s",
-            DescriptorUtils.dump(this),
-            extraLength(),
-            DescriptorUtils.dump(extra()).replaceAll("(?m)^", "    "));
+        return String.format(
+            "%s%n" + "  extralen %17d%n" + "  extra:%n" + "%s", DescriptorUtils
+            .dump(this), this.extraLength(),
+            DescriptorUtils.dump(this.extra()).replaceAll("(?m)^", "    "));
     }
 
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder()
-            .append(bLength())
-            .append(bDescriptorType())
-            .append(bEndpointAddress())
-            .append(bmAttributes())
-            .append(wMaxPacketSize())
-            .append(bInterval())
-            .append(bRefresh())
-            .append(bSynchAddress())
-            .append(extra())
-            .append(extraLength())
-            .toHashCode();
+        return new HashCodeBuilder().append(this.bLength())
+            .append(this.bDescriptorType()).append(this.bEndpointAddress())
+            .append(this.bmAttributes()).append(this.wMaxPacketSize())
+            .append(this.bInterval()).append(this.bRefresh())
+            .append(this.bSynchAddress()).append(this.extra())
+            .append(this.extraLength()).toHashCode();
     }
 
     @Override
@@ -153,30 +144,28 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
         {
             return false;
         }
-        if (getClass() != obj.getClass())
+        if (this.getClass() != obj.getClass())
         {
             return false;
         }
 
         final EndpointDescriptor other = (EndpointDescriptor) obj;
 
-        return new EqualsBuilder()
-            .append(bLength(), other.bLength())
-            .append(bDescriptorType(), other.bDescriptorType())
-            .append(bEndpointAddress(), other.bEndpointAddress())
-            .append(bmAttributes(), other.bmAttributes())
-            .append(wMaxPacketSize(), other.wMaxPacketSize())
-            .append(bInterval(), other.bInterval())
-            .append(bRefresh(), other.bRefresh())
-            .append(bSynchAddress(), other.bSynchAddress())
-            .append(extra(), other.extra())
-            .append(extraLength(), other.extraLength())
-            .isEquals();
+        return new EqualsBuilder().append(this.bLength(), other.bLength())
+            .append(this.bDescriptorType(), other.bDescriptorType())
+            .append(this.bEndpointAddress(), other.bEndpointAddress())
+            .append(this.bmAttributes(), other.bmAttributes())
+            .append(this.wMaxPacketSize(), other.wMaxPacketSize())
+            .append(this.bInterval(), other.bInterval())
+            .append(this.bRefresh(), other.bRefresh())
+            .append(this.bSynchAddress(), other.bSynchAddress())
+            .append(this.extra(), other.extra())
+            .append(this.extraLength(), other.extraLength()).isEquals();
     }
 
     @Override
     public String toString()
     {
-        return dump();
+        return this.dump();
     }
 }

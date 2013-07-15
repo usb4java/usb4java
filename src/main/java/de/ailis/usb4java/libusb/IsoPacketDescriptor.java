@@ -21,7 +21,7 @@ public final class IsoPacketDescriptor
      */
     public long getPointer()
     {
-        return isoPacketDescriptorPointer;
+        return this.isoPacketDescriptorPointer;
     }
 
     public native int length();
@@ -41,7 +41,7 @@ public final class IsoPacketDescriptor
         final int prime = 31;
         int result = 1;
         result = (prime * result)
-            + (int) (isoPacketDescriptorPointer ^ (isoPacketDescriptorPointer >>> 32));
+            + (int) (this.isoPacketDescriptorPointer ^ (this.isoPacketDescriptorPointer >>> 32));
         return result;
     }
 
@@ -56,12 +56,12 @@ public final class IsoPacketDescriptor
         {
             return false;
         }
-        if (getClass() != obj.getClass())
+        if (this.getClass() != obj.getClass())
         {
             return false;
         }
         final IsoPacketDescriptor other = (IsoPacketDescriptor) obj;
-        if (isoPacketDescriptorPointer != other.isoPacketDescriptorPointer)
+        if (this.isoPacketDescriptorPointer != other.isoPacketDescriptorPointer)
         {
             return false;
         }
@@ -72,6 +72,6 @@ public final class IsoPacketDescriptor
     public String toString()
     {
         return String.format("libusb iso packet descriptor 0x%x",
-            isoPacketDescriptorPointer);
+            this.isoPacketDescriptorPointer);
     }
 }

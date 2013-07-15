@@ -2,7 +2,7 @@
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
  * 
- * Based on libusb <http://www.libusb.org/>:  
+ * Based on libusb <http://www.libusb.org/>:
  * 
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
@@ -106,7 +106,7 @@ public final class DeviceDescriptor implements UsbDeviceDescriptor
      */
     public String dump()
     {
-        return dump(null);
+        return this.dump(null);
     }
 
     /**
@@ -120,10 +120,11 @@ public final class DeviceDescriptor implements UsbDeviceDescriptor
     public String dump(final DeviceHandle handle)
     {
         final String sManufacturer = LibUsb.getStringDescriptor(handle,
-            iManufacturer());
-        final String sProduct = LibUsb.getStringDescriptor(handle, iProduct());
+            this.iManufacturer());
+        final String sProduct = LibUsb.getStringDescriptor(handle,
+            this.iProduct());
         final String sSerialNumber = LibUsb.getStringDescriptor(handle,
-            iSerialNumber());
+            this.iSerialNumber());
         return DescriptorUtils.dump(this, sManufacturer, sProduct,
             sSerialNumber);
     }
@@ -131,22 +132,14 @@ public final class DeviceDescriptor implements UsbDeviceDescriptor
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder()
-            .append(bLength())
-            .append(bDescriptorType())
-            .append(bcdUSB())
-            .append(bDeviceClass())
-            .append(bDeviceSubClass())
-            .append(bDeviceProtocol())
-            .append(bMaxPacketSize0())
-            .append(idVendor())
-            .append(idProduct())
-            .append(bcdDevice())
-            .append(iManufacturer())
-            .append(iProduct())
-            .append(iSerialNumber())
-            .append(bNumConfigurations())
-            .toHashCode();
+        return new HashCodeBuilder().append(this.bLength())
+            .append(this.bDescriptorType()).append(this.bcdUSB())
+            .append(this.bDeviceClass()).append(this.bDeviceSubClass())
+            .append(this.bDeviceProtocol()).append(this.bMaxPacketSize0())
+            .append(this.idVendor()).append(this.idProduct())
+            .append(this.bcdDevice()).append(this.iManufacturer())
+            .append(this.iProduct()).append(this.iSerialNumber())
+            .append(this.bNumConfigurations()).toHashCode();
     }
 
     @Override
@@ -160,34 +153,33 @@ public final class DeviceDescriptor implements UsbDeviceDescriptor
         {
             return false;
         }
-        if (getClass() != obj.getClass())
+        if (this.getClass() != obj.getClass())
         {
             return false;
         }
 
         final DeviceDescriptor other = (DeviceDescriptor) obj;
 
-        return new EqualsBuilder()
-            .append(bLength(), other.bLength())
-            .append(bDescriptorType(), other.bDescriptorType())
-            .append(bcdUSB(), other.bcdUSB())
-            .append(bDeviceClass(), other.bDeviceClass())
-            .append(bDeviceSubClass(), other.bDeviceSubClass())
-            .append(bDeviceProtocol(), other.bDeviceProtocol())
-            .append(bMaxPacketSize0(), other.bMaxPacketSize0())
-            .append(idVendor(), other.idVendor())
-            .append(idProduct(), other.idProduct())
-            .append(bcdDevice(), other.bcdDevice())
-            .append(iManufacturer(), other.iManufacturer())
-            .append(iProduct(), other.iProduct())
-            .append(iSerialNumber(), other.iSerialNumber())
-            .append(bNumConfigurations(), other.bNumConfigurations())
+        return new EqualsBuilder().append(this.bLength(), other.bLength())
+            .append(this.bDescriptorType(), other.bDescriptorType())
+            .append(this.bcdUSB(), other.bcdUSB())
+            .append(this.bDeviceClass(), other.bDeviceClass())
+            .append(this.bDeviceSubClass(), other.bDeviceSubClass())
+            .append(this.bDeviceProtocol(), other.bDeviceProtocol())
+            .append(this.bMaxPacketSize0(), other.bMaxPacketSize0())
+            .append(this.idVendor(), other.idVendor())
+            .append(this.idProduct(), other.idProduct())
+            .append(this.bcdDevice(), other.bcdDevice())
+            .append(this.iManufacturer(), other.iManufacturer())
+            .append(this.iProduct(), other.iProduct())
+            .append(this.iSerialNumber(), other.iSerialNumber())
+            .append(this.bNumConfigurations(), other.bNumConfigurations())
             .isEquals();
     }
 
     @Override
     public String toString()
     {
-        return dump();
+        return this.dump();
     }
 }

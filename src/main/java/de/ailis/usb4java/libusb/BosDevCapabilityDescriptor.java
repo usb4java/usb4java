@@ -2,7 +2,7 @@
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
  * 
- * Based on libusb <http://www.libusb.org/>:  
+ * Based on libusb <http://www.libusb.org/>:
  * 
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
@@ -92,49 +92,53 @@ public final class BosDevCapabilityDescriptor
      */
     public String dump()
     {
-        return String.format("BOS Device Capability Descriptor:%n"
-            + "  bLength %18d%n"
-            + "  bDescriptorType %10d%n"
-            + "  bDevCapabilityType %7s%n"
-            + "  devCapabilityData:%n%s%n",
-            bLength() & 0xff,
-            bDescriptorType() & 0xff,
-            bDevCapabilityType() & 0xff,
-            DescriptorUtils.dump(devCapabilityData())
-                .replaceAll("(?m)^", "    "));
-        
+        return String.format(
+            "BOS Device Capability Descriptor:%n" + "  bLength %18d%n"
+                + "  bDescriptorType %10d%n" + "  bDevCapabilityType %7s%n"
+                + "  devCapabilityData:%n%s%n",
+                this.bLength() & 0xff,
+                this.bDescriptorType() & 0xff,
+                this.bDevCapabilityType() & 0xff,
+                DescriptorUtils.dump(this.devCapabilityData()).replaceAll("(?m)^",
+                    "    "));
+
     }
 
     @Override
     public boolean equals(final Object obj)
     {
-        if (obj == null) return false;
-        if (obj == this) return true;
-        if (obj.getClass() != getClass()) return false;
-        final BosDevCapabilityDescriptor other =
-            (BosDevCapabilityDescriptor) obj;
+        if (obj == null)
+        {
+            return false;
+        }
+        if (obj == this)
+        {
+            return true;
+        }
+        if (obj.getClass() != this.getClass())
+        {
+            return false;
+        }
+        final BosDevCapabilityDescriptor other = (BosDevCapabilityDescriptor) obj;
         return new EqualsBuilder()
-            .append(bDescriptorType(), other.bDescriptorType())
-            .append(bLength(), other.bLength())
-            .append(bDevCapabilityType(), other.bDevCapabilityType())
-            .append(devCapabilityData().array(),
-                other.devCapabilityData().array()).isEquals();
+        .append(this.bDescriptorType(), other.bDescriptorType())
+        .append(this.bLength(), other.bLength())
+        .append(this.bDevCapabilityType(), other.bDevCapabilityType())
+        .append(this.devCapabilityData().array(),
+            other.devCapabilityData().array()).isEquals();
     }
 
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder()
-            .append(bLength())
-            .append(bDescriptorType())
-            .append(bDevCapabilityType())
-            .append(devCapabilityData())
-            .toHashCode();
+        return new HashCodeBuilder().append(this.bLength())
+            .append(this.bDescriptorType()).append(this.bDevCapabilityType())
+            .append(this.devCapabilityData()).toHashCode();
     }
 
     @Override
     public String toString()
     {
-        return dump();
+        return this.dump();
     }
 }

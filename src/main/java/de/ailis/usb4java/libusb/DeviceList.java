@@ -2,7 +2,7 @@
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
  * 
- * Based on libusb <http://www.libusb.org/>:  
+ * Based on libusb <http://www.libusb.org/>:
  * 
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
@@ -23,7 +23,7 @@ import java.util.Iterator;
 /**
  * List of devices as returned by
  * {@link LibUsb#getDeviceList(Context, DeviceList)}.
- *
+ * 
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class DeviceList implements Iterable<Device>
@@ -84,8 +84,8 @@ public final class DeviceList implements Iterable<Device>
         final int prime = 31;
         int result = 1;
         result = (prime * result)
-            + (int) (deviceListPointer ^ (deviceListPointer >>> 32));
-        result = (prime * result) + size;
+            + (int) (this.deviceListPointer ^ (this.deviceListPointer >>> 32));
+        result = (prime * result) + this.size;
         return result;
     }
 
@@ -100,16 +100,16 @@ public final class DeviceList implements Iterable<Device>
         {
             return false;
         }
-        if (getClass() != obj.getClass())
+        if (this.getClass() != obj.getClass())
         {
             return false;
         }
         final DeviceList other = (DeviceList) obj;
-        if (deviceListPointer != other.deviceListPointer)
+        if (this.deviceListPointer != other.deviceListPointer)
         {
             return false;
         }
-        if (size != other.size)
+        if (this.size != other.size)
         {
             return false;
         }
@@ -120,6 +120,6 @@ public final class DeviceList implements Iterable<Device>
     public String toString()
     {
         return String.format("libusb device list 0x%x with size %d",
-            deviceListPointer, size);
+            this.deviceListPointer, this.size);
     }
 }

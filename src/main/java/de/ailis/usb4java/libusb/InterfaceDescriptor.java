@@ -2,7 +2,7 @@
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
  * 
- * Based on libusb <http://www.libusb.org/>:  
+ * Based on libusb <http://www.libusb.org/>:
  * 
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
@@ -120,10 +120,11 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
         final StringBuilder builder = new StringBuilder();
 
         builder.append(String.format("%s%n" + "  extralen %17d%n"
-            + "  extra:%n" + "%s", DescriptorUtils.dump(this), extraLength(),
-            DescriptorUtils.dump(extra()).replaceAll("(?m)^", "    ")));
+            + "  extra:%n" + "%s", DescriptorUtils.dump(this),
+            this.extraLength(),
+            DescriptorUtils.dump(this.extra()).replaceAll("(?m)^", "    ")));
 
-        for (final EndpointDescriptor epDesc : endpoint())
+        for (final EndpointDescriptor epDesc : this.endpoint())
         {
             builder.append("%n" + epDesc.dump());
         }
@@ -134,20 +135,13 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder()
-            .append(bLength())
-            .append(bDescriptorType())
-            .append(bInterfaceNumber())
-            .append(bAlternateSetting())
-            .append(bNumEndpoints())
-            .append(bInterfaceClass())
-            .append(bInterfaceSubClass())
-            .append(bInterfaceProtocol())
-            .append(iInterface())
-            .append(endpoint())
-            .append(extra())
-            .append(extraLength())
-            .toHashCode();
+        return new HashCodeBuilder().append(this.bLength())
+            .append(this.bDescriptorType()).append(this.bInterfaceNumber())
+            .append(this.bAlternateSetting()).append(this.bNumEndpoints())
+            .append(this.bInterfaceClass()).append(this.bInterfaceSubClass())
+            .append(this.bInterfaceProtocol()).append(this.iInterface())
+            .append(this.endpoint()).append(this.extra())
+            .append(this.extraLength()).toHashCode();
     }
 
     @Override
@@ -161,32 +155,30 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
         {
             return false;
         }
-        if (getClass() != obj.getClass())
+        if (this.getClass() != obj.getClass())
         {
             return false;
         }
 
         final InterfaceDescriptor other = (InterfaceDescriptor) obj;
 
-        return new EqualsBuilder()
-            .append(bLength(), other.bLength())
-            .append(bDescriptorType(), other.bDescriptorType())
-            .append(bInterfaceNumber(), other.bInterfaceNumber())
-            .append(bAlternateSetting(), other.bAlternateSetting())
-            .append(bNumEndpoints(), other.bNumEndpoints())
-            .append(bInterfaceClass(), other.bInterfaceClass())
-            .append(bInterfaceSubClass(), other.bInterfaceSubClass())
-            .append(bInterfaceProtocol(), other.bInterfaceProtocol())
-            .append(iInterface(), other.iInterface())
-            .append(endpoint(), other.endpoint())
-            .append(extra(), other.extra())
-            .append(extraLength(), other.extraLength())
-            .isEquals();
+        return new EqualsBuilder().append(this.bLength(), other.bLength())
+            .append(this.bDescriptorType(), other.bDescriptorType())
+            .append(this.bInterfaceNumber(), other.bInterfaceNumber())
+            .append(this.bAlternateSetting(), other.bAlternateSetting())
+            .append(this.bNumEndpoints(), other.bNumEndpoints())
+            .append(this.bInterfaceClass(), other.bInterfaceClass())
+            .append(this.bInterfaceSubClass(), other.bInterfaceSubClass())
+            .append(this.bInterfaceProtocol(), other.bInterfaceProtocol())
+            .append(this.iInterface(), other.iInterface())
+            .append(this.endpoint(), other.endpoint())
+            .append(this.extra(), other.extra())
+            .append(this.extraLength(), other.extraLength()).isEquals();
     }
 
     @Override
     public String toString()
     {
-        return dump();
+        return this.dump();
     }
 }

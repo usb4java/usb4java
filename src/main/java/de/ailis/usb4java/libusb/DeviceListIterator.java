@@ -34,13 +34,13 @@ final class DeviceListIterator implements Iterator<Device>
     @Override
     public boolean hasNext()
     {
-        return nextIndex < devices.getSize();
+        return this.nextIndex < this.devices.getSize();
     }
 
     @Override
     public Device next()
     {
-        return devices.get(nextIndex++);
+        return this.devices.get(this.nextIndex++);
     }
 
     @Override

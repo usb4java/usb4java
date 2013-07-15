@@ -2,7 +2,7 @@
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
  * 
- * Based on libusb <http://www.libusb.org/>:  
+ * Based on libusb <http://www.libusb.org/>:
  * 
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
@@ -117,10 +117,11 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
         final StringBuilder builder = new StringBuilder();
 
         builder.append(String.format("%s%n" + "  extralen %17d%n"
-            + "  extra:%n" + "%s", DescriptorUtils.dump(this), extraLength(),
-            DescriptorUtils.dump(extra()).replaceAll("(?m)^", "    ")));
+            + "  extra:%n" + "%s", DescriptorUtils.dump(this),
+            this.extraLength(),
+            DescriptorUtils.dump(this.extra()).replaceAll("(?m)^", "    ")));
 
-        for (final Interface iface : iface())
+        for (final Interface iface : this.iface())
         {
             builder.append("%n" + iface.dump());
         }
@@ -131,19 +132,12 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder()
-            .append(bLength())
-            .append(bDescriptorType())
-            .append(wTotalLength())
-            .append(bNumInterfaces())
-            .append(bConfigurationValue())
-            .append(iConfiguration())
-            .append(bmAttributes())
-            .append(bMaxPower())
-            .append(iface())
-            .append(extra())
-            .append(extraLength())
-            .toHashCode();
+        return new HashCodeBuilder().append(this.bLength())
+            .append(this.bDescriptorType()).append(this.wTotalLength())
+            .append(this.bNumInterfaces()).append(this.bConfigurationValue())
+            .append(this.iConfiguration()).append(this.bmAttributes())
+            .append(this.bMaxPower()).append(this.iface()).append(this.extra())
+            .append(this.extraLength()).toHashCode();
     }
 
     @Override
@@ -157,31 +151,29 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
         {
             return false;
         }
-        if (getClass() != obj.getClass())
+        if (this.getClass() != obj.getClass())
         {
             return false;
         }
 
         final ConfigDescriptor other = (ConfigDescriptor) obj;
 
-        return new EqualsBuilder()
-            .append(bLength(), other.bLength())
-            .append(bDescriptorType(), other.bDescriptorType())
-            .append(wTotalLength(), other.wTotalLength())
-            .append(bNumInterfaces(), other.bNumInterfaces())
-            .append(bConfigurationValue(), other.bConfigurationValue())
-            .append(iConfiguration(), other.iConfiguration())
-            .append(bmAttributes(), other.bmAttributes())
-            .append(bMaxPower(), other.bMaxPower())
-            .append(iface(), other.iface())
-            .append(extra(), other.extra())
-            .append(extraLength(), other.extraLength())
-            .isEquals();
+        return new EqualsBuilder().append(this.bLength(), other.bLength())
+            .append(this.bDescriptorType(), other.bDescriptorType())
+            .append(this.wTotalLength(), other.wTotalLength())
+            .append(this.bNumInterfaces(), other.bNumInterfaces())
+            .append(this.bConfigurationValue(), other.bConfigurationValue())
+            .append(this.iConfiguration(), other.iConfiguration())
+            .append(this.bmAttributes(), other.bmAttributes())
+            .append(this.bMaxPower(), other.bMaxPower())
+            .append(this.iface(), other.iface())
+            .append(this.extra(), other.extra())
+            .append(this.extraLength(), other.extraLength()).isEquals();
     }
 
     @Override
     public String toString()
     {
-        return dump();
+        return this.dump();
     }
 }

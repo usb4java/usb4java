@@ -87,8 +87,14 @@ public final class Loader
     {
         final String os = System.getProperty("os.name").toLowerCase()
             .replace(" ", "");
-        if (os.contains(OS_WINDOWS)) return OS_WINDOWS;
-        if (os.equals(OS_MACOSX)) return OS_OSX;
+        if (os.contains(OS_WINDOWS))
+        {
+            return OS_WINDOWS;
+        }
+        if (os.equals(OS_MACOSX))
+        {
+            return OS_OSX;
+        }
         return os;
     }
 
@@ -102,10 +108,17 @@ public final class Loader
      */
     private static String getArch()
     {
-        final String arch = System.getProperty("os.arch");
-        if (arch.equals(ARCH_I386)) return ARCH_X86;
-        if (arch.equals(ARCH_AMD64)) return ARCH_X86_64;
-        return arch.toLowerCase().replace(" ", "");
+        final String arch = System.getProperty("os.arch").toLowerCase()
+            .replace(" ", "");
+        if (arch.equals(ARCH_I386))
+        {
+            return ARCH_X86;
+        }
+        if (arch.equals(ARCH_AMD64))
+        {
+            return ARCH_X86_64;
+        }
+        return arch;
     }
 
     /**
@@ -118,16 +131,25 @@ public final class Loader
         final String os = getOS();
         final String key = "usb4java.libext." + getOS();
         final String ext = System.getProperty(key);
-        if (ext != null) return ext;
+        if (ext != null)
+        {
+            return ext;
+        }
         if (os.equals(OS_LINUX) || os.equals(OS_FREEBSD) || os.equals(OS_SUNOS))
+        {
             return EXT_SO;
+        }
         if (os.equals(OS_WINDOWS))
+        {
             return EXT_DLL;
+        }
         if (os.equals(OS_OSX))
+        {
             return EXT_DYLIB;
-        throw new LoaderException("Unable to determine the shared library " +
-            "file extension for operating system '" + os +
-            "'. Please specify Java parameter -D" + key + "=<FILE-EXTENSION>");
+        }
+        throw new LoaderException("Unable to determine the shared library "
+            + "file extension for operating system '" + os
+            + "'. Please specify Java parameter -D" + key + "=<FILE-EXTENSION>");
     }
 
     /**
@@ -139,23 +161,30 @@ public final class Loader
     private static File createTempDirectory()
     {
         // Return cached tmp directory when already created
-        if (tmp != null) return tmp;
+        if (tmp != null)
+        {
+            return tmp;
+        }
 
         try
         {
             tmp = File.createTempFile("usb4java", null);
             if (!tmp.delete())
+            {
                 throw new IOException("Unable to delete temporary file " + tmp);
+            }
             if (!tmp.mkdirs())
+            {
                 throw new IOException("Unable to create temporary directory "
                     + tmp);
+            }
             tmp.deleteOnExit();
             return tmp;
         }
         catch (final IOException e)
         {
-            throw new LoaderException("Unable to create temporary directory " +
-                "for usb4java natives: " + e, e);
+            throw new LoaderException("Unable to create temporary directory "
+                + "for usb4java natives: " + e, e);
         }
     }
 
@@ -191,7 +220,10 @@ public final class Loader
     private static String getExtraLibName()
     {
         final String os = getOS();
-        if (os.equals(OS_WINDOWS)) return "libusb-1.0." + EXT_DLL;
+        if (os.equals(OS_WINDOWS))
+        {
+            return "libusb-1.0." + EXT_DLL;
+        }
         return null;
     }
 
@@ -207,7 +239,7 @@ public final class Loader
      */
     private static void copy(final InputStream input, final File output)
         throws IOException
-    {
+        {
         final byte[] buffer = new byte[BUFFER_SIZE];
         final FileOutputStream stream = new FileOutputStream(output);
         try
@@ -222,7 +254,7 @@ public final class Loader
         {
             stream.close();
         }
-    }
+        }
 
     /**
      * Extracts a single library.
@@ -233,18 +265,20 @@ public final class Loader
      *            The library name to extract (For example "libusb0.dll")
      * @return The absolute path to the extracted library.
      */
-    private static String extractLibrary(final String platform,
-        final String lib)
+    private static String extractLibrary(final String platform, final String lib)
     {
         // Extract the usb4java library
-        final String source = '/' +
-            Loader.class.getPackage().getName().replace('.', '/') +
-            '/' + platform + "/" + lib;
+        final String source = '/'
+            + Loader.class.getPackage().getName().replace('.', '/') + '/'
+            + platform + "/" + lib;
 
         // Check if native library is present
         final URL url = Loader.class.getResource(source);
-        if (url == null) throw new LoaderException(
-            "Native library not found in classpath: " + source);
+        if (url == null)
+        {
+            throw new LoaderException("Native library not found in classpath: "
+                + source);
+        }
 
         // If native library was found in an already extracted form then
         // return this one without extracting it
@@ -267,11 +301,12 @@ public final class Loader
         final File dest = new File(createTempDirectory(), lib);
         try
         {
-            final InputStream stream =
-                Loader.class.getResourceAsStream(source);
+            final InputStream stream = Loader.class.getResourceAsStream(source);
             if (stream == null)
+            {
                 throw new LoaderException("Unable to find " + source
                     + " in the classpath");
+            }
             try
             {
                 copy(stream, dest);
@@ -283,9 +318,8 @@ public final class Loader
         }
         catch (final IOException e)
         {
-            throw new LoaderException(
-                "Unable to extract native library " + source + " to " + dest
-                    + ": " + e, e);
+            throw new LoaderException("Unable to extract native library "
+                + source + " to " + dest + ": " + e, e);
         }
 
         // Mark usb4java library for deletion
@@ -305,13 +339,18 @@ public final class Loader
      */
     public static void load()
     {
-        if (loaded) return;
+        if (loaded)
+        {
+            return;
+        }
 
         final String platform = getPlatform();
         final String lib = getLibName();
         final String extraLib = getExtraLibName();
         if (extraLib != null)
+        {
             System.load(extractLibrary(platform, extraLib));
+        }
         System.load(extractLibrary(platform, lib));
         loaded = true;
     }

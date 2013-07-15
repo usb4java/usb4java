@@ -2,7 +2,7 @@
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
  * 
- * Based on libusb <http://www.libusb.org/>:  
+ * Based on libusb <http://www.libusb.org/>:
  * 
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
@@ -564,8 +564,7 @@ public final class LibUsb
     /**
      * pollfd listeners (to support different listeners for different contexts).
      */
-    private static final ConcurrentMap<Long, ImmutablePair<PollfdListener, Object>> pollfdListeners =
-        new ConcurrentHashMap<Long, ImmutablePair<PollfdListener, Object>>();
+    private static final ConcurrentMap<Long, ImmutablePair<PollfdListener, Object>> pollfdListeners = new ConcurrentHashMap<Long, ImmutablePair<PollfdListener, Object>>();
 
     static
     {
@@ -645,8 +644,7 @@ public final class LibUsb
      * @param level
      *            The log level to set.
      */
-    public static native void setDebug(final Context context,
-        final int level);
+    public static native void setDebug(final Context context, final int level);
 
     /**
      * Returns the version of the libusb runtime.
@@ -728,7 +726,8 @@ public final class LibUsb
     /**
      * Get the list of all port numbers from root for the specified device.
      * 
-     * @deprecated Please use {@link #getPortNumbers(Device, ByteBuffer)} instead.
+     * @deprecated Please use {@link #getPortNumbers(Device, ByteBuffer)}
+     *             instead.
      * 
      * @param context
      *            The context.
@@ -741,8 +740,8 @@ public final class LibUsb
      *         array is too small
      */
     @Deprecated
-    public static int getPortPath(final Context context,
-        final Device device, final ByteBuffer path)
+    public static int getPortPath(final Context context, final Device device,
+        final ByteBuffer path)
     {
         return getPortNumbers(device, path);
     }
@@ -877,8 +876,7 @@ public final class LibUsb
      *         {@link #ERROR_NO_DEVICE} if the device has been disconnected
      *         another error on other failure
      */
-    public static native int open(final Device device,
-        final DeviceHandle handle);
+    public static native int open(final Device device, final DeviceHandle handle);
 
     /**
      * Convenience function for finding a device with a particular
@@ -1479,8 +1477,7 @@ public final class LibUsb
      * @param companionDescriptor
      *            Output location for the superspeed endpoint companion
      *            descriptor. Only valid if 0 was returned. Must be freed with
-     *            {@link #freeSsEndpointCompanionDescriptor(
-     *            SsEndpointCompanionDescriptor)}
+     *            {@link #freeSsEndpointCompanionDescriptor(SsEndpointCompanionDescriptor)}
      *            after use.
      * @return {@link #SUCCESS} on success, {@link #ERROR_NOT_FOUND} if the
      *         descriptor does not exist, another error code on error
@@ -1491,8 +1488,8 @@ public final class LibUsb
 
     /**
      * Free a superspeed endpoint companion descriptor obtained from
-     * {@link #getSsEndpointCompanionDescriptor(Context, EndpointDescriptor, 
-     * SsEndpointCompanionDescriptor)}.
+     * {@link #getSsEndpointCompanionDescriptor(Context, EndpointDescriptor, SsEndpointCompanionDescriptor)}
+     * .
      * 
      * It is safe to call this function with a NULL parameter, in which case the
      * function simply returns.
@@ -1529,8 +1526,7 @@ public final class LibUsb
      * @param descriptor
      *            The BOS descriptor to free.
      */
-    public static native void freeBosDescriptor(final BosDescriptor
-        descriptor);
+    public static native void freeBosDescriptor(final BosDescriptor descriptor);
 
     /**
      * Get an USB 2.0 Extension descriptor.
@@ -1543,21 +1539,20 @@ public final class LibUsb
      * @param extensionDescriptor
      *            Output location for the USB 2.0 Extension descriptor. Only
      *            valid if 0 was returned. Must be freed with
-     *            {@link #freeUsb20ExtensionDescriptor(
-     *            Usb20ExtensionDescriptor)} after use.
+     *            {@link #freeUsb20ExtensionDescriptor(Usb20ExtensionDescriptor)}
+     *            after use.
      * @return 0 on success a LIBUSB_ERROR code on error
      */
-    public static native int getUsb20ExtensionDescriptor(
-        final Context context,
+    public static native int getUsb20ExtensionDescriptor(final Context context,
         final BosDevCapabilityDescriptor devCapDescriptor,
         final Usb20ExtensionDescriptor extensionDescriptor);
 
     /**
      * Free a USB 2.0 Extension descriptor obtained from
-     * {@link #getUsb20ExtensionDescriptor(Context, BosDevCapabilityDescriptor, 
-     * Usb20ExtensionDescriptor)}.
+     * {@link #getUsb20ExtensionDescriptor(Context, BosDevCapabilityDescriptor, Usb20ExtensionDescriptor)}
+     * .
      * 
-     * It is safe to call this function with a NULL parameter, in which case 
+     * It is safe to call this function with a NULL parameter, in which case
      * the function simply returns.
      * 
      * @param extensionDescriptor
@@ -1576,10 +1571,10 @@ public final class LibUsb
      *            {@link #BT_SS_USB_DEVICE_CAPABILITY}.
      * @param ssUsbDeviceCapabilityDescriptor
      *            Output location for the SuperSpeed USB Device Capability
-     *            descriptor. Only valid if {@link #SUCCESS} was returned. 
+     *            descriptor. Only valid if {@link #SUCCESS} was returned.
      *            Must be freed with
-     *            {@link #freeSsUsbDeviceCapabilityDescriptor(
-     *            SsUsbDeviceCapabilityDescriptor)} after use.
+     *            {@link #freeSsUsbDeviceCapabilityDescriptor(SsUsbDeviceCapabilityDescriptor)}
+     *            after use.
      * @return {@link #SUCCESS} on success, an error code on error.
      */
     public static native int getSsUsbDeviceCapabilityDescriptor(
@@ -1589,8 +1584,8 @@ public final class LibUsb
 
     /**
      * Free a SuperSpeed USB Device Capability descriptor obtained from
-     * {@link #getSsUsbDeviceCapabilityDescriptor(Context, 
-     * BosDevCapabilityDescriptor, SsUsbDeviceCapabilityDescriptor)}.
+     * {@link #getSsUsbDeviceCapabilityDescriptor(Context, BosDevCapabilityDescriptor, SsUsbDeviceCapabilityDescriptor)}
+     * .
      * 
      * It is safe to call this function with a NULL parameter,
      * in which case the function simply returns.
@@ -1600,7 +1595,7 @@ public final class LibUsb
      */
     public static native void freeSsUsbDeviceCapabilityDescriptor(
         final SsUsbDeviceCapabilityDescriptor ssUsbDeviceCapabilityDescriptor);
-    
+
     /**
      * Get a Container ID descriptor.
      * 
@@ -1616,17 +1611,16 @@ public final class LibUsb
      *            after use.
      * @return {@link #SUCCESS} on success or an error code on error
      */
-    public static native int getContainerIdDescriptor(
-        final Context context,
+    public static native int getContainerIdDescriptor(final Context context,
         final BosDevCapabilityDescriptor devCapDescriptor,
         final ContainerIdDescriptor containerIdDescriptor);
 
     /**
      * Free a Container ID descriptor obtained from
-     * {@link #getContainerIdDescriptor(Context, BosDevCapabilityDescriptor, 
-     * ContainerIdDescriptor)}.
+     * {@link #getContainerIdDescriptor(Context, BosDevCapabilityDescriptor, ContainerIdDescriptor)}
+     * .
      * 
-     * It is safe to call this function with a NULL parameter, in which case 
+     * It is safe to call this function with a NULL parameter, in which case
      * the function simply returns.
      * 
      * @param containerIdDescriptor
@@ -1634,7 +1628,7 @@ public final class LibUsb
      */
     public static native void freeContainerIdDescriptor(
         final ContainerIdDescriptor containerIdDescriptor);
-    
+
     /**
      * Retrieve a descriptor from the default control pipe.
      * 
@@ -1656,7 +1650,7 @@ public final class LibUsb
         final byte index, final ByteBuffer data)
     {
         return controlTransfer(handle, ENDPOINT_IN, REQUEST_GET_DESCRIPTOR,
-            (short)((type << 8) | index), (short) 0, data, 1000);
+            (short) ((type << 8) | index), (short) 0, data, 1000);
     }
 
     /**
@@ -1681,7 +1675,7 @@ public final class LibUsb
         final byte index, final short langId, final ByteBuffer data)
     {
         return controlTransfer(handle, ENDPOINT_IN, REQUEST_GET_DESCRIPTOR,
-            (short)((DT_STRING << 8) | index), langId, data, 1000);
+            (short) ((DT_STRING << 8) | index), langId, data, 1000);
     }
 
     /**
@@ -1762,8 +1756,8 @@ public final class LibUsb
      *         been disconnected, another ERROR code on other failures.
      */
     public static native int bulkTransfer(final DeviceHandle handle,
-        final byte endpoint, final ByteBuffer data, final IntBuffer transferred,
-        final long timeout);
+        final byte endpoint, final ByteBuffer data,
+        final IntBuffer transferred, final long timeout);
 
     /**
      * Perform a USB interrupt transfer.
@@ -1808,8 +1802,8 @@ public final class LibUsb
      *         has been disconnected, another ERROR code on other error
      */
     public static native int interruptTransfer(final DeviceHandle handle,
-        final byte endpoint, final ByteBuffer data, final IntBuffer transferred,
-        final long timeout);
+        final byte endpoint, final ByteBuffer data,
+        final IntBuffer transferred, final long timeout);
 
     /**
      * Attempt to acquire the event handling lock.
@@ -2338,25 +2332,31 @@ public final class LibUsb
      * This function will fire off the USB transfer and then return immediately.
      * 
      * @param transfer
-     *           The transfer to submit
-     * @return 0 on success, {@link #LIBUSB_ERROR_NO_DEVICE} if the device has been
-     * disconnected, {@link #LIBUSB_ERROR_BUSY} if the transfer has already been
-     * submitted. {@link #LIBUSB_ERROR_NOT_SUPPORTED} if the transfer flags are
-     * not supported by the operating system. Another LIBUSB_ERROR code on failure.
+     *            The transfer to submit
+     * @return 0 on success, {@link #LIBUSB_ERROR_NO_DEVICE} if the device has
+     *         been
+     *         disconnected, {@link #LIBUSB_ERROR_BUSY} if the transfer has
+     *         already been
+     *         submitted. {@link #LIBUSB_ERROR_NOT_SUPPORTED} if the transfer
+     *         flags are
+     *         not supported by the operating system. Another LIBUSB_ERROR code
+     *         on failure.
      */
     public static native int submitTransfer(final Transfer transfer);
 
     /**
      * Asynchronously cancel a previously submitted transfer.
      * 
-     * This function returns immediately, but this does not indicate cancellation
+     * This function returns immediately, but this does not indicate
+     * cancellation
      * is complete. Your callback function will be invoked at some later time
      * with a transfer status of {@link #LIBUSB_TRANSFER_CANCELLED}.
      * 
      * @param transfer
      *            The transfer to cancel
      * @return 0 on success, {@link #LIBUSB_ERROR_NOT_FOUND} if the transfer is
-     * already complete or cancelled. Another LIBUSB_ERROR code on failure.
+     *         already complete or cancelled. Another LIBUSB_ERROR code on
+     *         failure.
      */
     public static native int cancelTransfer(final Transfer transfer);
 
@@ -2402,9 +2402,9 @@ public final class LibUsb
     }
 
     public static void fillBulkTransfer(final Transfer transfer,
-        final DeviceHandle handle, final byte endpoint, final ByteBuffer buffer,
-        final TransferCallback callback, final Object userData,
-        final long timeout)
+        final DeviceHandle handle, final byte endpoint,
+        final ByteBuffer buffer, final TransferCallback callback,
+        final Object userData, final long timeout)
     {
         transfer.setDevHandle(handle);
         transfer.setEndpoint(endpoint);
@@ -2416,9 +2416,9 @@ public final class LibUsb
     }
 
     public static void fillInterruptTransfer(final Transfer transfer,
-        final DeviceHandle handle, final byte endpoint, final ByteBuffer buffer,
-        final TransferCallback callback, final Object userData,
-        final long timeout)
+        final DeviceHandle handle, final byte endpoint,
+        final ByteBuffer buffer, final TransferCallback callback,
+        final Object userData, final long timeout)
     {
         transfer.setDevHandle(handle);
         transfer.setEndpoint(endpoint);
@@ -2430,9 +2430,10 @@ public final class LibUsb
     }
 
     public static void fillIsoTransfer(final Transfer transfer,
-        final DeviceHandle handle, final byte endpoint, final ByteBuffer buffer,
-        final int numIsoPackets, final TransferCallback callback,
-        final Object userData, final long timeout)
+        final DeviceHandle handle, final byte endpoint,
+        final ByteBuffer buffer, final int numIsoPackets,
+        final TransferCallback callback, final Object userData,
+        final long timeout)
     {
         transfer.setDevHandle(handle);
         transfer.setEndpoint(endpoint);

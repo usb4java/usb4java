@@ -2,7 +2,7 @@
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
  * 
- * Based on libusb <http://www.libusb.org/>:  
+ * Based on libusb <http://www.libusb.org/>:
  * 
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
@@ -60,7 +60,7 @@ public final class DeviceHandle
         final int prime = 31;
         int result = 1;
         result = (prime * result)
-            + (int) (deviceHandlePointer ^ (deviceHandlePointer >>> 32));
+            + (int) (this.deviceHandlePointer ^ (this.deviceHandlePointer >>> 32));
         return result;
     }
 
@@ -75,12 +75,12 @@ public final class DeviceHandle
         {
             return false;
         }
-        if (getClass() != obj.getClass())
+        if (this.getClass() != obj.getClass())
         {
             return false;
         }
         final DeviceHandle other = (DeviceHandle) obj;
-        if (deviceHandlePointer != other.deviceHandlePointer)
+        if (this.deviceHandlePointer != other.deviceHandlePointer)
         {
             return false;
         }
@@ -90,6 +90,7 @@ public final class DeviceHandle
     @Override
     public String toString()
     {
-        return String.format("libusb device handle 0x%x", deviceHandlePointer);
+        return String.format("libusb device handle 0x%x",
+            this.deviceHandlePointer);
     }
 }

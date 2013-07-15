@@ -2,7 +2,7 @@
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
  * 
- * Based on libusb <http://www.libusb.org/>:  
+ * Based on libusb <http://www.libusb.org/>:
  * 
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
@@ -48,7 +48,7 @@ public final class Version implements Comparable<Version>
      */
     public long getPointer()
     {
-        return versionPointer;
+        return this.versionPointer;
     }
 
     /**
@@ -89,13 +89,9 @@ public final class Version implements Comparable<Version>
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder()
-        .append(major())
-        .append(minor())
-        .append(micro())
-        .append(nano())
-        .append(rc())
-        .toHashCode();
+        return new HashCodeBuilder().append(this.major()).append(this.minor())
+            .append(this.micro()).append(this.nano()).append(this.rc())
+            .toHashCode();
     }
 
     @Override
@@ -109,19 +105,17 @@ public final class Version implements Comparable<Version>
         {
             return false;
         }
-        if (getClass() != obj.getClass())
+        if (this.getClass() != obj.getClass())
         {
             return false;
         }
 
         final Version other = (Version) obj;
 
-        return new EqualsBuilder()
-            .append(major(), other.major())
-            .append(minor(), other.minor())
-            .append(micro(), other.micro())
-            .append(nano(), other.nano())
-            .append(rc(), other.rc())
+        return new EqualsBuilder().append(this.major(), other.major())
+            .append(this.minor(), other.minor())
+            .append(this.micro(), other.micro())
+            .append(this.nano(), other.nano()).append(this.rc(), other.rc())
             .isEquals();
     }
 
@@ -137,18 +131,17 @@ public final class Version implements Comparable<Version>
             return 1;
         }
 
-        return new CompareToBuilder()
-            .append(major(), other.major())
-            .append(minor(), other.minor())
-            .append(micro(), other.micro())
-            .append(nano(), other.nano())
-            .append(rc(), other.rc())
+        return new CompareToBuilder().append(this.major(), other.major())
+            .append(this.minor(), other.minor())
+            .append(this.micro(), other.micro())
+            .append(this.nano(), other.nano()).append(this.rc(), other.rc())
             .toComparison();
     }
 
     @Override
     public String toString()
     {
-        return major() + "." + minor() + "." + micro() + "." + nano() + rc();
+        return this.major() + "." + this.minor() + "." + this.micro() + "."
+            + this.nano() + this.rc();
     }
 }

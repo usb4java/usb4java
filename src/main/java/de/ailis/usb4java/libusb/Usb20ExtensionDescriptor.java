@@ -2,7 +2,7 @@
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
  * 
- * Based on libusb <http://www.libusb.org/>:  
+ * Based on libusb <http://www.libusb.org/>:
  * 
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
@@ -36,8 +36,8 @@ public final class Usb20ExtensionDescriptor
 
     /**
      * Constructs a new USB 2.0 Extension descriptor which can be passed to the
-     * {@link LibUsb#getUsb20ExtensionDescriptor(Context, 
-     * BosDevCapabilityDescriptor, Usb20ExtensionDescriptor)} method.
+     * {@link LibUsb#getUsb20ExtensionDescriptor(Context, BosDevCapabilityDescriptor, Usb20ExtensionDescriptor)}
+     * method.
      */
     public Usb20ExtensionDescriptor()
     {
@@ -76,7 +76,7 @@ public final class Usb20ExtensionDescriptor
     public native byte bDevCapabilityType();
 
     /**
-     * Returns the bitmap of supported device level features. 
+     * Returns the bitmap of supported device level features.
      * 
      * @return The supported device level features.
      */
@@ -90,45 +90,47 @@ public final class Usb20ExtensionDescriptor
     public String dump()
     {
         return String.format("USB 2.0 Extension Descriptor:%n"
-            + "  bLength %18d%n"
-            + "  bDescriptorType %10d%n"
-            + "  bDevCapabilityType %7d%n"
-            + "  bmAttributes %13s%n",
-            bLength() & 0xff,
-            bDescriptorType() & 0xff,
-            bDevCapabilityType() & 0xff,
-            String.format("0x%08x", bmAttributes()));
+            + "  bLength %18d%n" + "  bDescriptorType %10d%n"
+            + "  bDevCapabilityType %7d%n" + "  bmAttributes %13s%n",
+            this.bLength() & 0xff, this.bDescriptorType() & 0xff,
+            this.bDevCapabilityType() & 0xff,
+            String.format("0x%08x", this.bmAttributes()));
     }
 
     @Override
     public boolean equals(final Object obj)
     {
-        if (obj == null) return false;
-        if (obj == this) return true;
-        if (obj.getClass() != getClass()) return false;
-        final Usb20ExtensionDescriptor other =
-            (Usb20ExtensionDescriptor) obj;
+        if (obj == null)
+        {
+            return false;
+        }
+        if (obj == this)
+        {
+            return true;
+        }
+        if (obj.getClass() != this.getClass())
+        {
+            return false;
+        }
+        final Usb20ExtensionDescriptor other = (Usb20ExtensionDescriptor) obj;
         return new EqualsBuilder()
-            .append(bDescriptorType(), other.bDescriptorType())
-            .append(bLength(), other.bLength())
-            .append(bDevCapabilityType(), other.bDevCapabilityType())
-            .append(bmAttributes(), other.bmAttributes()).isEquals();
+        .append(this.bDescriptorType(), other.bDescriptorType())
+        .append(this.bLength(), other.bLength())
+        .append(this.bDevCapabilityType(), other.bDevCapabilityType())
+        .append(this.bmAttributes(), other.bmAttributes()).isEquals();
     }
 
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder()
-            .append(bLength())
-            .append(bDescriptorType())
-            .append(bDevCapabilityType())
-            .append(bmAttributes())
-            .toHashCode();
+        return new HashCodeBuilder().append(this.bLength())
+            .append(this.bDescriptorType()).append(this.bDevCapabilityType())
+            .append(this.bmAttributes()).toHashCode();
     }
 
     @Override
     public String toString()
     {
-        return dump();
+        return this.dump();
     }
 }

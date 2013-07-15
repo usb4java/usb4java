@@ -2,7 +2,7 @@
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
  * 
- * Based on libusb <http://www.libusb.org/>:  
+ * Based on libusb <http://www.libusb.org/>:
  * 
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
@@ -69,7 +69,7 @@ public final class Device
         final int prime = 31;
         int result = 1;
         result = (prime * result)
-            + (int) (devicePointer ^ (devicePointer >>> 32));
+            + (int) (this.devicePointer ^ (this.devicePointer >>> 32));
         return result;
     }
 
@@ -84,12 +84,12 @@ public final class Device
         {
             return false;
         }
-        if (getClass() != obj.getClass())
+        if (this.getClass() != obj.getClass())
         {
             return false;
         }
         final Device other = (Device) obj;
-        if (devicePointer != other.devicePointer)
+        if (this.devicePointer != other.devicePointer)
         {
             return false;
         }
@@ -99,6 +99,6 @@ public final class Device
     @Override
     public String toString()
     {
-        return String.format("libusb device 0x%x", devicePointer);
+        return String.format("libusb device 0x%x", this.devicePointer);
     }
 }

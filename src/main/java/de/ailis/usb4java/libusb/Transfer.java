@@ -2,7 +2,7 @@
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
  * 
- * Based on libusb <http://www.libusb.org/>:  
+ * Based on libusb <http://www.libusb.org/>:
  * 
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
@@ -26,7 +26,7 @@ import java.nio.ByteBuffer;
  * The user populates this structure and then submits it in order to request a
  * transfer. After the transfer has completed, the library populates the
  * transfer with the results and passes it back to the user.
- *
+ * 
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class Transfer
@@ -55,7 +55,7 @@ public final class Transfer
      */
     public long getPointer()
     {
-        return transferPointer;
+        return this.transferPointer;
     }
 
     /**
@@ -169,13 +169,13 @@ public final class Transfer
         // maximum capacity.
         if (length != 0)
         {
-            if (transferBuffer == null)
+            if (this.transferBuffer == null)
             {
                 throw new IllegalArgumentException(
                     "buffer is null, only a length of 0 is allowed");
             }
 
-            if (transferBuffer.capacity() < length)
+            if (this.transferBuffer.capacity() < length)
             {
                 throw new IllegalArgumentException(
                     "buffer too small for requested length");
@@ -183,7 +183,7 @@ public final class Transfer
         }
 
         // Native call.
-        setLengthNative(length);
+        this.setLengthNative(length);
     }
 
     native void setLengthNative(final int length);
@@ -237,7 +237,7 @@ public final class Transfer
      */
     public ByteBuffer buffer()
     {
-        return transferBuffer;
+        return this.transferBuffer;
     }
 
     /**
@@ -249,21 +249,21 @@ public final class Transfer
     public void setBuffer(final ByteBuffer buffer)
     {
         // Native call.
-        setBufferNative(buffer);
+        this.setBufferNative(buffer);
 
         if (buffer != null)
         {
             // Set new length based on buffer's capacity.
-            setLengthNative(buffer.capacity());
+            this.setLengthNative(buffer.capacity());
         }
         else
         {
-            setLengthNative(0);
+            this.setLengthNative(0);
         }
 
         // Once we know the native calls have gone through, update the
         // reference.
-        transferBuffer = buffer;
+        this.transferBuffer = buffer;
     }
 
     native void setBufferNative(final ByteBuffer buffer);
@@ -297,7 +297,7 @@ public final class Transfer
         final int prime = 31;
         int result = 1;
         result = (prime * result)
-            + (int) (transferPointer ^ (transferPointer >>> 32));
+            + (int) (this.transferPointer ^ (this.transferPointer >>> 32));
         return result;
     }
 
@@ -312,12 +312,12 @@ public final class Transfer
         {
             return false;
         }
-        if (getClass() != obj.getClass())
+        if (this.getClass() != obj.getClass())
         {
             return false;
         }
         final Transfer other = (Transfer) obj;
-        if (transferPointer != other.transferPointer)
+        if (this.transferPointer != other.transferPointer)
         {
             return false;
         }
@@ -327,6 +327,6 @@ public final class Transfer
     @Override
     public String toString()
     {
-        return String.format("libusb transfer 0x%x", transferPointer);
+        return String.format("libusb transfer 0x%x", this.transferPointer);
     }
 }

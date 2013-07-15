@@ -2,7 +2,7 @@
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
  * 
- * Based on libusb <http://www.libusb.org/>:  
+ * Based on libusb <http://www.libusb.org/>:
  * 
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
@@ -41,8 +41,7 @@ public final class ContainerIdDescriptor
 
     /**
      * Constructs a new Container Id descriptor which can be passed to the
-     * {@link LibUsb#getContainerIdDescriptor(Context, 
-     * BosDevCapabilityDescriptor, ContainerIdDescriptor)}
+     * {@link LibUsb#getContainerIdDescriptor(Context, BosDevCapabilityDescriptor, ContainerIdDescriptor)}
      * method.
      */
     public ContainerIdDescriptor()
@@ -102,51 +101,51 @@ public final class ContainerIdDescriptor
      */
     public String dump()
     {
-        return String.format("Container Id Descriptor:%n"
-            + "  bLength %18d%n"
-            + "  bDescriptorType %10d%n"
-            + "  bDevCapabilityType %7d%n"
-            + "  bReserved %16d%n"
-            + "  containerId:%n%s%n",
-            bLength() & 0xff,
-            bDescriptorType() & 0xff,
-            bDevCapabilityType() & 0xff,
-            bReserved() & 0xff,
-            DescriptorUtils.dump(containerId()).replaceAll("(?m)^", "    "));
+        return String.format("Container Id Descriptor:%n" + "  bLength %18d%n"
+            + "  bDescriptorType %10d%n" + "  bDevCapabilityType %7d%n"
+            + "  bReserved %16d%n" + "  containerId:%n%s%n",
+            this.bLength() & 0xff, this.bDescriptorType() & 0xff, this
+            .bDevCapabilityType() & 0xff, this.bReserved() & 0xff,
+            DescriptorUtils.dump(this.containerId())
+            .replaceAll("(?m)^", "    "));
     }
 
     @Override
     public boolean equals(final Object obj)
     {
-        if (obj == null) return false;
-        if (obj == this) return true;
-        if (obj.getClass() != getClass()) return false;
-        final ContainerIdDescriptor other =
-            (ContainerIdDescriptor) obj;
+        if (obj == null)
+        {
+            return false;
+        }
+        if (obj == this)
+        {
+            return true;
+        }
+        if (obj.getClass() != this.getClass())
+        {
+            return false;
+        }
+        final ContainerIdDescriptor other = (ContainerIdDescriptor) obj;
         return new EqualsBuilder()
-            .append(bDescriptorType(), other.bDescriptorType())
-            .append(bLength(), other.bLength())
-            .append(bDevCapabilityType(), other.bDevCapabilityType())
-            .append(bReserved(), other.bReserved())
-            .append(containerId().array(), other.containerId().array())
-            .isEquals();
+        .append(this.bDescriptorType(), other.bDescriptorType())
+        .append(this.bLength(), other.bLength())
+        .append(this.bDevCapabilityType(), other.bDevCapabilityType())
+        .append(this.bReserved(), other.bReserved())
+        .append(this.containerId().array(), other.containerId().array())
+        .isEquals();
     }
 
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder()
-            .append(bLength())
-            .append(bDescriptorType())
-            .append(bDevCapabilityType())
-            .append(bReserved())
-            .append(containerId())
-            .toHashCode();
+        return new HashCodeBuilder().append(this.bLength())
+            .append(this.bDescriptorType()).append(this.bDevCapabilityType())
+            .append(this.bReserved()).append(this.containerId()).toHashCode();
     }
 
     @Override
     public String toString()
     {
-        return dump();
+        return this.dump();
     }
 }

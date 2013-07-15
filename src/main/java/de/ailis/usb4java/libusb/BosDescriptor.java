@@ -2,7 +2,7 @@
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
  * 
- * Based on libusb <http://www.libusb.org/>:  
+ * Based on libusb <http://www.libusb.org/>:
  * 
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
@@ -36,8 +36,7 @@ public final class BosDescriptor
 
     /**
      * Constructs a new BOS descriptor which can be passed to the
-     * {@link LibUsb#getBosDescriptor(DeviceHandle, BosDescriptor)}
-     * method.
+     * {@link LibUsb#getBosDescriptor(DeviceHandle, BosDescriptor)} method.
      */
     public BosDescriptor()
     {
@@ -69,19 +68,19 @@ public final class BosDescriptor
     public native byte bDescriptorType();
 
     /**
-     * Returns the length of this descriptor and all of its sub descriptors. 
+     * Returns the length of this descriptor and all of its sub descriptors.
      * 
      * @return The total descriptor length.
      */
     public native short wTotalLength();
 
     /**
-     * Returns the number of separate device capability descriptors in the BOS. 
+     * Returns the number of separate device capability descriptors in the BOS.
      * 
      * @return The number of device capability descriptors.
      */
     public native byte bNumDeviceCaps();
-    
+
     /**
      * Returns the array with the device capability descriptors.
      * 
@@ -97,53 +96,54 @@ public final class BosDescriptor
     public String dump()
     {
         final StringBuilder builder = new StringBuilder();
-        builder.append(String.format("BOS Descriptor:%n"
-            + "  bLength %18d%n"
-            + "  bDescriptorType %10d%n"
-            + "  wTotalLength %13s%n"
-            + "  bNumDeviceCaps %11s%n",
-            bLength() & 0xff,
-            bDescriptorType() & 0xff,
-            wTotalLength() & 0xffff,
-            bNumDeviceCaps() & 0xff));
-        for (final BosDevCapabilityDescriptor descriptor: devCapability())
+        builder.append(String.format("BOS Descriptor:%n" + "  bLength %18d%n"
+            + "  bDescriptorType %10d%n" + "  wTotalLength %13s%n"
+            + "  bNumDeviceCaps %11s%n", this.bLength() & 0xff,
+            this.bDescriptorType() & 0xff, this.wTotalLength() & 0xffff,
+            this.bNumDeviceCaps() & 0xff));
+        for (final BosDevCapabilityDescriptor descriptor : this.devCapability())
         {
             builder.append(descriptor.dump().replaceAll("(?m)^", "  "));
         }
-        return builder.toString();            
+        return builder.toString();
     }
 
     @Override
     public boolean equals(final Object obj)
     {
-        if (obj == null) return false;
-        if (obj == this) return true;
-        if (obj.getClass() != getClass()) return false;
-        final BosDescriptor other =
-            (BosDescriptor) obj;
+        if (obj == null)
+        {
+            return false;
+        }
+        if (obj == this)
+        {
+            return true;
+        }
+        if (obj.getClass() != this.getClass())
+        {
+            return false;
+        }
+        final BosDescriptor other = (BosDescriptor) obj;
         return new EqualsBuilder()
-            .append(bDescriptorType(), other.bDescriptorType())
-            .append(bLength(), other.bLength())
-            .append(wTotalLength(), other.wTotalLength())
-            .append(bNumDeviceCaps(), other.bNumDeviceCaps())
-            .append(devCapability(), other.devCapability()).isEquals();
+        .append(this.bDescriptorType(), other.bDescriptorType())
+        .append(this.bLength(), other.bLength())
+        .append(this.wTotalLength(), other.wTotalLength())
+        .append(this.bNumDeviceCaps(), other.bNumDeviceCaps())
+        .append(this.devCapability(), other.devCapability()).isEquals();
     }
 
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder()
-            .append(bLength())
-            .append(bDescriptorType())
-            .append(wTotalLength())
-            .append(bNumDeviceCaps())
-            .append(devCapability())
+        return new HashCodeBuilder().append(this.bLength())
+            .append(this.bDescriptorType()).append(this.wTotalLength())
+            .append(this.bNumDeviceCaps()).append(this.devCapability())
             .toHashCode();
     }
 
     @Override
     public String toString()
     {
-        return dump();
+        return this.dump();
     }
 }

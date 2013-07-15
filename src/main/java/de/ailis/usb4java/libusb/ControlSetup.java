@@ -16,10 +16,11 @@ public final class ControlSetup
             throw new IllegalArgumentException("buffer cannot be null");
         }
 
-        controlSetup = BufferUtils.slice(buffer, 0, LibUsb.CONTROL_SETUP_SIZE);
+        this.controlSetup = BufferUtils.slice(buffer, 0,
+            LibUsb.CONTROL_SETUP_SIZE);
 
         // Control Setup (as all of USB) is Little Endian.
-        controlSetup.order(ByteOrder.LITTLE_ENDIAN);
+        this.controlSetup.order(ByteOrder.LITTLE_ENDIAN);
     }
 
     /**
@@ -34,52 +35,52 @@ public final class ControlSetup
 
     public byte bmRequestType()
     {
-        return controlSetup.get(0);
+        return this.controlSetup.get(0);
     }
 
     public void setBmRequestType(final byte bmRequestType)
     {
-        controlSetup.put(0, bmRequestType);
+        this.controlSetup.put(0, bmRequestType);
     }
 
     public byte bRequest()
     {
-        return controlSetup.get(1);
+        return this.controlSetup.get(1);
     }
 
     public void setBRequest(final byte bRequest)
     {
-        controlSetup.put(1, bRequest);
+        this.controlSetup.put(1, bRequest);
     }
 
     public short wValue()
     {
-        return controlSetup.getShort(2);
+        return this.controlSetup.getShort(2);
     }
 
     public void setWValue(final short wValue)
     {
-        controlSetup.putShort(2, wValue);
+        this.controlSetup.putShort(2, wValue);
     }
 
     public short wIndex()
     {
-        return controlSetup.getShort(4);
+        return this.controlSetup.getShort(4);
     }
 
     public void setWIndex(final short wIndex)
     {
-        controlSetup.putShort(4, wIndex);
+        this.controlSetup.putShort(4, wIndex);
     }
 
     public short wLength()
     {
-        return controlSetup.getShort(6);
+        return this.controlSetup.getShort(6);
     }
 
     public void setWLength(final short wLength)
     {
-        controlSetup.putShort(6, wLength);
+        this.controlSetup.putShort(6, wLength);
     }
 
     @Override
@@ -88,7 +89,7 @@ public final class ControlSetup
         final int prime = 31;
         int result = 1;
         result = (prime * result)
-            + ((controlSetup == null) ? 0 : controlSetup.hashCode());
+            + ((this.controlSetup == null) ? 0 : this.controlSetup.hashCode());
         return result;
     }
 
@@ -103,19 +104,19 @@ public final class ControlSetup
         {
             return false;
         }
-        if (getClass() != obj.getClass())
+        if (this.getClass() != obj.getClass())
         {
             return false;
         }
         final ControlSetup other = (ControlSetup) obj;
-        if (controlSetup == null)
+        if (this.controlSetup == null)
         {
             if (other.controlSetup != null)
             {
                 return false;
             }
         }
-        else if (!controlSetup.equals(other.controlSetup))
+        else if (!this.controlSetup.equals(other.controlSetup))
         {
             return false;
         }
@@ -126,6 +127,6 @@ public final class ControlSetup
     public String toString()
     {
         return String.format("libusb control setup with buffer %s",
-            controlSetup.toString());
+            this.controlSetup.toString());
     }
 }

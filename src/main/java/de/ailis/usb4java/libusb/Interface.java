@@ -2,7 +2,7 @@
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
  * 
- * Based on libusb <http://www.libusb.org/>:  
+ * Based on libusb <http://www.libusb.org/>:
  * 
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
@@ -67,7 +67,7 @@ public final class Interface
 
     /**
      * Returns a dump of this interface.
-     *
+     * 
      * @return The interface dump.
      */
     public String dump()
@@ -75,9 +75,9 @@ public final class Interface
         final StringBuilder builder = new StringBuilder();
 
         builder.append(String.format("Interface:%n" + "  numAltsetting %10d",
-            numAltsetting()));
+            this.numAltsetting()));
 
-        for (final InterfaceDescriptor intDesc : altsetting())
+        for (final InterfaceDescriptor intDesc : this.altsetting())
         {
             builder.append("%n" + intDesc.dump());
         }
@@ -88,10 +88,8 @@ public final class Interface
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder()
-            .append(altsetting())
-            .append(numAltsetting())
-            .toHashCode();
+        return new HashCodeBuilder().append(this.altsetting())
+            .append(this.numAltsetting()).toHashCode();
     }
 
     @Override
@@ -105,7 +103,7 @@ public final class Interface
         {
             return false;
         }
-        if (getClass() != obj.getClass())
+        if (this.getClass() != obj.getClass())
         {
             return false;
         }
@@ -113,14 +111,13 @@ public final class Interface
         final Interface other = (Interface) obj;
 
         return new EqualsBuilder()
-            .append(altsetting(), other.altsetting())
-            .append(numAltsetting(), other.numAltsetting())
-            .isEquals();
+        .append(this.altsetting(), other.altsetting())
+        .append(this.numAltsetting(), other.numAltsetting()).isEquals();
     }
 
     @Override
     public String toString()
     {
-        return dump();
+        return this.dump();
     }
 }

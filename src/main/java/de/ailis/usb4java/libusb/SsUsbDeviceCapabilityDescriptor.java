@@ -2,7 +2,7 @@
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
  * 
- * Based on libusb <http://www.libusb.org/>:  
+ * Based on libusb <http://www.libusb.org/>:
  * 
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
@@ -23,7 +23,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * A structure representing the SuperSpeed USB Device Capability descriptor.
- * This descriptor is documented in section 9.6.2.2 of the USB 3.0 
+ * This descriptor is documented in section 9.6.2.2 of the USB 3.0
  * specification.
  * 
  * All multiple-byte fields are represented in host-endian format.
@@ -36,10 +36,10 @@ public final class SsUsbDeviceCapabilityDescriptor
     private long ssUsbDeviceCapabilityDescriptorPointer;
 
     /**
-     * Constructs a new SuperSpeed USB Device Capability descriptor which can 
+     * Constructs a new SuperSpeed USB Device Capability descriptor which can
      * be passed to the
-     * {@link LibUsb#getSsUsbDeviceCapabilityDescriptor(Context, 
-     * BosDevCapabilityDescriptor, SsUsbDeviceCapabilityDescriptor)} method.
+     * {@link LibUsb#getSsUsbDeviceCapabilityDescriptor(Context, BosDevCapabilityDescriptor, SsUsbDeviceCapabilityDescriptor)}
+     * method.
      */
     public SsUsbDeviceCapabilityDescriptor()
     {
@@ -78,35 +78,35 @@ public final class SsUsbDeviceCapabilityDescriptor
     public native byte bDevCapabilityType();
 
     /**
-     * Returns the bitmap of supported device level features. 
+     * Returns the bitmap of supported device level features.
      * 
      * @return The supported device level features.
      */
     public native byte bmAttributes();
-    
+
     /**
-     * Returns the bitmap encoding of the speed supported by this device when 
+     * Returns the bitmap encoding of the speed supported by this device when
      * operating in SuperSpeed mode.
      * 
      * @return The supported speed.
      */
     public native short wSpeedSupported();
-    
+
     /**
-     * Returns the lowest speed at which all the functionality supported by the 
+     * Returns the lowest speed at which all the functionality supported by the
      * device is available to the user.
      * 
      * @return The lowest speed.
      */
     public native byte bFunctionalitySupport();
-    
+
     /**
      * Returns the U1 Device Exit Latency.
      * 
      * @return The U1 Device Exit Latency.
      */
     public native byte bU1DevExitLat();
-    
+
     /**
      * Returns the U2 Device Exit Latency.
      * 
@@ -122,62 +122,58 @@ public final class SsUsbDeviceCapabilityDescriptor
     public String dump()
     {
         return String.format("SuperSpeed USB Device Capability descriptor:%n"
-            + "  bLength %18d%n"
-            + "  bDescriptorType %10d%n"
-            + "  bDevCapabilityType %7d%n"
-            + "  bmAttributes %13s%n"
-            + "  wSpeedSupported %10d%n"
-            + "  bFunctionalitySupport %4d%n"
-            + "  bU1DevExitLat %12d%n"
-            + "  bU2DevExitLat %12d%n",
-            bLength() & 0xff,
-            bDescriptorType() & 0xff,
-            bDevCapabilityType() & 0xff,
-            String.format("0x%02x", bmAttributes() & 0xff),
-            wSpeedSupported() & 0xffff,
-            bFunctionalitySupport() & 0xff,
-            bU1DevExitLat() & 0xff,
-            bU2DevExitLat() & 0xffff);
+            + "  bLength %18d%n" + "  bDescriptorType %10d%n"
+            + "  bDevCapabilityType %7d%n" + "  bmAttributes %13s%n"
+            + "  wSpeedSupported %10d%n" + "  bFunctionalitySupport %4d%n"
+            + "  bU1DevExitLat %12d%n" + "  bU2DevExitLat %12d%n",
+            this.bLength() & 0xff, this.bDescriptorType() & 0xff,
+            this.bDevCapabilityType() & 0xff,
+            String.format("0x%02x", this.bmAttributes() & 0xff),
+            this.wSpeedSupported() & 0xffff,
+            this.bFunctionalitySupport() & 0xff, this.bU1DevExitLat() & 0xff,
+            this.bU2DevExitLat() & 0xffff);
     }
 
     @Override
     public boolean equals(final Object obj)
     {
-        if (obj == null) return false;
-        if (obj == this) return true;
-        if (obj.getClass() != getClass()) return false;
-        final SsUsbDeviceCapabilityDescriptor other =
-            (SsUsbDeviceCapabilityDescriptor) obj;
+        if (obj == null)
+        {
+            return false;
+        }
+        if (obj == this)
+        {
+            return true;
+        }
+        if (obj.getClass() != this.getClass())
+        {
+            return false;
+        }
+        final SsUsbDeviceCapabilityDescriptor other = (SsUsbDeviceCapabilityDescriptor) obj;
         return new EqualsBuilder()
-            .append(bDescriptorType(), other.bDescriptorType())
-            .append(bLength(), other.bLength())
-            .append(bDevCapabilityType(), other.bDevCapabilityType())
-            .append(bmAttributes(), other.bmAttributes())
-            .append(wSpeedSupported(), other.wSpeedSupported())
-            .append(bFunctionalitySupport(), other.bFunctionalitySupport())
-            .append(bU1DevExitLat(), other.bU1DevExitLat())
-            .append(bU2DevExitLat(), other.bU2DevExitLat())
-            .isEquals();
+        .append(this.bDescriptorType(), other.bDescriptorType())
+        .append(this.bLength(), other.bLength())
+        .append(this.bDevCapabilityType(), other.bDevCapabilityType())
+        .append(this.bmAttributes(), other.bmAttributes())
+        .append(this.wSpeedSupported(), other.wSpeedSupported())
+        .append(this.bFunctionalitySupport(), other.bFunctionalitySupport())
+        .append(this.bU1DevExitLat(), other.bU1DevExitLat())
+        .append(this.bU2DevExitLat(), other.bU2DevExitLat()).isEquals();
     }
 
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder()
-            .append(bLength())
-            .append(bDescriptorType())
-            .append(bDevCapabilityType())
-            .append(bmAttributes())
-            .append(wSpeedSupported())
-            .append(bFunctionalitySupport())
-            .append(bU1DevExitLat())
-            .append(bU2DevExitLat())
-            .toHashCode();
+        return new HashCodeBuilder().append(this.bLength())
+            .append(this.bDescriptorType()).append(this.bDevCapabilityType())
+            .append(this.bmAttributes()).append(this.wSpeedSupported())
+            .append(this.bFunctionalitySupport()).append(this.bU1DevExitLat())
+            .append(this.bU2DevExitLat()).toHashCode();
     }
 
     @Override
     public String toString()
     {
-        return dump();
+        return this.dump();
     }
 }
