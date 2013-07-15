@@ -31,19 +31,18 @@ public class DeviceDescriptorTest
         LibUsb.init(null);
         this.descriptor = new DeviceDescriptor();
     }
-    
+
     /**
      * Tear down test.
      */
-    @After    
+    @After
     public void tearDown()
     {
         LibUsb.exit(null);
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link DeviceDescriptor#bLength()}
+     * Tests uninitialized access to {@link DeviceDescriptor#bLength()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedLength()
@@ -53,8 +52,7 @@ public class DeviceDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link DeviceDescriptor#bDescriptorType()}
+     * Tests uninitialized access to {@link DeviceDescriptor#bDescriptorType()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedDescriptorType()
@@ -64,8 +62,7 @@ public class DeviceDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link DeviceDescriptor#bcdUSB()}
+     * Tests uninitialized access to {@link DeviceDescriptor#bcdUSB()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedBcdUSB()
@@ -75,8 +72,7 @@ public class DeviceDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link DeviceDescriptor#bDeviceClass()}
+     * Tests uninitialized access to {@link DeviceDescriptor#bDeviceClass()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedDeviceClass()
@@ -86,8 +82,7 @@ public class DeviceDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link DeviceDescriptor#bDeviceSubClass()}
+     * Tests uninitialized access to {@link DeviceDescriptor#bDeviceSubClass()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedDeviceSubClass()
@@ -97,8 +92,7 @@ public class DeviceDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link DeviceDescriptor#bDeviceProtocol()}
+     * Tests uninitialized access to {@link DeviceDescriptor#bDeviceProtocol()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedDeviceProtocol()
@@ -108,8 +102,7 @@ public class DeviceDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link DeviceDescriptor#bMaxPacketSize0()}
+     * Tests uninitialized access to {@link DeviceDescriptor#bMaxPacketSize0()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedMaxPacketSize0()
@@ -119,8 +112,7 @@ public class DeviceDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link DeviceDescriptor#idVendor()}
+     * Tests uninitialized access to {@link DeviceDescriptor#idVendor()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedVendor()
@@ -130,8 +122,7 @@ public class DeviceDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link DeviceDescriptor#idProduct()}
+     * Tests uninitialized access to {@link DeviceDescriptor#idProduct()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedProduct()
@@ -141,8 +132,7 @@ public class DeviceDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link DeviceDescriptor#bcdDevice()}
+     * Tests uninitialized access to {@link DeviceDescriptor#bcdDevice()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedBcdDevice()
@@ -152,8 +142,7 @@ public class DeviceDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link DeviceDescriptor#iManufacturer()}
+     * Tests uninitialized access to {@link DeviceDescriptor#iManufacturer()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedManufacturer()
@@ -163,8 +152,7 @@ public class DeviceDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link DeviceDescriptor#iProduct()}
+     * Tests uninitialized access to {@link DeviceDescriptor#iProduct()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedIProduct()
@@ -174,8 +162,7 @@ public class DeviceDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link DeviceDescriptor#iSerialNumber()}
+     * Tests uninitialized access to {@link DeviceDescriptor#iSerialNumber()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedSerialNumber()

@@ -32,14 +32,14 @@ public class LibUSBGlobalTest
     @Before
     public void setUp()
     {
-        context = new Context();
+        this.context = new Context();
         try
         {
-            LibUsb.init(context);
+            LibUsb.init(this.context);
         }
-        catch (Throwable e)
+        catch (final Throwable e)
         {
-            context = null;
+            this.context = null;
         }
     }
 
@@ -49,9 +49,9 @@ public class LibUSBGlobalTest
     @After
     public void tearDown()
     {
-        if (context != null)
+        if (this.context != null)
         {
-            LibUsb.exit(context);
+            LibUsb.exit(this.context);
         }
     }
 
@@ -62,11 +62,11 @@ public class LibUSBGlobalTest
     public void testSetDebug()
     {
         assumeUsbTestsEnabled();
-        LibUsb.setDebug(context, LibUsb.LOG_LEVEL_DEBUG);
-        LibUsb.setDebug(context, LibUsb.LOG_LEVEL_INFO);
-        LibUsb.setDebug(context, LibUsb.LOG_LEVEL_WARNING);
-        LibUsb.setDebug(context, LibUsb.LOG_LEVEL_ERROR);
-        LibUsb.setDebug(context, LibUsb.LOG_LEVEL_NONE);
+        LibUsb.setDebug(this.context, LibUsb.LOG_LEVEL_DEBUG);
+        LibUsb.setDebug(this.context, LibUsb.LOG_LEVEL_INFO);
+        LibUsb.setDebug(this.context, LibUsb.LOG_LEVEL_WARNING);
+        LibUsb.setDebug(this.context, LibUsb.LOG_LEVEL_ERROR);
+        LibUsb.setDebug(this.context, LibUsb.LOG_LEVEL_NONE);
     }
 
     /**
@@ -77,13 +77,13 @@ public class LibUSBGlobalTest
     {
         assumeUsbTestsEnabled();
         final DeviceList list = new DeviceList();
-        final int result = LibUsb.getDeviceList(context, list);
+        final int result = LibUsb.getDeviceList(this.context, list);
         assertTrue(
             "At least one USB device must be present for the simple unit tests",
             result > 0);
         assertEquals(result, list.getSize());
         int i = 0;
-        for (Device device: list)
+        for (final Device device : list)
         {
             assertNotNull(device);
             assertEquals(device, list.get(i));
@@ -101,7 +101,7 @@ public class LibUSBGlobalTest
     public void testGetDeviceListWithoutList()
     {
         assumeUsbTestsEnabled();
-        LibUsb.getDeviceList(context, null);
+        LibUsb.getDeviceList(this.context, null);
     }
 
     /**

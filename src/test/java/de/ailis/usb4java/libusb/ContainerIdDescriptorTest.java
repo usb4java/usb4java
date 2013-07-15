@@ -31,19 +31,18 @@ public class ContainerIdDescriptorTest
         LibUsb.init(null);
         this.descriptor = new ContainerIdDescriptor();
     }
-    
+
     /**
      * Tear down test.
      */
-    @After    
+    @After
     public void tearDown()
     {
         LibUsb.exit(null);
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link ContainerIdDescriptor#bLength()}
+     * Tests uninitialized access to {@link ContainerIdDescriptor#bLength()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedLength()
@@ -75,8 +74,7 @@ public class ContainerIdDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link ContainerIdDescriptor#bReserved()}
+     * Tests uninitialized access to {@link ContainerIdDescriptor#bReserved()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedReserved()
@@ -86,8 +84,7 @@ public class ContainerIdDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link ContainerIdDescriptor#containerId()}
+     * Tests uninitialized access to {@link ContainerIdDescriptor#containerId()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedContainerId()

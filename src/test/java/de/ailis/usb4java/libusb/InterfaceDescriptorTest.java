@@ -31,19 +31,18 @@ public class InterfaceDescriptorTest
         LibUsb.init(null);
         this.descriptor = new InterfaceDescriptor();
     }
-    
+
     /**
      * Tear down test.
      */
-    @After    
+    @After
     public void tearDown()
     {
         LibUsb.exit(null);
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link InterfaceDescriptor#bLength()}
+     * Tests uninitialized access to {@link InterfaceDescriptor#bLength()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedLength()
@@ -86,8 +85,7 @@ public class InterfaceDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link InterfaceDescriptor#bNumEndpoints()}
+     * Tests uninitialized access to {@link InterfaceDescriptor#bNumEndpoints()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedNumEndpoints()
@@ -130,8 +128,7 @@ public class InterfaceDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link InterfaceDescriptor#iInterface()}
+     * Tests uninitialized access to {@link InterfaceDescriptor#iInterface()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedInterface()
@@ -141,8 +138,7 @@ public class InterfaceDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link InterfaceDescriptor#endpoint()}
+     * Tests uninitialized access to {@link InterfaceDescriptor#endpoint()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedEndpoint()
@@ -152,8 +148,7 @@ public class InterfaceDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link InterfaceDescriptor#extra()}
+     * Tests uninitialized access to {@link InterfaceDescriptor#extra()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedExtra()
@@ -163,8 +158,7 @@ public class InterfaceDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link InterfaceDescriptor#extraLength()}
+     * Tests uninitialized access to {@link InterfaceDescriptor#extraLength()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedExtraLength()

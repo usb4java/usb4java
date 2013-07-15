@@ -31,11 +31,11 @@ public class SsUsbDeviceCapabilityDescriptorTest
         LibUsb.init(null);
         this.descriptor = new SsUsbDeviceCapabilityDescriptor();
     }
-    
+
     /**
      * Tear down test.
      */
-    @After    
+    @After
     public void tearDown()
     {
         LibUsb.exit(null);

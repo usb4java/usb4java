@@ -31,19 +31,18 @@ public class InterfaceTest
         LibUsb.init(null);
         this.descriptor = new Interface();
     }
-    
+
     /**
      * Tear down test.
      */
-    @After    
+    @After
     public void tearDown()
     {
         LibUsb.exit(null);
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link Interface#altsetting()}
+     * Tests uninitialized access to {@link Interface#altsetting()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedAltsetting()
@@ -53,8 +52,7 @@ public class InterfaceTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link Interface#numAltsetting()}
+     * Tests uninitialized access to {@link Interface#numAltsetting()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedDescriptorType()

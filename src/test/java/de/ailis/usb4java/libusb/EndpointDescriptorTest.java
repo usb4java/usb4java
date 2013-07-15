@@ -31,19 +31,18 @@ public class EndpointDescriptorTest
         LibUsb.init(null);
         this.descriptor = new EndpointDescriptor();
     }
-    
+
     /**
      * Tear down test.
      */
-    @After    
+    @After
     public void tearDown()
     {
         LibUsb.exit(null);
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link EndpointDescriptor#bLength()}
+     * Tests uninitialized access to {@link EndpointDescriptor#bLength()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedLength()
@@ -62,7 +61,7 @@ public class EndpointDescriptorTest
         assumeUsbTestsEnabled();
         this.descriptor.bDescriptorType();
     }
-    
+
     /**
      * Tests uninitialized access to
      * {@link EndpointDescriptor#bEndpointAddress()}
@@ -73,10 +72,9 @@ public class EndpointDescriptorTest
         assumeUsbTestsEnabled();
         this.descriptor.bEndpointAddress();
     }
-    
+
     /**
-     * Tests uninitialized access to
-     * {@link EndpointDescriptor#bmAttributes()}
+     * Tests uninitialized access to {@link EndpointDescriptor#bmAttributes()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedAttributes()
@@ -86,8 +84,7 @@ public class EndpointDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link EndpointDescriptor#wMaxPacketSize()}
+     * Tests uninitialized access to {@link EndpointDescriptor#wMaxPacketSize()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedMaxPacketSize()
@@ -97,8 +94,7 @@ public class EndpointDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link EndpointDescriptor#bInterval()}
+     * Tests uninitialized access to {@link EndpointDescriptor#bInterval()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedInterval()
@@ -106,10 +102,9 @@ public class EndpointDescriptorTest
         assumeUsbTestsEnabled();
         this.descriptor.bInterval();
     }
-    
+
     /**
-     * Tests uninitialized access to
-     * {@link EndpointDescriptor#bRefresh()}
+     * Tests uninitialized access to {@link EndpointDescriptor#bRefresh()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedRefresh()
@@ -117,10 +112,9 @@ public class EndpointDescriptorTest
         assumeUsbTestsEnabled();
         this.descriptor.bRefresh();
     }
-    
+
     /**
-     * Tests uninitialized access to
-     * {@link EndpointDescriptor#bSynchAddress()}
+     * Tests uninitialized access to {@link EndpointDescriptor#bSynchAddress()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedSynchAddress()
@@ -128,10 +122,9 @@ public class EndpointDescriptorTest
         assumeUsbTestsEnabled();
         this.descriptor.bSynchAddress();
     }
-    
+
     /**
-     * Tests uninitialized access to
-     * {@link EndpointDescriptor#extra()}
+     * Tests uninitialized access to {@link EndpointDescriptor#extra()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedExtra()
@@ -141,8 +134,7 @@ public class EndpointDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link EndpointDescriptor#extraLength()}
+     * Tests uninitialized access to {@link EndpointDescriptor#extraLength()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedExtraLength()

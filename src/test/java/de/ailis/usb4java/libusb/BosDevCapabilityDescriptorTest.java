@@ -31,11 +31,11 @@ public class BosDevCapabilityDescriptorTest
         LibUsb.init(null);
         this.descriptor = new BosDevCapabilityDescriptor();
     }
-    
+
     /**
      * Tear down test.
      */
-    @After    
+    @After
     public void tearDown()
     {
         LibUsb.exit(null);

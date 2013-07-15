@@ -194,7 +194,7 @@ public class LibUSBTest
             LibUsb.exit(null);
             fail("Double-exit should throw IllegalStateException");
         }
-        catch (IllegalStateException e)
+        catch (final IllegalStateException e)
         {
             // Expected behavior
         }
@@ -208,7 +208,7 @@ public class LibUSBTest
     public void testInitDeinitWithContext()
     {
         assumeUsbTestsEnabled();
-        Context context = new Context();
+        final Context context = new Context();
         assertEquals(LibUsb.SUCCESS, LibUsb.init(context));
         LibUsb.exit(context);
 
@@ -217,7 +217,7 @@ public class LibUSBTest
             LibUsb.exit(context);
             fail("Double-exit should throw IllegalStateException");
         }
-        catch (IllegalStateException e)
+        catch (final IllegalStateException e)
         {
             // Expected behavior
         }
@@ -440,7 +440,8 @@ public class LibUSBTest
     public void testGetConfigurationWithUninitializedHandle()
     {
         assumeUsbTestsEnabled();
-        LibUsb.getConfiguration(new DeviceHandle(), IntBuffer.allocate(1));
+        LibUsb.getConfiguration(new DeviceHandle(),
+            BufferUtils.allocateIntBuffer());
     }
 
     /**
@@ -609,7 +610,8 @@ public class LibUSBTest
     public void testGetConfigDescriptorWithUninitializedDevice()
     {
         assumeUsbTestsEnabled();
-        LibUsb.getConfigDescriptor(new Device(), (byte) 0, new ConfigDescriptor());
+        LibUsb.getConfigDescriptor(new Device(), (byte) 0,
+            new ConfigDescriptor());
     }
 
     /**
@@ -638,7 +640,6 @@ public class LibUSBTest
 
     /**
      * Tests the
-<<<<<<< HEAD
      * {@link LibUsb#getSsEndpointCompanionDescriptor(Context, EndpointDescriptor, SsEndpointCompanionDescriptor)}
      * method with uninitialized endpoint.
      */
@@ -646,7 +647,7 @@ public class LibUSBTest
     public void testGetSsEndpointCompanionDescriptorWithUninitializedEndpoint()
     {
         assumeUsbTestsEnabled();
-        LibUsb.getSsEndpointCompanionDescriptor(null, new EndpointDescriptor(), 
+        LibUsb.getSsEndpointCompanionDescriptor(null, new EndpointDescriptor(),
             new SsEndpointCompanionDescriptor());
     }
 
@@ -671,7 +672,8 @@ public class LibUSBTest
     public void testFreeSsEndpointCompanionDescriptorWithUninitializedDescriptor()
     {
         assumeUsbTestsEnabled();
-        LibUsb.freeSsEndpointCompanionDescriptor(new SsEndpointCompanionDescriptor());
+        LibUsb
+        .freeSsEndpointCompanionDescriptor(new SsEndpointCompanionDescriptor());
     }
 
     /**
@@ -685,10 +687,9 @@ public class LibUSBTest
         assumeUsbTestsEnabled();
         LibUsb.freeSsEndpointCompanionDescriptor(null);
     }
-    
+
     /**
-     * Tests the
-     * {@link LibUsb#getBosDescriptor(DeviceHandle, BosDescriptor)}
+     * Tests the {@link LibUsb#getBosDescriptor(DeviceHandle, BosDescriptor)}
      * method with uninitialized handled.
      */
     @Test(expected = IllegalStateException.class)
@@ -699,8 +700,7 @@ public class LibUSBTest
     }
 
     /**
-     * Tests the
-     * {@link LibUsb#getBosDescriptor(DeviceHandle, BosDescriptor)}
+     * Tests the {@link LibUsb#getBosDescriptor(DeviceHandle, BosDescriptor)}
      * method without handle.
      */
     @Test(expected = IllegalArgumentException.class)
@@ -711,9 +711,8 @@ public class LibUSBTest
     }
 
     /**
-     * Tests the
-     * {@link LibUsb#freeBosDescriptor(BosDescriptor)}
-     * method with uninitialized descriptor.
+     * Tests the {@link LibUsb#freeBosDescriptor(BosDescriptor)} method with
+     * uninitialized descriptor.
      */
     @Test(expected = IllegalStateException.class)
     public void testFreeBosDescriptorWithUninitializedDescriptor()
@@ -723,9 +722,8 @@ public class LibUSBTest
     }
 
     /**
-     * Tests the
-     * {@link LibUsb#freeBosDescriptor(BosDescriptor)}
-     * method with null parameter. Must do nothing.
+     * Tests the {@link LibUsb#freeBosDescriptor(BosDescriptor)} method with
+     * null parameter. Must do nothing.
      */
     @Test
     public void testFreeBosDescriptorWithNull()
@@ -733,26 +731,23 @@ public class LibUSBTest
         assumeUsbTestsEnabled();
         LibUsb.freeBosDescriptor(null);
     }
-    
+
     /**
      * Tests the
-     * {@link LibUsb#getUsb20ExtensionDescriptor(Context, 
-     * BosDevCapabilityDescriptor, Usb20ExtensionDescriptor)}
+     * {@link LibUsb#getUsb20ExtensionDescriptor(Context, BosDevCapabilityDescriptor, Usb20ExtensionDescriptor)}
      * method with uninitialized device capability descriptor.
      */
     @Test(expected = IllegalStateException.class)
     public void testGetUsb20ExtensionDescriptorWithUninitializedEndpoint()
     {
         assumeUsbTestsEnabled();
-        LibUsb.getUsb20ExtensionDescriptor(null, 
-            new BosDevCapabilityDescriptor(), 
-            new Usb20ExtensionDescriptor());
+        LibUsb.getUsb20ExtensionDescriptor(null,
+            new BosDevCapabilityDescriptor(), new Usb20ExtensionDescriptor());
     }
 
     /**
      * Tests the
-     * {@link LibUsb#getUsb20ExtensionDescriptor(Context, 
-     * BosDevCapabilityDescriptor, Usb20ExtensionDescriptor)}
+     * {@link LibUsb#getUsb20ExtensionDescriptor(Context, BosDevCapabilityDescriptor, Usb20ExtensionDescriptor)}
      * method without descriptors.
      */
     @Test(expected = IllegalArgumentException.class)
@@ -785,26 +780,24 @@ public class LibUSBTest
         assumeUsbTestsEnabled();
         LibUsb.freeUsb20ExtensionDescriptor(null);
     }
-    
+
     /**
      * Tests the
-     * {@link LibUsb#getSsUsbDeviceCapabilityDescriptor(Context, 
-     * BosDevCapabilityDescriptor, SsUsbDeviceCapabilityDescriptor)}
+     * {@link LibUsb#getSsUsbDeviceCapabilityDescriptor(Context, BosDevCapabilityDescriptor, SsUsbDeviceCapabilityDescriptor)}
      * method with uninitialized device capability descriptor.
      */
     @Test(expected = IllegalStateException.class)
     public void testGetSsUsbDeviceCapabilityDescriptorWithUninitializedEndpoint()
     {
         assumeUsbTestsEnabled();
-        LibUsb.getSsUsbDeviceCapabilityDescriptor(null, 
-            new BosDevCapabilityDescriptor(), 
+        LibUsb.getSsUsbDeviceCapabilityDescriptor(null,
+            new BosDevCapabilityDescriptor(),
             new SsUsbDeviceCapabilityDescriptor());
     }
 
     /**
      * Tests the
-     * {@link LibUsb#getSsUsbDeviceCapabilityDescriptor(Context, 
-     * BosDevCapabilityDescriptor, SsUsbDeviceCapabilityDescriptor)}
+     * {@link LibUsb#getSsUsbDeviceCapabilityDescriptor(Context, BosDevCapabilityDescriptor, SsUsbDeviceCapabilityDescriptor)}
      * method without descriptors.
      */
     @Test(expected = IllegalArgumentException.class)
@@ -823,7 +816,8 @@ public class LibUSBTest
     public void testFreeSsUsbDeviceCapabilityDescriptorWithUninitializedDescriptor()
     {
         assumeUsbTestsEnabled();
-        LibUsb.freeSsUsbDeviceCapabilityDescriptor(new SsUsbDeviceCapabilityDescriptor());
+        LibUsb
+        .freeSsUsbDeviceCapabilityDescriptor(new SsUsbDeviceCapabilityDescriptor());
     }
 
     /**
@@ -837,26 +831,23 @@ public class LibUSBTest
         assumeUsbTestsEnabled();
         LibUsb.freeSsUsbDeviceCapabilityDescriptor(null);
     }
-    
+
     /**
      * Tests the
-     * {@link LibUsb#getContainerIdDescriptor(Context, 
-     * BosDevCapabilityDescriptor, ContainerIdDescriptor)}
+     * {@link LibUsb#getContainerIdDescriptor(Context, BosDevCapabilityDescriptor, ContainerIdDescriptor)}
      * method with uninitialized device capability descriptor.
      */
     @Test(expected = IllegalStateException.class)
     public void testGetContainerIdDescriptorWithUninitializedEndpoint()
     {
         assumeUsbTestsEnabled();
-        LibUsb.getContainerIdDescriptor(null, 
-            new BosDevCapabilityDescriptor(), 
+        LibUsb.getContainerIdDescriptor(null, new BosDevCapabilityDescriptor(),
             new ContainerIdDescriptor());
     }
 
     /**
      * Tests the
-     * {@link LibUsb#getContainerIdDescriptor(Context, 
-     * BosDevCapabilityDescriptor, ContainerIdDescriptor)}
+     * {@link LibUsb#getContainerIdDescriptor(Context, BosDevCapabilityDescriptor, ContainerIdDescriptor)}
      * method without descriptors.
      */
     @Test(expected = IllegalArgumentException.class)
@@ -867,8 +858,7 @@ public class LibUSBTest
     }
 
     /**
-     * Tests the
-     * {@link LibUsb#freeContainerIdDescriptor(ContainerIdDescriptor)}
+     * Tests the {@link LibUsb#freeContainerIdDescriptor(ContainerIdDescriptor)}
      * method with uninitialized descriptor.
      */
     @Test(expected = IllegalStateException.class)
@@ -879,8 +869,7 @@ public class LibUSBTest
     }
 
     /**
-     * Tests the
-     * {@link LibUsb#freeContainerIdDescriptor(ContainerIdDescriptor)}
+     * Tests the {@link LibUsb#freeContainerIdDescriptor(ContainerIdDescriptor)}
      * method with null parameter. Must do nothing.
      */
     @Test
@@ -892,10 +881,7 @@ public class LibUSBTest
 
     /**
      * Tests the
-     * {@link LibUsb#getDescriptor(DeviceHandle, int, int, ByteBuffer)} method
-=======
      * {@link LibUsb#getDescriptor(DeviceHandle, byte, byte, ByteBuffer)} method
->>>>>>> origin/asyncio
      * with uninitialized device handle.
      */
     @Test(expected = IllegalStateException.class)
@@ -928,8 +914,8 @@ public class LibUSBTest
     public void testControlTransferWithUninitializedHandle()
     {
         assumeUsbTestsEnabled();
-        LibUsb.controlTransfer(new DeviceHandle(), (byte) 0, (byte) 0, (short) 0, (short) 0,
-            ByteBuffer.allocateDirect(1), 0);
+        LibUsb.controlTransfer(new DeviceHandle(), (byte) 0, (byte) 0,
+            (short) 0, (short) 0, ByteBuffer.allocateDirect(1), 0);
     }
 
     /**
@@ -942,7 +928,7 @@ public class LibUSBTest
     {
         assumeUsbTestsEnabled();
         LibUsb.bulkTransfer(new DeviceHandle(), (byte) 0,
-            ByteBuffer.allocateDirect(1), IntBuffer.allocate(1), 0);
+            ByteBuffer.allocateDirect(1), BufferUtils.allocateIntBuffer(), 0);
     }
 
     /**
@@ -955,7 +941,7 @@ public class LibUSBTest
     {
         assumeUsbTestsEnabled();
         LibUsb.interruptTransfer(new DeviceHandle(), (byte) 0,
-            ByteBuffer.allocateDirect(1), IntBuffer.allocate(1), 0);
+            ByteBuffer.allocateDirect(1), BufferUtils.allocateIntBuffer(), 0);
     }
 
     /**
@@ -1086,7 +1072,8 @@ public class LibUSBTest
     {
         assumeUsbTestsEnabled();
         final Context context = new Context();
-        LibUsb.handleEventsTimeoutCompleted(context, 53, BufferUtils.allocateIntBuffer());
+        LibUsb.handleEventsTimeoutCompleted(context, 53,
+            BufferUtils.allocateIntBuffer());
     }
 
     /**
@@ -1150,7 +1137,7 @@ public class LibUSBTest
     }
 
     /**
-     * Tests {@link LibUsb#getNextTimeout(Context, IntBuffer)} with
+     * Tests {@link LibUsb#getNextTimeout(Context, LongBuffer)} with
      * uninitialized USB context.
      */
     @Test(expected = IllegalStateException.class)
@@ -1158,12 +1145,12 @@ public class LibUSBTest
     {
         assumeUsbTestsEnabled();
         final Context context = new Context();
-        LibUsb.getNextTimeout(context, LongBuffer.allocate(1));
+        LibUsb.getNextTimeout(context, BufferUtils.allocateLongBuffer());
     }
 
     /**
-     * Tests {@link LibUsb#setPollfdNotifiers(Context)} with uninitialized USB
-     * context.
+     * Tests {@link LibUsb#setPollfdNotifiers(Context, long)} with uninitialized
+     * USB context.
      */
     @Test(expected = IllegalStateException.class)
     public void testSetPollfdNotifiersWithUninitializedContext()
@@ -1194,8 +1181,8 @@ public class LibUSBTest
     public void testPollFdNotifiers()
     {
         assumeUsbTestsEnabled();
-        PollfdListenerMock listener = new PollfdListenerMock();
-        Context context = new Context();
+        final PollfdListenerMock listener = new PollfdListenerMock();
+        final Context context = new Context();
         LibUsb.init(context);
         LibUsb.setPollfdNotifiers(context, listener, "test");
 

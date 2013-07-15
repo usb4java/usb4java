@@ -19,6 +19,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.ailis.usb4java.utils.BufferUtils;
+
 /**
  * Tests the device-scope methods of the {@link LibUsb} class which need a open
  * USB context and a device to run the tests on.
@@ -51,21 +53,20 @@ public class LibUSBDeviceTest
     @Before
     public void setUp()
     {
-        context = new Context();
-        LibUsb.init(context);
+        this.context = new Context();
+        LibUsb.init(this.context);
         try
         {
-            device = findTestDevice();
-            if (device == null)
+            this.device = this.findTestDevice();
+            if (this.device == null)
             {
                 throw new IllegalStateException("Need at least one USB device "
-                    +
-                    "with at least one endpoint to execute this test");
+                    + "with at least one endpoint to execute this test");
             }
         }
-        catch (Throwable e)
+        catch (final Throwable e)
         {
-            device = null;
+            this.device = null;
         }
     }
 
@@ -76,41 +77,41 @@ public class LibUSBDeviceTest
      */
     private Device findTestDevice()
     {
-        DeviceList list = new DeviceList();
-        if (LibUsb.getDeviceList(context, list) <= 0)
+        final DeviceList list = new DeviceList();
+        if (LibUsb.getDeviceList(this.context, list) <= 0)
         {
             return null;
         }
         try
         {
-            for (Device device: list)
+            for (final Device device : list)
             {
-                DeviceDescriptor descriptor = new DeviceDescriptor();
+                final DeviceDescriptor descriptor = new DeviceDescriptor();
                 if (LibUsb.getDeviceDescriptor(device, descriptor) != 0)
                 {
                     continue;
                 }
-                vendorId = descriptor.idVendor();
-                productId = descriptor.idProduct();
-                ConfigDescriptor config = new ConfigDescriptor();
+                this.vendorId = descriptor.idVendor();
+                this.productId = descriptor.idProduct();
+                final ConfigDescriptor config = new ConfigDescriptor();
                 if (LibUsb.getActiveConfigDescriptor(device, config) < 0)
                 {
                     return null;
                 }
                 try
                 {
-                    configValue = config.bConfigurationValue();
+                    this.configValue = config.bConfigurationValue();
                     for (int j = 0; j < config.bNumInterfaces(); j++)
                     {
-                        Interface iface = config.iface()[j];
+                        final Interface iface = config.iface()[j];
                         for (int k = 0; k < iface.numAltsetting(); k++)
                         {
-                            InterfaceDescriptor ifaceDescriptor =
-                                iface.altsetting()[k];
+                            final InterfaceDescriptor ifaceDescriptor = iface
+                                .altsetting()[k];
                             if (ifaceDescriptor.bNumEndpoints() > 1)
                             {
-                                endpoint = ifaceDescriptor.endpoint()[0].
-                                    bEndpointAddress();
+                                this.endpoint = ifaceDescriptor.endpoint()[0]
+                                    .bEndpointAddress();
                                 return LibUsb.refDevice(device);
                             }
                         }
@@ -135,13 +136,13 @@ public class LibUSBDeviceTest
     @After
     public void tearDown()
     {
-        if (device != null)
+        if (this.device != null)
         {
-            LibUsb.unrefDevice(device);
+            LibUsb.unrefDevice(this.device);
         }
-        if (context != null)
+        if (this.context != null)
         {
-            LibUsb.exit(context);
+            LibUsb.exit(this.context);
         }
     }
 
@@ -152,8 +153,8 @@ public class LibUSBDeviceTest
     public void testGetBusNumber()
     {
         assumeUsbTestsEnabled();
-        assumeNotNull(device);
-        assertTrue(LibUsb.getBusNumber(device) >= 0);
+        assumeNotNull(this.device);
+        assertTrue(LibUsb.getBusNumber(this.device) >= 0);
     }
 
     /**
@@ -163,126 +164,69 @@ public class LibUSBDeviceTest
     public void testGetPortNumber()
     {
         assumeUsbTestsEnabled();
-        assumeNotNull(device);
-        assertTrue(LibUsb.getPortNumber(device) >= 0);
+        assumeNotNull(this.device);
+        assertTrue(LibUsb.getPortNumber(this.device) >= 0);
     }
 
     /**
-<<<<<<< HEAD
-     * Tests the {@link LibUsb#getPortNumbers(Device, byte[])} method.
-=======
-     * Tests the {@link LibUsb#getPortPath(Context, Device, ByteBuffer)} method.
->>>>>>> origin/asyncio
+     * Tests the {@link LibUsb#getPortNumbers(Device, ByteBuffer)} method.
      */
     @Test
     public void testGetPortNumbers()
     {
         assumeUsbTestsEnabled();
-<<<<<<< HEAD
         assumeNotNull(this.device);
-        byte[] path = new byte[8];
-        int result = LibUsb.getPortNumbers(this.device, path);
-=======
-        assumeNotNull(device);
-        ByteBuffer path = ByteBuffer.allocateDirect(8);
-        int result = LibUsb.getPortPath(context, device, path);
->>>>>>> origin/asyncio
+        final ByteBuffer path = BufferUtils.allocateByteBuffer(8);
+        final int result = LibUsb.getPortNumbers(this.device, path);
         assertTrue(result > 0);
         assertTrue(result <= path.capacity());
     }
 
     /**
-<<<<<<< HEAD
-     * Tests the {@link LibUsb#getPortNumbers(Device, byte[])} method with
-=======
-     * Tests the {@link LibUsb#getPortPath(Context, Device, ByteBuffer)} method with
->>>>>>> origin/asyncio
+     * Tests the {@link LibUsb#getPortNumbers(Device, ByteBuffer)} method with
      * 0-sized path buffer.
      */
     @Test
     public void testGetPortNumbersWithTooSmallBuffer()
     {
         assumeUsbTestsEnabled();
-<<<<<<< HEAD
         assumeNotNull(this.device);
-        byte[] path = new byte[0];
-        int result = LibUsb.getPortNumbers(this.device, path);
-=======
-        assumeNotNull(device);
-        ByteBuffer path = ByteBuffer.allocateDirect(0);
-        int result = LibUsb.getPortPath(context, device, path);
->>>>>>> origin/asyncio
+        final ByteBuffer path = BufferUtils.allocateByteBuffer(0);
+        final int result = LibUsb.getPortNumbers(this.device, path);
         assertEquals(LibUsb.ERROR_OVERFLOW, result);
     }
 
     /**
-<<<<<<< HEAD
-     * Tests the {@link LibUsb#getPortNumbers(Device, byte[])} method
-=======
-     * Tests the {@link LibUsb#getPortPath(Context, Device, ByteBuffer)} method
->>>>>>> origin/asyncio
+     * Tests the {@link LibUsb#getPortNumbers(Device, ByteBuffer)} method
      * without a device.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testGetPortNumbersWithoutDevice()
     {
         assumeUsbTestsEnabled();
-<<<<<<< HEAD
-        LibUsb.getPortNumbers(null, new byte[8]);
+        LibUsb.getPortNumbers(null, BufferUtils.allocateByteBuffer(8));
     }
 
     /**
-     * Tests the {@link LibUsb#getPortNumbers(Device, byte[])} method
-=======
-        LibUsb.getPortPath(context, null, ByteBuffer.allocateDirect(8));
-    }
-
-    /**
-     * Tests the {@link LibUsb#getPortPath(Context, Device, ByteBuffer)} method
->>>>>>> origin/asyncio
+     * Tests the {@link LibUsb#getPortNumbers(Device, ByteBuffer)} method
      * without a buffer.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testGetPortNumbersWithoutBuffer()
     {
         assumeUsbTestsEnabled();
-<<<<<<< HEAD
         LibUsb.getPortNumbers(this.device, null);
     }
 
     /**
-     * Tests {@link LibUsb#getPortNumbers(Device, byte[])} method with
-=======
-        LibUsb.getPortPath(context, device, null);
-    }
-
-    /**
-     * Tests {@link LibUsb#getPortPath(Context, Device, ByteBuffer)} method with
-     * uninitialized USB context.
-     */
-    @Test(expected = IllegalStateException.class)
-    public void testGetPortPathWithUninitializedContext()
-    {
-        assumeUsbTestsEnabled();
-        assumeNotNull(device);
-        final Context context = new Context();
-        LibUsb.getPortPath(context, device, ByteBuffer.allocateDirect(16));
-    }
-
-    /**
-     * Tests {@link LibUsb#getPortPath(Context, Device, ByteBuffer)} method with
->>>>>>> origin/asyncio
+     * Tests {@link LibUsb#getPortNumbers(Device, ByteBuffer)} method with
      * uninitialized device.
      */
     @Test(expected = IllegalStateException.class)
     public void testGetPortNumbersWithUninitializedDevice()
     {
         assumeUsbTestsEnabled();
-<<<<<<< HEAD
-        LibUsb.getPortNumbers(new Device(), new byte[16]);
-=======
-        LibUsb.getPortPath(context, new Device(), ByteBuffer.allocateDirect(16));
->>>>>>> origin/asyncio
+        LibUsb.getPortNumbers(new Device(), BufferUtils.allocateByteBuffer(16));
     }
 
     /**
@@ -292,17 +236,17 @@ public class LibUSBDeviceTest
     public void testGetParent()
     {
         assumeUsbTestsEnabled();
-        assumeNotNull(device);
-        DeviceList list = new DeviceList();
-        LibUsb.getDeviceList(context, list);
+        assumeNotNull(this.device);
+        final DeviceList list = new DeviceList();
+        LibUsb.getDeviceList(this.context, list);
         try
         {
-            Device parent = LibUsb.getParent(device);
+            final Device parent = LibUsb.getParent(this.device);
 
             // We cannot test anything else here. Parent can be null if our
             // test device is a root device. We just make sure that it can't
             // be the device itself.
-            assertNotEquals(parent, device);
+            assertNotEquals(parent, this.device);
         }
         finally
         {
@@ -327,8 +271,8 @@ public class LibUSBDeviceTest
     public void testGetDeviceAddress()
     {
         assumeUsbTestsEnabled();
-        assumeNotNull(device);
-        assertTrue(LibUsb.getDeviceAddress(device) >= 0);
+        assumeNotNull(this.device);
+        assertTrue(LibUsb.getDeviceAddress(this.device) >= 0);
     }
 
     /**
@@ -349,9 +293,10 @@ public class LibUSBDeviceTest
     public void testGetDeviceSpeed()
     {
         assumeUsbTestsEnabled();
-        assumeNotNull(device);
-        int speed = LibUsb.getDeviceSpeed(device);
-        assertTrue((speed >= LibUsb.SPEED_UNKNOWN) && (speed <= LibUsb.SPEED_SUPER));
+        assumeNotNull(this.device);
+        final int speed = LibUsb.getDeviceSpeed(this.device);
+        assertTrue((speed >= LibUsb.SPEED_UNKNOWN)
+            && (speed <= LibUsb.SPEED_SUPER));
     }
 
     /**
@@ -371,9 +316,9 @@ public class LibUSBDeviceTest
     public void testGetMaxPacketSizeWithInvalidEndpoint()
     {
         assumeUsbTestsEnabled();
-        assumeNotNull(device);
+        assumeNotNull(this.device);
         assertEquals(LibUsb.ERROR_NOT_FOUND,
-            LibUsb.getMaxPacketSize(device, (byte) 0));
+            LibUsb.getMaxPacketSize(this.device, (byte) 0));
     }
 
     /**
@@ -383,8 +328,8 @@ public class LibUSBDeviceTest
     public void testGetMaxPacketSize()
     {
         assumeUsbTestsEnabled();
-        assumeNotNull(device);
-        assertTrue(LibUsb.getMaxPacketSize(device, endpoint) > 0);
+        assumeNotNull(this.device);
+        assertTrue(LibUsb.getMaxPacketSize(this.device, this.endpoint) > 0);
     }
 
     /**
@@ -405,9 +350,9 @@ public class LibUSBDeviceTest
     public void testGetMaxIsoPacketSizeWithInvalidEndpoint()
     {
         assumeUsbTestsEnabled();
-        assumeNotNull(device);
+        assumeNotNull(this.device);
         assertEquals(LibUsb.ERROR_NOT_FOUND,
-            LibUsb.getMaxIsoPacketSize(device, (byte) 0));
+            LibUsb.getMaxIsoPacketSize(this.device, (byte) 0));
     }
 
     /**
@@ -417,8 +362,8 @@ public class LibUSBDeviceTest
     public void testGetMaxIsoPacketSize()
     {
         assumeUsbTestsEnabled();
-        assumeNotNull(device);
-        assertTrue(LibUsb.getMaxIsoPacketSize(device, endpoint) > 0);
+        assumeNotNull(this.device);
+        assertTrue(LibUsb.getMaxIsoPacketSize(this.device, this.endpoint) > 0);
     }
 
     /**
@@ -440,8 +385,8 @@ public class LibUSBDeviceTest
     public void testRefUnRefDevice()
     {
         assumeUsbTestsEnabled();
-        assumeNotNull(device);
-        Device device = LibUsb.refDevice(this.device);
+        assumeNotNull(this.device);
+        final Device device = LibUsb.refDevice(this.device);
         try
         {
             assertEquals(this.device, device);
@@ -483,10 +428,11 @@ public class LibUSBDeviceTest
     public void testOpenAndClose()
     {
         assumeUsbTestsEnabled();
-        assumeNotNull(device);
-        DeviceHandle handle = new DeviceHandle();
-        int result = LibUsb.open(device, handle);
-        assertTrue((result == LibUsb.SUCCESS) || (result == LibUsb.ERROR_ACCESS));
+        assumeNotNull(this.device);
+        final DeviceHandle handle = new DeviceHandle();
+        final int result = LibUsb.open(this.device, handle);
+        assertTrue((result == LibUsb.SUCCESS)
+            || (result == LibUsb.ERROR_ACCESS));
         if (result == LibUsb.SUCCESS)
         {
             LibUsb.close(handle);
@@ -496,7 +442,7 @@ public class LibUSBDeviceTest
                 LibUsb.close(handle);
                 fail("Double-close should throw IllegalStateException");
             }
-            catch (IllegalStateException e)
+            catch (final IllegalStateException e)
             {
                 // Expected behavior
             }
@@ -511,7 +457,7 @@ public class LibUSBDeviceTest
     public void testOpenWithoutDevice()
     {
         assumeUsbTestsEnabled();
-        DeviceHandle handle = new DeviceHandle();
+        final DeviceHandle handle = new DeviceHandle();
         LibUsb.open(null, handle);
     }
 
@@ -523,7 +469,7 @@ public class LibUSBDeviceTest
     public void testOpenWithoutHandle()
     {
         assumeUsbTestsEnabled();
-        LibUsb.open(device, null);
+        LibUsb.open(this.device, null);
     }
 
     /**
@@ -537,7 +483,8 @@ public class LibUSBDeviceTest
     }
 
     /**
-     * Tests the {@link LibUsb#openDeviceWithVidPid(Context, int, int)} method.
+     * Tests the {@link LibUsb#openDeviceWithVidPid(Context, short, short)}
+     * method.
      * We can't test anything here because the device most likely can't be
      * opened anyway. We just make sure it does not crash.
      */
@@ -545,8 +492,8 @@ public class LibUSBDeviceTest
     public void testOpenDeviceWithVidPid()
     {
         assumeUsbTestsEnabled();
-        DeviceHandle handle = LibUsb.openDeviceWithVidPid(context,
-            vendorId, productId);
+        final DeviceHandle handle = LibUsb.openDeviceWithVidPid(this.context,
+            this.vendorId, this.productId);
         if (handle != null)
         {
             LibUsb.close(handle);
@@ -572,7 +519,7 @@ public class LibUSBDeviceTest
     public void testGetConfigurationWithoutHandle()
     {
         assumeUsbTestsEnabled();
-        LibUsb.getConfiguration(null, IntBuffer.allocate(1));
+        LibUsb.getConfiguration(null, BufferUtils.allocateIntBuffer());
     }
 
     /**
@@ -705,7 +652,7 @@ public class LibUSBDeviceTest
     public void testGetDeviceDescriptorWithoutDescriptor()
     {
         assumeUsbTestsEnabled();
-        LibUsb.getDeviceDescriptor(device, null);
+        LibUsb.getDeviceDescriptor(this.device, null);
     }
 
     /**
@@ -720,9 +667,9 @@ public class LibUSBDeviceTest
     public void testGetDeviceDescriptor()
     {
         assumeUsbTestsEnabled();
-        assumeNotNull(device);
-        DeviceDescriptor desc = new DeviceDescriptor();
-        LibUsb.getDeviceDescriptor(device, desc);
+        assumeNotNull(this.device);
+        final DeviceDescriptor desc = new DeviceDescriptor();
+        LibUsb.getDeviceDescriptor(this.device, desc);
         desc.bcdDevice();
         desc.bcdUSB();
         assertEquals(LibUsb.DT_DEVICE, desc.bDescriptorType());
@@ -755,7 +702,7 @@ public class LibUSBDeviceTest
     public void testGetActiveConfigDescriptorWithoutDescriptor()
     {
         assumeUsbTestsEnabled();
-        LibUsb.getActiveConfigDescriptor(device, null);
+        LibUsb.getActiveConfigDescriptor(this.device, null);
     }
 
     /**
@@ -776,9 +723,9 @@ public class LibUSBDeviceTest
         assertEquals(desc.bNumInterfaces(), desc.iface().length);
         assertTrue(desc.wTotalLength() >= desc.bLength());
 
-        for (Interface iface: desc.iface())
+        for (final Interface iface : desc.iface())
         {
-            validateInterface(iface);
+            this.validateInterface(iface);
         }
     }
 
@@ -791,9 +738,9 @@ public class LibUSBDeviceTest
     private void validateInterface(final Interface iface)
     {
         assertEquals(iface.numAltsetting(), iface.altsetting().length);
-        for (InterfaceDescriptor desc: iface.altsetting())
+        for (final InterfaceDescriptor desc : iface.altsetting())
         {
-            validateInterfaceDescriptor(desc);
+            this.validateInterfaceDescriptor(desc);
         }
     }
 
@@ -816,9 +763,9 @@ public class LibUSBDeviceTest
         assertEquals(desc.extraLength(), desc.extra().limit());
         desc.iInterface();
 
-        for (EndpointDescriptor endDesc: desc.endpoint())
+        for (final EndpointDescriptor endDesc : desc.endpoint())
         {
-            validateEndpointDescriptor(endDesc);
+            this.validateEndpointDescriptor(endDesc);
         }
     }
 
@@ -850,12 +797,12 @@ public class LibUSBDeviceTest
     public void testGetActiveConfigDescriptor()
     {
         assumeUsbTestsEnabled();
-        assumeNotNull(device);
-        ConfigDescriptor desc = new ConfigDescriptor();
-        LibUsb.getActiveConfigDescriptor(device, desc);
+        assumeNotNull(this.device);
+        final ConfigDescriptor desc = new ConfigDescriptor();
+        LibUsb.getActiveConfigDescriptor(this.device, desc);
         try
         {
-            validateConfigDescriptor(desc);
+            this.validateConfigDescriptor(desc);
         }
         finally
         {
@@ -884,23 +831,24 @@ public class LibUSBDeviceTest
     public void testGetConfigDescriptorWithoutDescriptor()
     {
         assumeUsbTestsEnabled();
-        LibUsb.getConfigDescriptor(device, (byte) 0, null);
+        LibUsb.getConfigDescriptor(this.device, (byte) 0, null);
     }
 
     /**
      * Tests the
-     * {@link LibUsb#getConfigDescriptor(Device, byte, ConfigDescriptor)} method.
+     * {@link LibUsb#getConfigDescriptor(Device, byte, ConfigDescriptor)}
+     * method.
      */
     @Test
     public void testGetConfigDescriptor()
     {
         assumeUsbTestsEnabled();
-        assumeNotNull(device);
-        ConfigDescriptor desc = new ConfigDescriptor();
-        LibUsb.getConfigDescriptor(device, (byte) 0, desc);
+        assumeNotNull(this.device);
+        final ConfigDescriptor desc = new ConfigDescriptor();
+        LibUsb.getConfigDescriptor(this.device, (byte) 0, desc);
         try
         {
-            validateConfigDescriptor(desc);
+            this.validateConfigDescriptor(desc);
         }
         finally
         {
@@ -917,7 +865,8 @@ public class LibUSBDeviceTest
     public void testGetConfigDescriptorByValueWithoutDevice()
     {
         assumeUsbTestsEnabled();
-        LibUsb.getConfigDescriptorByValue(null, (byte) 0, new ConfigDescriptor());
+        LibUsb.getConfigDescriptorByValue(null, (byte) 0,
+            new ConfigDescriptor());
     }
 
     /**
@@ -929,7 +878,7 @@ public class LibUSBDeviceTest
     public void testGetConfigDescriptorByValueWithoutDescriptor()
     {
         assumeUsbTestsEnabled();
-        LibUsb.getConfigDescriptorByValue(device, (byte) 0, null);
+        LibUsb.getConfigDescriptorByValue(this.device, (byte) 0, null);
     }
 
     /**
@@ -941,12 +890,12 @@ public class LibUSBDeviceTest
     public void testGetConfigDescriptorByValue()
     {
         assumeUsbTestsEnabled();
-        assumeNotNull(device);
-        ConfigDescriptor desc = new ConfigDescriptor();
-        LibUsb.getConfigDescriptorByValue(device, configValue, desc);
+        assumeNotNull(this.device);
+        final ConfigDescriptor desc = new ConfigDescriptor();
+        LibUsb.getConfigDescriptorByValue(this.device, this.configValue, desc);
         try
         {
-            validateConfigDescriptor(desc);
+            this.validateConfigDescriptor(desc);
         }
         finally
         {
@@ -957,7 +906,7 @@ public class LibUSBDeviceTest
                 LibUsb.freeConfigDescriptor(desc);
                 fail("Double-free should throw IllegalStateException");
             }
-            catch (IllegalStateException e)
+            catch (final IllegalStateException e)
             {
                 // Expected behavior
             }
@@ -1008,7 +957,8 @@ public class LibUSBDeviceTest
     public void testGetDescriptorWithoutHandle()
     {
         assumeUsbTestsEnabled();
-        LibUsb.getDescriptor(null, (byte) 0, (byte) 0, ByteBuffer.allocate(18));
+        LibUsb.getDescriptor(null, (byte) 0, (byte) 0,
+            BufferUtils.allocateByteBuffer(18));
     }
 
     /**
@@ -1032,7 +982,8 @@ public class LibUSBDeviceTest
     public void testGetStringDescriptorWithoutHandle()
     {
         assumeUsbTestsEnabled();
-        LibUsb.getStringDescriptor(null, (byte) 0, (short) 0, ByteBuffer.allocate(18));
+        LibUsb.getStringDescriptor(null, (byte) 0, (short) 0,
+            BufferUtils.allocateByteBuffer(18));
     }
 
     /**
@@ -1044,7 +995,8 @@ public class LibUSBDeviceTest
     public void testGetStringDescriptorWithoutBuffer()
     {
         assumeUsbTestsEnabled();
-        LibUsb.getStringDescriptor(new DeviceHandle(), (byte) 0, (short) 0, null);
+        LibUsb.getStringDescriptor(new DeviceHandle(), (byte) 0, (short) 0,
+            null);
     }
 
     /**
@@ -1056,7 +1008,8 @@ public class LibUSBDeviceTest
     public void testControlTransferWithoutHandle()
     {
         assumeUsbTestsEnabled();
-        LibUsb.controlTransfer(null, (byte) 0, (byte) 0, (short) 0, (short) 0, ByteBuffer.allocate(0), 0);
+        LibUsb.controlTransfer(null, (byte) 0, (byte) 0, (short) 0, (short) 0,
+            BufferUtils.allocateByteBuffer(0), 0);
     }
 
     /**
@@ -1068,7 +1021,8 @@ public class LibUSBDeviceTest
     public void testControlTransferWithoutBuffer()
     {
         assumeUsbTestsEnabled();
-        LibUsb.controlTransfer(new DeviceHandle(), (byte) 0, (byte) 0, (short) 0, (short) 0, null, 0);
+        LibUsb.controlTransfer(new DeviceHandle(), (byte) 0, (byte) 0,
+            (short) 0, (short) 0, null, 0);
     }
 
     /**
@@ -1080,8 +1034,8 @@ public class LibUSBDeviceTest
     public void testControlTransferWithIndirectBuffer()
     {
         assumeUsbTestsEnabled();
-        LibUsb.controlTransfer(new DeviceHandle(), (byte) 0, (byte) 0, (short) 0, (short) 0,
-            ByteBuffer.allocate(0), 0);
+        LibUsb.controlTransfer(new DeviceHandle(), (byte) 0, (byte) 0,
+            (short) 0, (short) 0, ByteBuffer.allocate(0), 0);
     }
 
     /**
@@ -1093,8 +1047,8 @@ public class LibUSBDeviceTest
     public void testBulkTransferWithoutHandle()
     {
         assumeUsbTestsEnabled();
-        LibUsb.bulkTransfer(null, (byte) 0, ByteBuffer.allocate(0),
-            IntBuffer.allocate(1), 0);
+        LibUsb.bulkTransfer(null, (byte) 0, BufferUtils.allocateByteBuffer(0),
+            BufferUtils.allocateIntBuffer(), 0);
     }
 
     /**
@@ -1107,7 +1061,7 @@ public class LibUSBDeviceTest
     {
         assumeUsbTestsEnabled();
         LibUsb.bulkTransfer(new DeviceHandle(), (byte) 0, null,
-            IntBuffer.allocate(1), 0);
+            BufferUtils.allocateIntBuffer(), 0);
     }
 
     /**
@@ -1119,8 +1073,8 @@ public class LibUSBDeviceTest
     public void testBulkTransferWithIndirectDataBuffer()
     {
         assumeUsbTestsEnabled();
-        LibUsb.bulkTransfer(new DeviceHandle(), (byte) 0, ByteBuffer.allocate(0),
-            IntBuffer.allocate(1), 0);
+        LibUsb.bulkTransfer(new DeviceHandle(), (byte) 0,
+            ByteBuffer.allocate(0), BufferUtils.allocateIntBuffer(), 0);
     }
 
     /**
@@ -1132,8 +1086,8 @@ public class LibUSBDeviceTest
     public void testBulkTransferWithoutTransferredBuffer()
     {
         assumeUsbTestsEnabled();
-        LibUsb.bulkTransfer(new DeviceHandle(), (byte) 0, ByteBuffer.allocate(0),
-            null, 0);
+        LibUsb.bulkTransfer(new DeviceHandle(), (byte) 0,
+            BufferUtils.allocateByteBuffer(0), null, 0);
     }
 
     /**
@@ -1145,8 +1099,9 @@ public class LibUSBDeviceTest
     public void testInterruptTransferWithoutHandle()
     {
         assumeUsbTestsEnabled();
-        LibUsb.interruptTransfer(null, (byte) 0, ByteBuffer.allocate(0),
-            IntBuffer.allocate(1), 0);
+        LibUsb.interruptTransfer(null, (byte) 0,
+            BufferUtils.allocateByteBuffer(0), BufferUtils.allocateIntBuffer(),
+            0);
     }
 
     /**
@@ -1159,7 +1114,7 @@ public class LibUSBDeviceTest
     {
         assumeUsbTestsEnabled();
         LibUsb.interruptTransfer(new DeviceHandle(), (byte) 0, null,
-            IntBuffer.allocate(1), 0);
+            BufferUtils.allocateIntBuffer(), 0);
     }
 
     /**
@@ -1171,8 +1126,8 @@ public class LibUSBDeviceTest
     public void testInterruptTransferWithIndirectDataBuffer()
     {
         assumeUsbTestsEnabled();
-        LibUsb.interruptTransfer(new DeviceHandle(), (byte) 0, ByteBuffer.allocate(0),
-            IntBuffer.allocate(1), 0);
+        LibUsb.interruptTransfer(new DeviceHandle(), (byte) 0,
+            ByteBuffer.allocate(0), BufferUtils.allocateIntBuffer(), 0);
     }
 
     /**
@@ -1184,8 +1139,8 @@ public class LibUSBDeviceTest
     public void testInterruptTransferWithoutTransferredBuffer()
     {
         assumeUsbTestsEnabled();
-        LibUsb.interruptTransfer(new DeviceHandle(), (byte) 0, ByteBuffer.allocate(0),
-            null, 0);
+        LibUsb.interruptTransfer(new DeviceHandle(), (byte) 0,
+            BufferUtils.allocateByteBuffer(0), null, 0);
     }
 
     /**
@@ -1196,8 +1151,8 @@ public class LibUSBDeviceTest
     public void testGetAndFreeDeviceList()
     {
         assumeUsbTestsEnabled();
-        DeviceList list = new DeviceList();
-        assertTrue(LibUsb.getDeviceList(context, list) >= 0);
+        final DeviceList list = new DeviceList();
+        assertTrue(LibUsb.getDeviceList(this.context, list) >= 0);
         LibUsb.freeDeviceList(list, true);
 
         try
@@ -1205,7 +1160,7 @@ public class LibUSBDeviceTest
             LibUsb.freeDeviceList(list, true);
             fail("Double-free should throw IllegalStateException");
         }
-        catch (IllegalStateException e)
+        catch (final IllegalStateException e)
         {
             // Expected behavior
         }
@@ -1220,7 +1175,7 @@ public class LibUSBDeviceTest
     public void testGetAndFreeDeviceListWithDefaultContext()
     {
         assumeUsbTestsEnabled();
-        DeviceList list = new DeviceList();
+        final DeviceList list = new DeviceList();
         assertEquals(0, LibUsb.init(null));
         try
         {
@@ -1232,7 +1187,7 @@ public class LibUSBDeviceTest
                 LibUsb.freeDeviceList(list, true);
                 fail("Double-free should throw IllegalStateException");
             }
-            catch (IllegalStateException e)
+            catch (final IllegalStateException e)
             {
                 // Expected behavior
             }
