@@ -18,7 +18,7 @@ import org.junit.Test;
 /**
  * Tests the global-scope methods of the {@link LibUsb} class which need a
  * open USB context.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public class LibUSBGlobalTest

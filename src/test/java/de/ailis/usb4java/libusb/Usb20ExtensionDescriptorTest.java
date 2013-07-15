@@ -13,7 +13,7 @@ import org.junit.Test;
 
 /**
  * Tests the {@link Usb20ExtensionDescriptor} class.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public class Usb20ExtensionDescriptorTest

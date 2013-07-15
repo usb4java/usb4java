@@ -21,7 +21,7 @@ import org.junit.Test;
 
 /**
  * Tests the {@link Transfer} class.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public class TransferTest
@@ -82,7 +82,7 @@ public class TransferTest
 
     /**
      * Sets the device handle pointer via reflection.
-     * 
+     *
      * @param handle
      *            The device handle pointer.
      * @param pointer

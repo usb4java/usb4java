@@ -24,7 +24,7 @@ import de.ailis.usb4java.utils.BufferUtils;
 /**
  * Tests the device-scope methods of the {@link LibUsb} class which need a open
  * USB context and a device to run the tests on.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public class LibUSBDeviceTest
@@ -72,7 +72,7 @@ public class LibUSBDeviceTest
 
     /**
      * Finds a test device with at least one endpoint.
-     * 
+     *
      * @return The test device or null if none.
      */
     private Device findTestDevice()
@@ -658,7 +658,7 @@ public class LibUSBDeviceTest
     /**
      * Tests the {@link LibUsb#getDeviceDescriptor(Device, DeviceDescriptor)}
      * method.
-     * 
+     *
      * Most descriptor fields can be anything because we are not testing a
      * specific device. We call each method anyway to make sure it is connected
      * to JNI and doesn't crash.
@@ -707,7 +707,7 @@ public class LibUSBDeviceTest
 
     /**
      * Validates the specified config descriptor.
-     * 
+     *
      * @param desc
      *            The config descriptor to validate.
      */
@@ -731,7 +731,7 @@ public class LibUSBDeviceTest
 
     /**
      * Validates the specified interface.
-     * 
+     *
      * @param iface
      *            The interface to validate.
      */
@@ -746,7 +746,7 @@ public class LibUSBDeviceTest
 
     /**
      * Validates the specified interface descriptor.
-     * 
+     *
      * @param desc
      *            The interface descriptor to validate.
      */
@@ -771,7 +771,7 @@ public class LibUSBDeviceTest
 
     /**
      * Validates the specified endpoint desriptor.
-     * 
+     *
      * @param desc
      *            The endpoint descriptor to validate.
      */

@@ -13,7 +13,7 @@ import org.junit.Test;
 
 /**
  * Tests the {@link ContainerIdDescriptor} class.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public class ContainerIdDescriptorTest

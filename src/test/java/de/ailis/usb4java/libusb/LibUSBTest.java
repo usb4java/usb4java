@@ -25,7 +25,7 @@ import de.ailis.usb4java.utils.BufferUtils;
 
 /**
  * Tests the {@link LibUsb} class.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public class LibUSBTest
@@ -673,7 +673,7 @@ public class LibUSBTest
     {
         assumeUsbTestsEnabled();
         LibUsb
-        .freeSsEndpointCompanionDescriptor(new SsEndpointCompanionDescriptor());
+            .freeSsEndpointCompanionDescriptor(new SsEndpointCompanionDescriptor());
     }
 
     /**
@@ -817,7 +817,7 @@ public class LibUSBTest
     {
         assumeUsbTestsEnabled();
         LibUsb
-        .freeSsUsbDeviceCapabilityDescriptor(new SsUsbDeviceCapabilityDescriptor());
+            .freeSsUsbDeviceCapabilityDescriptor(new SsUsbDeviceCapabilityDescriptor());
     }
 
     /**

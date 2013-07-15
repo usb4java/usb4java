@@ -13,7 +13,7 @@ import org.junit.Test;
 
 /**
  * Tests the {@link SsUsbDeviceCapabilityDescriptor} class.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public class SsUsbDeviceCapabilityDescriptorTest
