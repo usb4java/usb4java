@@ -116,8 +116,12 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
     {
         final StringBuilder builder = new StringBuilder();
 
-        builder.append(String.format("%s%n" + "  extralen %17d%n"
-            + "  extra:%n" + "%s", DescriptorUtils.dump(this),
+        builder.append(String.format(
+            "%s%n" +
+            "  extralen %17d%n" +
+            "  extra:%n" +
+            "%s",
+            DescriptorUtils.dump(this),
             this.extraLength(),
             DescriptorUtils.dump(this.extra()).replaceAll("(?m)^", "    ")));
 
@@ -132,12 +136,19 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.bLength())
-            .append(this.bDescriptorType()).append(this.wTotalLength())
-            .append(this.bNumInterfaces()).append(this.bConfigurationValue())
-            .append(this.iConfiguration()).append(this.bmAttributes())
-            .append(this.bMaxPower()).append(this.iface()).append(this.extra())
-            .append(this.extraLength()).toHashCode();
+        return new HashCodeBuilder()
+            .append(this.bLength())
+            .append(this.bDescriptorType())
+            .append(this.wTotalLength())
+            .append(this.bNumInterfaces())
+            .append(this.bConfigurationValue())
+            .append(this.iConfiguration())
+            .append(this.bmAttributes())
+            .append(this.bMaxPower())
+            .append(this.iface())
+            .append(this.extra())
+            .append(this.extraLength())
+            .toHashCode();
     }
 
     @Override
@@ -158,7 +169,8 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
 
         final ConfigDescriptor other = (ConfigDescriptor) obj;
 
-        return new EqualsBuilder().append(this.bLength(), other.bLength())
+        return new EqualsBuilder()
+            .append(this.bLength(), other.bLength())
             .append(this.bDescriptorType(), other.bDescriptorType())
             .append(this.wTotalLength(), other.wTotalLength())
             .append(this.bNumInterfaces(), other.bNumInterfaces())
@@ -168,7 +180,8 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
             .append(this.bMaxPower(), other.bMaxPower())
             .append(this.iface(), other.iface())
             .append(this.extra(), other.extra())
-            .append(this.extraLength(), other.extraLength()).isEquals();
+            .append(this.extraLength(), other.extraLength())
+            .isEquals();
     }
 
     @Override

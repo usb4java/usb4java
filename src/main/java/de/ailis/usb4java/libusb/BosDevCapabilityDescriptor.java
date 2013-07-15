@@ -93,15 +93,27 @@ public final class BosDevCapabilityDescriptor
     public String dump()
     {
         return String.format(
-            "BOS Device Capability Descriptor:%n" + "  bLength %18d%n"
-                + "  bDescriptorType %10d%n" + "  bDevCapabilityType %7s%n"
-                + "  devCapabilityData:%n%s%n",
-            this.bLength() & 0xff,
-            this.bDescriptorType() & 0xff,
-            this.bDevCapabilityType() & 0xff,
-            DescriptorUtils.dump(this.devCapabilityData()).replaceAll("(?m)^",
-                "    "));
+            "BOS Device Capability Descriptor:%n" +
+            "  bLength %18d%n" +
+            "  bDescriptorType %10d%n" +
+            "  bDevCapabilityType %7s%n" +
+            "  devCapabilityData:%n%s%n",
+            this.bLength() & 0xFF,
+            this.bDescriptorType() & 0xFF,
+            this.bDevCapabilityType() & 0xFF,
+            DescriptorUtils.dump(this.devCapabilityData())
+                .replaceAll("(?m)^", "    "));
+    }
 
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder()
+            .append(this.bLength())
+            .append(this.bDescriptorType())
+            .append(this.bDevCapabilityType())
+            .append(this.devCapabilityData())
+            .toHashCode();
     }
 
     @Override
@@ -119,21 +131,15 @@ public final class BosDevCapabilityDescriptor
         {
             return false;
         }
-        final BosDevCapabilityDescriptor other = (BosDevCapabilityDescriptor) obj;
-        return new EqualsBuilder()
-            .append(this.bDescriptorType(), other.bDescriptorType())
-            .append(this.bLength(), other.bLength())
-            .append(this.bDevCapabilityType(), other.bDevCapabilityType())
-            .append(this.devCapabilityData().array(),
-                other.devCapabilityData().array()).isEquals();
-    }
 
-    @Override
-    public int hashCode()
-    {
-        return new HashCodeBuilder().append(this.bLength())
-            .append(this.bDescriptorType()).append(this.bDevCapabilityType())
-            .append(this.devCapabilityData()).toHashCode();
+        final BosDevCapabilityDescriptor other = (BosDevCapabilityDescriptor) obj;
+
+        return new EqualsBuilder()
+            .append(this.bLength(), other.bLength())
+            .append(this.bDescriptorType(), other.bDescriptorType())
+            .append(this.bDevCapabilityType(), other.bDevCapabilityType())
+            .append(this.devCapabilityData(), other.devCapabilityData()).
+            isEquals();
     }
 
     @Override

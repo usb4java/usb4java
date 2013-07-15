@@ -105,6 +105,9 @@ public final class LibUsb
     /** Other error. */
     public static final int ERROR_OTHER = -99;
 
+    /** Total number of error codes */
+    public static final int ERROR_COUNT = 14;
+
     // Speed codes. Indicates the speed at which the device is operating.
 
     /** The OS doesn't report or know the device speed. */
@@ -126,16 +129,16 @@ public final class LibUsb
     // device supports.
 
     /** Low speed operation supported (1.5MBit/s). */
-    public static final int LOW_SPEED_OPERATION = 1;
+    public static final short LOW_SPEED_OPERATION = 1;
 
     /** Full speed operation supported (12MBit/s). */
-    public static final int FULL_SPEED_OPERATION = 2;
+    public static final short FULL_SPEED_OPERATION = 2;
 
     /** High speed operation supported (480MBit/s). */
-    public static final int HIGH_SPEED_OPERATION = 4;
+    public static final short HIGH_SPEED_OPERATION = 4;
 
     /** Superspeed operation supported (5000MBit/s). */
-    public static final int SUPER_SPEED_OPERATION = 8;
+    public static final short SUPER_SPEED_OPERATION = 8;
 
     // Masks for the bits of the bmAttributes field of the USB 2.0 Extension
     // descriptor.
@@ -147,21 +150,21 @@ public final class LibUsb
     // Device Capability descriptor.
 
     /** Supports Latency Tolerance Messages (LTM). */
-    public static final int BM_LTM_SUPPORT = 2;
+    public static final byte BM_LTM_SUPPORT = 2;
 
     // USB capability types.
 
     /** Wireless USB device capability. */
-    public static final int BT_WIRELESS_USB_DEVICE_CAPABILITY = 1;
+    public static final byte BT_WIRELESS_USB_DEVICE_CAPABILITY = 1;
 
     /** USB 2.0 extensions. */
-    public static final int BT_USB_2_0_EXTENSION = 2;
+    public static final byte BT_USB_2_0_EXTENSION = 2;
 
     /** SuperSpeed USB device capability. */
-    public static final int BT_SS_USB_DEVICE_CAPABILITY = 3;
+    public static final byte BT_SS_USB_DEVICE_CAPABILITY = 3;
 
     /** Container ID type. */
-    public static final int BT_CONTAINER_ID = 4;
+    public static final byte BT_CONTAINER_ID = 4;
 
     // Standard requests, as defined in table 9-5 of the USB 3.0 specifications.
 
@@ -406,14 +409,38 @@ public final class LibUsb
     /** Size of an interface descriptor. */
     public static final byte DT_INTERFACE_SIZE = 9;
 
-    /** Size of an interface descriptor. */
+    /** Size of an endpoint descriptor. */
     public static final byte DT_ENDPOINT_SIZE = 7;
 
-    /** Size of an interface descriptor. */
+    /** Size of an endpoint descriptor with audio extension. */
     public static final byte DT_ENDPOINT_AUDIO_SIZE = 9;
 
-    /** Size of an interface descriptor. */
+    /** Size of a hub descriptor. */
     public static final byte DT_HUB_NONVAR_SIZE = 7;
+
+    /** Size of a SuperSpeed endpoint companion descriptor. */
+    public static final byte DT_SS_ENDPOINT_COMPANION_SIZE = 6;
+
+    /** Size of a BOS descriptor. */
+    public static final byte DT_BOS_SIZE = 5;
+
+    /** Size of a device capability descriptor. */
+    public static final byte DT_DEVICE_CAPABILITY_SIZE = 3;
+
+    // BOS descriptor sizes
+
+    /** Size of a BOS descriptor. */
+    public static final byte BT_USB_2_0_EXTENSION_SIZE = 7;
+
+    /** Size of a BOS descriptor. */
+    public static final byte BT_SS_USB_DEVICE_CAPABILITY_SIZE = 10;
+
+    /** Size of a BOS descriptor. */
+    public static final byte BT_CONTAINER_ID_SIZE = 20;
+
+    /** We unwrap the BOS => define its maximum size */
+    public static final byte DT_BOS_MAX_SIZE = ((DT_BOS_SIZE)
+        + (BT_USB_2_0_EXTENSION_SIZE) + (BT_SS_USB_DEVICE_CAPABILITY_SIZE) + (BT_CONTAINER_ID_SIZE));
 
     // Endpoint direction. Values for bit 7 of the endpoint address scheme.
 
@@ -564,7 +591,8 @@ public final class LibUsb
     /**
      * pollfd listeners (to support different listeners for different contexts).
      */
-    private static final ConcurrentMap<Long, ImmutablePair<PollfdListener, Object>> pollfdListeners = new ConcurrentHashMap<Long, ImmutablePair<PollfdListener, Object>>();
+    private static final ConcurrentMap<Long, ImmutablePair<PollfdListener, Object>> pollfdListeners =
+        new ConcurrentHashMap<Long, ImmutablePair<PollfdListener, Object>>();
 
     static
     {

@@ -117,20 +117,30 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
     public String dump()
     {
         return String.format(
-            "%s%n" + "  extralen %17d%n" + "  extra:%n" + "%s", DescriptorUtils
-                .dump(this), this.extraLength(),
+            "%s%n" +
+            "  extralen %17d%n" +
+            "  extra:%n" +
+            "%s",
+            DescriptorUtils.dump(this),
+            this.extraLength(),
             DescriptorUtils.dump(this.extra()).replaceAll("(?m)^", "    "));
     }
 
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.bLength())
-            .append(this.bDescriptorType()).append(this.bEndpointAddress())
-            .append(this.bmAttributes()).append(this.wMaxPacketSize())
-            .append(this.bInterval()).append(this.bRefresh())
-            .append(this.bSynchAddress()).append(this.extra())
-            .append(this.extraLength()).toHashCode();
+        return new HashCodeBuilder()
+            .append(this.bLength())
+            .append(this.bDescriptorType())
+            .append(this.bEndpointAddress())
+            .append(this.bmAttributes())
+            .append(this.wMaxPacketSize())
+            .append(this.bInterval())
+            .append(this.bRefresh())
+            .append(this.bSynchAddress())
+            .append(this.extra())
+            .append(this.extraLength())
+            .toHashCode();
     }
 
     @Override
@@ -151,7 +161,8 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
 
         final EndpointDescriptor other = (EndpointDescriptor) obj;
 
-        return new EqualsBuilder().append(this.bLength(), other.bLength())
+        return new EqualsBuilder()
+            .append(this.bLength(), other.bLength())
             .append(this.bDescriptorType(), other.bDescriptorType())
             .append(this.bEndpointAddress(), other.bEndpointAddress())
             .append(this.bmAttributes(), other.bmAttributes())
@@ -160,7 +171,8 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
             .append(this.bRefresh(), other.bRefresh())
             .append(this.bSynchAddress(), other.bSynchAddress())
             .append(this.extra(), other.extra())
-            .append(this.extraLength(), other.extraLength()).isEquals();
+            .append(this.extraLength(), other.extraLength())
+            .isEquals();
     }
 
     @Override

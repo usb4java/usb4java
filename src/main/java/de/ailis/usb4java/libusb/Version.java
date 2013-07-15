@@ -89,8 +89,12 @@ public final class Version implements Comparable<Version>
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.major()).append(this.minor())
-            .append(this.micro()).append(this.nano()).append(this.rc())
+        return new HashCodeBuilder()
+            .append(this.major())
+            .append(this.minor())
+            .append(this.micro())
+            .append(this.nano())
+            .append(this.rc())
             .toHashCode();
     }
 
@@ -112,10 +116,12 @@ public final class Version implements Comparable<Version>
 
         final Version other = (Version) obj;
 
-        return new EqualsBuilder().append(this.major(), other.major())
+        return new EqualsBuilder()
+            .append(this.major(), other.major())
             .append(this.minor(), other.minor())
             .append(this.micro(), other.micro())
-            .append(this.nano(), other.nano()).append(this.rc(), other.rc())
+            .append(this.nano(), other.nano())
+            .append(this.rc(), other.rc())
             .isEquals();
     }
 
@@ -131,10 +137,12 @@ public final class Version implements Comparable<Version>
             return 1;
         }
 
-        return new CompareToBuilder().append(this.major(), other.major())
+        return new CompareToBuilder()
+            .append(this.major(), other.major())
             .append(this.minor(), other.minor())
             .append(this.micro(), other.micro())
-            .append(this.nano(), other.nano()).append(this.rc(), other.rc())
+            .append(this.nano(), other.nano())
+            .append(this.rc(), other.rc())
             .toComparison();
     }
 

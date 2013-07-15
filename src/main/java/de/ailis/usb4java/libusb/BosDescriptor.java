@@ -96,16 +96,36 @@ public final class BosDescriptor
     public String dump()
     {
         final StringBuilder builder = new StringBuilder();
-        builder.append(String.format("BOS Descriptor:%n" + "  bLength %18d%n"
-            + "  bDescriptorType %10d%n" + "  wTotalLength %13s%n"
-            + "  bNumDeviceCaps %11s%n", this.bLength() & 0xff,
-            this.bDescriptorType() & 0xff, this.wTotalLength() & 0xffff,
-            this.bNumDeviceCaps() & 0xff));
+
+        builder.append(String.format(
+            "BOS Descriptor:%n" +
+            "  bLength %18d%n" +
+            "  bDescriptorType %10d%n" +
+            "  wTotalLength %13s%n" +
+            "  bNumDeviceCaps %11s%n",
+            this.bLength() & 0xFF,
+            this.bDescriptorType() & 0xFF,
+            this.wTotalLength() & 0xFFFF,
+            this.bNumDeviceCaps() & 0xFF));
+
         for (final BosDevCapabilityDescriptor descriptor : this.devCapability())
         {
             builder.append(descriptor.dump().replaceAll("(?m)^", "  "));
         }
+
         return builder.toString();
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder()
+            .append(this.bLength())
+            .append(this.bDescriptorType())
+            .append(this.wTotalLength())
+            .append(this.bNumDeviceCaps())
+            .append(this.devCapability())
+            .toHashCode();
     }
 
     @Override
@@ -123,22 +143,16 @@ public final class BosDescriptor
         {
             return false;
         }
+
         final BosDescriptor other = (BosDescriptor) obj;
+
         return new EqualsBuilder()
-            .append(this.bDescriptorType(), other.bDescriptorType())
             .append(this.bLength(), other.bLength())
+            .append(this.bDescriptorType(), other.bDescriptorType())
             .append(this.wTotalLength(), other.wTotalLength())
             .append(this.bNumDeviceCaps(), other.bNumDeviceCaps())
-            .append(this.devCapability(), other.devCapability()).isEquals();
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return new HashCodeBuilder().append(this.bLength())
-            .append(this.bDescriptorType()).append(this.wTotalLength())
-            .append(this.bNumDeviceCaps()).append(this.devCapability())
-            .toHashCode();
+            .append(this.devCapability(), other.devCapability())
+            .isEquals();
     }
 
     @Override

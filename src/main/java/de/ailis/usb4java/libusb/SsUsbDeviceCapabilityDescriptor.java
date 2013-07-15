@@ -121,17 +121,39 @@ public final class SsUsbDeviceCapabilityDescriptor
      */
     public String dump()
     {
-        return String.format("SuperSpeed USB Device Capability descriptor:%n"
-            + "  bLength %18d%n" + "  bDescriptorType %10d%n"
-            + "  bDevCapabilityType %7d%n" + "  bmAttributes %13s%n"
-            + "  wSpeedSupported %10d%n" + "  bFunctionalitySupport %4d%n"
-            + "  bU1DevExitLat %12d%n" + "  bU2DevExitLat %12d%n",
-            this.bLength() & 0xff, this.bDescriptorType() & 0xff,
-            this.bDevCapabilityType() & 0xff,
-            String.format("0x%02x", this.bmAttributes() & 0xff),
-            this.wSpeedSupported() & 0xffff,
-            this.bFunctionalitySupport() & 0xff, this.bU1DevExitLat() & 0xff,
-            this.bU2DevExitLat() & 0xffff);
+        return String.format(
+            "SuperSpeed USB Device Capability Descriptor:%n" +
+            "  bLength %18d%n" +
+            "  bDescriptorType %10d%n" +
+            "  bDevCapabilityType %7d%n" +
+            "  bmAttributes %13s%n" +
+            "  wSpeedSupported %10d%n" +
+            "  bFunctionalitySupport %4d%n" +
+            "  bU1DevExitLat %12d%n" +
+            "  bU2DevExitLat %12d%n",
+            this.bLength() & 0xFF,
+            this.bDescriptorType() & 0xFF,
+            this.bDevCapabilityType() & 0xFF,
+            String.format("0x%02x", this.bmAttributes() & 0xFF),
+            this.wSpeedSupported() & 0xFFFF,
+            this.bFunctionalitySupport() & 0xFF,
+            this.bU1DevExitLat() & 0xFF,
+            this.bU2DevExitLat() & 0xFFFF);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder()
+            .append(this.bLength())
+            .append(this.bDescriptorType())
+            .append(this.bDevCapabilityType())
+            .append(this.bmAttributes())
+            .append(this.wSpeedSupported())
+            .append(this.bFunctionalitySupport())
+            .append(this.bU1DevExitLat())
+            .append(this.bU2DevExitLat())
+            .toHashCode();
     }
 
     @Override
@@ -149,26 +171,19 @@ public final class SsUsbDeviceCapabilityDescriptor
         {
             return false;
         }
+
         final SsUsbDeviceCapabilityDescriptor other = (SsUsbDeviceCapabilityDescriptor) obj;
+
         return new EqualsBuilder()
-            .append(this.bDescriptorType(), other.bDescriptorType())
             .append(this.bLength(), other.bLength())
+            .append(this.bDescriptorType(), other.bDescriptorType())
             .append(this.bDevCapabilityType(), other.bDevCapabilityType())
             .append(this.bmAttributes(), other.bmAttributes())
             .append(this.wSpeedSupported(), other.wSpeedSupported())
             .append(this.bFunctionalitySupport(), other.bFunctionalitySupport())
             .append(this.bU1DevExitLat(), other.bU1DevExitLat())
-            .append(this.bU2DevExitLat(), other.bU2DevExitLat()).isEquals();
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return new HashCodeBuilder().append(this.bLength())
-            .append(this.bDescriptorType()).append(this.bDevCapabilityType())
-            .append(this.bmAttributes()).append(this.wSpeedSupported())
-            .append(this.bFunctionalitySupport()).append(this.bU1DevExitLat())
-            .append(this.bU2DevExitLat()).toHashCode();
+            .append(this.bU2DevExitLat(), other.bU2DevExitLat())
+            .isEquals();
     }
 
     @Override

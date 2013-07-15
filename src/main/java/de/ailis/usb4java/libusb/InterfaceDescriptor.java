@@ -119,8 +119,12 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
     {
         final StringBuilder builder = new StringBuilder();
 
-        builder.append(String.format("%s%n" + "  extralen %17d%n"
-            + "  extra:%n" + "%s", DescriptorUtils.dump(this),
+        builder.append(String.format(
+            "%s%n" +
+            "  extralen %17d%n" +
+            "  extra:%n" +
+            "%s",
+            DescriptorUtils.dump(this),
             this.extraLength(),
             DescriptorUtils.dump(this.extra()).replaceAll("(?m)^", "    ")));
 
@@ -135,13 +139,20 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.bLength())
-            .append(this.bDescriptorType()).append(this.bInterfaceNumber())
-            .append(this.bAlternateSetting()).append(this.bNumEndpoints())
-            .append(this.bInterfaceClass()).append(this.bInterfaceSubClass())
-            .append(this.bInterfaceProtocol()).append(this.iInterface())
-            .append(this.endpoint()).append(this.extra())
-            .append(this.extraLength()).toHashCode();
+        return new HashCodeBuilder()
+            .append(this.bLength())
+            .append(this.bDescriptorType())
+            .append(this.bInterfaceNumber())
+            .append(this.bAlternateSetting())
+            .append(this.bNumEndpoints())
+            .append(this.bInterfaceClass())
+            .append(this.bInterfaceSubClass())
+            .append(this.bInterfaceProtocol())
+            .append(this.iInterface())
+            .append(this.endpoint())
+            .append(this.extra())
+            .append(this.extraLength())
+            .toHashCode();
     }
 
     @Override
@@ -162,7 +173,8 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
 
         final InterfaceDescriptor other = (InterfaceDescriptor) obj;
 
-        return new EqualsBuilder().append(this.bLength(), other.bLength())
+        return new EqualsBuilder()
+            .append(this.bLength(), other.bLength())
             .append(this.bDescriptorType(), other.bDescriptorType())
             .append(this.bInterfaceNumber(), other.bInterfaceNumber())
             .append(this.bAlternateSetting(), other.bAlternateSetting())
@@ -173,7 +185,8 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
             .append(this.iInterface(), other.iInterface())
             .append(this.endpoint(), other.endpoint())
             .append(this.extra(), other.extra())
-            .append(this.extraLength(), other.extraLength()).isEquals();
+            .append(this.extraLength(), other.extraLength())
+            .isEquals();
     }
 
     @Override

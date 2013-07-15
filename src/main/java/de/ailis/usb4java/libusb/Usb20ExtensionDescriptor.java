@@ -89,12 +89,27 @@ public final class Usb20ExtensionDescriptor
      */
     public String dump()
     {
-        return String.format("USB 2.0 Extension Descriptor:%n"
-            + "  bLength %18d%n" + "  bDescriptorType %10d%n"
-            + "  bDevCapabilityType %7d%n" + "  bmAttributes %13s%n",
-            this.bLength() & 0xff, this.bDescriptorType() & 0xff,
-            this.bDevCapabilityType() & 0xff,
+        return String.format(
+            "USB 2.0 Extension Descriptor:%n" +
+            "  bLength %18d%n" +
+            "  bDescriptorType %10d%n" +
+            "  bDevCapabilityType %7d%n" +
+            "  bmAttributes %13s%n",
+            this.bLength() & 0xFF,
+            this.bDescriptorType() & 0xFF,
+            this.bDevCapabilityType() & 0xFF,
             String.format("0x%08x", this.bmAttributes()));
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder()
+            .append(this.bLength())
+            .append(this.bDescriptorType())
+            .append(this.bDevCapabilityType())
+            .append(this.bmAttributes())
+            .toHashCode();
     }
 
     @Override
@@ -112,20 +127,15 @@ public final class Usb20ExtensionDescriptor
         {
             return false;
         }
-        final Usb20ExtensionDescriptor other = (Usb20ExtensionDescriptor) obj;
-        return new EqualsBuilder()
-            .append(this.bDescriptorType(), other.bDescriptorType())
-            .append(this.bLength(), other.bLength())
-            .append(this.bDevCapabilityType(), other.bDevCapabilityType())
-            .append(this.bmAttributes(), other.bmAttributes()).isEquals();
-    }
 
-    @Override
-    public int hashCode()
-    {
-        return new HashCodeBuilder().append(this.bLength())
-            .append(this.bDescriptorType()).append(this.bDevCapabilityType())
-            .append(this.bmAttributes()).toHashCode();
+        final Usb20ExtensionDescriptor other = (Usb20ExtensionDescriptor) obj;
+
+        return new EqualsBuilder()
+            .append(this.bLength(), other.bLength())
+            .append(this.bDescriptorType(), other.bDescriptorType())
+            .append(this.bDevCapabilityType(), other.bDevCapabilityType())
+            .append(this.bmAttributes(), other.bmAttributes())
+            .isEquals();
     }
 
     @Override

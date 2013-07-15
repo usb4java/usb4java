@@ -101,12 +101,30 @@ public final class SsEndpointCompanionDescriptor
      */
     public String dump()
     {
-        return String.format("Device Descriptor:%n" + "  bLength %18d%n"
-            + "  bDescriptorType %10d%n" + "  bMaxBurst %16s%n"
-            + "  bmAttributes %13d%n" + "  wBytesPerInterval %8d%n",
-            this.bLength() & 0xff, this.bDescriptorType() & 0xff,
-            this.bMaxBurst() & 0xff, this.bmAttributes() & 0xff,
-            this.wBytesPerInterval() & 0xffff);
+        return String.format(
+            "SuperSpeed Endpoint Companion Descriptor:%n" +
+            "  bLength %18d%n" +
+            "  bDescriptorType %10d%n" +
+            "  bMaxBurst %16s%n" +
+            "  bmAttributes %13d%n" +
+            "  wBytesPerInterval %8d%n",
+            this.bLength() & 0xFF,
+            this.bDescriptorType() & 0xFF,
+            this.bMaxBurst() & 0xFF,
+            this.bmAttributes() & 0xFF,
+            this.wBytesPerInterval() & 0xFFFF);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder()
+            .append(this.bLength())
+            .append(this.bDescriptorType())
+            .append(this.bMaxBurst())
+            .append(this.bmAttributes())
+            .append(this.wBytesPerInterval())
+            .toHashCode();
     }
 
     @Override
@@ -124,23 +142,16 @@ public final class SsEndpointCompanionDescriptor
         {
             return false;
         }
+
         final SsEndpointCompanionDescriptor other = (SsEndpointCompanionDescriptor) obj;
+
         return new EqualsBuilder()
-            .append(this.bDescriptorType(), other.bDescriptorType())
             .append(this.bLength(), other.bLength())
+            .append(this.bDescriptorType(), other.bDescriptorType())
             .append(this.bMaxBurst(), other.bMaxBurst())
             .append(this.bmAttributes(), other.bmAttributes())
             .append(this.wBytesPerInterval(), other.wBytesPerInterval())
             .isEquals();
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return new HashCodeBuilder().append(this.bLength())
-            .append(this.bDescriptorType()).append(this.bMaxBurst())
-            .append(this.bmAttributes()).append(this.wBytesPerInterval())
-            .toHashCode();
     }
 
     @Override

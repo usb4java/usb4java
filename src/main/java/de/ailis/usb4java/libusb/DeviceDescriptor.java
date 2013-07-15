@@ -132,14 +132,22 @@ public final class DeviceDescriptor implements UsbDeviceDescriptor
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.bLength())
-            .append(this.bDescriptorType()).append(this.bcdUSB())
-            .append(this.bDeviceClass()).append(this.bDeviceSubClass())
-            .append(this.bDeviceProtocol()).append(this.bMaxPacketSize0())
-            .append(this.idVendor()).append(this.idProduct())
-            .append(this.bcdDevice()).append(this.iManufacturer())
-            .append(this.iProduct()).append(this.iSerialNumber())
-            .append(this.bNumConfigurations()).toHashCode();
+        return new HashCodeBuilder()
+            .append(this.bLength())
+            .append(this.bDescriptorType())
+            .append(this.bcdUSB())
+            .append(this.bDeviceClass())
+            .append(this.bDeviceSubClass())
+            .append(this.bDeviceProtocol())
+            .append(this.bMaxPacketSize0())
+            .append(this.idVendor())
+            .append(this.idProduct())
+            .append(this.bcdDevice())
+            .append(this.iManufacturer())
+            .append(this.iProduct())
+            .append(this.iSerialNumber())
+            .append(this.bNumConfigurations())
+            .toHashCode();
     }
 
     @Override
@@ -160,7 +168,8 @@ public final class DeviceDescriptor implements UsbDeviceDescriptor
 
         final DeviceDescriptor other = (DeviceDescriptor) obj;
 
-        return new EqualsBuilder().append(this.bLength(), other.bLength())
+        return new EqualsBuilder()
+            .append(this.bLength(), other.bLength())
             .append(this.bDescriptorType(), other.bDescriptorType())
             .append(this.bcdUSB(), other.bcdUSB())
             .append(this.bDeviceClass(), other.bDeviceClass())

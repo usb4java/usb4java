@@ -101,13 +101,31 @@ public final class ContainerIdDescriptor
      */
     public String dump()
     {
-        return String.format("Container Id Descriptor:%n" + "  bLength %18d%n"
-            + "  bDescriptorType %10d%n" + "  bDevCapabilityType %7d%n"
-            + "  bReserved %16d%n" + "  containerId:%n%s%n",
-            this.bLength() & 0xff, this.bDescriptorType() & 0xff, this
-                .bDevCapabilityType() & 0xff, this.bReserved() & 0xff,
+        return String.format(
+            "Container ID Descriptor:%n" +
+            "  bLength %18d%n" +
+            "  bDescriptorType %10d%n" +
+            "  bDevCapabilityType %7d%n" +
+            "  bReserved %16d%n" +
+            "  ContainerID:%n%s%n",
+            this.bLength() & 0xFF,
+            this.bDescriptorType() & 0xFF,
+            this.bDevCapabilityType() & 0xFF,
+            this.bReserved() & 0xFF,
             DescriptorUtils.dump(this.containerId())
                 .replaceAll("(?m)^", "    "));
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder()
+            .append(this.bLength())
+            .append(this.bDescriptorType())
+            .append(this.bDevCapabilityType())
+            .append(this.bReserved())
+            .append(this.containerId())
+            .toHashCode();
     }
 
     @Override
@@ -125,22 +143,16 @@ public final class ContainerIdDescriptor
         {
             return false;
         }
+
         final ContainerIdDescriptor other = (ContainerIdDescriptor) obj;
+
         return new EqualsBuilder()
-            .append(this.bDescriptorType(), other.bDescriptorType())
             .append(this.bLength(), other.bLength())
+            .append(this.bDescriptorType(), other.bDescriptorType())
             .append(this.bDevCapabilityType(), other.bDevCapabilityType())
             .append(this.bReserved(), other.bReserved())
-            .append(this.containerId().array(), other.containerId().array())
+            .append(this.containerId(), other.containerId())
             .isEquals();
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return new HashCodeBuilder().append(this.bLength())
-            .append(this.bDescriptorType()).append(this.bDevCapabilityType())
-            .append(this.bReserved()).append(this.containerId()).toHashCode();
     }
 
     @Override

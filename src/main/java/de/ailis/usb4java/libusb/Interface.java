@@ -74,7 +74,9 @@ public final class Interface
     {
         final StringBuilder builder = new StringBuilder();
 
-        builder.append(String.format("Interface:%n" + "  numAltsetting %10d",
+        builder.append(String.format(
+            "Interface:%n" +
+            "  numAltsetting %10d",
             this.numAltsetting()));
 
         for (final InterfaceDescriptor intDesc : this.altsetting())
@@ -88,8 +90,10 @@ public final class Interface
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.altsetting())
-            .append(this.numAltsetting()).toHashCode();
+        return new HashCodeBuilder()
+            .append(this.altsetting())
+            .append(this.numAltsetting())
+            .toHashCode();
     }
 
     @Override
@@ -112,7 +116,8 @@ public final class Interface
 
         return new EqualsBuilder()
             .append(this.altsetting(), other.altsetting())
-            .append(this.numAltsetting(), other.numAltsetting()).isEquals();
+            .append(this.numAltsetting(), other.numAltsetting())
+            .isEquals();
     }
 
     @Override
