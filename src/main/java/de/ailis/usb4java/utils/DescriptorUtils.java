@@ -18,14 +18,13 @@ import de.ailis.usb4java.libusb.LibUsb;
 
 /**
  * Utility methods used for descriptor dumps.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class DescriptorUtils
 {
     /** Mapping from USB class id to USB class name. */
-    private static final Map<Byte, String> CLASS_NAMES =
-        new HashMap<Byte, String>();
+    private static final Map<Byte, String> CLASS_NAMES = new HashMap<Byte, String>();
 
     static
     {
@@ -42,8 +41,7 @@ public final class DescriptorUtils
         CLASS_NAMES.put(LibUsb.CLASS_SMART_CARD, "Smart Card");
         CLASS_NAMES.put(LibUsb.CLASS_CONTENT_SECURITY, "Content Security");
         CLASS_NAMES.put(LibUsb.CLASS_VIDEO, "Video");
-        CLASS_NAMES.put(LibUsb.CLASS_PERSONAL_HEALTHCARE,
-            "Personal Healthcare");
+        CLASS_NAMES.put(LibUsb.CLASS_PERSONAL_HEALTHCARE, "Personal Healthcare");
         CLASS_NAMES.put(LibUsb.CLASS_DIAGNOSTIC_DEVICE, "Diagnostic Device");
         CLASS_NAMES.put(LibUsb.CLASS_WIRELESS, "Wireless");
         CLASS_NAMES.put(LibUsb.CLASS_APPLICATION, "Application");
@@ -61,7 +59,7 @@ public final class DescriptorUtils
     /**
      * Returns the name of the specified USB class. "unknown" is returned for a
      * class which is unknown to libusb.
-     * 
+     *
      * @param usbClass
      *            The numeric USB class.
      * @return The USB class name.
@@ -80,7 +78,7 @@ public final class DescriptorUtils
 
     /**
      * Decodes a binary-coded decimal into a string and returns it.
-     * 
+     *
      * @param bcd
      *            The binary-coded decimal to decode.
      * @return The decoded binary-coded decimal.
@@ -92,7 +90,7 @@ public final class DescriptorUtils
 
     /**
      * Dumps the specified byte buffer into a hex string and returns it.
-     * 
+     *
      * @param bytes
      *            The bytes to dump.
      * @return The hex dump.
@@ -124,7 +122,7 @@ public final class DescriptorUtils
 
     /**
      * Dumps the specified USB device descriptor into a string and returns it.
-     * 
+     *
      * @param descriptor
      *            The USB device descriptor to dump.
      * @return The descriptor dump.
@@ -136,7 +134,7 @@ public final class DescriptorUtils
 
     /**
      * Dumps the specified USB device descriptor into a string and returns it.
-     * 
+     *
      * @param descriptor
      *            The USB device descriptor to dump.
      * @param manufacturer
@@ -150,21 +148,22 @@ public final class DescriptorUtils
     public static String dump(final UsbDeviceDescriptor descriptor,
         final String manufacturer, final String product, final String serial)
     {
-        return String.format("Device Descriptor:%n"
-            + "  bLength %18d%n"
-            + "  bDescriptorType %10d%n"
-            + "  bcdUSB %19s%n"
-            + "  bDeviceClass %13d %s%n"
-            + "  bDeviceSubClass %10d%n"
-            + "  bDeviceProtocol %10d%n"
-            + "  bMaxPacketSize0 %10d%n"
-            + "  idVendor %17s%n"
-            + "  idProduct %16s%n"
-            + "  bcdDevice %16s%n"
-            + "  iManufacturer %12d%s%n"
-            + "  iProduct %17d%s%n"
-            + "  iSerial %18d%s%n"
-            + "  bNumConfigurations %7d%n",
+        return String.format(
+            "Device Descriptor:%n" +
+            "  bLength %18d%n" +
+            "  bDescriptorType %10d%n" +
+            "  bcdUSB %19s%n" +
+            "  bDeviceClass %13d %s%n" +
+            "  bDeviceSubClass %10d%n" +
+            "  bDeviceProtocol %10d%n" +
+            "  bMaxPacketSize0 %10d%n" +
+            "  idVendor %17s%n" +
+            "  idProduct %16s%n" +
+            "  bcdDevice %16s%n" +
+            "  iManufacturer %12d%s%n" +
+            "  iProduct %17d%s%n" +
+            "  iSerial %18d%s%n" +
+            "  bNumConfigurations %7d%n",
             descriptor.bLength(),
             descriptor.bDescriptorType(),
             decodeBCD(descriptor.bcdUSB()),
@@ -188,24 +187,25 @@ public final class DescriptorUtils
     /**
      * Dumps the specified USB configuration descriptor into a string and
      * returns it.
-     * 
+     *
      * @param descriptor
      *            The USB configuration descriptor to dump.
      * @return The descriptor dump.
      */
     public static String dump(final UsbConfigurationDescriptor descriptor)
     {
-        return String.format("Configuration Descriptor:%n"
-            + "  bLength %18d%n"
-            + "  bDescriptorType %10d%n"
-            + "  wTotalLength %13d%n"
-            + "  bNumInterfaces %11d%n"
-            + "  bConfigurationValue %6d%n"
-            + "  iConfiguration %11d%n"
-            + "  bmAttributes %13s%n"
-            + "    %s%n"
-            + "%s"
-            + "  bMaxPower %16smA%n",
+        return String.format(
+            "Configuration Descriptor:%n" +
+            "  bLength %18d%n" +
+            "  bDescriptorType %10d%n" +
+            "  wTotalLength %13d%n" +
+            "  bNumInterfaces %11d%n" +
+            "  bConfigurationValue %6d%n" +
+            "  iConfiguration %11d%n" +
+            "  bmAttributes %13s%n" +
+            "    %s%n" +
+            "%s" +
+            "  bMaxPower %16smA%n",
             descriptor.bLength(),
             descriptor.bDescriptorType(),
             descriptor.wTotalLength() & 0xffff,
@@ -223,23 +223,24 @@ public final class DescriptorUtils
     /**
      * Dumps the specified USB interface descriptor into a string and returns
      * it.
-     * 
+     *
      * @param descriptor
      *            The USB interface descriptor to dump.
      * @return The descriptor dump.
      */
     public static String dump(final UsbInterfaceDescriptor descriptor)
     {
-        return String.format("Interface Descriptor:%n"
-            + "  bLength %18d%n"
-            + "  bDescriptorType %10d%n"
-            + "  bInterfaceNumber %9d%n"
-            + "  bAlternateSetting %8d%n"
-            + "  bNumEndpoints %12d%n"
-            + "  bInterfaceClass %10d %s%n"
-            + "  bInterfaceSubClass %7d%n"
-            + "  bInterfaceProtocol %7d%n"
-            + "  iInterface %15d%n",
+        return String.format(
+            "Interface Descriptor:%n" +
+            "  bLength %18d%n" +
+            "  bDescriptorType %10d%n" +
+            "  bInterfaceNumber %9d%n" +
+            "  bAlternateSetting %8d%n" +
+            "  bNumEndpoints %12d%n" +
+            "  bInterfaceClass %10d %s%n" +
+            "  bInterfaceSubClass %7d%n" +
+            "  bInterfaceProtocol %7d%n" +
+            "  iInterface %15d%n",
             descriptor.bLength(),
             descriptor.bDescriptorType(),
             descriptor.bInterfaceNumber() & 0xff,
@@ -254,28 +255,30 @@ public final class DescriptorUtils
 
     /**
      * Dumps the specified USB endpoint descriptor into a string and returns it.
-     * 
+     *
      * @param descriptor
      *            The USB endpoint descriptor to dump.
      * @return The descriptor dump.
      */
     public static String dump(final UsbEndpointDescriptor descriptor)
     {
-        return String.format("Endpoint Descriptor:%n"
-            + "  bLength %18d%n"
-            + "  bDescriptorType %10d%n"
-            + "  bEndpointAddress %9s  EP %d %s%n"
-            + "  bmAttributes %13d%n"
-            + "    Transfer Type             %s%n"
-            + "    Synch Type                %s%n"
-            + "    Usage Type                %s%n"
-            + "  wMaxPacketSize %11d%n"
-            + "  bInterval %16d%n",
+        return String.format(
+            "Endpoint Descriptor:%n" +
+            "  bLength %18d%n" +
+            "  bDescriptorType %10d%n" +
+            "  bEndpointAddress %9s  EP %d %s%n" +
+            "  bmAttributes %13d%n" +
+            "    Transfer Type             %s%n" +
+            "    Synch Type                %s%n" +
+            "    Usage Type                %s%n" +
+            "  wMaxPacketSize %11d%n" +
+            "  bInterval %16d%n",
             descriptor.bLength(),
             descriptor.bDescriptorType(),
             String.format("0x%02x", descriptor.bEndpointAddress() & 0xff),
             descriptor.bEndpointAddress() & 0x0f,
-            ((descriptor.bEndpointAddress() & LibUsb.ENDPOINT_IN) == 0) ? ("OUT") : ("IN"),
+            ((descriptor.bEndpointAddress() & LibUsb.ENDPOINT_IN) == 0) ?
+                ("OUT") : ("IN"),
             descriptor.bmAttributes() & 0xff,
             getTransferTypeName(descriptor.bmAttributes()),
             getSynchTypeName(descriptor.bmAttributes()),
@@ -287,7 +290,7 @@ public final class DescriptorUtils
     /**
      * Returns the name for the transfer type in the specified endpoint
      * attributes.
-     * 
+     *
      * @param bmAttributes
      *            The endpoint attributes value.
      * @return The transfer type name.
@@ -312,7 +315,7 @@ public final class DescriptorUtils
     /**
      * Returns the name for the synchronization type in the specified endpoint
      * attributes.
-     * 
+     *
      * @param bmAttributes
      *            The endpoint attributes value.
      * @return The synch type name.
@@ -336,7 +339,7 @@ public final class DescriptorUtils
 
     /**
      * Returns the name for the usage type in the specified endpoint attributes.
-     * 
+     *
      * @param bmAttributes
      *            The endpoint attributes value.
      * @return The usage type name.
@@ -360,7 +363,7 @@ public final class DescriptorUtils
 
     /**
      * Returns the name for the specified speed number.
-     * 
+     *
      * @param speed
      *            The speed number.
      * @return The speed name.

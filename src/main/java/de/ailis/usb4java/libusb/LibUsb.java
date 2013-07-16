@@ -2008,7 +2008,7 @@ public final class LibUsb
      * The only way to implement this in Java is by passing a direct buffer, and
      * then accessing memory directly. IntBuffers can be direct, if they are
      * created as a view of a direct ByteBuffer, as in the following code:
-     * ByteBuffer.allocateDirect(Integer.SIZE / Byte.SIZE).asIntBuffer()
+     * {@link BufferUtils.allocateIntBuffer()}
      *
      * @param context
      *            the context to operate on, or NULL for the default context
