@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2013 Luca Longinotti (l@longi.li)
+ * See COPYING file for copying conditions
+ */
+
 #include "IsoPacketDescriptor.h"
 
 jobject wrapIsoPacketDescriptor(JNIEnv *env,

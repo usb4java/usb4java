@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2013 Klaus Reimer (k@ailis.de)
+ * Copyright (C) 2013 Luca Longinotti (l@longi.li)
  * See COPYING file for copying conditions
  */
 

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2013 Klaus Reimer (k@ailis.de)
+ * Copyright (C) 2013 Luca Longinotti (l@longi.li)
  * See COPYING file for copying conditions
  */
 
@@ -9,6 +10,7 @@
  * Native methods for the LibUsb class.
  *
  * @author Klaus Reimer <k@ailis.de>
+ * @author Luca Longinotti <l@longi.li>
  */
 
 #include <stdlib.h>
