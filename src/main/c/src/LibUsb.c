@@ -31,6 +31,7 @@
 #include "SsUsbDeviceCapabilityDescriptor.h"
 #include "ContainerIdDescriptor.h"
 #include "Transfer.h"
+#include "HotplugCallbackHandle.h"
 
 static int defaultContextRefcnt = 0;
 
@@ -1406,4 +1407,87 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, cancelTransfer)
     if (!transfer) return 0;
 
     return libusb_cancel_transfer(transfer);
+}
+
+struct hotplug_data
+{
+    jobject callbackObject;
+    jmethodID callbackObjectMethod;
+    jobject callbackUserDataObject;
+};
+
+static int LIBUSB_CALL hotplugCallback(libusb_context *ctx,
+    libusb_device *device, libusb_hotplug_event event, void *user_data)
+{
+    THREAD_BEGIN(env)
+
+    // TODO: check for return value and free memory appropriately.
+
+    THREAD_END
+}
+
+/**
+ * int hotplugRegisterCallback(Context, int, int, short, short, byte,
+ *     HotplugCallback, Object, HotplugCallbackHandle)
+ */
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, hotplugRegisterCallback)
+(
+    JNIEnv *env, jclass class, jobject context, jint events, jint flags,
+    jshort vendorId, jshort productId, jbyte deviceClass,
+    jobject callback, jobject userData, jobject callbackHandle
+)
+{
+    libusb_context *ctx = unwrapContext(env, context);
+    if (!ctx && context) return 0;
+    NOT_NULL(env, callback, return 0);
+    if (callbackHandle) {
+        // If callbackHandle is set, the Java object must be fresh/empty.
+        NOT_SET(env, callbackHandle, "hotplugCallbackHandleValue", return 0);
+    }
+
+    // Allocate memory to hold the references to the callback on the C side.
+    struct hotplug_data *hotplugData = calloc(1, sizeof(*hotplugData));
+    if (!hotplugData)
+    {
+        return LIBUSB_ERROR_NO_MEM;
+    }
+
+    // Setup the needed global references to the callback objects.
+    hotplugData->callbackObject = NULL;
+    hotplugData->callbackObjectMethod = NULL;
+    hotplugData->callbackUserDataObject = userData;
+
+    // Register the callback.
+    libusb_hotplug_callback_handle handle = 0;
+    int result = libusb_hotplug_register_callback(ctx, events, flags,
+        vendorId, productId, deviceClass, &hotplugCallback, hotplugData, &handle);
+
+    // If callbackHandle is set and registering was successful, we set the handle
+    // to the value we've gotten from libusb.
+    if (callbackHandle && (result == LIBUSB_SUCCESS)) {
+        setHotplugCallbackHandle(env, handle, callbackHandle);
+    }
+
+    return result;
+}
+
+/*
+ * void hotplugDeregisterCallback(Context, HotplugCallbackHandle)
+ */
+JNIEXPORT void JNICALL METHOD_NAME(LibUsb, hotplugDeregisterCallback)
+(
+    JNIEnv *env, jclass class, jobject context, jobject callbackHandle
+)
+{
+    libusb_context *ctx = unwrapContext(env, context);
+    if (!ctx && context) return;
+    NOT_NULL(env, callbackHandle, return);
+
+    libusb_hotplug_callback_handle handle =
+        unwrapHotplugCallbackHandle(env, callbackHandle);
+    if (!handle) return;
+
+
+
+    resetHotplugCallbackHandle(env, callbackHandle);
 }

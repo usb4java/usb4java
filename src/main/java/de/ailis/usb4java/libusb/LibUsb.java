@@ -34,6 +34,7 @@ import de.ailis.usb4java.utils.BufferUtils;
  * Static class providing the constants and functions of libusb.
  *
  * @author Klaus Reimer (k@ailis.de)
+ * @author Luca Longinotti (l@longi.li)
  */
 public final class LibUsb
 {
@@ -588,6 +589,32 @@ public final class LibUsb
 
     /** Device sent more data than requested. */
     public static final int TRANSFER_OVERFLOW = 6;
+
+    // Flags for hotplug events
+
+    /**
+     * Arm the callback and fire it for all matching currently attached devices.
+     */
+    public static final int HOTPLUG_ENUMERATE = 1;
+
+    // Hotplug events
+
+    /** A device has been plugged in and is ready to use. */
+    public static final int HOTPLUG_EVENT_DEVICE_ARRIVED = 0x01;
+
+    /**
+     * A device has left and is no longer available.
+     * It is the user's responsibility to call {@link #close(DeviceHandle)} on
+     * any handle associated with a disconnected device.
+     * It is safe to call {@link #getDeviceDescriptor(Device, DeviceDescriptor)}
+     * on a device that has left.
+     */
+    public static final int HOTPLUG_EVENT_DEVICE_LEFT = 0x02;
+
+    // Wildcard matching for hotplug events
+
+    /** Match any vendorId or productId or deviceClass. */
+    public static final byte HOTPLUG_MATCH_ANY = -1;
 
     /**
      * pollfd listeners (to support different listeners for different contexts).
@@ -2008,8 +2035,8 @@ public final class LibUsb
      *
      * The only way to implement this in Java is by passing a direct buffer, and
      * then accessing memory directly. IntBuffers can be direct, if they are
-     * created as a view of a direct ByteBuffer, as in the following code:
-     * {@link BufferUtils.allocateIntBuffer()}
+     * created as a view of a direct ByteBuffer, by using BufferUtils:
+     * {@link BufferUtils#allocateIntBuffer()}
      *
      * @param context
      *            the context to operate on, or NULL for the default context
@@ -2517,4 +2544,56 @@ public final class LibUsb
         return BufferUtils.slice(transfer.buffer(), offset,
             isoDescriptors[packet].length());
     }
+
+    /**
+     * Register a hotplug callback function.
+     *
+     * Register a callback with the {@link Context}. The callback will fire
+     * when a matching event occurs on a matching device. The callback is
+     * armed until either it is deregistered with
+     * {@link #hotplugDeregisterCallback(Context, HotplugCallbackHandle)}
+     * or the supplied callback returns 1 to indicate it is finished processing
+     * events.
+     *
+     * @param context
+     *            context to register this callback with
+     * @param events
+     *            bitwise or of events that will trigger this callback
+     * @param flags
+     *            hotplug callback flags
+     * @param vendorId
+     *            the vendor id to match or {@link #HOTPLUG_MATCH_ANY}
+     * @param productId
+     *            the product id to match or {@link #HOTPLUG_MATCH_ANY}
+     * @param deviceClass
+     *            the device class to match or {@link #HOTPLUG_MATCH_ANY}
+     * @param callback
+     *            the function to be invoked on a matching event/device
+     * @param userData
+     *            user data to pass to the callback function
+     * @param handle
+     *            hotplug callback handle of the allocated callback. Only needed
+     *            if you later want to deregister this callback, can be NULL.
+     *
+     * @return LIBUSB_SUCCESS on success LIBUSB_ERROR code on failure
+     */
+    public static native int hotplugRegisterCallback(final Context context,
+        final int events, final int flags, final short vendorId,
+        final short productId, final byte deviceClass,
+        final HotplugCallback callback, final Object userData,
+        final HotplugCallbackHandle callbackHandle);
+
+    /**
+     * Deregisters a hotplug callback.
+     *
+     * Deregister a callback from a {@link Context}. This function is safe to
+     * call from within a hotplug callback.
+     *
+     * @param context
+     *            context this callback is registered with
+     * @param handle
+     *            the handle of the callback to deregister
+     */
+    public static native void hotplugDeregisterCallback(final Context context,
+        final HotplugCallbackHandle callbackHandle);
 }
