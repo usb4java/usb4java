@@ -1160,27 +1160,27 @@ public class LibUSBTest
     }
 
     /**
-     * Tests {@link LibUsb#setPollfdNotifiers(Context, long)} with uninitialized
-     * USB context.
+     * Tests {@link LibUsb#setPollfdNotifiersNative(Context, long)}
+     * with uninitialized USB context.
      */
     @Test(expected = IllegalStateException.class)
     public void testSetPollfdNotifiersWithUninitializedContext()
     {
         assumeUsbTestsEnabled();
         final Context context = new Context();
-        LibUsb.setPollfdNotifiers(context, context.getPointer());
+        LibUsb.setPollfdNotifiersNative(context, context.getPointer());
     }
 
     /**
-     * Tests {@link LibUsb#unsetPollfdNotifiers(Context)} with uninitialized USB
-     * context.
+     * Tests {@link LibUsb#unsetPollfdNotifiersNative(Context)} with
+     * uninitialized USB context.
      */
     @Test(expected = IllegalStateException.class)
     public void testUnsetPollfdNotifiersWithUninitializedContext()
     {
         assumeUsbTestsEnabled();
         final Context context = new Context();
-        LibUsb.unsetPollfdNotifiers(context);
+        LibUsb.unsetPollfdNotifiersNative(context);
     }
 
     /**

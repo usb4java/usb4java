@@ -617,7 +617,15 @@ public final class LibUsb
     public static final byte HOTPLUG_MATCH_ANY = -1;
 
     /**
-     * pollfd listeners (to support different listeners for different contexts).
+     * Hotplug callbacks (to correctly manage calls and additional data).
+     */
+    private static long globalHotplugId = 1;
+
+    private static final ConcurrentMap<Long, ImmutablePair<HotplugCallback, Object>> hotplugCallbacks =
+        new ConcurrentHashMap<Long, ImmutablePair<HotplugCallback, Object>>();
+
+    /**
+     * Pollfd listeners (to support different listeners for different contexts).
      */
     private static final ConcurrentMap<Long, ImmutablePair<PollfdListener, Object>> pollfdListeners =
         new ConcurrentHashMap<Long, ImmutablePair<PollfdListener, Object>>();
@@ -2228,7 +2236,7 @@ public final class LibUsb
      *            User data to be passed back to callbacks (useful for passing
      *            context information).
      */
-    public static void setPollfdNotifiers(final Context context,
+    public static synchronized void setPollfdNotifiers(final Context context,
         final PollfdListener listener, final Object userData)
     {
         long contextId;
@@ -2244,13 +2252,13 @@ public final class LibUsb
 
         if (listener == null)
         {
-            unsetPollfdNotifiers(context);
+            unsetPollfdNotifiersNative(context);
 
             pollfdListeners.remove(contextId);
         }
         else
         {
-            setPollfdNotifiers(context, contextId);
+            setPollfdNotifiersNative(context, contextId);
 
             pollfdListeners.put(contextId,
                 new ImmutablePair<PollfdListener, Object>(listener, userData));
@@ -2309,7 +2317,7 @@ public final class LibUsb
      * @param contextId
      *            A unique identifier for the given context.
      */
-    static native void setPollfdNotifiers(final Context context,
+    static native void setPollfdNotifiersNative(final Context context,
         final long contextId);
 
     /**
@@ -2319,7 +2327,7 @@ public final class LibUsb
      * @param context
      *            The context to operate on, or NULL for the default context
      */
-    static native void unsetPollfdNotifiers(final Context context);
+    static native void unsetPollfdNotifiersNative(final Context context);
 
     /**
      * Allocate a libusb transfer without support for isochronous transfers.
@@ -2545,14 +2553,39 @@ public final class LibUsb
             isoDescriptors[packet].length());
     }
 
+    static int hotplugCallback(final Context context, final Device device,
+        final int event, final long hotplugId)
+    {
+        final ImmutablePair<HotplugCallback, Object> callback = hotplugCallbacks
+            .get(hotplugId);
+
+        int result = 0;
+
+        if (callback != null)
+        {
+            result = callback.left.processEvent(context, device, event,
+                callback.right);
+        }
+
+        // If callback indicates it is finished, it will get deregistered
+        // automatically. As such, we have to remove it from the Java
+        // map, like when deregistering manually.
+        if (result == 1)
+        {
+            hotplugCallbacks.remove(hotplugId);
+        }
+
+        return result;
+    }
+
     /**
      * Register a hotplug callback function.
      *
      * Register a callback with the {@link Context}. The callback will fire
      * when a matching event occurs on a matching device. The callback is
      * armed until either it is deregistered with
-     * {@link #hotplugDeregisterCallback(Context, HotplugCallbackHandle)}
-     * or the supplied callback returns 1 to indicate it is finished processing
+     * {@link #hotplugDeregisterCallback(Context, HotplugCallbackHandle)} or the
+     * supplied callback returns 1 to indicate it is finished processing
      * events.
      *
      * @param context
@@ -2577,11 +2610,37 @@ public final class LibUsb
      *
      * @return LIBUSB_SUCCESS on success LIBUSB_ERROR code on failure
      */
-    public static native int hotplugRegisterCallback(final Context context,
+    public static synchronized int hotplugRegisterCallback(
+        final Context context, final int events, final int flags,
+        final short vendorId, final short productId, final byte deviceClass,
+        final HotplugCallback callback, final Object userData,
+        final HotplugCallbackHandle callbackHandle)
+    {
+        if (callback == null)
+        {
+            throw new IllegalArgumentException("callback must not be null");
+        }
+
+        final int result = hotplugRegisterCallbackNative(context, events,
+            flags, vendorId, productId, deviceClass, callbackHandle,
+            globalHotplugId);
+
+        if (result == LibUsb.SUCCESS)
+        {
+            hotplugCallbacks.put(globalHotplugId,
+                new ImmutablePair<HotplugCallback, Object>(callback, userData));
+
+            // Increment globalHotplugId by one, like the libusb handle.
+            globalHotplugId++;
+        }
+
+        return result;
+    }
+
+    static native int hotplugRegisterCallbackNative(final Context context,
         final int events, final int flags, final short vendorId,
         final short productId, final byte deviceClass,
-        final HotplugCallback callback, final Object userData,
-        final HotplugCallbackHandle callbackHandle);
+        final HotplugCallbackHandle callbackHandle, final long hotplugId);
 
     /**
      * Deregisters a hotplug callback.
@@ -2594,6 +2653,24 @@ public final class LibUsb
      * @param handle
      *            the handle of the callback to deregister
      */
-    public static native void hotplugDeregisterCallback(final Context context,
+    public static void hotplugDeregisterCallback(final Context context,
+        final HotplugCallbackHandle callbackHandle)
+    {
+        final long handle = hotplugDeregisterCallbackNative(context,
+            callbackHandle);
+
+        // When a handle is assigned by a register call, its value is the same
+        // as the one of globalHotplugId at that moment, which is what's used
+        // to identify data in the hotplugCallbacks map.
+        // This is because globalHotplugId pretty much mirrors the behavior of
+        // the handle: integer starting at 1, incremented each time by one.
+        // Problems could arise from concurrency, but are completely avoided by
+        // fully serializing register calls.
+        // As such, we can use the handle value from callbackHandle to
+        // correctly remove the data from the hotplugCallbacks map.
+        hotplugCallbacks.remove(handle);
+    }
+
+    static native long hotplugDeregisterCallbackNative(final Context context,
         final HotplugCallbackHandle callbackHandle);
 }

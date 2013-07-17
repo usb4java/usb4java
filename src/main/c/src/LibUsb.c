@@ -1272,14 +1272,14 @@ static void LIBUSB_CALL triggerPollfdAdded(int fd, short events, void *user_data
 {
     THREAD_BEGIN(env)
 
-    jclass fdcls = (*env)->FindClass(env, "java/io/FileDescriptor");
-    jmethodID constructor = (*env)->GetMethodID(env, fdcls, "<init>", "(I)V");
-    jobject object = (*env)->NewObject(env, fdcls, constructor, fd);
+    jclass fdCls = (*env)->FindClass(env, "java/io/FileDescriptor");
+    jmethodID fdConstructor = (*env)->GetMethodID(env, fdCls, "<init>", "(I)V");
+    jobject fdObject = (*env)->NewObject(env, fdCls, fdConstructor, fd);
 
     jclass cls = (*env)->FindClass(env, PACKAGE_DIR"/LibUsb");
     jmethodID method = (*env)->GetStaticMethodID(env, cls,
         "triggerPollfdAdded", "(Ljava/io/FileDescriptor;IJ)V");
-    (*env)->CallStaticVoidMethod(env, cls, method, object, (jint) events,
+    (*env)->CallStaticVoidMethod(env, cls, method, fdObject, (jint) events,
         (jlong) (intptr_t) user_data);
 
     THREAD_END
@@ -1289,38 +1289,37 @@ static void LIBUSB_CALL triggerPollfdRemoved(int fd, void *user_data)
 {
     THREAD_BEGIN(env)
 
-    jclass fdcls = (*env)->FindClass(env, "java/io/FileDescriptor");
-    jmethodID constructor = (*env)->GetMethodID(env, fdcls, "<init>", "(I)V");
-    jobject object = (*env)->NewObject(env, fdcls, constructor, fd);
+    jclass fdCls = (*env)->FindClass(env, "java/io/FileDescriptor");
+    jmethodID fdConstructor = (*env)->GetMethodID(env, fdCls, "<init>", "(I)V");
+    jobject fdObject = (*env)->NewObject(env, fdCls, fdConstructor, fd);
 
     jclass cls = (*env)->FindClass(env, PACKAGE_DIR"/LibUsb");
     jmethodID method = (*env)->GetStaticMethodID(env, cls,
         "triggerPollfdRemoved", "(Ljava/io/FileDescriptor;J)V");
-    (*env)->CallStaticVoidMethod(env, cls, method, object,
+    (*env)->CallStaticVoidMethod(env, cls, method, fdObject,
         (jlong) (intptr_t) user_data);
 
     THREAD_END
 }
 
 /**
- * void setPollfdNotifiers(Context, long)
+ * void setPollfdNotifiersNative(Context, long)
  */
-JNIEXPORT void JNICALL METHOD_NAME(LibUsb, setPollfdNotifiers)
+JNIEXPORT void JNICALL METHOD_NAME(LibUsb, setPollfdNotifiersNative)
 (
     JNIEnv *env, jclass class, jobject context, jlong context_id
 )
 {
     libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return;
-
     libusb_set_pollfd_notifiers(ctx, &triggerPollfdAdded, &triggerPollfdRemoved,
         (void *) (intptr_t) context_id);
 }
 
 /**
- * void unsetPollfdNotifiers(Context)
+ * void unsetPollfdNotifiersNative(Context)
  */
-JNIEXPORT void JNICALL METHOD_NAME(LibUsb, unsetPollfdNotifiers)
+JNIEXPORT void JNICALL METHOD_NAME(LibUsb, unsetPollfdNotifiersNative)
 (
     JNIEnv *env, jclass class, jobject context
 )
@@ -1409,62 +1408,55 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, cancelTransfer)
     return libusb_cancel_transfer(transfer);
 }
 
-struct hotplug_data
-{
-    jobject callbackObject;
-    jmethodID callbackObjectMethod;
-    jobject callbackUserDataObject;
-};
-
-static int LIBUSB_CALL hotplugCallback(libusb_context *ctx,
+static int LIBUSB_CALL hotplugCallback(libusb_context *context,
     libusb_device *device, libusb_hotplug_event event, void *user_data)
 {
     THREAD_BEGIN(env)
 
-    // TODO: check for return value and free memory appropriately.
+    jobject ctx = wrapContext(env, context);
+    jobject dev = wrapDevice(env, device);
+
+    jclass cls = (*env)->FindClass(env, PACKAGE_DIR"/LibUsb");
+    jmethodID method = (*env)->GetStaticMethodID(env, cls,
+        "hotplugCallback", "(L"PACKAGE_DIR"/Context;L"PACKAGE_DIR"/Device;IJ)I");
+    int result = (*env)->CallStaticIntMethod(env, cls, method, ctx, dev,
+        (jint) event, (jlong) (intptr_t) user_data);
 
     THREAD_END
+
+    return result;
 }
 
 /**
- * int hotplugRegisterCallback(Context, int, int, short, short, byte,
- *     HotplugCallback, Object, HotplugCallbackHandle)
+ * int hotplugRegisterCallbackNative(Context, int, int, short, short, byte,
+ *     HotplugCallbackHandle, long)
  */
-JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, hotplugRegisterCallback)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, hotplugRegisterCallbackNative)
 (
     JNIEnv *env, jclass class, jobject context, jint events, jint flags,
     jshort vendorId, jshort productId, jbyte deviceClass,
-    jobject callback, jobject userData, jobject callbackHandle
+    jobject callbackHandle, jlong hotplugId
 )
 {
     libusb_context *ctx = unwrapContext(env, context);
     if (!ctx && context) return 0;
-    NOT_NULL(env, callback, return 0);
-    if (callbackHandle) {
+
+    if (callbackHandle != NULL)
+    {
         // If callbackHandle is set, the Java object must be fresh/empty.
         NOT_SET(env, callbackHandle, "hotplugCallbackHandleValue", return 0);
     }
 
-    // Allocate memory to hold the references to the callback on the C side.
-    struct hotplug_data *hotplugData = calloc(1, sizeof(*hotplugData));
-    if (!hotplugData)
-    {
-        return LIBUSB_ERROR_NO_MEM;
-    }
-
-    // Setup the needed global references to the callback objects.
-    hotplugData->callbackObject = NULL;
-    hotplugData->callbackObjectMethod = NULL;
-    hotplugData->callbackUserDataObject = userData;
-
     // Register the callback.
-    libusb_hotplug_callback_handle handle = 0;
+    libusb_hotplug_callback_handle handle;
     int result = libusb_hotplug_register_callback(ctx, events, flags,
-        vendorId, productId, deviceClass, &hotplugCallback, hotplugData, &handle);
+        vendorId, productId, deviceClass, &hotplugCallback,
+        (void *) (intptr_t) hotplugId, &handle);
 
     // If callbackHandle is set and registering was successful, we set the handle
     // to the value we've gotten from libusb.
-    if (callbackHandle && (result == LIBUSB_SUCCESS)) {
+    if ((callbackHandle != NULL) && (result == LIBUSB_SUCCESS))
+    {
         setHotplugCallbackHandle(env, handle, callbackHandle);
     }
 
@@ -1472,22 +1464,25 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, hotplugRegisterCallback)
 }
 
 /*
- * void hotplugDeregisterCallback(Context, HotplugCallbackHandle)
+ * long hotplugDeregisterCallbackNative(Context, HotplugCallbackHandle)
  */
-JNIEXPORT void JNICALL METHOD_NAME(LibUsb, hotplugDeregisterCallback)
+JNIEXPORT jlong JNICALL METHOD_NAME(LibUsb, hotplugDeregisterCallbackNative)
 (
     JNIEnv *env, jclass class, jobject context, jobject callbackHandle
 )
 {
     libusb_context *ctx = unwrapContext(env, context);
-    if (!ctx && context) return;
-    NOT_NULL(env, callbackHandle, return);
+    if (!ctx && context) return 0;
+    NOT_NULL(env, callbackHandle, return 0);
 
     libusb_hotplug_callback_handle handle =
         unwrapHotplugCallbackHandle(env, callbackHandle);
-    if (!handle) return;
+    if (!handle) return 0;
 
-
+    // Deregister the callback.
+    libusb_hotplug_deregister_callback(ctx, handle);
 
     resetHotplugCallbackHandle(env, callbackHandle);
+
+    return handle;
 }
