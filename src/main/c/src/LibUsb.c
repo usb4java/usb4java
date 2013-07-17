@@ -1276,11 +1276,8 @@ static void LIBUSB_CALL triggerPollfdAdded(int fd, short events, void *user_data
     jmethodID fdConstructor = (*env)->GetMethodID(env, fdCls, "<init>", "(I)V");
     jobject fdObject = (*env)->NewObject(env, fdCls, fdConstructor, fd);
 
-    jclass cls = (*env)->FindClass(env, PACKAGE_DIR"/LibUsb");
-    jmethodID method = (*env)->GetStaticMethodID(env, cls,
-        "triggerPollfdAdded", "(Ljava/io/FileDescriptor;IJ)V");
-    (*env)->CallStaticVoidMethod(env, cls, method, fdObject, (jint) events,
-        (jlong) (intptr_t) user_data);
+    (*env)->CallStaticVoidMethod(env, jClassLibUsb, jMethodTriggerPollfdAdded,
+        fdObject, (jint) events, (jlong) (intptr_t) user_data);
 
     THREAD_END
 }
@@ -1293,11 +1290,8 @@ static void LIBUSB_CALL triggerPollfdRemoved(int fd, void *user_data)
     jmethodID fdConstructor = (*env)->GetMethodID(env, fdCls, "<init>", "(I)V");
     jobject fdObject = (*env)->NewObject(env, fdCls, fdConstructor, fd);
 
-    jclass cls = (*env)->FindClass(env, PACKAGE_DIR"/LibUsb");
-    jmethodID method = (*env)->GetStaticMethodID(env, cls,
-        "triggerPollfdRemoved", "(Ljava/io/FileDescriptor;J)V");
-    (*env)->CallStaticVoidMethod(env, cls, method, fdObject,
-        (jlong) (intptr_t) user_data);
+    (*env)->CallStaticVoidMethod(env, jClassLibUsb, jMethodTriggerPollfdRemoved,
+        fdObject, (jlong) (intptr_t) user_data);
 
     THREAD_END
 }
@@ -1416,10 +1410,8 @@ static int LIBUSB_CALL hotplugCallback(libusb_context *context,
     jobject ctx = wrapContext(env, context);
     jobject dev = wrapDevice(env, device);
 
-    jclass cls = (*env)->FindClass(env, PACKAGE_DIR"/LibUsb");
-    jmethodID method = (*env)->GetStaticMethodID(env, cls,
-        "hotplugCallback", "(L"PACKAGE_DIR"/Context;L"PACKAGE_DIR"/Device;IJ)I");
-    int result = (*env)->CallStaticIntMethod(env, cls, method, ctx, dev,
+    int result = (*env)->CallStaticIntMethod(env,
+        jClassLibUsb, jMethodHotplugCallback, ctx, dev,
         (jint) event, (jlong) (intptr_t) user_data);
 
     THREAD_END

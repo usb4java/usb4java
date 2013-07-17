@@ -77,7 +77,7 @@
 
 #define THREAD_BEGIN(ENV) \
     JNIEnv *ENV; \
-    jint getEnvResult = (*jvm)->GetEnv(jvm, (void **) &ENV, JNI_VERSION_1_4); \
+    jint getEnvResult = (*jvm)->GetEnv(jvm, (void **) &ENV, JNI_VERSION_1_6); \
     if (getEnvResult == JNI_EDETACHED) \
         (*jvm)->AttachCurrentThread(jvm, (void**) &ENV, NULL);
 
@@ -85,7 +85,14 @@
     if (getEnvResult == JNI_EDETACHED) \
         (*jvm)->DetachCurrentThread(jvm);
 
+// JVM access.
 extern JavaVM *jvm;
+
+// Callback caching.
+extern jclass jClassLibUsb;
+extern jmethodID jMethodTriggerPollfdAdded;
+extern jmethodID jMethodTriggerPollfdRemoved;
+extern jmethodID jMethodHotplugCallback;
 
 jint illegalArgument(JNIEnv *env, const char *message);
 jint illegalState(JNIEnv *env, const char *message);
