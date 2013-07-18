@@ -30,6 +30,14 @@ build()
 
     DISTDIR="$SRCDIR/../resources/de/ailis/usb4java/libusb/$OS-$ARCH"
 
+    # Only Windows needs the shared library, the others want static ones.
+    if [ "$OS" = "windows"  ]
+    then
+        LIB_CONFIG="--disable-static --enable-shared"
+    else
+        LIB_CONFIG="--enable-static --disable-shared"
+    fi
+
     # Clean up
     rm -rf "$TMPDIR"
     rm -rf "$DISTDIR"
@@ -63,8 +71,7 @@ build()
         cd "$UDEV_NAME"
         LIBS="$UDEV_LIBS" \
         CFLAGS="$CFLAGS $UDEV_CFLAGS" \
-        ./configure --prefix="$TMPDIR" --host="$HOST" --with-pic --enable-static \
-            --disable-shared $UDEV_CONFIG
+        ./configure --prefix="$TMPDIR" --host="$HOST" --with-pic $LIB_CONFIG $UDEV_CONFIG
         make
         make install-strip
 
@@ -97,8 +104,7 @@ build()
     PKG_CONFIG_PATH="$TMPDIR/lib/pkgconfig" \
     LIBS="$LIBUSB_LIBS" \
     CFLAGS="$CFLAGS $LIBUSB_CFLAGS" \
-    ./configure --prefix="$TMPDIR" --host="$HOST" --with-pic --enable-static \
-        --disable-shared $LIBUSB_CONFIG
+    ./configure --prefix="$TMPDIR" --host="$HOST" --with-pic $LIB_CONFIG $LIBUSB_CONFIG
     make
     make install-strip
 
