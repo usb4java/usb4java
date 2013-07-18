@@ -9,9 +9,8 @@ set -e
 OS="linux"
 ARCH="x86_64"
 HOST="$ARCH-$OS-gnu"
-CFLAGS="-m64 -Wl,--wrap=memcpy"
-LIBUSB_CONFIG="--disable-shared --disable-udev"
-USB4JAVA_LIBS="-lrt"
-USB4JAVA_CFLAGS="-DWRAP_MEMCPY"
+CFLAGS="-m64 -O2"
+UDEV_SUPPORT="yes"
+#USB4JAVA_CFLAGS="-Wl,--wrap=memcpy -DWRAP_MEMCPY"
 
 build

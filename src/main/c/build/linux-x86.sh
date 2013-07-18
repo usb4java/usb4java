@@ -9,8 +9,7 @@ set -e
 OS="linux"
 ARCH="x86"
 HOST="$ARCH-$OS-gnu"
-CFLAGS="-m32"
-LIBUSB_CONFIG="--disable-shared --disable-udev"
-USB4JAVA_LIBS="-lrt"
+CFLAGS="-m32 -O2"
+UDEV_SUPPORT="yes"
 
 build

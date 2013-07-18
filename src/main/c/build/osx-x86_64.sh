@@ -9,8 +9,8 @@ set -e
 
 OS="osx"
 ARCH="x86_64"
-CFLAGS="-arch x86_64"
-LIBUSB_CONFIG="--disable-shared"
+HOST="$ARCH-apple-darwin"
+CFLAGS="-arch x86_64 -O2"
 USB4JAVA_LIBS="-lobjc -Wl,-framework,IOKit -Wl,-framework,CoreFoundation"
 
 build
