@@ -2621,9 +2621,10 @@ public final class LibUsb
             throw new IllegalArgumentException("callback must not be null");
         }
 
+        // Mask the values for conversion to int in libusb API.
         final int result = hotplugRegisterCallbackNative(context, events,
-            flags, vendorId, productId, deviceClass, callbackHandle,
-            globalHotplugId);
+            flags, (vendorId & 0xFFFF), (productId & 0xFFFF),
+            (deviceClass & 0xFF), callbackHandle, globalHotplugId);
 
         if (result == LibUsb.SUCCESS)
         {
@@ -2638,8 +2639,8 @@ public final class LibUsb
     }
 
     static native int hotplugRegisterCallbackNative(final Context context,
-        final int events, final int flags, final short vendorId,
-        final short productId, final byte deviceClass,
+        final int events, final int flags, final int vendorId,
+        final int productId, final int deviceClass,
         final HotplugCallbackHandle callbackHandle, final long hotplugId);
 
     /**

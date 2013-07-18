@@ -1420,13 +1420,13 @@ static int LIBUSB_CALL hotplugCallback(libusb_context *context,
 }
 
 /**
- * int hotplugRegisterCallbackNative(Context, int, int, short, short, byte,
+ * int hotplugRegisterCallbackNative(Context, int, int, int, int, int,
  *     HotplugCallbackHandle, long)
  */
 JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, hotplugRegisterCallbackNative)
 (
     JNIEnv *env, jclass class, jobject context, jint events, jint flags,
-    jshort vendorId, jshort productId, jbyte deviceClass,
+    jint vendorId, jint productId, jint deviceClass,
     jobject callbackHandle, jlong hotplugId
 )
 {
