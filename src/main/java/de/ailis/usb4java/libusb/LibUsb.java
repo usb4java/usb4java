@@ -2622,9 +2622,15 @@ public final class LibUsb
         }
 
         // Mask the values for conversion to int in libusb API.
-        final int result = hotplugRegisterCallbackNative(context, events,
-            flags, (vendorId & 0xFFFF), (productId & 0xFFFF),
-            (deviceClass & 0xFF), callbackHandle, globalHotplugId);
+        final int result = hotplugRegisterCallbackNative(
+            context, events, flags,
+            (vendorId == LibUsb.HOTPLUG_MATCH_ANY) ? (LibUsb.HOTPLUG_MATCH_ANY)
+                : (vendorId & 0xFFFF),
+            (productId == LibUsb.HOTPLUG_MATCH_ANY) ? (LibUsb.HOTPLUG_MATCH_ANY)
+                : (productId & 0xFFFF),
+            (deviceClass == LibUsb.HOTPLUG_MATCH_ANY) ? (LibUsb.HOTPLUG_MATCH_ANY)
+                : (deviceClass & 0xFF),
+            callbackHandle, globalHotplugId);
 
         if (result == LibUsb.SUCCESS)
         {
