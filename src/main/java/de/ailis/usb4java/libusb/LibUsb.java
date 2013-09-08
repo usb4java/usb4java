@@ -804,8 +804,8 @@ public final class LibUsb
      *         array is too small
      */
     @Deprecated
-    public static int getPortPath(final Context context, final Device device,
-        final ByteBuffer path)
+    public static int getPortPath(@SuppressWarnings("unused") final Context context,
+        final Device device, final ByteBuffer path)
     {
         return getPortNumbers(device, path);
     }
