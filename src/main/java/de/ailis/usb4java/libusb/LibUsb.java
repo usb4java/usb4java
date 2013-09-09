@@ -614,7 +614,7 @@ public final class LibUsb
     // Wildcard matching for hotplug events
 
     /** Match any vendorId or productId or deviceClass. */
-    public static final byte HOTPLUG_MATCH_ANY = -1;
+    public static final int HOTPLUG_MATCH_ANY = -1;
 
     /**
      * Hotplug callbacks (to correctly manage calls and additional data).
@@ -2612,7 +2612,7 @@ public final class LibUsb
      */
     public static synchronized int hotplugRegisterCallback(
         final Context context, final int events, final int flags,
-        final short vendorId, final short productId, final byte deviceClass,
+        final int vendorId, final int productId, final int deviceClass,
         final HotplugCallback callback, final Object userData,
         final HotplugCallbackHandle callbackHandle)
     {
