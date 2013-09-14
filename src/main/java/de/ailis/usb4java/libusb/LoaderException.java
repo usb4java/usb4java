@@ -7,7 +7,7 @@ package de.ailis.usb4java.libusb;
 
 /**
  * Thrown when JNI library could not be loaded.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class LoaderException extends RuntimeException
@@ -17,7 +17,7 @@ public final class LoaderException extends RuntimeException
 
     /**
      * Constructor.
-     * 
+     *
      * @param message
      *            The error message.
      */
@@ -28,7 +28,7 @@ public final class LoaderException extends RuntimeException
 
     /**
      * Constructor.
-     * 
+     *
      * @param message
      *            The error message.
      * @param cause

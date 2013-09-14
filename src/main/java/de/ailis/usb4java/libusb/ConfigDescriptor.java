@@ -1,9 +1,9 @@
 /*
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
- * 
- * Based on libusb <http://www.libusb.org/>:  
- * 
+ *
+ * Based on libusb <http://www.libusb.org/>:
+ *
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
  * Copyright 2010-2012 Peter Stuge <peter@stuge.se>
@@ -29,10 +29,10 @@ import de.ailis.usb4java.utils.DescriptorUtils;
 
 /**
  * A structure representing the standard USB configuration descriptor.
- * 
+ *
  * This descriptor is documented in section 9.6.3 of the USB 3.0 specification.
  * All multiple-byte fields are represented in host-endian format.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class ConfigDescriptor implements UsbConfigurationDescriptor
@@ -51,7 +51,7 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
 
     /**
      * Returns the native pointer.
-     * 
+     *
      * @return The native pointer.
      */
     public long getPointer()
@@ -85,103 +85,108 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
 
     /**
      * Returns the array with interfaces supported by this configuration.
-     * 
+     *
      * @return The array with interfaces.
      */
     public native Interface[] iface();
 
     /**
      * Extra descriptors.
-     * 
+     *
      * If libusb encounters unknown interface descriptors, it will store them
      * here, should you wish to parse them.
-     * 
+     *
      * @return The extra descriptors.
      */
     public native ByteBuffer extra();
 
     /**
      * Length of the extra descriptors, in bytes.
-     * 
+     *
      * @return The extra descriptors length.
      */
     public native int extraLength();
 
     /**
      * Returns a dump of this descriptor.
-     * 
+     *
      * @return The descriptor dump.
      */
     public String dump()
     {
-        return dump(null);
-    }
-
-    /**
-     * Returns a dump of this descriptor.
-     * 
-     * @param handle
-     *            The USB device handle for resolving string descriptors. If
-     *            null then no strings are resolved.
-     * @return The descriptor dump.
-     */
-    public String dump(final DeviceHandle handle)
-    {
         final StringBuilder builder = new StringBuilder();
-        builder
-            .append(String.format("%s"
-                + "  extralen %17d%n"
-                + "  extra:%n"
-                + "%s%n",
-                DescriptorUtils.dump(this),
-                extraLength(),
-                DescriptorUtils.dump(extra()).replaceAll("(?m)^", "    ")));
-        for (final Interface descriptor: iface())
-        {
-            builder.append(descriptor.dump(handle)
-                .replaceAll("(?m)^", "  "));
-        }
-        return builder.toString();
-    }
 
-    @Override
-    public boolean equals(final Object obj)
-    {
-        if (obj == null) return false;
-        if (obj == this) return true;
-        if (obj.getClass() != getClass()) return false;
-        final ConfigDescriptor other = (ConfigDescriptor) obj;
-        return new EqualsBuilder()
-            .append(bDescriptorType(), other.bDescriptorType())
-            .append(bLength(), other.bLength())
-            .append(bConfigurationValue(), other.bConfigurationValue())
-            .append(bmAttributes(), other.bmAttributes())
-            .append(bNumInterfaces(), other.bNumInterfaces())
-            .append(iConfiguration(), other.iConfiguration())
-            .append(bMaxPower(), other.bMaxPower())
-            .append(wTotalLength(), other.wTotalLength()).isEquals();
+        builder.append(String.format(
+            "%s%n" +
+            "  extralen %17d%n" +
+            "  extra:%n" +
+            "%s",
+            DescriptorUtils.dump(this),
+            this.extraLength(),
+            DescriptorUtils.dump(this.extra()).replaceAll("(?m)^", "    ")));
+
+        for (final Interface iface : this.iface())
+        {
+            builder.append("%n" + iface.dump());
+        }
+
+        return builder.toString();
     }
 
     @Override
     public int hashCode()
     {
         return new HashCodeBuilder()
-            .append(bLength())
-            .append(bDescriptorType())
-            .append(wTotalLength())
-            .append(bNumInterfaces())
-            .append(bConfigurationValue())
-            .append(iConfiguration())
-            .append(bmAttributes())
-            .append(bMaxPower())
-            .append(extra())
-            .append(extraLength())
+            .append(this.bLength())
+            .append(this.bDescriptorType())
+            .append(this.wTotalLength())
+            .append(this.bNumInterfaces())
+            .append(this.bConfigurationValue())
+            .append(this.iConfiguration())
+            .append(this.bmAttributes())
+            .append(this.bMaxPower())
+            .append(this.iface())
+            .append(this.extra())
+            .append(this.extraLength())
             .toHashCode();
+    }
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (this.getClass() != obj.getClass())
+        {
+            return false;
+        }
+
+        final ConfigDescriptor other = (ConfigDescriptor) obj;
+
+        return new EqualsBuilder()
+            .append(this.bLength(), other.bLength())
+            .append(this.bDescriptorType(), other.bDescriptorType())
+            .append(this.wTotalLength(), other.wTotalLength())
+            .append(this.bNumInterfaces(), other.bNumInterfaces())
+            .append(this.bConfigurationValue(), other.bConfigurationValue())
+            .append(this.iConfiguration(), other.iConfiguration())
+            .append(this.bmAttributes(), other.bmAttributes())
+            .append(this.bMaxPower(), other.bMaxPower())
+            .append(this.iface(), other.iface())
+            .append(this.extra(), other.extra())
+            .append(this.extraLength(), other.extraLength())
+            .isEquals();
     }
 
     @Override
     public String toString()
     {
-        return dump();
+        return this.dump();
     }
 }

@@ -1,9 +1,9 @@
 /*
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
- * 
- * Based on libusb <http://www.libusb.org/>:  
- * 
+ *
+ * Based on libusb <http://www.libusb.org/>:
+ *
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
  * Copyright 2010-2012 Peter Stuge <peter@stuge.se>
@@ -22,7 +22,7 @@ import java.io.FileDescriptor;
 
 /**
  * Listener interface for pollfd notifications.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public interface PollfdListener
@@ -30,7 +30,7 @@ public interface PollfdListener
     /**
      * Callback function, invoked when a new file descriptor should be added to
      * the set of file descriptors monitored for events.
-     * 
+     *
      * @param fd
      *            the new file descriptor.
      * @param events
@@ -43,10 +43,10 @@ public interface PollfdListener
     /**
      * Callback function, invoked when a file descriptor should be removed from
      * the set of file descriptors being monitored for events.
-     * 
+     *
      * After returning from this callback, do not use that file descriptor
      * again.
-     * 
+     *
      * @param fd
      *            The file descriptor to stop monitoring.
      * @param userData

@@ -1,2 +1,0 @@
-* Implement hotplug support.
-* Implement asynchronous communication in low-level API.

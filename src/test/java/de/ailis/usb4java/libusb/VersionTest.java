@@ -13,7 +13,7 @@ import org.junit.Test;
 
 /**
  * Tests the {@link Version} class.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public class VersionTest
@@ -31,19 +31,18 @@ public class VersionTest
         LibUsb.init(null);
         this.version = new Version();
     }
-    
+
     /**
      * Tear down test.
      */
-    @After    
+    @After
     public void tearDown()
     {
         LibUsb.exit(null);
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link Version#major()}
+     * Tests uninitialized access to {@link Version#major()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedMajor()
@@ -53,8 +52,7 @@ public class VersionTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link Version#minor()}
+     * Tests uninitialized access to {@link Version#minor()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedMinor()
@@ -64,8 +62,7 @@ public class VersionTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link Version#micro()}
+     * Tests uninitialized access to {@link Version#micro()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedMicro()
@@ -75,8 +72,7 @@ public class VersionTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link Version#rc()}
+     * Tests uninitialized access to {@link Version#rc()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedRc()

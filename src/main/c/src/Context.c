@@ -5,9 +5,14 @@
 
 #include "Context.h"
 
-void setContext(JNIEnv* env, libusb_context* context, jobject object)
+void setContext(JNIEnv* env, const libusb_context* context, jobject object)
 {
     SET_POINTER(env, context, object, "contextPointer");
+}
+
+jobject wrapContext(JNIEnv* env, const libusb_context* context)
+{
+    WRAP_POINTER(env, context, "Context", "contextPointer");
 }
 
 libusb_context* unwrapContext(JNIEnv* env, jobject context)

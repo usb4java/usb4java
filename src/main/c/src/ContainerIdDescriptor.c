@@ -6,7 +6,7 @@
 #include "ContainerIdDescriptor.h"
 
 void setContainerIdDescriptor(JNIEnv* env,
-    struct libusb_container_id_descriptor* descriptor, jobject object)
+    const struct libusb_container_id_descriptor* descriptor, jobject object)
 {
     SET_POINTER(env, descriptor, object, "containerIdDescriptorPointer");
 }
@@ -35,7 +35,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(ContainerIdDescriptor, bLength)
     struct libusb_container_id_descriptor *descriptor =
         unwrapContainerIdDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bLength;
+    return (jbyte) descriptor->bLength;
 }
 
 /**
@@ -49,7 +49,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(ContainerIdDescriptor, bDescriptorType)
     struct libusb_container_id_descriptor *descriptor =
         unwrapContainerIdDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bDescriptorType;
+    return (jbyte) descriptor->bDescriptorType;
 }
 
 /**
@@ -63,7 +63,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(ContainerIdDescriptor, bDevCapabilityType)
     struct libusb_container_id_descriptor *descriptor =
         unwrapContainerIdDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bDevCapabilityType;
+    return (jbyte) descriptor->bDevCapabilityType;
 }
 
 /**
@@ -77,7 +77,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(ContainerIdDescriptor, bReserved)
     struct libusb_container_id_descriptor *descriptor =
         unwrapContainerIdDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bReserved;
+    return (jbyte) descriptor->bReserved;
 }
 
 /**
@@ -91,6 +91,5 @@ JNIEXPORT jobject JNICALL METHOD_NAME(ContainerIdDescriptor, containerId)
     struct libusb_container_id_descriptor *descriptor =
         unwrapContainerIdDescriptor(env, this);
     if (!descriptor) return NULL;
-    return (*env)->NewDirectByteBuffer(env, (void *) descriptor->ContainerID,
-        16);
+    return NewDirectReadOnlyByteBuffer(env, descriptor->ContainerID, 16);
 }

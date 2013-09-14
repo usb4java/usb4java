@@ -13,7 +13,7 @@ import org.junit.Test;
 
 /**
  * Tests the {@link BosDevCapabilityDescriptor} class.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public class BosDevCapabilityDescriptorTest
@@ -31,11 +31,11 @@ public class BosDevCapabilityDescriptorTest
         LibUsb.init(null);
         this.descriptor = new BosDevCapabilityDescriptor();
     }
-    
+
     /**
      * Tear down test.
      */
-    @After    
+    @After
     public void tearDown()
     {
         LibUsb.exit(null);

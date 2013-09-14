@@ -13,7 +13,7 @@ import org.junit.Test;
 
 /**
  * Tests the {@link SsEndpointCompanionDescriptor} class.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public class SsEndpointCompanionDescriptorTest
@@ -31,11 +31,11 @@ public class SsEndpointCompanionDescriptorTest
         LibUsb.init(null);
         this.descriptor = new SsEndpointCompanionDescriptor();
     }
-    
+
     /**
      * Tear down test.
      */
-    @After    
+    @After
     public void tearDown()
     {
         LibUsb.exit(null);

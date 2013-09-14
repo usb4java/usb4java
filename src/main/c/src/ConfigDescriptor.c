@@ -7,7 +7,7 @@
 #include "Interface.h"
 
 void setConfigDescriptor(JNIEnv* env,
-    struct libusb_config_descriptor* descriptor, jobject object)
+    const struct libusb_config_descriptor* descriptor, jobject object)
 {
     SET_POINTER(env, descriptor, object, "configDescriptorPointer");
 }
@@ -35,7 +35,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(ConfigDescriptor, bLength)
     struct libusb_config_descriptor *descriptor =
         unwrapConfigDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bLength;
+    return (jbyte) descriptor->bLength;
 }
 
 /**
@@ -49,7 +49,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(ConfigDescriptor, bDescriptorType)
     struct libusb_config_descriptor *descriptor =
         unwrapConfigDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bDescriptorType;
+    return (jbyte) descriptor->bDescriptorType;
 }
 
 /**
@@ -63,7 +63,7 @@ JNIEXPORT jshort JNICALL METHOD_NAME(ConfigDescriptor, wTotalLength)
     struct libusb_config_descriptor *descriptor =
         unwrapConfigDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->wTotalLength;
+    return (jshort) descriptor->wTotalLength;
 }
 
 /**
@@ -77,7 +77,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(ConfigDescriptor, bNumInterfaces)
     struct libusb_config_descriptor *descriptor =
         unwrapConfigDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bNumInterfaces;
+    return (jbyte) descriptor->bNumInterfaces;
 }
 
 /**
@@ -91,7 +91,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(ConfigDescriptor, bConfigurationValue)
     struct libusb_config_descriptor *descriptor =
         unwrapConfigDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bConfigurationValue;
+    return (jbyte) descriptor->bConfigurationValue;
 }
 
 /**
@@ -105,7 +105,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(ConfigDescriptor, iConfiguration)
     struct libusb_config_descriptor *descriptor =
         unwrapConfigDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->iConfiguration;
+    return (jbyte) descriptor->iConfiguration;
 }
 
 /**
@@ -119,7 +119,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(ConfigDescriptor, bmAttributes)
     struct libusb_config_descriptor *descriptor =
         unwrapConfigDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bmAttributes;
+    return (jbyte) descriptor->bmAttributes;
 }
 
 /**
@@ -133,7 +133,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(ConfigDescriptor, bMaxPower)
     struct libusb_config_descriptor *descriptor =
         unwrapConfigDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->MaxPower;
+    return (jbyte) descriptor->MaxPower;
 }
 
 /**
@@ -162,8 +162,7 @@ JNIEXPORT jobject JNICALL METHOD_NAME(ConfigDescriptor, extra)
     struct libusb_config_descriptor *descriptor =
         unwrapConfigDescriptor(env, this);
     if (!descriptor) return NULL;
-    return (*env)->NewDirectByteBuffer(env, (void *) descriptor->extra,
-        descriptor->extra_length);
+    return NewDirectReadOnlyByteBuffer(env, descriptor->extra, descriptor->extra_length);
 }
 
 /**

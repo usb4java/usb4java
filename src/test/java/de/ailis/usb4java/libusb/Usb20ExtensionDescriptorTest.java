@@ -13,7 +13,7 @@ import org.junit.Test;
 
 /**
  * Tests the {@link Usb20ExtensionDescriptor} class.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public class Usb20ExtensionDescriptorTest
@@ -31,19 +31,18 @@ public class Usb20ExtensionDescriptorTest
         LibUsb.init(null);
         this.descriptor = new Usb20ExtensionDescriptor();
     }
-    
+
     /**
      * Tear down test.
      */
-    @After    
+    @After
     public void tearDown()
     {
         LibUsb.exit(null);
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link Usb20ExtensionDescriptor#bLength()}
+     * Tests uninitialized access to {@link Usb20ExtensionDescriptor#bLength()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedLength()

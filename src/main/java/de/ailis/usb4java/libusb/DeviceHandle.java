@@ -1,9 +1,9 @@
 /*
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
- * 
- * Based on libusb <http://www.libusb.org/>:  
- * 
+ *
+ * Based on libusb <http://www.libusb.org/>:
+ *
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
  * Copyright 2010-2012 Peter Stuge <peter@stuge.se>
@@ -18,17 +18,15 @@
 
 package de.ailis.usb4java.libusb;
 
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 /**
  * Structure representing a handle on a USB device.
- * 
+ *
  * This is an opaque type for which you are only ever provided with a pointer,
  * usually originating from {@link LibUsb#open(Device, DeviceHandle)}.
- * 
+ *
  * A device handle is used to perform I/O and other operations. When finished
  * with a device handle, you should call {@link LibUsb#close(DeviceHandle)}.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class DeviceHandle
@@ -48,7 +46,7 @@ public final class DeviceHandle
 
     /**
      * Returns the native pointer to the device handle structure.
-     * 
+     *
      * @return The native pointer to the device handle structure.
      */
     public long getPointer()
@@ -59,22 +57,40 @@ public final class DeviceHandle
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.deviceHandlePointer)
-            .toHashCode();
+        final int prime = 31;
+        int result = 1;
+        result = (prime * result)
+            + (int) (this.deviceHandlePointer ^ (this.deviceHandlePointer >>> 32));
+        return result;
     }
 
     @Override
     public boolean equals(final Object obj)
     {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (this.getClass() != obj.getClass())
+        {
+            return false;
+        }
         final DeviceHandle other = (DeviceHandle) obj;
-        return this.deviceHandlePointer == other.deviceHandlePointer;
+        if (this.deviceHandlePointer != other.deviceHandlePointer)
+        {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString()
     {
-        return String.format("libusb handle 0x%x", this.deviceHandlePointer);
+        return String.format("libusb device handle 0x%x",
+            this.deviceHandlePointer);
     }
 }
