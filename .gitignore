@@ -2,4 +2,6 @@ target
 .settings
 .classpath
 .project
+.idea
+*.iml
 hs_err_*.log
