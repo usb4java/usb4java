@@ -8,7 +8,8 @@
 
 #include "usb4java.h"
 
-void setContext(JNIEnv*, libusb_context*, jobject);
+void setContext(JNIEnv*, const libusb_context*, jobject);
+jobject wrapContext(JNIEnv*, const libusb_context*);
 libusb_context* unwrapContext(JNIEnv*, jobject);
 void resetContext(JNIEnv*, jobject);
 

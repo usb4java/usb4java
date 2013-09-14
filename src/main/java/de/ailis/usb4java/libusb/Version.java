@@ -1,9 +1,9 @@
 /*
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
- * 
- * Based on libusb <http://www.libusb.org/>:  
- * 
+ *
+ * Based on libusb <http://www.libusb.org/>:
+ *
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
  * Copyright 2010-2012 Peter Stuge <peter@stuge.se>
@@ -24,14 +24,14 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * Structure providing the version of the libusb runtime.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class Version implements Comparable<Version>
 {
     /** The native pointer to the version structure. */
-    private long pointer;
-    
+    private long versionPointer;
+
     /**
      * Package-private constructor to prevent manual instantiation. An instance
      * is only returned by the JNI method {@link LibUsb#getVersion()}.
@@ -43,77 +43,113 @@ public final class Version implements Comparable<Version>
 
     /**
      * Returns the native pointer.
-     * 
+     *
      * @return The native pointer.
      */
     public long getPointer()
     {
-        return this.pointer;
+        return this.versionPointer;
     }
 
     /**
      * Returns the library major version.
-     * 
+     *
      * @return The library major version.
      */
     public native int major();
 
     /**
      * Returns the library minor version.
-     * 
+     *
      * @return The library minor version.
      */
     public native int minor();
 
     /**
      * Returns the library micro version.
-     * 
+     *
      * @return The library micro version.
      */
     public native int micro();
 
     /**
+     * Returns the library nano version.
+     *
+     * @return The library nano version.
+     */
+    public native int nano();
+
+    /**
      * Returns the release candidate suffix string, e.g. "-rc4".
-     * 
+     *
      * @return The release candidate suffix string.
      */
     public native String rc();
 
     @Override
-    public String toString()
-    {
-        return major() + "." + minor() + "." + micro() + rc();
-    }
-
-    @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.pointer).toHashCode();
+        return new HashCodeBuilder()
+            .append(this.major())
+            .append(this.minor())
+            .append(this.micro())
+            .append(this.nano())
+            .append(this.rc())
+            .toHashCode();
     }
 
     @Override
     public boolean equals(final Object obj)
     {
-        if (obj == null) return false;
-        if (obj == this) return true;
-        if (obj.getClass() != getClass()) return false;
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (this.getClass() != obj.getClass())
+        {
+            return false;
+        }
+
         final Version other = (Version) obj;
+
         return new EqualsBuilder()
-            .append(major(), other.major())
-            .append(minor(), other.minor())
-            .append(micro(), other.micro())
-            .append(rc(), other.rc())
+            .append(this.major(), other.major())
+            .append(this.minor(), other.minor())
+            .append(this.micro(), other.micro())
+            .append(this.nano(), other.nano())
+            .append(this.rc(), other.rc())
             .isEquals();
     }
 
     @Override
     public int compareTo(final Version other)
     {
+        if (this == other)
+        {
+            return 0;
+        }
+        if (other == null)
+        {
+            return 1;
+        }
+
         return new CompareToBuilder()
-            .append(major(), other.major())
-            .append(minor(), other.minor())
-            .append(micro(), other.micro())
-            .append(rc(), other.rc())
+            .append(this.major(), other.major())
+            .append(this.minor(), other.minor())
+            .append(this.micro(), other.micro())
+            .append(this.nano(), other.nano())
+            .append(this.rc(), other.rc())
             .toComparison();
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.major() + "." + this.minor() + "." + this.micro() + "."
+            + this.nano() + this.rc();
     }
 }

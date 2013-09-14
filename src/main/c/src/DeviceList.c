@@ -6,12 +6,12 @@
 #include "DeviceList.h"
 #include "Device.h"
 
-void setDeviceList(JNIEnv* env, libusb_device** list, int size, jobject object)
+void setDeviceList(JNIEnv* env, libusb_device* const *list, jint size, jobject object)
 {
     SET_POINTER(env, list, object, "deviceListPointer");
 
-    jclass cls = (*env)->GetObjectClass(env, object);
-    jfieldID field = (*env)->GetFieldID(env, cls, "size", "I");
+    // We already have the class from the previous call.
+    field = (*env)->GetFieldID(env, cls, "size", "I");
     (*env)->SetIntField(env, object, field, size);
 }
 
@@ -23,6 +23,11 @@ libusb_device** unwrapDeviceList(JNIEnv* env, jobject list)
 void resetDeviceList(JNIEnv* env, jobject obj)
 {
     RESET_POINTER(env, obj, "deviceListPointer");
+
+    // We already have the class from the previous call.
+    // Reset size field to zero too.
+    field = (*env)->GetFieldID(env, cls, "size", "I");
+    (*env)->SetIntField(env, obj, field, 0);
 }
 
 /**
@@ -33,9 +38,13 @@ JNIEXPORT jobject JNICALL METHOD_NAME(DeviceList, get)
     JNIEnv *env, jobject this, jint index
 )
 {
+    libusb_device* const *list = unwrapDeviceList(env, this);
+    if (!list) return NULL;
+
     jclass cls = (*env)->GetObjectClass(env, this);
     jfieldID field = (*env)->GetFieldID(env, cls, "size", "I");
     int size = (*env)->GetIntField(env, this, field);
     if (index < 0 || index >= size) return NULL;
-    return wrapDevice(env, unwrapDeviceList(env, this)[index]);
+
+    return wrapDevice(env, list[index]);
 }

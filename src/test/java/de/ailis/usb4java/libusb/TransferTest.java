@@ -21,7 +21,7 @@ import org.junit.Test;
 
 /**
  * Tests the {@link Transfer} class.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public class TransferTest
@@ -40,7 +40,7 @@ public class TransferTest
         {
             LibUsb.init(this.context);
         }
-        catch (Throwable e)
+        catch (final Throwable e)
         {
             this.context = null;
         }
@@ -52,7 +52,10 @@ public class TransferTest
     @After
     public void tearDown()
     {
-        if (this.context != null) LibUsb.exit(this.context);
+        if (this.context != null)
+        {
+            LibUsb.exit(this.context);
+        }
     }
 
     /**
@@ -62,7 +65,7 @@ public class TransferTest
     public void testAllocAndFree()
     {
         assumeUsbTestsEnabled();
-        Transfer transfer = LibUsb.allocTransfer(0);
+        final Transfer transfer = LibUsb.allocTransfer(0);
         assertNotNull(transfer);
         LibUsb.freeTransfer(transfer);
 
@@ -71,7 +74,7 @@ public class TransferTest
             LibUsb.freeTransfer(transfer);
             fail("Double-free should throw IllegalStateException");
         }
-        catch (IllegalStateException e)
+        catch (final IllegalStateException e)
         {
             // Expected behavior
         }
@@ -79,22 +82,22 @@ public class TransferTest
 
     /**
      * Sets the device handle pointer via reflection.
-     * 
+     *
      * @param handle
      *            The device handle pointer.
      * @param pointer
      *            The pointer to set.
      */
-    private void setPointer(DeviceHandle handle, long pointer)
+    private void setPointer(final DeviceHandle handle, final long pointer)
     {
         try
         {
-            Field field =
-                DeviceHandle.class.getDeclaredField("deviceHandlePointer");
+            final Field field = DeviceHandle.class
+                .getDeclaredField("deviceHandlePointer");
             field.setAccessible(true);
             field.set(handle, pointer);
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             throw new RuntimeException(e.toString(), e);
         }
@@ -108,70 +111,70 @@ public class TransferTest
     public void testDevHandle()
     {
         assumeUsbTestsEnabled();
-        Transfer transfer = LibUsb.allocTransfer(0);
-        DeviceHandle handle = new DeviceHandle();
-        setPointer(handle, 1);
-        DeviceHandle handle2 = new DeviceHandle();
-        setPointer(handle2, 2);
-        assertNull(transfer.getDevHandle());
+        final Transfer transfer = LibUsb.allocTransfer(0);
+        final DeviceHandle handle = new DeviceHandle();
+        this.setPointer(handle, 1);
+        final DeviceHandle handle2 = new DeviceHandle();
+        this.setPointer(handle2, 2);
+        assertNull(transfer.devHandle());
         transfer.setDevHandle(handle);
-        assertNotNull(transfer.getDevHandle());
-        assertNotSame(handle, transfer.getDevHandle());
-        assertNotEquals(handle2, transfer.getDevHandle());
-        assertEquals(handle, transfer.getDevHandle());
+        assertNotNull(transfer.devHandle());
+        assertNotSame(handle, transfer.devHandle());
+        assertNotEquals(handle2, transfer.devHandle());
+        assertEquals(handle, transfer.devHandle());
         transfer.setDevHandle(null);
-        assertNull(transfer.getDevHandle());
+        assertNull(transfer.devHandle());
         LibUsb.freeTransfer(transfer);
     }
 
     /**
-     * Tests the {@link Transfer#setFlags(int)} and {@link Transfer#getFlags()}
+     * Tests the {@link Transfer#setFlags(byte)} and {@link Transfer#getFlags()}
      * methods.
      */
     @Test
     public void testFlags()
     {
         assumeUsbTestsEnabled();
-        Transfer transfer = LibUsb.allocTransfer(0);
-        assertEquals(0, transfer.getFlags());
-        transfer.setFlags(1);
-        assertEquals(1, transfer.getFlags());
-        transfer.setFlags(0);
-        assertEquals(0, transfer.getFlags());
+        final Transfer transfer = LibUsb.allocTransfer(0);
+        assertEquals(0, transfer.flags());
+        transfer.setFlags((byte) 1);
+        assertEquals(1, transfer.flags());
+        transfer.setFlags((byte) 0);
+        assertEquals(0, transfer.flags());
         LibUsb.freeTransfer(transfer);
     }
 
     /**
-     * Tests the {@link Transfer#setEndpoint(int)} and
+     * Tests the {@link Transfer#setEndpoint(byte)} and
      * {@link Transfer#getEndpoint()} methods.
      */
     @Test
     public void testEndpoint()
     {
         assumeUsbTestsEnabled();
-        Transfer transfer = LibUsb.allocTransfer(0);
-        assertEquals(0, transfer.getEndpoint());
-        transfer.setEndpoint(1);
-        assertEquals(1, transfer.getEndpoint());
-        transfer.setEndpoint(0);
-        assertEquals(0, transfer.getEndpoint());
+        final Transfer transfer = LibUsb.allocTransfer(0);
+        assertEquals(0, transfer.endpoint());
+        transfer.setEndpoint((byte) 1);
+        assertEquals(1, transfer.endpoint());
+        transfer.setEndpoint((byte) 0);
+        assertEquals(0, transfer.endpoint());
         LibUsb.freeTransfer(transfer);
     }
 
     /**
-     * Tests the {@link Transfer#setType(int)} and {@link Transfer#getType()}
+     * Tests the {@link Transfer#setType(byte)} and {@link Transfer#getType()}
      * methods.
      */
     @Test
     public void testType()
     {
         assumeUsbTestsEnabled();
-        Transfer transfer = LibUsb.allocTransfer(0);
-        assertEquals(0, transfer.getType());
-        transfer.setType(1);
-        assertEquals(1, transfer.getType());
-        transfer.setType(0);
-        assertEquals(0, transfer.getType());
+        final Transfer transfer = LibUsb.allocTransfer(0);
+        assertEquals(0, transfer.type());
+        transfer.setType((byte) 1);
+        assertEquals(1, transfer.type());
+        transfer.setType((byte) 0);
+        assertEquals(0, transfer.type());
         LibUsb.freeTransfer(transfer);
     }
 
@@ -183,12 +186,12 @@ public class TransferTest
     public void testTimeout()
     {
         assumeUsbTestsEnabled();
-        Transfer transfer = LibUsb.allocTransfer(0);
-        assertEquals(0, transfer.getTimeout());
+        final Transfer transfer = LibUsb.allocTransfer(0);
+        assertEquals(0, transfer.timeout());
         transfer.setTimeout(1);
-        assertEquals(1, transfer.getTimeout());
+        assertEquals(1, transfer.timeout());
         transfer.setTimeout(0);
-        assertEquals(0, transfer.getTimeout());
+        assertEquals(0, transfer.timeout());
         LibUsb.freeTransfer(transfer);
     }
 
@@ -199,8 +202,8 @@ public class TransferTest
     public void testGetStatus()
     {
         assumeUsbTestsEnabled();
-        Transfer transfer = LibUsb.allocTransfer(0);
-        assertEquals(0, transfer.getStatus());
+        final Transfer transfer = LibUsb.allocTransfer(0);
+        assertEquals(0, transfer.status());
         LibUsb.freeTransfer(transfer);
     }
 }

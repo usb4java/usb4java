@@ -16,9 +16,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests the global-scope methods of the {@link LibUsb} class which need a 
+ * Tests the global-scope methods of the {@link LibUsb} class which need a
  * open USB context.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public class LibUSBGlobalTest
@@ -37,7 +37,7 @@ public class LibUSBGlobalTest
         {
             LibUsb.init(this.context);
         }
-        catch (Throwable e)
+        catch (final Throwable e)
         {
             this.context = null;
         }
@@ -49,7 +49,10 @@ public class LibUSBGlobalTest
     @After
     public void tearDown()
     {
-        if (this.context != null) LibUsb.exit(this.context);
+        if (this.context != null)
+        {
+            LibUsb.exit(this.context);
+        }
     }
 
     /**
@@ -80,7 +83,7 @@ public class LibUSBGlobalTest
             result > 0);
         assertEquals(result, list.getSize());
         int i = 0;
-        for (Device device: list)
+        for (final Device device : list)
         {
             assertNotNull(device);
             assertEquals(device, list.get(i));
@@ -109,7 +112,7 @@ public class LibUSBGlobalTest
     public void testEndianConversion()
     {
         assumeUsbTestsEnabled();
-        assertEquals(0x1234, LibUsb.le16ToCpu(LibUsb.cpuToLe16(0x1234)));
+        assertEquals(0x1234, LibUsb.le16ToCpu(LibUsb.cpuToLe16((short) 0x1234)));
     }
 
     /**

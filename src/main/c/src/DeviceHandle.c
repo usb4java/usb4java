@@ -5,12 +5,13 @@
 
 #include "DeviceHandle.h"
 
-void setDeviceHandle(JNIEnv* env, libusb_device_handle* deviceHandle, jobject object)
+void setDeviceHandle(JNIEnv* env, const libusb_device_handle* deviceHandle,
+    jobject object)
 {
     SET_POINTER(env, deviceHandle, object, "deviceHandlePointer");
 }
 
-jobject wrapDeviceHandle(JNIEnv* env, libusb_device_handle* deviceHandle)
+jobject wrapDeviceHandle(JNIEnv* env, const libusb_device_handle* deviceHandle)
 {
     WRAP_POINTER(env, deviceHandle, "DeviceHandle", "deviceHandlePointer");
 }

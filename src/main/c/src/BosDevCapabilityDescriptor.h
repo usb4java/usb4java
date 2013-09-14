@@ -8,9 +8,11 @@
 
 #include "usb4java.h"
 
+jobject wrapBosDevCapabilityDescriptor(JNIEnv *,
+    const struct libusb_bos_dev_capability_descriptor *);
 jobjectArray wrapBosDevCapabilityDescriptors(JNIEnv*, int,
-    struct libusb_bos_dev_capability_descriptor**);
-struct libusb_bos_dev_capability_descriptor
-    *unwrapBosDevCapabilityDescriptor(JNIEnv *, jobject);
+    struct libusb_bos_dev_capability_descriptor * const *);
+struct libusb_bos_dev_capability_descriptor*
+    unwrapBosDevCapabilityDescriptor(JNIEnv *, jobject);
 
 #endif

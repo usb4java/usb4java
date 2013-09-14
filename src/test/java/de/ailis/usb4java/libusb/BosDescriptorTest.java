@@ -13,7 +13,7 @@ import org.junit.Test;
 
 /**
  * Tests the {@link BosDescriptor} class.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public class BosDescriptorTest
@@ -31,19 +31,18 @@ public class BosDescriptorTest
         LibUsb.init(null);
         this.descriptor = new BosDescriptor();
     }
-    
+
     /**
      * Tear down test.
      */
-    @After    
+    @After
     public void tearDown()
     {
         LibUsb.exit(null);
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link BosDescriptor#bLength()}
+     * Tests uninitialized access to {@link BosDescriptor#bLength()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedLength()
@@ -53,8 +52,7 @@ public class BosDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link BosDescriptor#bDescriptorType()}
+     * Tests uninitialized access to {@link BosDescriptor#bDescriptorType()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedDescriptorType()
@@ -64,8 +62,7 @@ public class BosDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link BosDescriptor#wTotalLength()}
+     * Tests uninitialized access to {@link BosDescriptor#wTotalLength()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedTotalLength()
@@ -75,8 +72,7 @@ public class BosDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link BosDescriptor#bNumDeviceCaps()}
+     * Tests uninitialized access to {@link BosDescriptor#bNumDeviceCaps()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedNumDeviceCaps()
@@ -86,8 +82,7 @@ public class BosDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link BosDescriptor#devCapability()}
+     * Tests uninitialized access to {@link BosDescriptor#devCapability()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedDevCapability()

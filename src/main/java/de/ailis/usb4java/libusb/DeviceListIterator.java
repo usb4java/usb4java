@@ -9,7 +9,7 @@ import java.util.Iterator;
 
 /**
  * Iterator for device list.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 final class DeviceListIterator implements Iterator<Device>
@@ -22,7 +22,7 @@ final class DeviceListIterator implements Iterator<Device>
 
     /**
      * Constructor.
-     * 
+     *
      * @param devices
      *            The devices list.
      */

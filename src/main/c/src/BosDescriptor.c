@@ -7,7 +7,7 @@
 #include "BosDevCapabilityDescriptor.h"
 
 void setBosDescriptor(JNIEnv* env,
-    struct libusb_bos_descriptor* descriptor, jobject object)
+    const struct libusb_bos_descriptor* descriptor, jobject object)
 {
     SET_POINTER(env, descriptor, object, "bosDescriptorPointer");
 }
@@ -35,7 +35,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(BosDescriptor, bLength)
     struct libusb_bos_descriptor *descriptor =
         unwrapBosDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bLength;
+    return (jbyte) descriptor->bLength;
 }
 
 /**
@@ -49,7 +49,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(BosDescriptor, bDescriptorType)
     struct libusb_bos_descriptor *descriptor =
         unwrapBosDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bDescriptorType;
+    return (jbyte) descriptor->bDescriptorType;
 }
 
 /**
@@ -63,7 +63,7 @@ JNIEXPORT jshort JNICALL METHOD_NAME(BosDescriptor, wTotalLength)
     struct libusb_bos_descriptor *descriptor =
         unwrapBosDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->wTotalLength;
+    return (jshort) descriptor->wTotalLength;
 }
 
 /**
@@ -77,7 +77,7 @@ JNIEXPORT jbyte JNICALL METHOD_NAME(BosDescriptor, bNumDeviceCaps)
     struct libusb_bos_descriptor *descriptor =
         unwrapBosDescriptor(env, this);
     if (!descriptor) return 0;
-    return descriptor->bNumDeviceCaps;
+    return (jbyte) descriptor->bNumDeviceCaps;
 }
 
 /**

@@ -8,7 +8,7 @@
 
 #include "usb4java.h"
 
-void setConfigDescriptor(JNIEnv*, struct libusb_config_descriptor*, jobject);
+void setConfigDescriptor(JNIEnv*, const struct libusb_config_descriptor*, jobject);
 struct libusb_config_descriptor* unwrapConfigDescriptor(JNIEnv*, jobject);
 void resetConfigDescriptor(JNIEnv*, jobject);
 

@@ -13,7 +13,7 @@ import org.junit.Test;
 
 /**
  * Tests the {@link ConfigDescriptor} class.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public class ConfigDescriptorTest
@@ -31,19 +31,18 @@ public class ConfigDescriptorTest
         LibUsb.init(null);
         this.descriptor = new ConfigDescriptor();
     }
-    
+
     /**
      * Tear down test.
      */
-    @After    
+    @After
     public void tearDown()
     {
         LibUsb.exit(null);
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link ConfigDescriptor#bLength()}
+     * Tests uninitialized access to {@link ConfigDescriptor#bLength()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedLength()
@@ -53,8 +52,7 @@ public class ConfigDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link ConfigDescriptor#bDescriptorType()}
+     * Tests uninitialized access to {@link ConfigDescriptor#bDescriptorType()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedDescriptorType()
@@ -64,8 +62,7 @@ public class ConfigDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link ConfigDescriptor#wTotalLength()}
+     * Tests uninitialized access to {@link ConfigDescriptor#wTotalLength()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedTotalLength()
@@ -75,8 +72,7 @@ public class ConfigDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link ConfigDescriptor#bNumInterfaces()}
+     * Tests uninitialized access to {@link ConfigDescriptor#bNumInterfaces()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedNumInterfaces()
@@ -97,8 +93,7 @@ public class ConfigDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link ConfigDescriptor#iConfiguration()}
+     * Tests uninitialized access to {@link ConfigDescriptor#iConfiguration()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedConfiguration()
@@ -108,8 +103,7 @@ public class ConfigDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link ConfigDescriptor#bmAttributes()}
+     * Tests uninitialized access to {@link ConfigDescriptor#bmAttributes()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedDescriptorAttributes()
@@ -119,8 +113,7 @@ public class ConfigDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link ConfigDescriptor#bMaxPower()}
+     * Tests uninitialized access to {@link ConfigDescriptor#bMaxPower()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedDescriptorMaxPower()
@@ -130,8 +123,7 @@ public class ConfigDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link ConfigDescriptor#iface()}
+     * Tests uninitialized access to {@link ConfigDescriptor#iface()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedDescriptorIface()
@@ -141,8 +133,7 @@ public class ConfigDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link ConfigDescriptor#extra()}
+     * Tests uninitialized access to {@link ConfigDescriptor#extra()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedDescriptorExtra()
@@ -152,8 +143,7 @@ public class ConfigDescriptorTest
     }
 
     /**
-     * Tests uninitialized access to
-     * {@link ConfigDescriptor#extraLength()}
+     * Tests uninitialized access to {@link ConfigDescriptor#extraLength()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedDescriptorExtraLength()

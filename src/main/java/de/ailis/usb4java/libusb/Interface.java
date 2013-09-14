@@ -1,9 +1,9 @@
 /*
  * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
- * 
- * Based on libusb <http://www.libusb.org/>:  
- * 
+ *
+ * Based on libusb <http://www.libusb.org/>:
+ *
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
  * Copyright 2010-2012 Peter Stuge <peter@stuge.se>
@@ -18,11 +18,12 @@
 
 package de.ailis.usb4java.libusb;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * A collection of alternate settings for a particular USB interface.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public final class Interface
@@ -31,35 +32,35 @@ public final class Interface
     private long interfacePointer;
 
     /**
-     * Package-private constructor to prevent manual instantiation. Interfaces 
+     * Package-private constructor to prevent manual instantiation. Interfaces
      * are always created by JNI.
      */
     Interface()
     {
         // Empty
     }
-    
+
     /**
      * Returns the native pointer.
-     * 
+     *
      * @return The native pointer.
      */
     public long getPointer()
     {
         return this.interfacePointer;
     }
-        
+
     /**
      * Returns the array with interface descriptors. The length of this array is
      * determined by the {@link #numAltsetting()} field.
-     * 
+     *
      * @return The array with interface descriptors.
      */
     public native InterfaceDescriptor[] altsetting();
 
     /**
      * Returns the number of alternate settings that belong to this interface.
-     * 
+     *
      * @return The number of alternate settings.
      */
     public native int numAltsetting();
@@ -71,45 +72,57 @@ public final class Interface
      */
     public String dump()
     {
-        return dump(null);
-    }
-
-    /**
-     * Returns a dump of this descriptor.
-     *
-     * @param handle
-     *            The USB device handle for resolving string descriptors. If
-     *            null then no strings are resolved.
-     * @return The descriptor dump.
-     */
-    public String dump(final DeviceHandle handle)
-    {
         final StringBuilder builder = new StringBuilder();
-        for (final InterfaceDescriptor descriptor : altsetting())
+
+        builder.append(String.format(
+            "Interface:%n" +
+            "  numAltsetting %10d",
+            this.numAltsetting()));
+
+        for (final InterfaceDescriptor intDesc : this.altsetting())
         {
-            builder.append(descriptor.dump(handle));
+            builder.append("%n" + intDesc.dump());
         }
+
         return builder.toString();
     }
 
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.interfacePointer).toHashCode();
+        return new HashCodeBuilder()
+            .append(this.altsetting())
+            .append(this.numAltsetting())
+            .toHashCode();
     }
 
     @Override
     public boolean equals(final Object obj)
     {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (this.getClass() != obj.getClass())
+        {
+            return false;
+        }
+
         final Interface other = (Interface) obj;
-        return this.interfacePointer == other.interfacePointer;
+
+        return new EqualsBuilder()
+            .append(this.altsetting(), other.altsetting())
+            .append(this.numAltsetting(), other.numAltsetting())
+            .isEquals();
     }
-    
+
     @Override
     public String toString()
     {
-        return dump();
+        return this.dump();
     }
 }
