@@ -266,6 +266,7 @@ public final class LibUsb
      */
     public static final int CAP_SUPPORTS_DETACH_KERNEL_DRIVER = 0x0101;
 
+    /** The size of a control setup packet. */
     public static final short CONTROL_SETUP_SIZE = 8;
 
     // Device and/or Interface Class codes.
@@ -482,6 +483,7 @@ public final class LibUsb
     // Values for bits 2:3 of the bmAttributes field in
     // EndpointDescriptor.
 
+    /** The mask used to filter out sync types from attributes. */
     public static final byte ISO_SYNC_TYPE_MASK = 0x0C;
 
     /** No synchronization. */
@@ -499,6 +501,7 @@ public final class LibUsb
     // Usage type for isochronous endpoints. Values for bits 4:5 of the
     // bmAttributes field in EndpointDescriptor.
 
+    /** The mask used to filter out usage types from attributes. */
     public static final byte ISO_USAGE_TYPE_MASK = 0x30;
 
     /** Data endpoint. */
@@ -616,11 +619,12 @@ public final class LibUsb
     /** Match any vendorId or productId or deviceClass. */
     public static final int HOTPLUG_MATCH_ANY = -1;
 
+    /** The next global hotplug ID to use. */
+    private static long globalHotplugId = 1;
+
     /**
      * Hotplug callbacks (to correctly manage calls and additional data).
      */
-    private static long globalHotplugId = 1;
-
     private static final ConcurrentMap<Long, ImmutablePair<HotplugCallback, Object>> hotplugCallbacks =
         new ConcurrentHashMap<Long, ImmutablePair<HotplugCallback, Object>>();
 
@@ -814,7 +818,7 @@ public final class LibUsb
      * Get the the parent from the specified device [EXPERIMENTAL].
      *
      * Please note that the reference count of the returned device is not
-     * increased. As such, do not *ever* call {@link #unrefDevice(Device))
+     * increased. As such, do not *ever* call {@link #unrefDevice(Device)}
      * directly on the returned Device.
      *
      * @param device
@@ -858,7 +862,7 @@ public final class LibUsb
      * isochronous transfers, but a design mistake resulted in this function
      * instead. It simply returns the wMaxPacketSize value without considering
      * its contents. If you're dealing with isochronous transfers, you probably
-     * want {@link #getMaxIsoPacketSize(Device, int)} instead.
+     * want {@link #getMaxIsoPacketSize(Device, byte)} instead.
      *
      * @param device
      *            A device.
@@ -986,7 +990,7 @@ public final class LibUsb
      * Get the underlying device for a handle.
      *
      * Please note that the reference count of the returned device is not
-     * increased. As such, do not *ever* call {@link #unrefDevice(Device))
+     * increased. As such, do not *ever* call {@link #unrefDevice(Device)}
      * directly on the returned Device.
      *
      * @param handle
@@ -1417,7 +1421,7 @@ public final class LibUsb
 
     /**
      * A simple wrapper around
-     * {@link #getStringDescriptorAscii(DeviceHandle, int, StringBuffer)}.
+     * {@link #getStringDescriptorAscii(DeviceHandle, byte, StringBuffer)}.
      * It simply returns the string (maximum length of 127) if possible. If not
      * possible (NULL handle or 0-index specified or error occured) then null is
      * returned.
@@ -1464,7 +1468,7 @@ public final class LibUsb
      * @return 0 on success, {@link #ERROR_NOT_FOUND} if the device is in
      *         unconfigured state another ERROR code on error
      *
-     * @see #getConfigDescriptor(Device, int, ConfigDescriptor)
+     * @see #getConfigDescriptor(Device, byte, ConfigDescriptor)
      */
     public static native int getActiveConfigDescriptor(final Device device,
         final ConfigDescriptor descriptor);
@@ -1487,7 +1491,7 @@ public final class LibUsb
      *         not exist another ERROR code on error.
      *
      * @see #getActiveConfigDescriptor(Device, ConfigDescriptor)
-     * @see #getConfigDescriptorByValue(Device, int, ConfigDescriptor)
+     * @see #getConfigDescriptorByValue(Device, byte, ConfigDescriptor)
      */
     public static native int getConfigDescriptor(final Device device,
         final byte index, final ConfigDescriptor descriptor);
@@ -1511,14 +1515,14 @@ public final class LibUsb
      *         not exist another ERROR code on error See also:
      *
      * @see #getActiveConfigDescriptor(Device, ConfigDescriptor)
-     * @see #getConfigDescriptor(Device, int, ConfigDescriptor)
+     * @see #getConfigDescriptor(Device, byte, ConfigDescriptor)
      */
     public static native int getConfigDescriptorByValue(final Device device,
         final byte value, final ConfigDescriptor descriptor);
 
     /**
      * Free a configuration descriptor obtained from
-     * {@link #getConfigDescriptor(Device, int, ConfigDescriptor)} or
+     * {@link #getConfigDescriptor(Device, byte, ConfigDescriptor)} or
      * {@link #getActiveConfigDescriptor(Device, ConfigDescriptor)}.
      *
      * It is safe to call this function with a NULL config parameter, in which
@@ -1733,7 +1737,7 @@ public final class LibUsb
      * @param data
      *            Output buffer for descriptor.
      * @return number of bytes returned in data, or LIBUSB_ERROR code on failure
-     * @see #getStringDescriptorAscii(DeviceHandle, int, StringBuffer)
+     * @see #getStringDescriptorAscii(DeviceHandle, byte, StringBuffer)
      */
     public static int getStringDescriptor(final DeviceHandle handle,
         final byte index, final short langId, final ByteBuffer data)
@@ -2154,20 +2158,20 @@ public final class LibUsb
      * Ordinarily, libusb's event handler needs to be called into at specific
      * moments in time (in addition to times when there is activity on the file
      * descriptor set). The usual approach is to use
-     * {@link #getNextTimeout(Context, IntBuffer)} to learn about when the next
+     * {@link #getNextTimeout(Context, LongBuffer)} to learn about when the next
      * timeout occurs, and to adjust your poll()/select() timeout accordingly so
      * that you can make a call into the library at that time.
      *
      * Some platforms supported by libusb do not come with this baggage - any
      * events relevant to timing will be represented by activity on the file
-     * descriptor set, and {@link #getNextTimeout(Context, IntBuffer)} will
+     * descriptor set, and {@link #getNextTimeout(Context, LongBuffer)} will
      * always return 0. This function allows you to detect whether you are
      * running on such a platform.
      *
      * @param context
      *            The context to operate on, or NULL for the default context
      * @return 0 if you must call into libusb at times determined by
-     *         {@link #getNextTimeout(Context, IntBuffer)}, or 1 if all timeout
+     *         {@link #getNextTimeout(Context, LongBuffer)}, or 1 if all timeout
      *         events are handled internally or through regular activity on the
      *         file descriptors.
      */
@@ -2358,7 +2362,7 @@ public final class LibUsb
      * number of packet descriptors to be allocated as part of the transfer. The
      * returned transfer is not specially initialized for isochronous I/O; you
      * are still required to call the {@link Transfer#setNumIsoPackets(int)} a
-     * {@link Transfer#setType(int)} methods accordingly.
+     * {@link Transfer#setType(byte)} methods accordingly.
      *
      * It is safe to allocate a transfer with some isochronous packets and then
      * use it on a non-isochronous endpoint. If you do this, ensure that at time
@@ -2397,11 +2401,11 @@ public final class LibUsb
      *
      * @param transfer
      *            The transfer to submit
-     * @return 0 on success, {@link #LIBUSB_ERROR_NO_DEVICE} if the device has
+     * @return 0 on success, {@link #ERROR_NO_DEVICE} if the device has
      *         been
-     *         disconnected, {@link #LIBUSB_ERROR_BUSY} if the transfer has
+     *         disconnected, {@link #ERROR_BUSY} if the transfer has
      *         already been
-     *         submitted. {@link #LIBUSB_ERROR_NOT_SUPPORTED} if the transfer
+     *         submitted. {@link #ERROR_NOT_SUPPORTED} if the transfer
      *         flags are
      *         not supported by the operating system. Another LIBUSB_ERROR code
      *         on failure.
@@ -2414,27 +2418,76 @@ public final class LibUsb
      * This function returns immediately, but this does not indicate
      * cancellation
      * is complete. Your callback function will be invoked at some later time
-     * with a transfer status of {@link #LIBUSB_TRANSFER_CANCELLED}.
+     * with a transfer status of {@link #TRANSFER_CANCELLED}.
      *
      * @param transfer
      *            The transfer to cancel
-     * @return 0 on success, {@link #LIBUSB_ERROR_NOT_FOUND} if the transfer is
+     * @return 0 on success, {@link #ERROR_NOT_FOUND} if the transfer is
      *         already complete or cancelled. Another LIBUSB_ERROR code on
      *         failure.
      */
     public static native int cancelTransfer(final Transfer transfer);
 
+    /**
+     * Get the data section of a control transfer.
+     * 
+     * This convenience function is here to remind you that the data does not
+     * start until 8 bytes into the actual buffer, as the setup packet comes
+     * first.
+     * 
+     * Calling this function only makes sense from a transfer callback function,
+     * or situations where you have already allocated a suitably sized buffer at
+     * {@link Transfer#buffer()}.
+     * 
+     * @param transfer
+     *            A transfer.
+     * @return The data section.
+     */
     public static ByteBuffer controlTransferGetData(final Transfer transfer)
     {
         return BufferUtils.slice(transfer.buffer(), CONTROL_SETUP_SIZE,
             transfer.buffer().limit() - CONTROL_SETUP_SIZE);
     }
 
+    /**
+     * Get the control setup packet of a control transfer.
+     * 
+     * This convenience function is here to remind you that the control setup
+     * occupies the first 8 bytes of the transfer data buffer.
+     * 
+     * Calling this function only makes sense from a transfer callback function,
+     * or situations where you have already allocated a suitably sized buffer at
+     * {@link Transfer#buffer()}.
+     * 
+     * @param transfer
+     *            A transfer.
+     * @return The setup section.
+     */
     public static ControlSetup controlTransferGetSetup(final Transfer transfer)
     {
         return new ControlSetup(transfer.buffer());
     }
 
+    /**
+     * Helper function to populate the setup packet (first 8 bytes of the data
+     * buffer) for a control transfer.
+     * 
+     * The wIndex, wValue and wLength values should be given in host-endian byte
+     * order.
+     * 
+     * @param buffer
+     *            Buffer to output the setup packet into.
+     * @param bmRequestType
+     *            See {@link ControlSetup#bmRequestType()}.
+     * @param bRequest
+     *            See {@link ControlSetup#bRequest()}.
+     * @param wValue
+     *            See {@link ControlSetup#wValue()}.
+     * @param wIndex
+     *            See {@link ControlSetup#wIndex()}.
+     * @param wLength
+     *            See {@link ControlSetup#wLength()}.
+     */
     public static void fillControlSetup(final ByteBuffer buffer,
         final byte bmRequestType, final byte bRequest, final short wValue,
         final short wIndex, final short wLength)
@@ -2447,6 +2500,47 @@ public final class LibUsb
         setup.setWLength(wLength);
     }
 
+    /**
+     * Helper function to populate the required {@link Transfer} fields for a
+     * control transfer.
+     * 
+     * If you pass a transfer buffer to this function, the first 8 bytes will be
+     * interpreted as a control setup packet, and the wLength field will be used
+     * to automatically populate the length field of the transfer. Therefore the
+     * recommended approach is:
+     * 
+     * 1. Allocate a suitably sized data buffer (including space for control
+     * setup).
+     * 
+     * 2. Call
+     * {@link #fillControlSetup(ByteBuffer, byte, byte, short, short, short)}.
+     * 
+     * 3. If this is a host-to-device transfer with a data stage, put the data
+     * in place after the setup packet.
+     * 
+     * 4. Call this function.
+     * 
+     * 5. Call {@link #submitTransfer(Transfer)}.
+     * 
+     * It is also legal to pass a NULL buffer to this function, in which case
+     * this function will not attempt to populate the length field. Remember
+     * that you must then populate the buffer and length fields later.
+     * 
+     * @param transfer
+     *            The transfer to populate.
+     * @param handle
+     *            Handle of the device that will handle the transfer.
+     * @param buffer
+     *            Data buffer. If provided, this function will interpret the
+     *            first 8 bytes as a setup packet and infer the transfer length
+     *            from that.
+     * @param callback
+     *            callback function to be invoked on transfer completion.
+     * @param userData
+     *            User data to pass to callback function.
+     * @param timeout
+     *            Timeout for the transfer in milliseconds.
+     */
     public static void fillControlTransfer(final Transfer transfer,
         final DeviceHandle handle, final ByteBuffer buffer,
         final TransferCallback callback, final Object userData,
@@ -2465,6 +2559,25 @@ public final class LibUsb
         transfer.setLength(CONTROL_SETUP_SIZE + (setup.wLength() & 0xFFFF));
     }
 
+    /**
+     * Helper function to populate the required {@link Transfer} fields for a
+     * bulk transfer.
+     * 
+     * @param transfer
+     *            The transfer to populate.
+     * @param handle
+     *            Handle of the device that will handle the transfer.
+     * @param endpoint
+     *            Address of the endpoint where this transfer will be sent.
+     * @param buffer
+     *            Data buffer.
+     * @param callback
+     *            Callback function to be invoked on transfer completion.
+     * @param userData
+     *            User data to pass to callback function.
+     * @param timeout
+     *            Timeout for the transfer in milliseconds.
+     */
     public static void fillBulkTransfer(final Transfer transfer,
         final DeviceHandle handle, final byte endpoint,
         final ByteBuffer buffer, final TransferCallback callback,
@@ -2479,6 +2592,25 @@ public final class LibUsb
         transfer.setCallback(callback);
     }
 
+    /**
+     * Helper function to populate the required {@link Transfer} fields for an
+     * interrupt transfer.
+     * 
+     * @param transfer
+     *            The transfer to populate.
+     * @param handle
+     *            Handle of the device that will handle the transfer.
+     * @param endpoint
+     *            Address of the endpoint where this transfer will be sent.
+     * @param buffer
+     *            Data buffer.
+     * @param callback
+     *            Callback function to be invoked on transfer completion.
+     * @param userData
+     *            User data to pass to callback function.
+     * @param timeout
+     *            Timeout for the transfer in milliseconds.
+     */
     public static void fillInterruptTransfer(final Transfer transfer,
         final DeviceHandle handle, final byte endpoint,
         final ByteBuffer buffer, final TransferCallback callback,
@@ -2493,6 +2625,27 @@ public final class LibUsb
         transfer.setCallback(callback);
     }
 
+    /**
+     * Helper function to populate the required {@link Transfer} fields for an
+     * isochronous transfer.
+     * 
+     * @param transfer
+     *            The transfer to populate.
+     * @param handle
+     *            Handle of the device that will handle the transfer.
+     * @param endpoint
+     *            Address of the endpoint where this transfer will be sent.
+     * @param buffer
+     *            Data buffer.
+     * @param numIsoPackets
+     *            The number of isochronous packets.
+     * @param callback
+     *            Callback function to be invoked on transfer completion.
+     * @param userData
+     *            User data to pass to callback function.
+     * @param timeout
+     *            Timeout for the transfer in milliseconds.
+     */
     public static void fillIsoTransfer(final Transfer transfer,
         final DeviceHandle handle, final byte endpoint,
         final ByteBuffer buffer, final int numIsoPackets,
@@ -2509,6 +2662,16 @@ public final class LibUsb
         transfer.setCallback(callback);
     }
 
+    /**
+     * Convenience function to set the length of all packets in an isochronous
+     * transfer, based on the {@link Transfer#numIsoPackets()} field.
+     * 
+     * @param transfer
+     *            A transfer.
+     * @param length
+     *            The length to set in each isochronous packet descriptor.
+     * @see #getMaxPacketSize(Device, byte)
+     */
     public static void setIsoPacketLengths(final Transfer transfer,
         final int length)
     {
@@ -2518,6 +2681,24 @@ public final class LibUsb
         }
     }
 
+    /**
+     * Convenience function to locate the position of an isochronous packet
+     * within the buffer of an isochronous transfer.
+     * 
+     * This is a thorough function which loops through all preceding packets,
+     * accumulating their lengths to find the position of the specified packet.
+     * Typically you will assign equal lengths to each packet in the transfer,
+     * and hence the above method is sub-optimal. You may wish to use
+     * {@link #getIsoPacketBufferSimple(Transfer, int)} instead.
+     * 
+     * @param transfer
+     *            A transfer.
+     * @param packet
+     *            The packet to return the address of.
+     * @return The base address of the packet buffer inside the transfer buffer,
+     *         or NULL if the packet does not exist.
+     * @see #getIsoPacketBufferSimple(Transfer, int)
+     */
     public static ByteBuffer getIsoPacketBuffer(final Transfer transfer,
         final int packet)
     {
@@ -2538,6 +2719,27 @@ public final class LibUsb
             isoDescriptors[packet].length());
     }
 
+    /**
+     * Convenience function to locate the position of an isochronous packet
+     * within the buffer of an isochronous transfer, for transfers where each
+     * packet is of identical size.
+     * 
+     * This function relies on the assumption that every packet within the
+     * transfer is of identical size to the first packet. Calculating the
+     * location of the packet buffer is then just a simple calculation: buffer +
+     * (packet_size * packet)
+     * 
+     * Do not use this function on transfers other than those that have
+     * identical packet lengths for each packet.
+     * 
+     * @param transfer
+     *            A transfer.
+     * @param packet
+     *            The packet to return the address of.
+     * @return The base address of the packet buffer inside the transfer buffer,
+     *         or NULL if the packet does not exist.
+     * @see #getIsoPacketBuffer(Transfer, int)
+     */
     public static ByteBuffer getIsoPacketBufferSimple(final Transfer transfer,
         final int packet)
     {
@@ -2553,6 +2755,20 @@ public final class LibUsb
             isoDescriptors[packet].length());
     }
 
+    /**
+     * Processes a hotplug event from native code.
+     * 
+     * @param context
+     *            Context of this notification.
+     * @param device
+     *            The device this event occurred on.
+     * @param event
+     *            Event that occurred
+     * @param hotplugId
+     *            The hotplug ID.
+     * @return Whether this callback is finished processing events. Returning 1
+     *         will cause this callback to be deregistered.
+     */
     static int hotplugCallback(final Context context, final Device device,
         final int event, final long hotplugId)
     {
@@ -2589,26 +2805,25 @@ public final class LibUsb
      * events.
      *
      * @param context
-     *            context to register this callback with
+     *            Context to register this callback with.
      * @param events
-     *            bitwise or of events that will trigger this callback
+     *            Bitwise or of events that will trigger this callback.
      * @param flags
-     *            hotplug callback flags
+     *            Hotplug callback flags.
      * @param vendorId
-     *            the vendor id to match or {@link #HOTPLUG_MATCH_ANY}
+     *            The vendor id to match or {@link #HOTPLUG_MATCH_ANY}.
      * @param productId
-     *            the product id to match or {@link #HOTPLUG_MATCH_ANY}
+     *            The product id to match or {@link #HOTPLUG_MATCH_ANY}.
      * @param deviceClass
-     *            the device class to match or {@link #HOTPLUG_MATCH_ANY}
+     *            The device class to match or {@link #HOTPLUG_MATCH_ANY}.
      * @param callback
-     *            the function to be invoked on a matching event/device
+     *            The function to be invoked on a matching event/device
      * @param userData
-     *            user data to pass to the callback function
-     * @param handle
-     *            hotplug callback handle of the allocated callback. Only needed
+     *            User data to pass to the callback function.
+     * @param callbackHandle
+     *            Hotplug callback handle of the allocated callback. Only needed
      *            if you later want to deregister this callback, can be NULL.
-     *
-     * @return LIBUSB_SUCCESS on success LIBUSB_ERROR code on failure
+     * @return {@link #SUCCESS} on success, some ERROR code on failure.
      */
     public static synchronized int hotplugRegisterCallback(
         final Context context, final int events, final int flags,
@@ -2644,6 +2859,28 @@ public final class LibUsb
         return result;
     }
 
+    /**
+     * Internally called native method for registering a hotplug callback.
+     * 
+     * @param context
+     *            Context to register this callback with.
+     * @param events
+     *            Bitwise or of events that will trigger this callback.
+     * @param flags
+     *            Hotplug callback flags.
+     * @param vendorId
+     *            The vendor id to match or {@link #HOTPLUG_MATCH_ANY}.
+     * @param productId
+     *            The product id to match or {@link #HOTPLUG_MATCH_ANY}.
+     * @param deviceClass
+     *            The device class to match or {@link #HOTPLUG_MATCH_ANY}.
+     * @param callbackHandle
+     *            Hotplug callback handle of the allocated callback. Only needed
+     *            if you later want to deregister this callback, can be NULL.
+     * @param hotplugId
+     *            The hotplug callback ID.
+     * @return {@link #SUCCESS} on success, some ERROR code on failure.
+     */    
     static native int hotplugRegisterCallbackNative(final Context context,
         final int events, final int flags, final int vendorId,
         final int productId, final int deviceClass,
@@ -2657,7 +2894,7 @@ public final class LibUsb
      *
      * @param context
      *            context this callback is registered with
-     * @param handle
+     * @param callbackHandle
      *            the handle of the callback to deregister
      */
     public static void hotplugDeregisterCallback(final Context context,
@@ -2678,6 +2915,18 @@ public final class LibUsb
         hotplugCallbacks.remove(handle);
     }
 
+    /**
+     * Internally called native method for unregistering a hotplug callback.
+     *
+     * Deregister a callback from a {@link Context}. This function is safe to
+     * call from within a hotplug callback.
+     *
+     * @param context
+     *            context this callback is registered with
+     * @param callbackHandle
+     *            the handle of the callback to deregister
+     * @return The hotplug callback ID.
+     */
     static native long hotplugDeregisterCallbackNative(final Context context,
         final HotplugCallbackHandle callbackHandle);
 }

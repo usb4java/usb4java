@@ -105,7 +105,7 @@ public class TransferTest
 
     /**
      * Tests the {@link Transfer#setDevHandle(DeviceHandle)} and
-     * {@link Transfer#getDevHandle()} methods.
+     * {@link Transfer#devHandle()} methods.
      */
     @Test
     public void testDevHandle()
@@ -128,7 +128,7 @@ public class TransferTest
     }
 
     /**
-     * Tests the {@link Transfer#setFlags(byte)} and {@link Transfer#getFlags()}
+     * Tests the {@link Transfer#setFlags(byte)} and {@link Transfer#flags()}
      * methods.
      */
     @Test
@@ -146,7 +146,7 @@ public class TransferTest
 
     /**
      * Tests the {@link Transfer#setEndpoint(byte)} and
-     * {@link Transfer#getEndpoint()} methods.
+     * {@link Transfer#endpoint()} methods.
      */
     @Test
     public void testEndpoint()
@@ -162,7 +162,7 @@ public class TransferTest
     }
 
     /**
-     * Tests the {@link Transfer#setType(byte)} and {@link Transfer#getType()}
+     * Tests the {@link Transfer#setType(byte)} and {@link Transfer#type()}
      * methods.
      */
     @Test
@@ -179,8 +179,8 @@ public class TransferTest
     }
 
     /**
-     * Tests the {@link Transfer#setTimeout(int)} and
-     * {@link Transfer#getTimeout()} methods.
+     * Tests the {@link Transfer#setTimeout(long)} and
+     * {@link Transfer#timeout()} methods.
      */
     @Test
     public void testTimeout()
@@ -196,7 +196,7 @@ public class TransferTest
     }
 
     /**
-     * Tests the {@link Transfer#getStatus()} methods.
+     * Tests the {@link Transfer#status()} methods.
      */
     @Test
     public void testGetStatus()

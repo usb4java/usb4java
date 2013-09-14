@@ -42,7 +42,8 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
 
     /**
      * Constructs a new config descriptor which can be passed to the
-     * {@link LibUsb#getConfigDescriptor(Device, int, ConfigDescriptor)} method.
+     * {@link LibUsb#getConfigDescriptor(Device, byte, ConfigDescriptor)} 
+     * method.
      */
     public ConfigDescriptor()
     {

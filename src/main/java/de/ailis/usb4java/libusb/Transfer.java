@@ -35,9 +35,11 @@ public final class Transfer
     /** The native pointer to the transfer structure. */
     private long transferPointer;
 
-    // Keeping a reference to the buffer has multiple benefits: faster get(), GC
-    // prevention (while Transfer is alive) and you can check the buffer's
-    // original capacity (needed to check setLength() properly).
+    /**
+     * Keeping a reference to the buffer has multiple benefits: faster get(), GC
+     * prevention (while Transfer is alive) and you can check the buffer's
+     * original capacity (needed to check setLength() properly).
+     */
     private ByteBuffer transferBuffer;
 
     /**
@@ -187,6 +189,12 @@ public final class Transfer
         this.setLengthNative(length);
     }
 
+    /**
+     * Native method called internally to set the length of the data buffer.
+     * 
+     * @param length
+     *            The length to set.
+     */
     native void setLengthNative(final int length);
 
     /**
@@ -267,6 +275,12 @@ public final class Transfer
         this.transferBuffer = buffer;
     }
 
+    /**
+     * Native method called internally to set the data buffer.
+     * 
+     * @param buffer
+     *            The data buffer to set.
+     */
     native void setBufferNative(final ByteBuffer buffer);
 
     /**

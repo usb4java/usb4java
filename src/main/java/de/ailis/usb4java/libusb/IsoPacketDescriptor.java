@@ -18,6 +18,9 @@
 
 package de.ailis.usb4java.libusb;
 
+/**
+ * Isochronous packet descriptor.
+ */
 public final class IsoPacketDescriptor
 {
     /** The native pointer to the descriptor structure. */
@@ -42,15 +45,36 @@ public final class IsoPacketDescriptor
         return this.isoPacketDescriptorPointer;
     }
 
+    /**
+     * Returns the length of data to request in this packet.
+     * 
+     * @return The length of data to request in this packet.
+     */
     public native int length();
 
+    /**
+     * Sets the length of data to request in this packet.
+     * 
+     * @param length
+     *            The length to set.
+     */
     // Theoretically the right representation for a C unsigned int would be a
     // Java long, but the maximum length for ISO Packets is 1024 bytes, so an
     // int more than suffices to hold any possible valid values here.
     public native void setLength(final int length);
 
+    /**
+     * Returns the amount of data that was actually transferred.
+     * 
+     * @return The amount of data that was actually transferred.
+     */
     public native int actualLength();
 
+    /**
+     * Returns the status code for this packet.
+     * 
+     * @return The status code for this packet.
+     */
     public native int status();
 
     @Override

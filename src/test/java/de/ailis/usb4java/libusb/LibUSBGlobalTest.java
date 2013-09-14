@@ -105,8 +105,8 @@ public class LibUSBGlobalTest
     }
 
     /**
-     * Checks the {@link LibUsb#le16ToCpu(int)} and
-     * {@link LibUsb#cpuToLe16(int)} methods.
+     * Checks the {@link LibUsb#le16ToCpu(short)} and
+     * {@link LibUsb#cpuToLe16(short)} methods.
      */
     @Test
     public void testEndianConversion()
