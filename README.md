@@ -5,6 +5,7 @@ USB library for Java based on libusb 1.0
 ----------------------------------------
 
 Copyright (C) 2011 Klaus Reimer <k@ailis.de>
+Copyright (C) 2013 Luca Longinotti <l@longi.li>
 
 See LICENSE.md for licensing information.
 

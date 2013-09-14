@@ -46,6 +46,16 @@
       <timezone>+1</timezone>
       <url>http://www.ailis.de/~k/</url>
     </developer>        
+    <developer>
+      <id>llongi</id>
+      <name>Luca Longinotti</name>
+      <email>l@longi.li</email>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>+1</timezone>
+      <url>https://l.longi.li/</url>
+    </developer>        
   </developers>
 
   <properties>
