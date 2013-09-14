@@ -8,6 +8,14 @@
     <author email="k@ailis.de">Klaus Reimer</author>
   </properties>
   <body>    
+    <release version="1.2.0" date="2013-09-14" description="Major update">
+      <action dev="llongi" type="add" date="2013-09-14">
+        Add hotplug support to low-level API.  
+      </action>
+      <action dev="llongi" type="add" date="2013-09-14">
+        Add asynchronous I/O support to low-level API.  
+      </action>
+    </release>
     <release version="1.1.0" date="2013-07-13" description="Major update">
       <action dev="kayahr" type="update" date="2013-07-13">
         Using reunited libusb/libusbx 1.0.16 as backend.  
