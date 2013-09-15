@@ -7,14 +7,14 @@
   <packaging>jar</packaging>
   <name>usb4java</name>
   <version>1.2.0-SNAPSHOT</version>
-  <url>http://kayahr.github.com/usb4java/</url>
+  <url>http://usb4java.org/</url>
   <description>
     USB library for Java based on libusb and implementing javax.usb (JSR-80).
   </description>
   <inceptionYear>2011</inceptionYear>
   <organization>
-    <name>Klaus Reimer</name>
-    <url>http://www.ailis.de/~k/</url>
+    <name>usb4java Team</name>
+    <url>http://usb4java.org/</url>
   </organization>
   
   <licenses>
@@ -66,14 +66,14 @@
   </properties>
   
   <scm>
-    <connection>scm:git:git://github.com/kayahr/${project.artifactId}.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/kayahr/${project.artifactId}.git</developerConnection>
-    <url>http://github.com/kayahr/${project.artifactId}</url>
+    <connection>scm:git:git://github.com/usb4java/${project.artifactId}.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/usb4java/${project.artifactId}.git</developerConnection>
+    <url>http://github.com/usb4java/${project.artifactId}</url>
   </scm>
        
   <issueManagement>
     <system>GitHub</system>
-    <url>https://github.com/kayahr/${project.artifactId}/issues</url>
+    <url>https://github.com/usb4java/${project.artifactId}/issues</url>
   </issueManagement>
   
   <ciManagement>
