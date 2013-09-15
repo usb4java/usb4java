@@ -32,7 +32,7 @@
         <li><a href="${repoBaseUrl}/">Older versions and snapshots</a></li>
         <li>
           Source code repository:
-          <a href="http://github.com/usb4java/${project.artifactId}/">GitHub</a> / 
+          <a href="http://github.com/usb4java/${project.artifactId}/">GitHub</a> 
         </li>
       </ul>
       <p>
