@@ -84,6 +84,7 @@
       </p>
     </section>
     
+    <!--
     <section name="Donation">
       <p>
         If you like ${project.name}, please consider making a small donation
@@ -100,6 +101,7 @@
              alt="Flattr this" title="Flattr this" />
       </a>
     </section>
+    -->
         
     <section name="Support">
       <p>

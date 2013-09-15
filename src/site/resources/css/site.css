@@ -1,14 +1,12 @@
-#bannerRight img
+#breadcrumbs .breadcrumb
 {
-    position: absolute;
-    top: 0;
-    right: 0;
-    border: 0;
+    padding-right: 50px;
 }
 
-#breadcrumbs
+#breadcrumbs .breadcrumb a
 {
-    padding-right: 150px;
+    position: relative;
+    z-index: 10001;
 }
 
 a.externalLink
