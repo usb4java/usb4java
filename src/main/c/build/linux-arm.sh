@@ -9,7 +9,7 @@ set -e
 OS="linux"
 ARCH="arm"
 HOST="$ARCH-$OS-gnueabi"
-CFLAGS="-Os"
+CFLAGS="-Os -lrt"
 UDEV_SUPPORT="no"
 
 build
