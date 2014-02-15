@@ -54,7 +54,7 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getApiVersion)
     JNIEnv *env, jclass class
 )
 {
-    return LIBUSBX_API_VERSION;
+    return LIBUSB_API_VERSION;
 }
 
 /**
