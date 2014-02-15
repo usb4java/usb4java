@@ -189,22 +189,45 @@
         </configuration>
         <executions>
           <execution>
-            <id>no-natives</id>
+            <id>usb4java</id>
             <goals><goal>jar</goal></goals>
             <phase>package</phase>
             <configuration>
-              <classifier>no-natives</classifier>
+              <classifier>usb4java</classifier>
               <excludes>
+                <exclude>org/libusb4java/**</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>libusb</id>
+            <goals><goal>jar</goal></goals>
+            <phase>package</phase>
+            <configuration>
+              <classifier>libusb</classifier>
+              <excludes>
+                <exclude>org/usb4java/**</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>libusb-no-natives</id>
+            <goals><goal>jar</goal></goals>
+            <phase>package</phase>
+            <configuration>
+              <classifier>libusb-no-natives</classifier>
+              <excludes>
+                <exclude>org/usb4java/**</exclude>
                 <exclude>org/libusb4java/*-*/**</exclude>
               </excludes>
             </configuration>
           </execution>
           <execution>
-            <id>natives</id>
+            <id>libusb-natives</id>
             <goals><goal>jar</goal></goals>
             <phase>package</phase>
             <configuration>
-              <classifier>natives</classifier>
+              <classifier>libusb-natives</classifier>
               <includes>
                 <include>org/libusb4java/*-*/**</include>
               </includes>
@@ -340,7 +363,7 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.1</version>      
+      <version>3.2.1</version>
     </dependency>
   </dependencies>
   
