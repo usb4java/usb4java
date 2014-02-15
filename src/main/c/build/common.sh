@@ -3,12 +3,12 @@ SRCDIR="$(pwd)/.."
 TMPDIR="$SRCDIR/tmp"
 DOWNLOADS="$SRCDIR/downloads"
 
-UDEV_VERSION="1.2"
+UDEV_VERSION="1.4"
 
 LIBUSB="stable"
-LIBUSB_STABLE_VERSION="1.0.17"
+LIBUSB_STABLE_VERSION="1.0.18"
 LIBUSB_STABLE_RC=""
-LIBUSB_BETA_VERSION="1.0.18"
+LIBUSB_BETA_VERSION="1.0.19"
 LIBUSB_BETA_RC="-rc1"
 
 build()
@@ -19,13 +19,13 @@ build()
 
     if [ "$LIBUSB" = "stable" ]
     then
-        LIBUSB_NAME="libusbx-$LIBUSB_STABLE_VERSION$LIBUSB_STABLE_RC"
+        LIBUSB_NAME="libusb-$LIBUSB_STABLE_VERSION$LIBUSB_STABLE_RC"
         LIBUSB_ARCHIVE="$LIBUSB_NAME.tar.bz2"
-        LIBUSB_URL="http://downloads.sf.net/project/libusbx/releases/$LIBUSB_STABLE_VERSION/source/$LIBUSB_ARCHIVE"
+        LIBUSB_URL="http://downloads.sf.net/project/libusb/libusb-1.0/$LIBUSB_NAME/$LIBUSB_ARCHIVE"
     else
-        LIBUSB_NAME="libusbx-$LIBUSB_BETA_VERSION$LIBUSB_BETA_RC"
+        LIBUSB_NAME="libusb-$LIBUSB_BETA_VERSION$LIBUSB_BETA_RC"
         LIBUSB_ARCHIVE="$LIBUSB_NAME.tar.bz2"
-        LIBUSB_URL="http://downloads.sf.net/project/libusbx/releases/$LIBUSB_BETA_VERSION/source/$LIBUSB_ARCHIVE"
+        LIBUSB_URL="http://downloads.sf.net/project/libusb/libusb-1.0/$LIBUSB_NAME/$LIBUSB_ARCHIVE"
     fi
 
     DISTDIR="$SRCDIR/../resources/de/ailis/usb4java/libusb/$OS-$ARCH"
