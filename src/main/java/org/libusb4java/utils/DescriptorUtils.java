@@ -3,7 +3,7 @@
  * See LICENSE.md for licensing information.
  */
 
-package org.usb4java.utils;
+package org.libusb4java.utils;
 
 import java.nio.ByteBuffer;
 import java.util.HashMap;
@@ -14,7 +14,7 @@ import javax.usb.UsbDeviceDescriptor;
 import javax.usb.UsbEndpointDescriptor;
 import javax.usb.UsbInterfaceDescriptor;
 
-import org.usb4java.libusb.LibUsb;
+import org.libusb4java.LibUsb;
 
 /**
  * Utility methods used for descriptor dumps.

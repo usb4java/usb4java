@@ -6,5 +6,5 @@
 /**
  * Low-Level classes based on the native libusb library.
  */
-package org.usb4java.libusb;
+package org.libusb4java;
 

@@ -16,12 +16,12 @@
  * Copyright 2012-2013 Toby Gray <toby.gray@realvnc.com>
  */
 
-package org.usb4java.libusb;
+package org.libusb4java;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import org.usb4java.utils.BufferUtils;
+import org.libusb4java.utils.BufferUtils;
 
 /**
  * Setup packet for control transfers.

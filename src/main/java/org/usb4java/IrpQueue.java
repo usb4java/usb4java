@@ -16,9 +16,9 @@ import javax.usb.UsbException;
 import javax.usb.UsbIrp;
 import javax.usb.UsbShortPacketException;
 
-import org.usb4java.libusb.DeviceHandle;
-import org.usb4java.libusb.LibUsb;
-import org.usb4java.libusb.LibUsbException;
+import org.libusb4java.DeviceHandle;
+import org.libusb4java.LibUsb;
+import org.libusb4java.LibUsbException;
 
 /**
  * A queue for USB I/O request packets.

@@ -17,7 +17,7 @@
  * Copyright 2012-2013 Toby Gray <toby.gray@realvnc.com>
  */
 
-package org.usb4java.libusb;
+package org.libusb4java;
 
 import java.io.FileDescriptor;
 import java.nio.ByteBuffer;
@@ -28,7 +28,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
-import org.usb4java.utils.BufferUtils;
+import org.libusb4java.utils.BufferUtils;
 
 /**
  * Static class providing the constants and functions of libusb.

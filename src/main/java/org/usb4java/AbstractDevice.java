@@ -28,11 +28,11 @@ import javax.usb.event.UsbDeviceListener;
 import javax.usb.util.DefaultUsbControlIrp;
 
 import org.usb4java.descriptors.SimpleUsbStringDescriptor;
-import org.usb4java.libusb.ConfigDescriptor;
-import org.usb4java.libusb.Device;
-import org.usb4java.libusb.DeviceHandle;
-import org.usb4java.libusb.LibUsb;
-import org.usb4java.libusb.LibUsbException;
+import org.libusb4java.ConfigDescriptor;
+import org.libusb4java.Device;
+import org.libusb4java.DeviceHandle;
+import org.libusb4java.LibUsb;
+import org.libusb4java.LibUsbException;
 
 /**
  * A Usb device.

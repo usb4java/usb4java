@@ -11,7 +11,7 @@ import javax.usb.UsbEndpointDescriptor;
 import javax.usb.UsbPipe;
 
 import org.usb4java.descriptors.SimpleUsbEndpointDescriptor;
-import org.usb4java.libusb.EndpointDescriptor;
+import org.libusb4java.EndpointDescriptor;
 
 /**
  * usb4java implementation of UsbEndpoint.

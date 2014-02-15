@@ -10,7 +10,7 @@ import javax.usb.UsbEndpointDescriptor;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import org.usb4java.utils.DescriptorUtils;
+import org.libusb4java.utils.DescriptorUtils;
 
 /**
  * Simple USB endpoint descriptor.

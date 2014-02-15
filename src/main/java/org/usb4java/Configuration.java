@@ -18,10 +18,10 @@ import javax.usb.UsbDisconnectedException;
 import javax.usb.UsbException;
 
 import org.usb4java.descriptors.SimpleUsbConfigurationDescriptor;
-import org.usb4java.libusb.ConfigDescriptor;
-import org.usb4java.libusb.InterfaceDescriptor;
-import org.usb4java.libusb.LibUsb;
-import org.usb4java.libusb.LibUsbException;
+import org.libusb4java.ConfigDescriptor;
+import org.libusb4java.InterfaceDescriptor;
+import org.libusb4java.LibUsb;
+import org.libusb4java.LibUsbException;
 
 /**
  * usb4java implementation of JSR-80 UsbConfiguration.
@@ -60,7 +60,7 @@ final class Configuration implements UsbConfiguration
     {
         this.device = device;
         this.descriptor = new SimpleUsbConfigurationDescriptor(descriptor);
-        for (org.usb4java.libusb.Interface iface: descriptor.iface())
+        for (org.libusb4java.Interface iface: descriptor.iface())
         {
             for (InterfaceDescriptor ifaceDescriptor: iface.altsetting())
             {

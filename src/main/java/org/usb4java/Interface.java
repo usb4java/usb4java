@@ -20,8 +20,8 @@ import javax.usb.UsbInterfacePolicy;
 import javax.usb.UsbNotActiveException;
 
 import org.usb4java.descriptors.SimpleUsbInterfaceDescriptor;
-import org.usb4java.libusb.EndpointDescriptor;
-import org.usb4java.libusb.InterfaceDescriptor;
+import org.libusb4java.EndpointDescriptor;
+import org.libusb4java.InterfaceDescriptor;
 
 /**
  * usb4java implementation of UsbInterface.

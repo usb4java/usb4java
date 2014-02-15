@@ -16,7 +16,7 @@
  * Copyright 2012-2013 Toby Gray <toby.gray@realvnc.com>
  */
 
-package org.usb4java.libusb;
+package org.libusb4java;
 
 import java.nio.ByteBuffer;
 
@@ -25,8 +25,8 @@ import javax.usb.UsbDeviceDescriptor;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import org.usb4java.utils.BufferUtils;
-import org.usb4java.utils.DescriptorUtils;
+import org.libusb4java.utils.BufferUtils;
+import org.libusb4java.utils.DescriptorUtils;
 
 /**
  * A structure representing the standard USB device descriptor.

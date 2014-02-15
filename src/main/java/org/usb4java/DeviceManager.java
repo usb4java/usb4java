@@ -15,12 +15,12 @@ import javax.usb.UsbException;
 import javax.usb.UsbHub;
 
 import org.usb4java.descriptors.SimpleUsbDeviceDescriptor;
-import org.usb4java.libusb.Context;
-import org.usb4java.libusb.Device;
-import org.usb4java.libusb.DeviceDescriptor;
-import org.usb4java.libusb.DeviceList;
-import org.usb4java.libusb.LibUsb;
-import org.usb4java.libusb.LibUsbException;
+import org.libusb4java.Context;
+import org.libusb4java.Device;
+import org.libusb4java.DeviceDescriptor;
+import org.libusb4java.DeviceList;
+import org.libusb4java.LibUsb;
+import org.libusb4java.LibUsbException;
 
 /**
  * Manages the USB devices.
