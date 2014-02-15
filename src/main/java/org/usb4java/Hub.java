@@ -3,14 +3,14 @@
  * See LICENSE.md for licensing information.
  */
 
-package de.ailis.usb4java;
+package org.usb4java;
 
 import java.util.List;
 
 import javax.usb.UsbHub;
 
-import de.ailis.usb4java.libusb.Device;
-import de.ailis.usb4java.libusb.LibUsbException;
+import org.usb4java.libusb.Device;
+import org.usb4java.libusb.LibUsbException;
 
 /**
  * usb4java implementation of JSR-80 UsbHub.

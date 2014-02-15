@@ -3,7 +3,7 @@
  * See LICENSE.md for licensing information.
  */
 
-package de.ailis.usb4java;
+package org.usb4java;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -16,9 +16,9 @@ import javax.usb.UsbException;
 import javax.usb.UsbIrp;
 import javax.usb.UsbShortPacketException;
 
-import de.ailis.usb4java.libusb.DeviceHandle;
-import de.ailis.usb4java.libusb.LibUsb;
-import de.ailis.usb4java.libusb.LibUsbException;
+import org.usb4java.libusb.DeviceHandle;
+import org.usb4java.libusb.LibUsb;
+import org.usb4java.libusb.LibUsbException;
 
 /**
  * A queue for USB I/O request packets.

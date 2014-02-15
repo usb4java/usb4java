@@ -16,14 +16,14 @@
  * Copyright 2012-2013 Toby Gray <toby.gray@realvnc.com>
  */
 
-package de.ailis.usb4java.libusb;
+package org.usb4java.libusb;
 
 import java.nio.ByteBuffer;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import de.ailis.usb4java.utils.DescriptorUtils;
+import org.usb4java.utils.DescriptorUtils;
 
 /**
  * A generic representation of a BOS Device Capability descriptor.

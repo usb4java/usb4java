@@ -6,4 +6,4 @@
 /**
  * Utility classes providing static helper methods.
  */
-package de.ailis.usb4java.utils;
+package org.usb4java.utils;

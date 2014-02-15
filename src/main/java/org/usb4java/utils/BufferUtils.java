@@ -3,7 +3,7 @@
  * See LICENSE.md for licensing information.
  */
 
-package de.ailis.usb4java.utils;
+package org.usb4java.utils;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;

@@ -3,7 +3,7 @@
  * See LICENSE.md for licensing information.
  */
 
-package de.ailis.usb4java;
+package org.usb4java;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
@@ -27,12 +27,12 @@ import javax.usb.event.UsbDeviceEvent;
 import javax.usb.event.UsbDeviceListener;
 import javax.usb.util.DefaultUsbControlIrp;
 
-import de.ailis.usb4java.descriptors.SimpleUsbStringDescriptor;
-import de.ailis.usb4java.libusb.ConfigDescriptor;
-import de.ailis.usb4java.libusb.Device;
-import de.ailis.usb4java.libusb.DeviceHandle;
-import de.ailis.usb4java.libusb.LibUsb;
-import de.ailis.usb4java.libusb.LibUsbException;
+import org.usb4java.descriptors.SimpleUsbStringDescriptor;
+import org.usb4java.libusb.ConfigDescriptor;
+import org.usb4java.libusb.Device;
+import org.usb4java.libusb.DeviceHandle;
+import org.usb4java.libusb.LibUsb;
+import org.usb4java.libusb.LibUsbException;
 
 /**
  * A Usb device.

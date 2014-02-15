@@ -3,7 +3,7 @@
  * See LICENSE.md for licensing information.
  */
 
-package de.ailis.usb4java;
+package org.usb4java;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -17,11 +17,11 @@ import javax.usb.UsbConfigurationDescriptor;
 import javax.usb.UsbDisconnectedException;
 import javax.usb.UsbException;
 
-import de.ailis.usb4java.descriptors.SimpleUsbConfigurationDescriptor;
-import de.ailis.usb4java.libusb.ConfigDescriptor;
-import de.ailis.usb4java.libusb.InterfaceDescriptor;
-import de.ailis.usb4java.libusb.LibUsb;
-import de.ailis.usb4java.libusb.LibUsbException;
+import org.usb4java.descriptors.SimpleUsbConfigurationDescriptor;
+import org.usb4java.libusb.ConfigDescriptor;
+import org.usb4java.libusb.InterfaceDescriptor;
+import org.usb4java.libusb.LibUsb;
+import org.usb4java.libusb.LibUsbException;
 
 /**
  * usb4java implementation of JSR-80 UsbConfiguration.
@@ -60,7 +60,7 @@ final class Configuration implements UsbConfiguration
     {
         this.device = device;
         this.descriptor = new SimpleUsbConfigurationDescriptor(descriptor);
-        for (de.ailis.usb4java.libusb.Interface iface: descriptor.iface())
+        for (org.usb4java.libusb.Interface iface: descriptor.iface())
         {
             for (InterfaceDescriptor ifaceDescriptor: iface.altsetting())
             {

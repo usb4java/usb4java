@@ -3,7 +3,7 @@
  * See LICENSE.md for licensing information.
  */
 
-package de.ailis.usb4java;
+package org.usb4java;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import javax.usb.UsbInterface;
 import javax.usb.UsbInterfaceDescriptor;
 import javax.usb.UsbInterfacePolicy;
 
-import de.ailis.usb4java.descriptors.SimpleUsbInterfaceDescriptor;
+import org.usb4java.descriptors.SimpleUsbInterfaceDescriptor;
 
 /**
  * The virtual USB interfaces used by the virtual USB root hub.

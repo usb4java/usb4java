@@ -3,7 +3,7 @@
  * See LICENSE.md for licensing information.
  */
 
-package de.ailis.usb4java;
+package org.usb4java;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,13 +14,13 @@ import java.util.Map;
 import javax.usb.UsbException;
 import javax.usb.UsbHub;
 
-import de.ailis.usb4java.descriptors.SimpleUsbDeviceDescriptor;
-import de.ailis.usb4java.libusb.Context;
-import de.ailis.usb4java.libusb.Device;
-import de.ailis.usb4java.libusb.DeviceDescriptor;
-import de.ailis.usb4java.libusb.DeviceList;
-import de.ailis.usb4java.libusb.LibUsb;
-import de.ailis.usb4java.libusb.LibUsbException;
+import org.usb4java.descriptors.SimpleUsbDeviceDescriptor;
+import org.usb4java.libusb.Context;
+import org.usb4java.libusb.Device;
+import org.usb4java.libusb.DeviceDescriptor;
+import org.usb4java.libusb.DeviceList;
+import org.usb4java.libusb.LibUsb;
+import org.usb4java.libusb.LibUsbException;
 
 /**
  * Manages the USB devices.

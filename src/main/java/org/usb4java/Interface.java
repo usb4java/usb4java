@@ -3,7 +3,7 @@
  * See LICENSE.md for licensing information.
  */
 
-package de.ailis.usb4java;
+package org.usb4java;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -19,9 +19,9 @@ import javax.usb.UsbInterfaceDescriptor;
 import javax.usb.UsbInterfacePolicy;
 import javax.usb.UsbNotActiveException;
 
-import de.ailis.usb4java.descriptors.SimpleUsbInterfaceDescriptor;
-import de.ailis.usb4java.libusb.EndpointDescriptor;
-import de.ailis.usb4java.libusb.InterfaceDescriptor;
+import org.usb4java.descriptors.SimpleUsbInterfaceDescriptor;
+import org.usb4java.libusb.EndpointDescriptor;
+import org.usb4java.libusb.InterfaceDescriptor;
 
 /**
  * usb4java implementation of UsbInterface.

@@ -3,7 +3,7 @@
  * See LICENSE.md for licensing information.
  */
 
-package de.ailis.usb4java.libusb;
+package org.usb4java.libusb;
 
 /**
  * Hotplug callback..

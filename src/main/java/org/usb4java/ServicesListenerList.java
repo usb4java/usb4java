@@ -3,7 +3,7 @@
  * See LICENSE.md for licensing information.
  */
 
-package de.ailis.usb4java;
+package org.usb4java;
 
 import javax.usb.event.UsbServicesEvent;
 import javax.usb.event.UsbServicesListener;

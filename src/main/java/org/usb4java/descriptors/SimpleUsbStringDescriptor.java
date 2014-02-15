@@ -3,7 +3,7 @@
  * See LICENSE.md for licensing information.
  */
 
-package de.ailis.usb4java.descriptors;
+package org.usb4java.descriptors;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;

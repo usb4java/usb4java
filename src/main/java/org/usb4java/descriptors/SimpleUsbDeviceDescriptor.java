@@ -3,14 +3,14 @@
  * See LICENSE.md for licensing information.
  */
 
-package de.ailis.usb4java.descriptors;
+package org.usb4java.descriptors;
 
 import javax.usb.UsbDeviceDescriptor;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import de.ailis.usb4java.utils.DescriptorUtils;
+import org.usb4java.utils.DescriptorUtils;
 
 /**
  * Simple USB device descriptor.

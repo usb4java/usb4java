@@ -16,7 +16,7 @@
  * Copyright 2012-2013 Toby Gray <toby.gray@realvnc.com>
  */
 
-package de.ailis.usb4java.libusb;
+package org.usb4java.libusb;
 
 /**
  * Structure representing a USB device detected on the system.

@@ -6,4 +6,4 @@
 /**
  * USB Descriptor implementations.
  */
-package de.ailis.usb4java.descriptors;
+package org.usb4java.descriptors;

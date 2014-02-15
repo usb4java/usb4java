@@ -3,7 +3,7 @@
  * See LICENSE.md for licensing information.
  */
 
-package de.ailis.usb4java;
+package org.usb4java;
 
 import java.util.Properties;
 
@@ -15,7 +15,7 @@ import java.util.Properties;
 final class Config
 {
     /** Base key name for properties. */
-    private static final String KEY_BASE = "de.ailis.usb4java.";
+    private static final String KEY_BASE = "org.usb4java.";
     
     /** The default USB communication timeout in milliseconds. */
     private static final int DEFAULT_TIMEOUT = 2500;

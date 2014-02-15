@@ -3,10 +3,10 @@
  * See LICENSE.md for licensing information.
  */
 
-package de.ailis.usb4java;
+package org.usb4java;
 
-import de.ailis.usb4java.libusb.Device;
-import de.ailis.usb4java.libusb.LibUsbException;
+import org.usb4java.libusb.Device;
+import org.usb4java.libusb.LibUsbException;
 
 /**
  * A non-hub USB device.

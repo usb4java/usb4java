@@ -6,4 +6,4 @@
 /**
  * The main usb4java package.
  */
-package de.ailis.usb4java;
+package org.usb4java;

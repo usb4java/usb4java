@@ -3,7 +3,7 @@
  * See LICENSE.md for licensing information.
  */
 
-package de.ailis.usb4java;
+package org.usb4java;
 
 import javax.usb.UsbDevice;
 import javax.usb.UsbException;
@@ -13,8 +13,8 @@ import javax.usb.UsbServices;
 import javax.usb.event.UsbServicesEvent;
 import javax.usb.event.UsbServicesListener;
 
-import de.ailis.usb4java.libusb.Loader;
-import de.ailis.usb4java.libusb.LoaderException;
+import org.usb4java.libusb.Loader;
+import org.usb4java.libusb.LoaderException;
 
 /**
  * usb4java implementation of JSR-80 UsbServices.

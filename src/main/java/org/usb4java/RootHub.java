@@ -3,7 +3,7 @@
  * See LICENSE.md for licensing information.
  */
 
-package de.ailis.usb4java;
+package org.usb4java;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ import javax.usb.UsbStringDescriptor;
 import javax.usb.event.UsbDeviceListener;
 import javax.usb.util.DefaultUsbControlIrp;
 
-import de.ailis.usb4java.descriptors.SimpleUsbDeviceDescriptor;
+import org.usb4java.descriptors.SimpleUsbDeviceDescriptor;
 
 /**
  * The virtual USB root hub.

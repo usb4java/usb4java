@@ -3,15 +3,15 @@
  * See LICENSE.md for licensing information.
  */
 
-package de.ailis.usb4java;
+package org.usb4java;
 
 import javax.usb.UsbConst;
 import javax.usb.UsbEndpoint;
 import javax.usb.UsbEndpointDescriptor;
 import javax.usb.UsbPipe;
 
-import de.ailis.usb4java.descriptors.SimpleUsbEndpointDescriptor;
-import de.ailis.usb4java.libusb.EndpointDescriptor;
+import org.usb4java.descriptors.SimpleUsbEndpointDescriptor;
+import org.usb4java.libusb.EndpointDescriptor;
 
 /**
  * usb4java implementation of UsbEndpoint.

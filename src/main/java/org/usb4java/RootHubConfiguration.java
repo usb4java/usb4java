@@ -3,7 +3,7 @@
  * See LICENSE.md for licensing information.
  */
 
-package de.ailis.usb4java;
+package org.usb4java;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ import javax.usb.UsbConst;
 import javax.usb.UsbDevice;
 import javax.usb.UsbInterface;
 
-import de.ailis.usb4java.descriptors.SimpleUsbConfigurationDescriptor;
+import org.usb4java.descriptors.SimpleUsbConfigurationDescriptor;
 
 /**
  * Virtual USB configuration used by the virtual USB root hub.

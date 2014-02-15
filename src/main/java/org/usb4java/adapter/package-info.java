@@ -6,4 +6,4 @@
 /**
  * Event adapter classes. 
  */
-package de.ailis.usb4java.adapter;
+package org.usb4java.adapter;
