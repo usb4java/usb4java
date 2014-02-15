@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   
-  <groupId>de.ailis.usb4java</groupId>
+  <groupId>org.usb4java</groupId>
   <artifactId>usb4java</artifactId>
   <packaging>jar</packaging>
   <name>usb4java</name>
@@ -54,7 +54,7 @@
         <role>Developer</role>
       </roles>
       <timezone>+1</timezone>
-      <url>https://l.longi.li/</url>
+      <url>http://l.longi.li/</url>
     </developer>        
   </developers>
 
@@ -181,8 +181,8 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>de.ailis.usb4java.Main</mainClass>
-              <packageName>de.ailis.usb4java</packageName> 
+              <mainClass>org.usb4java.Main</mainClass>
+              <packageName>org.usb4java</packageName>
               <addClasspath>true</addClasspath>           
             </manifest>
           </archive>
@@ -195,7 +195,7 @@
             <configuration>
               <classifier>no-natives</classifier>
               <excludes>
-                <exclude>de/ailis/usb4java/libusb/*-*/**</exclude>
+                <exclude>org/usb4java/libusb/*-*/**</exclude>
               </excludes>
             </configuration>
           </execution>
@@ -206,7 +206,7 @@
             <configuration>
               <classifier>natives</classifier>
               <includes>
-                <include>de/ailis/usb4java/libusb/*-*/**</include>
+                <include>org/usb4java/libusb/*-*/**</include>
               </includes>
             </configuration>
           </execution>
