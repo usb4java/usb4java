@@ -3,7 +3,7 @@
  * See LICENSE.md for licensing information.
  */
 
-package org.usb4java.utils;
+package org.libusb4java.utils;
 
 import static org.junit.Assert.assertEquals;
 
@@ -16,7 +16,7 @@ import org.usb4java.descriptors.SimpleUsbConfigurationDescriptor;
 import org.usb4java.descriptors.SimpleUsbDeviceDescriptor;
 import org.usb4java.descriptors.SimpleUsbEndpointDescriptor;
 import org.usb4java.descriptors.SimpleUsbInterfaceDescriptor;
-import org.usb4java.libusb.LibUsb;
+import org.libusb4java.LibUsb;
 
 /**
  * Tests the {@link DescriptorUtils} class.

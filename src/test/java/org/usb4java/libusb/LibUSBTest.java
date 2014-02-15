@@ -3,7 +3,7 @@
  * See LICENSE.md for licensing information.
  */
 
-package org.usb4java.libusb;
+package org.libusb4java;
 
 import static org.usb4java.test.UsbAssume.assumeUsbTestsEnabled;
 import static org.junit.Assert.assertEquals;
@@ -20,8 +20,8 @@ import java.nio.LongBuffer;
 
 import org.junit.Test;
 
-import org.usb4java.libusb.mocks.PollfdListenerMock;
-import org.usb4java.utils.BufferUtils;
+import org.libusb4java.mocks.PollfdListenerMock;
+import org.libusb4java.utils.BufferUtils;
 
 /**
  * Tests the {@link LibUsb} class.

@@ -2,11 +2,11 @@
  * Copyright (C) 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
  */
-package org.usb4java.libusb.mocks;
+package org.libusb4java.mocks;
 
 import java.io.FileDescriptor;
 
-import org.usb4java.libusb.PollfdListener;
+import org.libusb4java.PollfdListener;
 
 /**
  * A mocked pollfd listener implementation.

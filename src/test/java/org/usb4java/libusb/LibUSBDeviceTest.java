@@ -3,7 +3,7 @@
  * See LICENSE.md for licensing information.
  */
 
-package org.usb4java.libusb;
+package org.libusb4java;
 
 import static org.usb4java.test.UsbAssume.assumeUsbTestsEnabled;
 import static org.junit.Assert.assertEquals;
@@ -19,7 +19,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.usb4java.utils.BufferUtils;
+import org.libusb4java.utils.BufferUtils;
 
 /**
  * Tests the device-scope methods of the {@link LibUsb} class which need a open

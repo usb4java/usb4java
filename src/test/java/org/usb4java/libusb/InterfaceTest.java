@@ -3,7 +3,7 @@
  * See LICENSE.md for licensing information.
  */
 
-package org.usb4java.libusb;
+package org.libusb4java;
 
 import static org.usb4java.test.UsbAssume.assumeUsbTestsEnabled;
 
