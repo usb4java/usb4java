@@ -6,7 +6,6 @@
 package org.usb4java;
 
 import org.libusb4java.Device;
-import org.libusb4java.LibUsbException;
 
 /**
  * A non-hub USB device.

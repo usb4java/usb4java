@@ -32,7 +32,6 @@ import org.libusb4java.ConfigDescriptor;
 import org.libusb4java.Device;
 import org.libusb4java.DeviceHandle;
 import org.libusb4java.LibUsb;
-import org.libusb4java.LibUsbException;
 
 /**
  * A Usb device.

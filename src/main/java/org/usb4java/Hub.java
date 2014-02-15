@@ -10,7 +10,6 @@ import java.util.List;
 import javax.usb.UsbHub;
 
 import org.libusb4java.Device;
-import org.libusb4java.LibUsbException;
 
 /**
  * usb4java implementation of JSR-80 UsbHub.

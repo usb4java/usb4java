@@ -21,7 +21,6 @@ import org.usb4java.descriptors.SimpleUsbConfigurationDescriptor;
 import org.libusb4java.ConfigDescriptor;
 import org.libusb4java.InterfaceDescriptor;
 import org.libusb4java.LibUsb;
-import org.libusb4java.LibUsbException;
 
 /**
  * usb4java implementation of JSR-80 UsbConfiguration.

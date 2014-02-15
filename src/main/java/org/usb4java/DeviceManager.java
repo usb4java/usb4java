@@ -20,7 +20,6 @@ import org.libusb4java.Device;
 import org.libusb4java.DeviceDescriptor;
 import org.libusb4java.DeviceList;
 import org.libusb4java.LibUsb;
-import org.libusb4java.LibUsbException;
 
 /**
  * Manages the USB devices.

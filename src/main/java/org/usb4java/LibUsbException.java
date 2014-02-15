@@ -16,9 +16,11 @@
  * Copyright 2012-2013 Toby Gray <toby.gray@realvnc.com>
  */
 
-package org.libusb4java;
+package org.usb4java;
 
 import javax.usb.UsbException;
+
+import org.libusb4java.LibUsb;
 
 /**
  * libusb-specific USB exception.
