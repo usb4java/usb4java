@@ -15,7 +15,7 @@ import javax.usb.*;
 
 import org.junit.runner.RunWith;
 
-import de.ailis.usb4java.test.TCKRunner;
+import org.usb4java.test.TCKRunner;
  
  
  

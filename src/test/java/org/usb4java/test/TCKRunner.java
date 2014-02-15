@@ -3,7 +3,7 @@
  * See LICENSE.md for licensing information.
  */
 
-package de.ailis.usb4java.test;
+package org.usb4java.test;
 
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.internal.runners.JUnit38ClassRunner;

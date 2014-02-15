@@ -3,7 +3,7 @@
  * See LICENSE.md for licensing information.
  */
 
-package de.ailis.usb4java.utils;
+package org.usb4java.utils;
 
 import static org.junit.Assert.assertEquals;
 
@@ -12,11 +12,11 @@ import java.nio.ByteBuffer;
 
 import org.junit.Test;
 
-import de.ailis.usb4java.descriptors.SimpleUsbConfigurationDescriptor;
-import de.ailis.usb4java.descriptors.SimpleUsbDeviceDescriptor;
-import de.ailis.usb4java.descriptors.SimpleUsbEndpointDescriptor;
-import de.ailis.usb4java.descriptors.SimpleUsbInterfaceDescriptor;
-import de.ailis.usb4java.libusb.LibUsb;
+import org.usb4java.descriptors.SimpleUsbConfigurationDescriptor;
+import org.usb4java.descriptors.SimpleUsbDeviceDescriptor;
+import org.usb4java.descriptors.SimpleUsbEndpointDescriptor;
+import org.usb4java.descriptors.SimpleUsbInterfaceDescriptor;
+import org.usb4java.libusb.LibUsb;
 
 /**
  * Tests the {@link DescriptorUtils} class.

@@ -3,9 +3,9 @@
  * See LICENSE.md for licensing information.
  */
 
-package de.ailis.usb4java.libusb;
+package org.usb4java.libusb;
 
-import static de.ailis.usb4java.test.UsbAssume.assumeUsbTestsEnabled;
+import static org.usb4java.test.UsbAssume.assumeUsbTestsEnabled;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;

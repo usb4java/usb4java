@@ -3,7 +3,7 @@
  * See LICENSE.md for licensing information.
  */
 
-package de.ailis.usb4java;
+package org.usb4java;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import de.ailis.usb4java.descriptors.SimpleUsbDeviceDescriptor;
+import org.usb4java.descriptors.SimpleUsbDeviceDescriptor;
 
 /**
  * Tests the {@link DeviceId} class.

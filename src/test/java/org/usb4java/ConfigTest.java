@@ -3,7 +3,7 @@
  * See LICENSE.md for licensing information.
  */
 
-package de.ailis.usb4java;
+package org.usb4java;
 
 import static org.junit.Assert.assertEquals;
 
@@ -37,7 +37,7 @@ public class ConfigTest
     public void testScanIntervalConfiguration()
     {
         final Properties properties = new Properties();
-        properties.put("de.ailis.usb4java.scanInterval", "123");
+        properties.put("org.usb4java.scanInterval", "123");
         final Config config = new Config(properties);
         assertEquals(123, config.getScanInterval());
     }
@@ -49,7 +49,7 @@ public class ConfigTest
     public void testTimeoutConfiguration()
     {
         final Properties properties = new Properties();
-        properties.put("de.ailis.usb4java.timeout", "1234");
+        properties.put("org.usb4java.timeout", "1234");
         final Config config = new Config(properties);
         assertEquals(1234, config.getTimeout());
     }

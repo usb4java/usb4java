@@ -3,7 +3,7 @@
  * See LICENSE.md for licensing information.
  */
 
-package de.ailis.usb4java.descriptors;
+package org.usb4java.descriptors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

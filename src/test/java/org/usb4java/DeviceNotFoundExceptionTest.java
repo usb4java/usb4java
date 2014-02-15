@@ -2,13 +2,13 @@
  * Copyright (C) 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
  */
-package de.ailis.usb4java;
+package org.usb4java;
 
 import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
 
-import de.ailis.usb4java.descriptors.SimpleUsbDeviceDescriptor;
+import org.usb4java.descriptors.SimpleUsbDeviceDescriptor;
 
 /**
  * Tests the {@link DeviceNotFoundException} class.

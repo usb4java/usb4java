@@ -3,7 +3,7 @@
  * See LICENSE.md for licensing information.
  */
 
-package de.ailis.usb4java.test;
+package org.usb4java.test;
 
 import static org.junit.Assume.assumeTrue;
 
