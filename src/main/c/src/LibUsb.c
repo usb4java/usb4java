@@ -609,12 +609,16 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getDeviceDescriptor)
 {
     NOT_NULL(env, device, return 0);
     NOT_NULL(env, descriptor, return 0);
-    NOT_SET(env, descriptor, "deviceDescriptorPointer", return 0);
+
     libusb_device *dev = unwrapDevice(env, device);
     if (!dev) return 0;
 
-    struct libusb_device_descriptor *dev_desc = calloc(1, sizeof(*dev_desc));
-    if (!dev_desc) return LIBUSB_ERROR_NO_MEM;
+    jclass cls = (*env)->GetObjectClass(env, descriptor);
+    jfieldID field = (*env)->GetFieldID(env, cls, "deviceDescriptorBuffer", "Ljava/nio/ByteBuffer;");
+    jobject buffer = (*env)->GetObjectField(env, descriptor, field);
+
+    // The Java code ensures this is an appropriately sized direct ByteBuffer.
+    struct libusb_device_descriptor *dev_desc = (*env)->GetDirectBufferAddress(env, buffer);
 
     int result = libusb_get_device_descriptor(dev, dev_desc);
     if (result == LIBUSB_SUCCESS)
@@ -623,27 +627,22 @@ JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, getDeviceDescriptor)
     }
     else
     {
-        // Free memory again on error.
-    	free(dev_desc);
+        // Reset pointer on error, to ensure subsequent accesses will throw exceptions.
+        resetDeviceDescriptor(env, descriptor);
     }
+
     return result;
 }
 
 /**
- * void freeDeviceDescriptor(DeviceDescriptor)
+ * int deviceDescriptorStructSize()
  */
-JNIEXPORT void JNICALL METHOD_NAME(LibUsb, freeDeviceDescriptor)
+JNIEXPORT jint JNICALL METHOD_NAME(LibUsb, deviceDescriptorStructSize)
 (
-    JNIEnv *env, jclass class, jobject descriptor
+    JNIEnv *env, jclass class
 )
 {
-    if (!descriptor) return;
-    struct libusb_device_descriptor *dev_desc = unwrapDeviceDescriptor(env,
-        descriptor);
-    if (!dev_desc) return;
-
-    free(dev_desc);
-    resetDeviceDescriptor(env, descriptor);
+    return sizeof(struct libusb_device_descriptor);
 }
 
 /**

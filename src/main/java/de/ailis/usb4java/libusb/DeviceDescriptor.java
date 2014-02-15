@@ -18,11 +18,14 @@
 
 package de.ailis.usb4java.libusb;
 
+import java.nio.ByteBuffer;
+
 import javax.usb.UsbDeviceDescriptor;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import de.ailis.usb4java.utils.BufferUtils;
 import de.ailis.usb4java.utils.DescriptorUtils;
 
 /**
@@ -38,13 +41,17 @@ public final class DeviceDescriptor implements UsbDeviceDescriptor
     /** The native pointer to the descriptor structure. */
     private long deviceDescriptorPointer;
 
+    /** The Java ByteBuffer which contains the descriptor structure. */
+    private final ByteBuffer deviceDescriptorBuffer;
+
     /**
      * Constructs a new device descriptor which can be passed to the
      * {@link LibUsb#getDeviceDescriptor(Device, DeviceDescriptor)} method.
      */
     public DeviceDescriptor()
     {
-        // Empty
+        // Assign new buffer.
+        this.deviceDescriptorBuffer = BufferUtils.allocateByteBuffer(LibUsb.deviceDescriptorStructSize());
     }
 
     /**

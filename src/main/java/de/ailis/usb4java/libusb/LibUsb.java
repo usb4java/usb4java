@@ -808,7 +808,7 @@ public final class LibUsb
      *         array is too small
      */
     @Deprecated
-    public static int getPortPath(final Context context, final Device device, 
+    public static int getPortPath(final Context context, final Device device,
         final ByteBuffer path)
     {
         return getPortNumbers(device, path);
@@ -1389,21 +1389,12 @@ public final class LibUsb
         final DeviceDescriptor descriptor);
 
     /**
-     * Free a device descriptor obtained from
-     * {@link #getDeviceDescriptor(Device, DeviceDescriptor)}.
+     * Returns the size in bytes of the buffer that's required to hold all
+     * of a device descriptor's data.
      *
-     * It is safe to call this function with a NULL device parameter, in which
-     * case the function simply returns.
-     *
-     * This function is not present in the libusb-1.0 API, but since
-     * getDeviceDescriptor() requires memory to be allocated manually,
-     * a way to deallocate it from Java is required to avoid a memory leak.
-     *
-     * @param descriptor
-     *            The device descriptor to free
+     * @return buffer size in bytes
      */
-    public static native void freeDeviceDescriptor(
-        final DeviceDescriptor descriptor);
+    public static native int deviceDescriptorStructSize();
 
     /**
      * Retrieve a string descriptor in C style ASCII.
@@ -2430,15 +2421,15 @@ public final class LibUsb
 
     /**
      * Get the data section of a control transfer.
-     * 
+     *
      * This convenience function is here to remind you that the data does not
      * start until 8 bytes into the actual buffer, as the setup packet comes
      * first.
-     * 
+     *
      * Calling this function only makes sense from a transfer callback function,
      * or situations where you have already allocated a suitably sized buffer at
      * {@link Transfer#buffer()}.
-     * 
+     *
      * @param transfer
      *            A transfer.
      * @return The data section.
@@ -2451,14 +2442,14 @@ public final class LibUsb
 
     /**
      * Get the control setup packet of a control transfer.
-     * 
+     *
      * This convenience function is here to remind you that the control setup
      * occupies the first 8 bytes of the transfer data buffer.
-     * 
+     *
      * Calling this function only makes sense from a transfer callback function,
      * or situations where you have already allocated a suitably sized buffer at
      * {@link Transfer#buffer()}.
-     * 
+     *
      * @param transfer
      *            A transfer.
      * @return The setup section.
@@ -2471,10 +2462,10 @@ public final class LibUsb
     /**
      * Helper function to populate the setup packet (first 8 bytes of the data
      * buffer) for a control transfer.
-     * 
+     *
      * The wIndex, wValue and wLength values should be given in host-endian byte
      * order.
-     * 
+     *
      * @param buffer
      *            Buffer to output the setup packet into.
      * @param bmRequestType
@@ -2503,29 +2494,29 @@ public final class LibUsb
     /**
      * Helper function to populate the required {@link Transfer} fields for a
      * control transfer.
-     * 
+     *
      * If you pass a transfer buffer to this function, the first 8 bytes will be
      * interpreted as a control setup packet, and the wLength field will be used
      * to automatically populate the length field of the transfer. Therefore the
      * recommended approach is:
-     * 
+     *
      * 1. Allocate a suitably sized data buffer (including space for control
      * setup).
-     * 
+     *
      * 2. Call
      * {@link #fillControlSetup(ByteBuffer, byte, byte, short, short, short)}.
-     * 
+     *
      * 3. If this is a host-to-device transfer with a data stage, put the data
      * in place after the setup packet.
-     * 
+     *
      * 4. Call this function.
-     * 
+     *
      * 5. Call {@link #submitTransfer(Transfer)}.
-     * 
+     *
      * It is also legal to pass a NULL buffer to this function, in which case
      * this function will not attempt to populate the length field. Remember
      * that you must then populate the buffer and length fields later.
-     * 
+     *
      * @param transfer
      *            The transfer to populate.
      * @param handle
@@ -2562,7 +2553,7 @@ public final class LibUsb
     /**
      * Helper function to populate the required {@link Transfer} fields for a
      * bulk transfer.
-     * 
+     *
      * @param transfer
      *            The transfer to populate.
      * @param handle
@@ -2595,7 +2586,7 @@ public final class LibUsb
     /**
      * Helper function to populate the required {@link Transfer} fields for an
      * interrupt transfer.
-     * 
+     *
      * @param transfer
      *            The transfer to populate.
      * @param handle
@@ -2628,7 +2619,7 @@ public final class LibUsb
     /**
      * Helper function to populate the required {@link Transfer} fields for an
      * isochronous transfer.
-     * 
+     *
      * @param transfer
      *            The transfer to populate.
      * @param handle
@@ -2665,7 +2656,7 @@ public final class LibUsb
     /**
      * Convenience function to set the length of all packets in an isochronous
      * transfer, based on the {@link Transfer#numIsoPackets()} field.
-     * 
+     *
      * @param transfer
      *            A transfer.
      * @param length
@@ -2684,13 +2675,13 @@ public final class LibUsb
     /**
      * Convenience function to locate the position of an isochronous packet
      * within the buffer of an isochronous transfer.
-     * 
+     *
      * This is a thorough function which loops through all preceding packets,
      * accumulating their lengths to find the position of the specified packet.
      * Typically you will assign equal lengths to each packet in the transfer,
      * and hence the above method is sub-optimal. You may wish to use
      * {@link #getIsoPacketBufferSimple(Transfer, int)} instead.
-     * 
+     *
      * @param transfer
      *            A transfer.
      * @param packet
@@ -2723,15 +2714,15 @@ public final class LibUsb
      * Convenience function to locate the position of an isochronous packet
      * within the buffer of an isochronous transfer, for transfers where each
      * packet is of identical size.
-     * 
+     *
      * This function relies on the assumption that every packet within the
      * transfer is of identical size to the first packet. Calculating the
      * location of the packet buffer is then just a simple calculation: buffer +
      * (packet_size * packet)
-     * 
+     *
      * Do not use this function on transfers other than those that have
      * identical packet lengths for each packet.
-     * 
+     *
      * @param transfer
      *            A transfer.
      * @param packet
@@ -2757,7 +2748,7 @@ public final class LibUsb
 
     /**
      * Processes a hotplug event from native code.
-     * 
+     *
      * @param context
      *            Context of this notification.
      * @param device
@@ -2861,7 +2852,7 @@ public final class LibUsb
 
     /**
      * Internally called native method for registering a hotplug callback.
-     * 
+     *
      * @param context
      *            Context to register this callback with.
      * @param events
@@ -2880,7 +2871,7 @@ public final class LibUsb
      * @param hotplugId
      *            The hotplug callback ID.
      * @return {@link #SUCCESS} on success, some ERROR code on failure.
-     */    
+     */
     static native int hotplugRegisterCallbackNative(final Context context,
         final int events, final int flags, final int vendorId,
         final int productId, final int deviceClass,
