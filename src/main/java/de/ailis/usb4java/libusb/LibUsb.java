@@ -1394,7 +1394,7 @@ public final class LibUsb
      *
      * @return buffer size in bytes
      */
-    public static native int deviceDescriptorStructSize();
+    static native int deviceDescriptorStructSize();
 
     /**
      * Retrieve a string descriptor in C style ASCII.
