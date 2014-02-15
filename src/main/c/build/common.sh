@@ -28,7 +28,7 @@ build()
         LIBUSB_URL="http://downloads.sf.net/project/libusb/libusb-1.0/$LIBUSB_NAME/$LIBUSB_ARCHIVE"
     fi
 
-    DISTDIR="$SRCDIR/../resources/org/usb4java/libusb/$OS-$ARCH"
+    DISTDIR="$SRCDIR/../resources/org/libusb4java/$OS-$ARCH"
 
     # Only Windows needs the shared library, the others want static ones.
     if [ "$OS" = "windows"  ]

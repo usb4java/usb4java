@@ -195,7 +195,7 @@
             <configuration>
               <classifier>no-natives</classifier>
               <excludes>
-                <exclude>org/usb4java/libusb/*-*/**</exclude>
+                <exclude>org/libusb4java/*-*/**</exclude>
               </excludes>
             </configuration>
           </execution>
@@ -206,7 +206,7 @@
             <configuration>
               <classifier>natives</classifier>
               <includes>
-                <include>org/usb4java/libusb/*-*/**</include>
+                <include>org/libusb4java/*-*/**</include>
               </includes>
             </configuration>
           </execution>

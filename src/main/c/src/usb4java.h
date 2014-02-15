@@ -11,8 +11,8 @@
 #include <libusb.h>
 #include "config.h"
 
-#define PACKAGE_DIR "org/usb4java/libusb"
-#define METHOD_NAME(CLASS_NAME, METHOD_NAME) Java_org_usb4java_libusb_##CLASS_NAME##_##METHOD_NAME
+#define PACKAGE_DIR "org/libusb4java"
+#define METHOD_NAME(CLASS_NAME, METHOD_NAME) Java_org_libusb4java_##CLASS_NAME##_##METHOD_NAME
 
 #if SIZEOF_VOID_P == 4
 #  define jptr jint
