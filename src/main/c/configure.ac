@@ -1,5 +1,5 @@
 AC_PREREQ([2.61])
-AC_INIT([libusb4java], [1.0.0], [k@ailis.de])
+AC_INIT([libusb4java], [1.2.0], [usb4java@googlegroups.com])
 AM_INIT_AUTOMAKE([foreign -Wall -Werror])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES(yes)])
 AC_CONFIG_MACRO_DIR([m4])

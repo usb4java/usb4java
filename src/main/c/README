@@ -23,7 +23,7 @@ When compilation was successful then you can find the library in the
 number (Examples: libusb4java.so, libusb4java.dylib, libusb4java.dll).
 
 usb4java searches for the library in the CLASSPATH directory
-`de/ailis/usb4java/libusb/<OS>-<ARCH>/`. On a 32 bit x86 linux machine for
-example the directory name is `de/ailis/usb4java/libusb/linux-x86`. Usually
+`org/usb4java/libusb/<OS>-<ARCH>/`. On a 32 bit x86 linux machine for
+example the directory name is `org/usb4java/libusb/linux-x86`. Usually
 you can find the required name in the exception thrown by usb4java when it
 does not find the required library. 
