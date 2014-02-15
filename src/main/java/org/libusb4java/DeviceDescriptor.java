@@ -20,11 +20,8 @@ package org.libusb4java;
 
 import java.nio.ByteBuffer;
 
-import javax.usb.UsbDeviceDescriptor;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import org.libusb4java.utils.BufferUtils;
 import org.libusb4java.utils.DescriptorUtils;
 
@@ -36,7 +33,7 @@ import org.libusb4java.utils.DescriptorUtils;
  *
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class DeviceDescriptor implements UsbDeviceDescriptor
+public final class DeviceDescriptor
 {
     /** The native pointer to the descriptor structure. */
     private long deviceDescriptorPointer;
@@ -64,46 +61,32 @@ public final class DeviceDescriptor implements UsbDeviceDescriptor
         return this.deviceDescriptorPointer;
     }
 
-    @Override
     public native byte bLength();
 
-    @Override
     public native byte bDescriptorType();
 
-    @Override
     public native short bcdUSB();
 
-    @Override
     public native byte bDeviceClass();
 
-    @Override
     public native byte bDeviceSubClass();
 
-    @Override
     public native byte bDeviceProtocol();
 
-    @Override
     public native byte bMaxPacketSize0();
 
-    @Override
     public native short idVendor();
 
-    @Override
     public native short idProduct();
 
-    @Override
     public native short bcdDevice();
 
-    @Override
     public native byte iManufacturer();
 
-    @Override
     public native byte iProduct();
 
-    @Override
     public native byte iSerialNumber();
 
-    @Override
     public native byte bNumConfigurations();
 
     /**

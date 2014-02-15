@@ -20,11 +20,8 @@ package org.libusb4java;
 
 import java.nio.ByteBuffer;
 
-import javax.usb.UsbEndpointDescriptor;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import org.libusb4java.utils.DescriptorUtils;
 
 /**
@@ -35,7 +32,7 @@ import org.libusb4java.utils.DescriptorUtils;
  *
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class EndpointDescriptor implements UsbEndpointDescriptor
+public final class EndpointDescriptor
 {
     /** The native pointer to the descriptor structure. */
     private long endpointDescriptorPointer;
@@ -59,22 +56,16 @@ public final class EndpointDescriptor implements UsbEndpointDescriptor
         return this.endpointDescriptorPointer;
     }
 
-    @Override
     public native byte bLength();
 
-    @Override
     public native byte bDescriptorType();
 
-    @Override
     public native byte bEndpointAddress();
 
-    @Override
     public native byte bmAttributes();
 
-    @Override
     public native short wMaxPacketSize();
 
-    @Override
     public native byte bInterval();
 
     /**

@@ -9,7 +9,7 @@ import javax.usb.UsbDeviceDescriptor;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
+import org.libusb4java.DeviceDescriptor;
 import org.libusb4java.utils.DescriptorUtils;
 
 /**
@@ -121,6 +121,24 @@ public final class SimpleUsbDeviceDescriptor extends SimpleUsbDescriptor
      *            The descriptor from which to copy the data.
      */
     public SimpleUsbDeviceDescriptor(final UsbDeviceDescriptor descriptor)
+    {
+        this(descriptor.bLength(),
+            descriptor.bDescriptorType(),
+            descriptor.bcdUSB(),
+            descriptor.bDeviceClass(),
+            descriptor.bDeviceSubClass(),
+            descriptor.bDeviceProtocol(),
+            descriptor.bMaxPacketSize0(),
+            descriptor.idVendor(),
+            descriptor.idProduct(),
+            descriptor.bcdDevice(),
+            descriptor.iManufacturer(),
+            descriptor.iProduct(),
+            descriptor.iSerialNumber(),
+            descriptor.bNumConfigurations());
+    }
+
+    public SimpleUsbDeviceDescriptor(DeviceDescriptor descriptor)
     {
         this(descriptor.bLength(),
             descriptor.bDescriptorType(),
@@ -258,6 +276,48 @@ public final class SimpleUsbDeviceDescriptor extends SimpleUsbDescriptor
     @Override
     public String toString()
     {
-        return DescriptorUtils.dump(this);
+        return dump(this);
+    }
+
+    /**
+     * Dumps the specified USB device descriptor into a string and returns it.
+     *
+     * @param descriptor
+     *            The USB device descriptor to dump.
+     * @return The descriptor dump.
+     */
+    public static String dump(final UsbDeviceDescriptor descriptor)
+    {
+        return String.format(
+            "Device Descriptor:%n" +
+            "  bLength %18d%n" +
+            "  bDescriptorType %10d%n" +
+            "  bcdUSB %19s%n" +
+            "  bDeviceClass %13d %s%n" +
+            "  bDeviceSubClass %10d%n" +
+            "  bDeviceProtocol %10d%n" +
+            "  bMaxPacketSize0 %10d%n" +
+            "  idVendor %17s%n" +
+            "  idProduct %16s%n" +
+            "  bcdDevice %16s%n" +
+            "  iManufacturer %12d%n" +
+            "  iProduct %17d%n" +
+            "  iSerial %18d%n" +
+            "  bNumConfigurations %7d%n",
+            descriptor.bLength(),
+            descriptor.bDescriptorType(),
+            DescriptorUtils.decodeBCD(descriptor.bcdUSB()),
+            descriptor.bDeviceClass() & 0xff,
+            DescriptorUtils.getUSBClassName(descriptor.bDeviceClass()),
+            descriptor.bDeviceSubClass() & 0xff,
+            descriptor.bDeviceProtocol() & 0xff,
+            descriptor.bMaxPacketSize0() & 0xff,
+            String.format("0x%04x", descriptor.idVendor() & 0xffff),
+            String.format("0x%04x", descriptor.idProduct() & 0xffff),
+            DescriptorUtils.decodeBCD(descriptor.bcdDevice()),
+            descriptor.iManufacturer() & 0xff,
+            descriptor.iProduct() & 0xff,
+            descriptor.iSerialNumber() & 0xff,
+            descriptor.bNumConfigurations() & 0xff);
     }
 }

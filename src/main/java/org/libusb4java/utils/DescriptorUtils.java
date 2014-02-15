@@ -9,11 +9,10 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.usb.UsbConfigurationDescriptor;
-import javax.usb.UsbDeviceDescriptor;
-import javax.usb.UsbEndpointDescriptor;
-import javax.usb.UsbInterfaceDescriptor;
-
+import org.libusb4java.ConfigDescriptor;
+import org.libusb4java.DeviceDescriptor;
+import org.libusb4java.EndpointDescriptor;
+import org.libusb4java.InterfaceDescriptor;
 import org.libusb4java.LibUsb;
 
 /**
@@ -127,7 +126,7 @@ public final class DescriptorUtils
      *            The USB device descriptor to dump.
      * @return The descriptor dump.
      */
-    public static String dump(final UsbDeviceDescriptor descriptor)
+    public static String dump(final DeviceDescriptor descriptor)
     {
         return dump(descriptor, null, null, null);
     }
@@ -145,7 +144,7 @@ public final class DescriptorUtils
      *            The serial number strsing or null if unknown.
      * @return The descriptor dump.
      */
-    public static String dump(final UsbDeviceDescriptor descriptor,
+    public static String dump(final DeviceDescriptor descriptor,
         final String manufacturer, final String product, final String serial)
     {
         return String.format(
@@ -192,7 +191,7 @@ public final class DescriptorUtils
      *            The USB configuration descriptor to dump.
      * @return The descriptor dump.
      */
-    public static String dump(final UsbConfigurationDescriptor descriptor)
+    public static String dump(final ConfigDescriptor descriptor)
     {
         return String.format(
             "Configuration Descriptor:%n" +
@@ -228,7 +227,7 @@ public final class DescriptorUtils
      *            The USB interface descriptor to dump.
      * @return The descriptor dump.
      */
-    public static String dump(final UsbInterfaceDescriptor descriptor)
+    public static String dump(final InterfaceDescriptor descriptor)
     {
         return String.format(
             "Interface Descriptor:%n" +
@@ -260,7 +259,7 @@ public final class DescriptorUtils
      *            The USB endpoint descriptor to dump.
      * @return The descriptor dump.
      */
-    public static String dump(final UsbEndpointDescriptor descriptor)
+    public static String dump(final EndpointDescriptor descriptor)
     {
         return String.format(
             "Endpoint Descriptor:%n" +
@@ -277,8 +276,7 @@ public final class DescriptorUtils
             descriptor.bDescriptorType(),
             String.format("0x%02x", descriptor.bEndpointAddress() & 0xff),
             descriptor.bEndpointAddress() & 0x0f,
-            ((descriptor.bEndpointAddress() & LibUsb.ENDPOINT_IN) == 0) ?
-                ("OUT") : ("IN"),
+            getDirectionName(descriptor.bEndpointAddress()),
             descriptor.bmAttributes() & 0xff,
             getTransferTypeName(descriptor.bmAttributes()),
             getSynchTypeName(descriptor.bmAttributes()),
@@ -383,5 +381,17 @@ public final class DescriptorUtils
             default:
                 return "Unknown";
         }
+    }
+
+    /**
+     * Returns the name of the USB traffic direction for the specified
+     * endpoint address.
+     *
+     * @param bEndpointAddress
+     *            The endpoint address.
+     * @return The direction name.
+     */
+    public static String getDirectionName(final byte bEndpointAddress) {
+        return ((bEndpointAddress & LibUsb.ENDPOINT_IN) == 0) ? ("OUT") : ("IN");
     }
 }

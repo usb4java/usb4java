@@ -9,7 +9,7 @@ import javax.usb.UsbEndpointDescriptor;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
+import org.libusb4java.EndpointDescriptor;
 import org.libusb4java.utils.DescriptorUtils;
 
 /**
@@ -79,6 +79,16 @@ public final class SimpleUsbEndpointDescriptor extends SimpleUsbDescriptor
             descriptor.bInterval());
     }
 
+    public SimpleUsbEndpointDescriptor(EndpointDescriptor descriptor)
+    {
+        this(descriptor.bLength(),
+            descriptor.bDescriptorType(),
+            descriptor.bEndpointAddress(),
+            descriptor.bmAttributes(),
+            descriptor.wMaxPacketSize(),
+            descriptor.bInterval());
+    }
+
     @Override
     public byte bEndpointAddress()
     {
@@ -136,6 +146,39 @@ public final class SimpleUsbEndpointDescriptor extends SimpleUsbDescriptor
     @Override
     public String toString()
     {
-        return DescriptorUtils.dump(this);
+        return dump(this);
+    }
+
+    /**
+     * Dumps the specified USB endpoint descriptor into a string and returns it.
+     *
+     * @param descriptor
+     *            The USB endpoint descriptor to dump.
+     * @return The descriptor dump.
+     */
+    public static String dump(final UsbEndpointDescriptor descriptor)
+    {
+        return String.format(
+            "Endpoint Descriptor:%n" +
+            "  bLength %18d%n" +
+            "  bDescriptorType %10d%n" +
+            "  bEndpointAddress %9s  EP %d %s%n" +
+            "  bmAttributes %13d%n" +
+            "    Transfer Type             %s%n" +
+            "    Synch Type                %s%n" +
+            "    Usage Type                %s%n" +
+            "  wMaxPacketSize %11d%n" +
+            "  bInterval %16d%n",
+            descriptor.bLength(),
+            descriptor.bDescriptorType(),
+            String.format("0x%02x", descriptor.bEndpointAddress() & 0xff),
+            descriptor.bEndpointAddress() & 0x0f,
+            DescriptorUtils.getDirectionName(descriptor.bEndpointAddress()),
+            descriptor.bmAttributes() & 0xff,
+            DescriptorUtils.getTransferTypeName(descriptor.bmAttributes()),
+            DescriptorUtils.getSynchTypeName(descriptor.bmAttributes()),
+            DescriptorUtils.getUsageTypeName(descriptor.bmAttributes()),
+            descriptor.wMaxPacketSize() & 0xffff,
+            descriptor.bInterval() & 0xff);
     }
 }

@@ -20,11 +20,8 @@ package org.libusb4java;
 
 import java.nio.ByteBuffer;
 
-import javax.usb.UsbConfigurationDescriptor;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import org.libusb4java.utils.DescriptorUtils;
 
 /**
@@ -35,7 +32,7 @@ import org.libusb4java.utils.DescriptorUtils;
  *
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class ConfigDescriptor implements UsbConfigurationDescriptor
+public final class ConfigDescriptor
 {
     /** The native pointer to the descriptor structure. */
     private long configDescriptorPointer;
@@ -60,28 +57,20 @@ public final class ConfigDescriptor implements UsbConfigurationDescriptor
         return this.configDescriptorPointer;
     }
 
-    @Override
     public native byte bLength();
 
-    @Override
     public native byte bDescriptorType();
 
-    @Override
     public native short wTotalLength();
 
-    @Override
     public native byte bNumInterfaces();
 
-    @Override
     public native byte bConfigurationValue();
 
-    @Override
     public native byte iConfiguration();
 
-    @Override
     public native byte bmAttributes();
 
-    @Override
     public native byte bMaxPower();
 
     /**

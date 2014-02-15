@@ -11,11 +11,6 @@ import java.lang.reflect.Constructor;
 import java.nio.ByteBuffer;
 
 import org.junit.Test;
-
-import org.usb4java.descriptors.SimpleUsbConfigurationDescriptor;
-import org.usb4java.descriptors.SimpleUsbDeviceDescriptor;
-import org.usb4java.descriptors.SimpleUsbEndpointDescriptor;
-import org.usb4java.descriptors.SimpleUsbInterfaceDescriptor;
 import org.libusb4java.LibUsb;
 
 /**
@@ -46,6 +41,16 @@ public class DescriptorUtilsTest
         assertEquals("Low", DescriptorUtils.getSpeedName(LibUsb.SPEED_LOW));
         assertEquals("Unknown",
             DescriptorUtils.getSpeedName(LibUsb.SPEED_UNKNOWN));
+    }
+
+    /**
+     * Tests the {@link DescriptorUtils#getDirectionName(byte)} method.
+     */
+    @Test
+    public void testGetDirectionName()
+    {
+        assertEquals("IN", DescriptorUtils.getDirectionName(LibUsb.ENDPOINT_IN));
+        assertEquals("OUT", DescriptorUtils.getDirectionName(LibUsb.ENDPOINT_OUT));
     }
 
     /**
@@ -121,196 +126,6 @@ public class DescriptorUtilsTest
             15, 16, 17, 18, 19, 20 });
         assertEquals("01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10\n" +
             "11 12 13 14", DescriptorUtils.dump(bytes));
-    }
-
-    /**
-     * Tests the {@link DescriptorUtils#dump(javax.usb.UsbDeviceDescriptor)}
-     * method.
-     */
-    @Test
-    public void testDumpUsbDeviceDescriptor()
-    {
-        assertEquals("Device Descriptor:\n"
-            + "  bLength                  0\n"
-            + "  bDescriptorType          1\n"
-            + "  bcdUSB                0.02\n"
-            + "  bDeviceClass             3 HID\n"
-            + "  bDeviceSubClass          4\n"
-            + "  bDeviceProtocol          5\n"
-            + "  bMaxPacketSize0          6\n"
-            + "  idVendor            0x0007\n"
-            + "  idProduct           0x0008\n"
-            + "  bcdDevice             0.09\n"
-            + "  iManufacturer           10\n"
-            + "  iProduct                11\n"
-            + "  iSerial                 12\n"
-            + "  bNumConfigurations      13\n",
-            DescriptorUtils.dump(new SimpleUsbDeviceDescriptor((byte) 0,
-                (byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5, (byte) 6,
-                (byte) 7, (byte) 8, (byte) 9, (byte) 10, (byte) 11, (byte) 12,
-                (byte) 13)));
-    }
-
-    /**
-     * Tests the {@link DescriptorUtils#dump(javax.usb.UsbDeviceDescriptor)}
-     * method.
-     */
-    @Test
-    public void testDumpUsbDeviceDescriptorWithNames()
-    {
-        assertEquals("Device Descriptor:\n"
-            + "  bLength                  0\n"
-            + "  bDescriptorType          1\n"
-            + "  bcdUSB                0.02\n"
-            + "  bDeviceClass             3 HID\n"
-            + "  bDeviceSubClass          4\n"
-            + "  bDeviceProtocol          5\n"
-            + "  bMaxPacketSize0          6\n"
-            + "  idVendor            0x0007\n"
-            + "  idProduct           0x0008\n"
-            + "  bcdDevice             0.09\n"
-            + "  iManufacturer           10 Manufacturer\n"
-            + "  iProduct                11 Product\n"
-            + "  iSerial                 12 Serial\n"
-            + "  bNumConfigurations      13\n",
-            DescriptorUtils.dump(new SimpleUsbDeviceDescriptor((byte) 0,
-                (byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5, (byte) 6,
-                (byte) 7, (byte) 8, (byte) 9, (byte) 10, (byte) 11, (byte) 12,
-                (byte) 13), "Manufacturer", "Product", "Serial"));
-    }
-
-    /**
-     * Tests the
-     * {@link DescriptorUtils#dump(javax.usb.UsbConfigurationDescriptor)}
-     * method.
-     */
-    @Test
-    public void testDumpUsbConfigurationDescriptor()
-    {
-        assertEquals("Configuration Descriptor:\n"
-            + "  bLength                  0\n"
-            + "  bDescriptorType          1\n"
-            + "  wTotalLength             2\n"
-            + "  bNumInterfaces           3\n"
-            + "  bConfigurationValue      4\n"
-            + "  iConfiguration           5\n"
-            + "  bmAttributes          0x06\n"
-            + "    (Bus Powered)\n"
-            + "  bMaxPower               14mA\n",
-            DescriptorUtils.dump(new SimpleUsbConfigurationDescriptor((byte) 0,
-                (byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5, (byte) 6,
-                (byte) 7)));
-    }
-
-    /**
-     * Tests the
-     * {@link DescriptorUtils#dump(javax.usb.UsbConfigurationDescriptor)}
-     * method with self-powered attribute.
-     */
-    @Test
-    public void testDumpUsbConfigurationDescriptorWithSelfPowering()
-    {
-        assertEquals("Configuration Descriptor:\n"
-            + "  bLength                  0\n"
-            + "  bDescriptorType          1\n"
-            + "  wTotalLength             2\n"
-            + "  bNumInterfaces           3\n"
-            + "  bConfigurationValue      4\n"
-            + "  iConfiguration           5\n"
-            + "  bmAttributes          0x40\n"
-            + "    Self Powered\n"
-            + "  bMaxPower               14mA\n",
-            DescriptorUtils.dump(new SimpleUsbConfigurationDescriptor((byte) 0,
-                (byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5, (byte) 0x40,
-                (byte) 7)));
-    }
-
-    /**
-     * Tests the
-     * {@link DescriptorUtils#dump(javax.usb.UsbConfigurationDescriptor)}
-     * method with remote wakup attribute.
-     */
-    @Test
-    public void testDumpUsbConfigurationDescriptorWithRemoteWakeup()
-    {
-        assertEquals("Configuration Descriptor:\n"
-            + "  bLength                  0\n"
-            + "  bDescriptorType          1\n"
-            + "  wTotalLength             2\n"
-            + "  bNumInterfaces           3\n"
-            + "  bConfigurationValue      4\n"
-            + "  iConfiguration           5\n"
-            + "  bmAttributes          0x20\n"
-            + "    (Bus Powered)\n"
-            + "    Remote Wakeup\n"
-            + "  bMaxPower               14mA\n",
-            DescriptorUtils.dump(new SimpleUsbConfigurationDescriptor((byte) 0,
-                (byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5, (byte) 0x20,
-                (byte) 7)));
-    }
-
-    /**
-     * Tests the {@link DescriptorUtils#dump(javax.usb.UsbInterfaceDescriptor)}
-     * method.
-     */
-    @Test
-    public void testDumpUsbInterfaceDescriptor()
-    {
-        assertEquals("Interface Descriptor:\n"
-            + "  bLength                  0\n"
-            + "  bDescriptorType          1\n"
-            + "  bInterfaceNumber         2\n"
-            + "  bAlternateSetting        3\n"
-            + "  bNumEndpoints            4\n"
-            + "  bInterfaceClass          5 Physical\n"
-            + "  bInterfaceSubClass       6\n"
-            + "  bInterfaceProtocol       7\n"
-            + "  iInterface               8\n",
-            DescriptorUtils.dump(new SimpleUsbInterfaceDescriptor((byte) 0,
-                (byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5, (byte) 6,
-                (byte) 7, (byte) 8)));
-    }
-
-    /**
-     * Tests the {@link DescriptorUtils#dump(javax.usb.UsbEndpointDescriptor)}
-     * method.
-     */
-    @Test
-    public void testDumpUsbEndpointDescriptor()
-    {
-        assertEquals("Endpoint Descriptor:\n"
-            + "  bLength                  0\n"
-            + "  bDescriptorType          1\n"
-            + "  bEndpointAddress      0x02  EP 2 OUT\n"
-            + "  bmAttributes             3\n"
-            + "    Transfer Type             Interrupt\n"
-            + "    Synch Type                None\n"
-            + "    Usage Type                Data\n"
-            + "  wMaxPacketSize           4\n"
-            + "  bInterval                5\n",
-            DescriptorUtils.dump(new SimpleUsbEndpointDescriptor((byte) 0,
-                (byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5)));
-    }
-
-    /**
-     * Tests the {@link DescriptorUtils#dump(javax.usb.UsbEndpointDescriptor)}
-     * method with IN endpoint.
-     */
-    @Test
-    public void testDumpUsbEndpointDescriptorWithIN()
-    {
-        assertEquals("Endpoint Descriptor:\n"
-            + "  bLength                  0\n"
-            + "  bDescriptorType          1\n"
-            + "  bEndpointAddress      0x82  EP 2 IN\n"
-            + "  bmAttributes             3\n"
-            + "    Transfer Type             Interrupt\n"
-            + "    Synch Type                None\n"
-            + "    Usage Type                Data\n"
-            + "  wMaxPacketSize           4\n"
-            + "  bInterval                5\n",
-            DescriptorUtils.dump(new SimpleUsbEndpointDescriptor((byte) 0,
-                (byte) 1, (byte) 0x82, (byte) 3, (byte) 4, (byte) 5)));
     }
 
     /**

@@ -20,11 +20,8 @@ package org.libusb4java;
 
 import java.nio.ByteBuffer;
 
-import javax.usb.UsbInterfaceDescriptor;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import org.libusb4java.utils.DescriptorUtils;
 
 /**
@@ -35,7 +32,7 @@ import org.libusb4java.utils.DescriptorUtils;
  *
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class InterfaceDescriptor implements UsbInterfaceDescriptor
+public final class InterfaceDescriptor
 {
     /** The native pointer to the descriptor structure. */
     private long interfaceDescriptorPointer;
@@ -59,31 +56,22 @@ public final class InterfaceDescriptor implements UsbInterfaceDescriptor
         return this.interfaceDescriptorPointer;
     }
 
-    @Override
     public native byte bLength();
 
-    @Override
     public native byte bDescriptorType();
 
-    @Override
     public native byte bInterfaceNumber();
 
-    @Override
     public native byte bAlternateSetting();
 
-    @Override
     public native byte bNumEndpoints();
 
-    @Override
     public native byte bInterfaceClass();
 
-    @Override
     public native byte bInterfaceSubClass();
 
-    @Override
     public native byte bInterfaceProtocol();
 
-    @Override
     public native byte iInterface();
 
     /**

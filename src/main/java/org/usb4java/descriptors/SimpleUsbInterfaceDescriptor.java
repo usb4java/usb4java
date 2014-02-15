@@ -9,7 +9,7 @@ import javax.usb.UsbInterfaceDescriptor;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
+import org.libusb4java.InterfaceDescriptor;
 import org.libusb4java.utils.DescriptorUtils;
 
 /**
@@ -89,6 +89,19 @@ public final class SimpleUsbInterfaceDescriptor extends SimpleUsbDescriptor
      *            The descriptor from which to copy the data.
      */
     public SimpleUsbInterfaceDescriptor(final UsbInterfaceDescriptor descriptor)
+    {
+        this(descriptor.bLength(),
+            descriptor.bDescriptorType(),
+            descriptor.bInterfaceNumber(),
+            descriptor.bAlternateSetting(),
+            descriptor.bNumEndpoints(),
+            descriptor.bInterfaceClass(),
+            descriptor.bInterfaceSubClass(),
+            descriptor.bInterfaceProtocol(),
+            descriptor.iInterface());
+    }
+
+    public SimpleUsbInterfaceDescriptor(InterfaceDescriptor descriptor)
     {
         this(descriptor.bLength(),
             descriptor.bDescriptorType(),
@@ -182,6 +195,39 @@ public final class SimpleUsbInterfaceDescriptor extends SimpleUsbDescriptor
     @Override
     public String toString()
     {
-        return DescriptorUtils.dump(this);
+        return dump(this);
+    }
+
+    /**
+     * Dumps the specified USB interface descriptor into a string and returns
+     * it.
+     *
+     * @param descriptor
+     *            The USB interface descriptor to dump.
+     * @return The descriptor dump.
+     */
+    public static String dump(final UsbInterfaceDescriptor descriptor)
+    {
+        return String.format(
+            "Interface Descriptor:%n" +
+            "  bLength %18d%n" +
+            "  bDescriptorType %10d%n" +
+            "  bInterfaceNumber %9d%n" +
+            "  bAlternateSetting %8d%n" +
+            "  bNumEndpoints %12d%n" +
+            "  bInterfaceClass %10d %s%n" +
+            "  bInterfaceSubClass %7d%n" +
+            "  bInterfaceProtocol %7d%n" +
+            "  iInterface %15d%n",
+            descriptor.bLength(),
+            descriptor.bDescriptorType(),
+            descriptor.bInterfaceNumber() & 0xff,
+            descriptor.bAlternateSetting() & 0xff,
+            descriptor.bNumEndpoints() & 0xff,
+            descriptor.bInterfaceClass() & 0xff,
+            DescriptorUtils.getUSBClassName(descriptor.bInterfaceClass()),
+            descriptor.bInterfaceSubClass() & 0xff,
+            descriptor.bInterfaceProtocol() & 0xff,
+            descriptor.iInterface() & 0xff);
     }
 }
