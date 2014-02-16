@@ -56,16 +56,56 @@ public final class EndpointDescriptor
         return this.endpointDescriptorPointer;
     }
 
+    /**
+     * Returns the size of this descriptor (in bytes).
+     * 
+     * @return The size of this descriptor (in bytes). 
+     */
     public native byte bLength();
 
+    /**
+     * Returns the descriptor type. Will have value {@link LibUsb#DT_ENDPOINT}
+     * in this context. 
+     * 
+     * @return The descriptor type.
+     */
     public native byte bDescriptorType();
 
+    /**
+     * The address of the endpoint described by this descriptor. Bits 0:3 are 
+     * the endpoint number. Bits 4:6 are reserved. Bit 7 indicates direction
+     * (Either {@link LibUsb#ENDPOINT_IN} or {@link LibUsb#ENDPOINT_OUT}).
+     * 
+     * @return The endpoint address.
+     */
     public native byte bEndpointAddress();
 
+    /**
+     * Attributes which apply to the endpoint when it is configured using the 
+     * bConfigurationValue. Bits 0:1 determine the transfer type and correspond 
+     * to the LibUsb.TRANSFER_TYPE_* constants. Bits 2:3 are only used for 
+     * isochronous endpoints and correspond to the LibUsb.ISO_SYNC_TYPE_* 
+     * constants. Bits 4:5 are also only used for isochronous endpoints and 
+     * correspond to the LibUsb.ISO_USAGE_TYPE_* constants. Bits 6:7 are 
+     * reserved.
+     *
+     * @return The attributes.
+     */
     public native byte bmAttributes();
 
+    /**
+     * Returns the maximum packet size this endpoint is capable of 
+     * sending/receiving.
+     * 
+     * @return The maximum packet size.
+     */
     public native short wMaxPacketSize();
 
+    /**
+     * Returns the interval for polling endpoint for data transfers.
+     * 
+     * @return The polling interval.
+     */
     public native byte bInterval();
 
     /**

@@ -56,22 +56,73 @@ public final class InterfaceDescriptor
         return this.interfaceDescriptorPointer;
     }
 
+    /**
+     * Returns the size of this descriptor (in bytes).
+     * 
+     * @return The size of this descriptor (in bytes). 
+     */
     public native byte bLength();
 
+    /**
+     * Returns the descriptor type. Will have value {@link LibUsb#DT_INTERFACE}
+     * in this context. 
+     * 
+     * @return The descriptor type.
+     */
     public native byte bDescriptorType();
 
+    /**
+     * Returns the number of this interface. 
+     *
+     * @return The interface number.
+     */
     public native byte bInterfaceNumber();
 
+    /**
+     * Returns the value used to select this alternate setting for this 
+     * interface.
+     * 
+     * @return The alternate setting value.
+     */
     public native byte bAlternateSetting();
 
+    /**
+     * Returns the number of endpoints used by this interface (excluding the 
+     * control endpoint).
+     * 
+     * @return The number of endpoints.
+     */
     public native byte bNumEndpoints();
 
+    /**
+     * Returns the USB-IF class code for this interface. See LibUSB.CLASS_*
+     * constants.
+     *
+     * @return The USB-IF class code.
+     */
     public native byte bInterfaceClass();
 
+    /**
+     * Returns the USB-IF subclass code for this interface, qualified by the 
+     * bInterfaceClass value.
+     * 
+     * @return The USB-IF subclass code.
+     */
     public native byte bInterfaceSubClass();
 
+    /**
+     * Returns the USB-IF protocol code for this interface, qualified by the 
+     * bInterfaceClass and bInterfaceSubClass values.
+     * 
+     * @return The USB-IF protocol code. 
+     */
     public native byte bInterfaceProtocol();
 
+    /**
+     * Returns the index of string descriptor describing this interface.
+     * 
+     * @return The string descriptor index. 
+     */
     public native byte iInterface();
 
     /**

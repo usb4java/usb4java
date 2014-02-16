@@ -57,20 +57,63 @@ public final class ConfigDescriptor
         return this.configDescriptorPointer;
     }
 
+    /**
+     * Returns the size of this descriptor (in bytes).
+     * 
+     * @return The size of this descriptor (in bytes). 
+     */
     public native byte bLength();
 
+    /**
+     * Returns the descriptor type. Will have value {@link LibUsb#DT_CONFIG}
+     * in this context. 
+     * 
+     * @return The descriptor type.
+     */
     public native byte bDescriptorType();
 
+    /**
+     * Returns the total length of data returned for this configuration.
+     * 
+     * @return The total length of data.
+     */
     public native short wTotalLength();
 
+    /**
+     * Returns the number of interfaces supported by this configuration.
+     * 
+     * @return The number of supported interfaces.
+     */ 
     public native byte bNumInterfaces();
 
+    /**
+     * Returns the identifier value for this configuration.
+     * 
+     * @return The identifier value.
+     */
     public native byte bConfigurationValue();
 
+    /**
+     * Returns the index of string descriptor describing this configuration.
+     * 
+     * @return The string descriptor index.
+     */
     public native byte iConfiguration();
 
+    /**
+     * Returns the configuration characteristics.
+     * 
+     * @return The configuration characteristics.
+     */
     public native byte bmAttributes();
 
+    /**
+     * Returns the maximum power consumption of the USB device from this bus 
+     * in this configuration when the device is fully operation. Expressed in 
+     * units of 2 mA.
+     * 
+     * @return The maximum power consumption.
+     */
     public native byte bMaxPower();
 
     /**
