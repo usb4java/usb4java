@@ -64,21 +64,11 @@ public final class SimpleUsbEndpointDescriptor extends SimpleUsbDescriptor
     }
 
     /**
-     * Copy constructor.
+     * Construct from a libusb4java endpoint descriptor.
      * 
      * @param descriptor
      *            The descriptor from which to copy the data.
      */
-    public SimpleUsbEndpointDescriptor(final UsbEndpointDescriptor descriptor)
-    {
-        this(descriptor.bLength(),
-            descriptor.bDescriptorType(),
-            descriptor.bEndpointAddress(),
-            descriptor.bmAttributes(),
-            descriptor.wMaxPacketSize(),
-            descriptor.bInterval());
-    }
-
     public SimpleUsbEndpointDescriptor(EndpointDescriptor descriptor)
     {
         this(descriptor.bLength(),

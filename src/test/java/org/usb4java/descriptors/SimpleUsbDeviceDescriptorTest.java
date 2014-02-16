@@ -8,7 +8,6 @@ package org.usb4java.descriptors;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.BeforeClass;
@@ -79,18 +78,6 @@ public class SimpleUsbDeviceDescriptorTest
             LENGTH, DESCRIPTOR_TYPE, USB, DEVICE_CLASS, DEVICE_SUB_CLASS,
             DEVICE_PROTOCOL, MAX_PACKET_SIZE0, ID_VENDOR, ID_PRODUCT, DEVICE,
             MANUFACTURER, PRODUCT, SERIAL_NUMBER, NUM_CONFIGURATIONS);
-    }
-
-    /**
-     * Tests the copy constructor.
-     */
-    @Test
-    public void testCopyConstructor()
-    {
-        final SimpleUsbDeviceDescriptor copy =
-            new SimpleUsbDeviceDescriptor(descriptor);
-        assertNotSame(copy, descriptor);
-        assertEquals(copy, descriptor);
     }
 
     /**
@@ -218,8 +205,11 @@ public class SimpleUsbDeviceDescriptorTest
     {
         final int code = descriptor.hashCode();
         assertEquals(code, descriptor.hashCode());
-        assertEquals(code,
-            new SimpleUsbDeviceDescriptor(descriptor).hashCode());
+        assertEquals(code,new SimpleUsbDeviceDescriptor(
+            LENGTH, DESCRIPTOR_TYPE, USB, DEVICE_CLASS, DEVICE_SUB_CLASS,
+            DEVICE_PROTOCOL, MAX_PACKET_SIZE0, ID_VENDOR, ID_PRODUCT, DEVICE,
+            MANUFACTURER, PRODUCT, SERIAL_NUMBER, 
+            NUM_CONFIGURATIONS).hashCode());
     }
 
     /**
@@ -232,7 +222,9 @@ public class SimpleUsbDeviceDescriptorTest
         assertFalse(descriptor.equals(new Object()));
         assertTrue(descriptor.equals(descriptor));
         assertTrue(descriptor.equals(new SimpleUsbDeviceDescriptor(
-            descriptor)));
+            LENGTH, DESCRIPTOR_TYPE, USB, DEVICE_CLASS, DEVICE_SUB_CLASS,
+            DEVICE_PROTOCOL, MAX_PACKET_SIZE0, ID_VENDOR, ID_PRODUCT, DEVICE,
+            MANUFACTURER, PRODUCT, SERIAL_NUMBER, NUM_CONFIGURATIONS)));
         assertFalse(descriptor.equals(new SimpleUsbDeviceDescriptor(
             WRONG, DESCRIPTOR_TYPE, USB, DEVICE_CLASS, DEVICE_SUB_CLASS,
             DEVICE_PROTOCOL, MAX_PACKET_SIZE0, ID_VENDOR, ID_PRODUCT, DEVICE,
@@ -298,8 +290,11 @@ public class SimpleUsbDeviceDescriptorTest
     public void testToString()
     {
         assertEquals(descriptor.toString(), descriptor.toString());
-        assertEquals(descriptor.toString(),
-            new SimpleUsbDeviceDescriptor(descriptor).toString());
+        assertEquals(descriptor.toString(), new SimpleUsbDeviceDescriptor(
+            LENGTH, DESCRIPTOR_TYPE, USB, DEVICE_CLASS, DEVICE_SUB_CLASS,
+            DEVICE_PROTOCOL, MAX_PACKET_SIZE0, ID_VENDOR, ID_PRODUCT, DEVICE,
+            MANUFACTURER, PRODUCT, SERIAL_NUMBER, 
+            NUM_CONFIGURATIONS).toString());
         assertNotEquals(descriptor.toString(), new SimpleUsbDeviceDescriptor(
             WRONG, DESCRIPTOR_TYPE, USB, DEVICE_CLASS, DEVICE_SUB_CLASS,
             DEVICE_PROTOCOL, MAX_PACKET_SIZE0, ID_VENDOR, ID_PRODUCT, DEVICE,

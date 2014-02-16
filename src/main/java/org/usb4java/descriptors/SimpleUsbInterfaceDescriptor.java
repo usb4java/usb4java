@@ -83,24 +83,11 @@ public final class SimpleUsbInterfaceDescriptor extends SimpleUsbDescriptor
     }
 
     /**
-     * Copy constructor.
+     * Construct from a libusb4java interface descriptor.
      * 
      * @param descriptor
      *            The descriptor from which to copy the data.
      */
-    public SimpleUsbInterfaceDescriptor(final UsbInterfaceDescriptor descriptor)
-    {
-        this(descriptor.bLength(),
-            descriptor.bDescriptorType(),
-            descriptor.bInterfaceNumber(),
-            descriptor.bAlternateSetting(),
-            descriptor.bNumEndpoints(),
-            descriptor.bInterfaceClass(),
-            descriptor.bInterfaceSubClass(),
-            descriptor.bInterfaceProtocol(),
-            descriptor.iInterface());
-    }
-
     public SimpleUsbInterfaceDescriptor(InterfaceDescriptor descriptor)
     {
         this(descriptor.bLength(),

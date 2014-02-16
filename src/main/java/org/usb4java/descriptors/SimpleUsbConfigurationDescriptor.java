@@ -76,24 +76,11 @@ public final class SimpleUsbConfigurationDescriptor extends SimpleUsbDescriptor
     }
 
     /**
-     * Copy constructor.
+     * Construct from a libusb4java configuration descriptor.
      * 
      * @param descriptor
      *            The descriptor from which to copy the data.
      */
-    public SimpleUsbConfigurationDescriptor(
-        final UsbConfigurationDescriptor descriptor)
-    {
-        this(descriptor.bLength(),
-            descriptor.bDescriptorType(),
-            descriptor.wTotalLength(),
-            descriptor.bNumInterfaces(),
-            descriptor.bConfigurationValue(),
-            descriptor.iConfiguration(),
-            descriptor.bmAttributes(),
-            descriptor.bMaxPower());
-    }
-
     public SimpleUsbConfigurationDescriptor(ConfigDescriptor descriptor)
     {
         this(descriptor.bLength(),

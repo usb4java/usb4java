@@ -115,29 +115,11 @@ public final class SimpleUsbDeviceDescriptor extends SimpleUsbDescriptor
     }
 
     /**
-     * Copy constructor.
+     * Construct from a libusb4java device descriptor.
      * 
      * @param descriptor
      *            The descriptor from which to copy the data.
      */
-    public SimpleUsbDeviceDescriptor(final UsbDeviceDescriptor descriptor)
-    {
-        this(descriptor.bLength(),
-            descriptor.bDescriptorType(),
-            descriptor.bcdUSB(),
-            descriptor.bDeviceClass(),
-            descriptor.bDeviceSubClass(),
-            descriptor.bDeviceProtocol(),
-            descriptor.bMaxPacketSize0(),
-            descriptor.idVendor(),
-            descriptor.idProduct(),
-            descriptor.bcdDevice(),
-            descriptor.iManufacturer(),
-            descriptor.iProduct(),
-            descriptor.iSerialNumber(),
-            descriptor.bNumConfigurations());
-    }
-
     public SimpleUsbDeviceDescriptor(DeviceDescriptor descriptor)
     {
         this(descriptor.bLength(),

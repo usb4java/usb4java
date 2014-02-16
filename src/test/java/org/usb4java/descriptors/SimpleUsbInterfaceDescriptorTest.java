@@ -8,7 +8,6 @@ package org.usb4java.descriptors;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.BeforeClass;
@@ -64,18 +63,6 @@ public class SimpleUsbInterfaceDescriptorTest
             LENGTH, DESCRIPTOR_TYPE, INTERFACE_NUMBER, ALTERNATE_SETTING,
             NUM_ENDPOINTS, INTERFACE_CLASS, INTERFACE_SUB_CLASS,
             INTERFACE_PROTOCOL, INTERFACE);
-    }
-
-    /**
-     * Tests the copy constructor.
-     */
-    @Test
-    public void testCopyConstructor()
-    {
-        final SimpleUsbInterfaceDescriptor copy =
-            new SimpleUsbInterfaceDescriptor(descriptor);
-        assertNotSame(copy, descriptor);
-        assertEquals(copy, descriptor);
     }
 
     /**
@@ -170,8 +157,10 @@ public class SimpleUsbInterfaceDescriptorTest
     {
         final int code = descriptor.hashCode();
         assertEquals(code, descriptor.hashCode());
-        assertEquals(code,
-            new SimpleUsbInterfaceDescriptor(descriptor).hashCode());
+        assertEquals(code, new SimpleUsbInterfaceDescriptor(
+            LENGTH, DESCRIPTOR_TYPE, INTERFACE_NUMBER, ALTERNATE_SETTING,
+            NUM_ENDPOINTS, INTERFACE_CLASS, INTERFACE_SUB_CLASS,
+            INTERFACE_PROTOCOL, INTERFACE).hashCode());
     }
 
     /**
@@ -184,7 +173,9 @@ public class SimpleUsbInterfaceDescriptorTest
         assertFalse(descriptor.equals(new Object()));
         assertTrue(descriptor.equals(descriptor));
         assertTrue(descriptor.equals(new SimpleUsbInterfaceDescriptor(
-            descriptor)));
+            LENGTH, DESCRIPTOR_TYPE, INTERFACE_NUMBER, ALTERNATE_SETTING,
+            NUM_ENDPOINTS, INTERFACE_CLASS, INTERFACE_SUB_CLASS,
+            INTERFACE_PROTOCOL, INTERFACE)));
         assertFalse(descriptor.equals(new SimpleUsbInterfaceDescriptor(
             WRONG, DESCRIPTOR_TYPE, INTERFACE_NUMBER, ALTERNATE_SETTING,
             NUM_ENDPOINTS, INTERFACE_CLASS, INTERFACE_SUB_CLASS,
@@ -231,7 +222,10 @@ public class SimpleUsbInterfaceDescriptorTest
     {
         assertEquals(descriptor.toString(), descriptor.toString());
         assertEquals(descriptor.toString(),
-            new SimpleUsbInterfaceDescriptor(descriptor).toString());
+            new SimpleUsbInterfaceDescriptor(
+                LENGTH, DESCRIPTOR_TYPE, INTERFACE_NUMBER, ALTERNATE_SETTING,
+                NUM_ENDPOINTS, INTERFACE_CLASS, INTERFACE_SUB_CLASS,
+                INTERFACE_PROTOCOL, INTERFACE).toString());
         assertNotEquals(descriptor.toString(),
             new SimpleUsbInterfaceDescriptor(
                 WRONG, DESCRIPTOR_TYPE, INTERFACE_NUMBER, ALTERNATE_SETTING,

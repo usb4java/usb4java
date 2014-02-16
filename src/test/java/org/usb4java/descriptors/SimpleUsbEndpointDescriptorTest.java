@@ -8,7 +8,6 @@ package org.usb4java.descriptors;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.BeforeClass;
@@ -55,19 +54,7 @@ public class SimpleUsbEndpointDescriptorTest
             LENGTH, DESCRIPTOR_TYPE, ENDPOINT_ADDRESS, ATTRIBUTES,
             MAX_PACKET_SIZE, INTERVAL);
     }
-
-    /**
-     * Tests the copy constructor.
-     */
-    @Test
-    public void testCopyConstructor()
-    {
-        final SimpleUsbEndpointDescriptor copy =
-            new SimpleUsbEndpointDescriptor(descriptor);
-        assertNotSame(copy, descriptor);
-        assertEquals(copy, descriptor);
-    }
-
+    
     /**
      * Tests the {@link SimpleUsbEndpointDescriptor#bLength()} method.
      */
@@ -130,8 +117,9 @@ public class SimpleUsbEndpointDescriptorTest
     {
         final int code = descriptor.hashCode();
         assertEquals(code, descriptor.hashCode());
-        assertEquals(code,
-            new SimpleUsbEndpointDescriptor(descriptor).hashCode());
+        assertEquals(code, new SimpleUsbEndpointDescriptor(
+            LENGTH, DESCRIPTOR_TYPE, ENDPOINT_ADDRESS, ATTRIBUTES,
+            MAX_PACKET_SIZE, INTERVAL).hashCode());
     }
 
     /**
@@ -144,7 +132,8 @@ public class SimpleUsbEndpointDescriptorTest
         assertFalse(descriptor.equals(new Object()));
         assertTrue(descriptor.equals(descriptor));
         assertTrue(descriptor.equals(new SimpleUsbEndpointDescriptor(
-            descriptor)));
+            LENGTH, DESCRIPTOR_TYPE, ENDPOINT_ADDRESS, ATTRIBUTES,
+            MAX_PACKET_SIZE, INTERVAL)));
         assertFalse(descriptor.equals(new SimpleUsbEndpointDescriptor(
             WRONG, DESCRIPTOR_TYPE, ENDPOINT_ADDRESS, ATTRIBUTES,
             MAX_PACKET_SIZE, INTERVAL)));
@@ -172,8 +161,9 @@ public class SimpleUsbEndpointDescriptorTest
     public void testToString()
     {
         assertEquals(descriptor.toString(), descriptor.toString());
-        assertEquals(descriptor.toString(),
-            new SimpleUsbEndpointDescriptor(descriptor).toString());
+        assertEquals(descriptor.toString(), new SimpleUsbEndpointDescriptor(
+            LENGTH, DESCRIPTOR_TYPE, ENDPOINT_ADDRESS, ATTRIBUTES,
+            MAX_PACKET_SIZE, INTERVAL).toString());
         assertNotEquals(descriptor.toString(), new SimpleUsbEndpointDescriptor(
             WRONG, DESCRIPTOR_TYPE, ENDPOINT_ADDRESS, ATTRIBUTES,
             MAX_PACKET_SIZE, INTERVAL).toString());

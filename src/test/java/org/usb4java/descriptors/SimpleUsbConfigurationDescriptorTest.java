@@ -8,7 +8,6 @@ package org.usb4java.descriptors;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.BeforeClass;
@@ -62,18 +61,6 @@ public class SimpleUsbConfigurationDescriptorTest
         descriptor = new SimpleUsbConfigurationDescriptor(
             LENGTH, DESCRIPTOR_TYPE, TOTAL_LENGTH, NUM_INTERFACES,
             CONFIGURATION_VALUE, CONFIGURATION, ATTRIBUTES, MAX_POWER);
-    }
-
-    /**
-     * Tests the copy constructor.
-     */
-    @Test
-    public void testCopyConstructor()
-    {
-        final SimpleUsbConfigurationDescriptor copy =
-            new SimpleUsbConfigurationDescriptor(descriptor);
-        assertNotSame(copy, descriptor);
-        assertEquals(copy, descriptor);
     }
 
     /**
@@ -160,8 +147,10 @@ public class SimpleUsbConfigurationDescriptorTest
     {
         final int code = descriptor.hashCode();
         assertEquals(code, descriptor.hashCode());
-        assertEquals(code,
-            new SimpleUsbConfigurationDescriptor(descriptor).hashCode());
+        assertEquals(code, new SimpleUsbConfigurationDescriptor(
+            LENGTH, DESCRIPTOR_TYPE, TOTAL_LENGTH, NUM_INTERFACES,
+            CONFIGURATION_VALUE, CONFIGURATION, ATTRIBUTES, 
+            MAX_POWER).hashCode());
     }
 
     /**
@@ -174,7 +163,8 @@ public class SimpleUsbConfigurationDescriptorTest
         assertFalse(descriptor.equals(new Object()));
         assertTrue(descriptor.equals(descriptor));
         assertTrue(descriptor.equals(new SimpleUsbConfigurationDescriptor(
-            descriptor)));
+            LENGTH, DESCRIPTOR_TYPE, TOTAL_LENGTH, NUM_INTERFACES,
+            CONFIGURATION_VALUE, CONFIGURATION, ATTRIBUTES, MAX_POWER)));
         assertFalse(descriptor.equals(new SimpleUsbConfigurationDescriptor(
             WRONG, DESCRIPTOR_TYPE, TOTAL_LENGTH, NUM_INTERFACES,
             CONFIGURATION_VALUE, CONFIGURATION, ATTRIBUTES, MAX_POWER)));
@@ -209,7 +199,10 @@ public class SimpleUsbConfigurationDescriptorTest
     {
         assertEquals(descriptor.toString(), descriptor.toString());
         assertEquals(descriptor.toString(),
-            new SimpleUsbConfigurationDescriptor(descriptor).toString());
+            new SimpleUsbConfigurationDescriptor(
+                LENGTH, DESCRIPTOR_TYPE, TOTAL_LENGTH, NUM_INTERFACES,
+                CONFIGURATION_VALUE, CONFIGURATION, ATTRIBUTES, 
+                MAX_POWER).toString());
         assertNotEquals(descriptor.toString(),
             new SimpleUsbConfigurationDescriptor(
                 WRONG, DESCRIPTOR_TYPE, TOTAL_LENGTH, NUM_INTERFACES,
