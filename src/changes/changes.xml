@@ -8,7 +8,11 @@
     <author email="k@ailis.de">Klaus Reimer</author>
   </properties>
   <body>    
-    <release version="1.2.0" date="2013-09-14" description="Major update">
+    <release version="1.2.0" date="2013-02-16" description="Major update">
+      <action dev="kayahr" type="update" date="2014-02-16">
+        Split project into usb4java (Main library), usb4java-javax
+        (javax.usb extension) and libusb4java (Native code).
+      </action>
       <action dev="llongi" type="add" date="2013-09-14">
         Add hotplug support to low-level API.  
       </action>

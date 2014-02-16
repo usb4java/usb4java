@@ -1,224 +1,128 @@
 /*
- * Copyright (C) 2011 Klaus Reimer <k@ailis.de>
+ * Copyright 2013 Klaus Reimer <k@ailis.de>
  * See LICENSE.md for licensing information.
+ *
+ * Based on libusb <http://www.libusb.org/>:
+ *
+ * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
+ * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
+ * Copyright 2010-2012 Peter Stuge <peter@stuge.se>
+ * Copyright 2008-2011 Nathan Hjelm <hjelmn@users.sourceforge.net>
+ * Copyright 2009-2012 Pete Batard <pete@akeo.ie>
+ * Copyright 2009-2012 Ludovic Rousseau <ludovic.rousseau@gmail.com>
+ * Copyright 2010-2012 Michael Plante <michael.plante@gmail.com>
+ * Copyright 2011-2012 Hans de Goede <hdegoede@redhat.com>
+ * Copyright 2012 Martin Pieuchot <mpi@openbsd.org>
+ * Copyright 2012-2013 Toby Gray <toby.gray@realvnc.com>
  */
 
 package org.usb4java;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.usb.UsbDisconnectedException;
-import javax.usb.UsbException;
-import javax.usb.UsbInterface;
-import javax.usb.UsbInterfaceDescriptor;
-import javax.usb.UsbInterfacePolicy;
-import javax.usb.UsbNotActiveException;
-
-import org.usb4java.descriptors.SimpleUsbInterfaceDescriptor;
-import org.libusb4java.EndpointDescriptor;
-import org.libusb4java.InterfaceDescriptor;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
- * usb4java implementation of UsbInterface.
- * 
+ * A collection of alternate settings for a particular USB interface.
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
-final class Interface implements UsbInterface
+public final class Interface
 {
-    /** The configuration this interface belongs to. */
-    private final Configuration configuration;
-
-    /** The interface descriptor. */
-    private final UsbInterfaceDescriptor descriptor;
-
-    /** The endpoints of this interface. */
-    private final Map<Byte, Endpoint> endpoints =
-        new HashMap<Byte, Endpoint>();
+    /** The native pointer to the descriptor structure. */
+    private long interfacePointer;
 
     /**
-     * Constructor.
-     * 
-     * @param configuration
-     *            The USB configuration this interface belongs to.
-     * @param descriptor
-     *            The libusb interface descriptor.
+     * Package-private constructor to prevent manual instantiation. Interfaces
+     * are always created by JNI.
      */
-    Interface(final Configuration configuration,
-        final InterfaceDescriptor descriptor)
+    Interface()
     {
-        this.configuration = configuration;
-        this.descriptor = new SimpleUsbInterfaceDescriptor(descriptor);
-        for (EndpointDescriptor endpointDescriptor: descriptor.endpoint())
+        // Empty
+    }
+
+    /**
+     * Returns the native pointer.
+     *
+     * @return The native pointer.
+     */
+    public long getPointer()
+    {
+        return this.interfacePointer;
+    }
+
+    /**
+     * Returns the array with interface descriptors. The length of this array is
+     * determined by the {@link #numAltsetting()} field.
+     *
+     * @return The array with interface descriptors.
+     */
+    public native InterfaceDescriptor[] altsetting();
+
+    /**
+     * Returns the number of alternate settings that belong to this interface.
+     *
+     * @return The number of alternate settings.
+     */
+    public native int numAltsetting();
+
+    /**
+     * Returns a dump of this interface.
+     *
+     * @return The interface dump.
+     */
+    public String dump()
+    {
+        final StringBuilder builder = new StringBuilder();
+
+        builder.append(String.format(
+            "Interface:%n" +
+            "  numAltsetting %10d",
+            this.numAltsetting()));
+
+        for (final InterfaceDescriptor intDesc : this.altsetting())
         {
-            final Endpoint endpoint =
-                new Endpoint(this, endpointDescriptor);
-            this.endpoints.put(endpointDescriptor.bEndpointAddress(), endpoint);
+            builder.append("%n" + intDesc.dump());
         }
-    }
 
-
-    /**
-     * Ensures this setting and configuration is active.
-     *
-     * @throws UsbNotActiveException
-     *             When the setting or the configuration is not active.
-     */
-    private void checkActive()
-    {
-        if (!this.configuration.isActive())
-            throw new UsbNotActiveException("Configuration is not active");
-        if (!isActive())
-            throw new UsbNotActiveException("Setting is not active");
-    }
-
-    /**
-     * Ensures that the device is connected.
-     *
-     * @throws UsbDisconnectedException
-     *             When device has been disconnected.
-     */
-    private void checkConnected()
-    {
-        this.configuration.getUsbDevice().checkConnected();
+        return builder.toString();
     }
 
     @Override
-    public void claim() throws UsbException
+    public int hashCode()
     {
-        claim(null);
+        return new HashCodeBuilder()
+            .append(this.altsetting())
+            .append(this.numAltsetting())
+            .toHashCode();
     }
 
     @Override
-    public void claim(final UsbInterfacePolicy policy) throws UsbException
+    public boolean equals(final Object obj)
     {
-        checkActive();
-        checkConnected();
-        final AbstractDevice device = this.configuration.getUsbDevice();
-        device.claimInterface(this.descriptor.bInterfaceNumber(),
-            policy != null && policy.forceClaim(this));
-        this.configuration.setUsbInterface(
-            this.descriptor.bInterfaceNumber(), this);
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (this.getClass() != obj.getClass())
+        {
+            return false;
+        }
+
+        final Interface other = (Interface) obj;
+
+        return new EqualsBuilder()
+            .append(this.altsetting(), other.altsetting())
+            .append(this.numAltsetting(), other.numAltsetting())
+            .isEquals();
     }
 
-    @Override
-    public void release() throws UsbException
-    {
-        checkActive();
-        checkConnected();
-        this.configuration.getUsbDevice().releaseInterface(
-            this.descriptor.bInterfaceNumber());
-    }
-
-    @Override
-    public boolean isClaimed()
-    {
-        return this.configuration.getUsbDevice().isInterfaceClaimed(
-            this.descriptor.bInterfaceNumber());
-    }
-
-    @Override
-    public boolean isActive()
-    {
-        return this.configuration.getUsbInterface(this.descriptor
-            .bInterfaceNumber()) == this;
-    }
-
-    @Override
-    public int getNumSettings()
-    {
-        return this.configuration.getNumSettings(this.descriptor
-            .bInterfaceNumber());
-    }
-
-    @Override
-    public byte getActiveSettingNumber()
-    {
-        checkActive();
-        return this.configuration
-            .getUsbInterface(this.descriptor.bInterfaceNumber())
-            .getUsbInterfaceDescriptor().bAlternateSetting();
-    }
-
-    @Override
-    public Interface getActiveSetting()
-    {
-        checkActive();
-        return this.configuration.getUsbInterface(this.descriptor
-                .bInterfaceNumber());
-    }
-
-    @Override
-    public Interface getSetting(final byte number)
-    {
-        return (this.configuration).getSettings(
-            this.descriptor.bInterfaceNumber()).get(number & 0xff);
-    }
-
-    @Override
-    public boolean containsSetting(final byte number)
-    {
-        return (this.configuration).getSettings(
-            this.descriptor.bInterfaceNumber()).containsKey(number & 0xff);
-    }
-
-    @Override
-    public List<Interface> getSettings()
-    {
-        return Collections.unmodifiableList(new ArrayList<Interface>(
-            this.configuration.getSettings(
-                this.descriptor.bInterfaceNumber()).values()));
-    }
-
-    @Override
-    public List<Endpoint> getUsbEndpoints()
-    {
-        return Collections.unmodifiableList(new ArrayList<Endpoint>(
-            this.endpoints.values()));
-    }
-
-    @Override
-    public Endpoint getUsbEndpoint(final byte address)
-    {
-        return this.endpoints.get(address);
-    }
-
-    @Override
-    public boolean containsUsbEndpoint(final byte address)
-    {
-        return this.endpoints.containsKey(address);
-    }
-
-    @Override
-    public Configuration getUsbConfiguration()
-    {
-        return this.configuration;
-    }
-
-    @Override
-    public UsbInterfaceDescriptor getUsbInterfaceDescriptor()
-    {
-        return this.descriptor;
-    }
-
-    @Override
-    public String getInterfaceString() throws UsbException,
-        UnsupportedEncodingException
-    {
-        checkConnected();
-        final byte iInterface = this.descriptor.iInterface();
-        if (iInterface == 0) return null;
-        return this.configuration.getUsbDevice().getString(iInterface);
-    }
-        
     @Override
     public String toString()
     {
-        return String.format("USB interface %02x", 
-            this.descriptor.bInterfaceNumber());
-    }    
+        return this.dump();
+    }
 }

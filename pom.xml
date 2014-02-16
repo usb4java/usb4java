@@ -173,101 +173,21 @@
         </configuration>
       </plugin>
       
-      <!-- Set main class -->
+      <!-- 
+        - Updated plexus-archi er dependency fixes a problem with broken 
+        - permissions inside the JAR files. 
+        -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>  
         <version>2.4</version>
-        <configuration>
-          <archive>
-            <manifest>
-              <mainClass>org.usb4java.Main</mainClass>
-              <packageName>org.usb4java</packageName>
-              <addClasspath>true</addClasspath>           
-            </manifest>
-          </archive>
-        </configuration>
-        <executions>
-          <execution>
-            <id>usb4java</id>
-            <goals><goal>jar</goal></goals>
-            <phase>package</phase>
-            <configuration>
-              <classifier>usb4java</classifier>
-              <excludes>
-                <exclude>org/libusb4java/**</exclude>
-              </excludes>
-            </configuration>
-          </execution>
-          <execution>
-            <id>libusb</id>
-            <goals><goal>jar</goal></goals>
-            <phase>package</phase>
-            <configuration>
-              <classifier>libusb</classifier>
-              <excludes>
-                <exclude>org/usb4java/**</exclude>
-              </excludes>
-            </configuration>
-          </execution>
-          <execution>
-            <id>libusb-no-natives</id>
-            <goals><goal>jar</goal></goals>
-            <phase>package</phase>
-            <configuration>
-              <classifier>libusb-no-natives</classifier>
-              <excludes>
-                <exclude>org/usb4java/**</exclude>
-                <exclude>org/libusb4java/*-*/**</exclude>
-              </excludes>
-            </configuration>
-          </execution>
-          <execution>
-            <id>libusb-natives</id>
-            <goals><goal>jar</goal></goals>
-            <phase>package</phase>
-            <configuration>
-              <classifier>libusb-natives</classifier>
-              <includes>
-                <include>org/libusb4java/*-*/**</include>
-              </includes>
-            </configuration>
-          </execution>
-        </executions>
-        
-        <!-- 
-          - This updated dependency fixes a problem with broken permissions
-          - inside the JAR files. 
-          -->
         <dependencies>
           <dependency>
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-archiver</artifactId>
-            <version>2.1.1</version>
+            <version>2.4.4</version>
           </dependency>
         </dependencies>
-      </plugin>
-
-      <!-- Build binary artifacts for Unix, Mac OS X and Windows -->
-      <plugin> 
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.4</version>
-        <configuration>
-          <appendAssemblyId>false</appendAssemblyId>
-          <descriptors>
-            <descriptor>src/main/assembly/tarball.xml</descriptor>
-            <descriptor>src/main/assembly/zip.xml</descriptor>
-          </descriptors>
-        </configuration>
-        <executions>
-          <execution>
-            <id>package-assembly</id>
-            <phase>package</phase>
-            <goals>
-              <goal>attached</goal>
-            </goals>
-          </execution>
-        </executions> 
       </plugin>
 
     </plugins>
@@ -348,18 +268,14 @@
       <artifactId>junit</artifactId>
       <version>4.11</version>
       <scope>test</scope>
-    </dependency> 
+    </dependency>
     <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <version>1.9.5</version>
+      <groupId>org.usb4java</groupId>
+      <artifactId>libusb4java</artifactId>
+      <classifier>linux-x86_64</classifier>
+      <version>1.2.0-SNAPSHOT</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>javax.usb</groupId>
-      <artifactId>usb-api</artifactId>
-      <version>1.0.2</version>
-    </dependency>
+    </dependency> 
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>

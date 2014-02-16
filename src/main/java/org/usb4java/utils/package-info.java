@@ -4,7 +4,6 @@
  */
 
 /**
- * Low-Level classes based on the native libusb library.
+ * Utility classes providing static helper methods.
  */
-package org.usb4java;
-
+package org.usb4java.utils;
