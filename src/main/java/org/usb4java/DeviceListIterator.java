@@ -6,6 +6,7 @@
 package org.usb4java;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Iterator for device list.
@@ -40,6 +41,7 @@ final class DeviceListIterator implements Iterator<Device>
     @Override
     public Device next()
     {
+        if (!hasNext()) throw new NoSuchElementException();
         return this.devices.get(this.nextIndex++);
     }
 
