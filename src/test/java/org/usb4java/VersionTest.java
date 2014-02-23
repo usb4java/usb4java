@@ -5,14 +5,15 @@
 
 package org.usb4java;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.usb4java.test.UsbAssume.assumeUsbTestsEnabled;
 import static org.usb4java.test.UsbAssume.isUsbTestsEnabled;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.usb4java.LibUsb;
-import org.usb4java.Version;
 
 /**
  * Tests the {@link Version} class.
@@ -21,9 +22,6 @@ import org.usb4java.Version;
  */
 public class VersionTest
 {
-    /** The test subject. */
-    private Version version;
-
     /**
      * Setup test.
      */
@@ -33,7 +31,6 @@ public class VersionTest
         if (isUsbTestsEnabled())
         {
             LibUsb.init(null);
-            this.version = new Version();
         }
     }
 
@@ -50,13 +47,33 @@ public class VersionTest
     }
 
     /**
+     * Tests the {@link Version#major()} method.
+     */
+    @Test
+    public void testMajor()
+    {
+        assumeUsbTestsEnabled();
+        assertTrue(LibUsb.getVersion().major() > 0);
+    }
+
+    /**
      * Tests uninitialized access to {@link Version#major()}
      */
     @Test(expected = IllegalStateException.class)
     public void testUninitializedMajor()
     {
         assumeUsbTestsEnabled();
-        this.version.major();
+        new Version().major();
+    }
+
+    /**
+     * Tests the {@link Version#minor()} method.
+     */
+    @Test
+    public void testMinor()
+    {
+        assumeUsbTestsEnabled();
+        assertTrue(LibUsb.getVersion().minor() >= 0);
     }
 
     /**
@@ -66,7 +83,17 @@ public class VersionTest
     public void testUninitializedMinor()
     {
         assumeUsbTestsEnabled();
-        this.version.minor();
+        new Version().minor();
+    }
+
+    /**
+     * Tests the {@link Version#micro()} method.
+     */
+    @Test
+    public void testMicro()
+    {
+        assumeUsbTestsEnabled();
+        assertTrue(LibUsb.getVersion().micro() >= 0);
     }
 
     /**
@@ -76,7 +103,17 @@ public class VersionTest
     public void testUninitializedMicro()
     {
         assumeUsbTestsEnabled();
-        this.version.micro();
+        new Version().micro();
+    }
+
+    /**
+     * Tests the {@link Version#micro()} method.
+     */
+    @Test
+    public void testRc()
+    {
+        assumeUsbTestsEnabled();
+        assertNotNull(LibUsb.getVersion().rc());
     }
 
     /**
@@ -86,6 +123,47 @@ public class VersionTest
     public void testUninitializedRc()
     {
         assumeUsbTestsEnabled();
-        this.version.rc();
+        new Version().rc();
+    }
+    
+    /**
+     * Tests the {@link Version#equals(Object)} method. This equals test
+     * is not complete because we can't generate a version object with a
+     * different LibUSB version.
+     */
+    @Test
+    public void testEquals()
+    {
+        assumeUsbTestsEnabled();
+        Version version = LibUsb.getVersion();
+        assertTrue(version.equals(version));
+        assertTrue(version.equals(LibUsb.getVersion()));
+        assertFalse(version.equals(null));
+        assertFalse(version.equals(""));        
+    }
+    
+    /**
+     * Tests the {@link Version#hashCode()} method. This test is not complete
+     * because we can't generate a version object with a different LibUSB
+     * version. So we just check that it doesn't crash.
+     */
+    @Test
+    public void testHashCode()
+    {
+        assumeUsbTestsEnabled();
+        Version version = LibUsb.getVersion();
+        version.hashCode();
+    }
+    
+    /**
+     * Tests the {@link Version#toString()} method
+     */
+    @Test
+    public void testToString()
+    {
+        assumeUsbTestsEnabled();
+        Version version = LibUsb.getVersion();
+        assertNotNull(version.toString());
+        assertTrue(version.toString().length() > 0);
     }
 }

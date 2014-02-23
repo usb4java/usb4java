@@ -18,7 +18,6 @@
 
 package org.usb4java;
 
-import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -27,7 +26,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  *
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class Version implements Comparable<Version>
+public final class Version
 {
     /** The native pointer to the version structure. */
     private long versionPointer;
@@ -123,27 +122,6 @@ public final class Version implements Comparable<Version>
             .append(this.nano(), other.nano())
             .append(this.rc(), other.rc())
             .isEquals();
-    }
-
-    @Override
-    public int compareTo(final Version other)
-    {
-        if (this == other)
-        {
-            return 0;
-        }
-        if (other == null)
-        {
-            return 1;
-        }
-
-        return new CompareToBuilder()
-            .append(this.major(), other.major())
-            .append(this.minor(), other.minor())
-            .append(this.micro(), other.micro())
-            .append(this.nano(), other.nano())
-            .append(this.rc(), other.rc())
-            .toComparison();
     }
 
     @Override
