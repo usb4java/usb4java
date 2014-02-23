@@ -3,7 +3,7 @@
  * See LICENSE.md for licensing information.
  */
 
-package org.usb4java.utils;
+package org.usb4java;
 
 import static org.junit.Assert.assertEquals;
 
