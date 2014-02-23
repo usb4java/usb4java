@@ -21,8 +21,6 @@ package org.usb4java;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import org.usb4java.utils.BufferUtils;
-
 /**
  * Setup packet for control transfers.
  * 

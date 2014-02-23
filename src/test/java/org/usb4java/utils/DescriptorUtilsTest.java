@@ -11,8 +11,8 @@ import java.lang.reflect.Constructor;
 import java.nio.ByteBuffer;
 
 import org.junit.Test;
+import org.usb4java.DescriptorUtils;
 import org.usb4java.LibUsb;
-import org.usb4java.utils.DescriptorUtils;
 
 /**
  * Tests the {@link DescriptorUtils} class.

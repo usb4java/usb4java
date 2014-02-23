@@ -29,7 +29,6 @@ import org.usb4java.EndpointDescriptor;
 import org.usb4java.Interface;
 import org.usb4java.InterfaceDescriptor;
 import org.usb4java.LibUsb;
-import org.usb4java.utils.BufferUtils;
 
 /**
  * Tests the device-scope methods of the {@link LibUsb} class which need a open

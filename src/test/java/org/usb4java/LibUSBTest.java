@@ -37,7 +37,6 @@ import org.usb4java.Transfer;
 import org.usb4java.Usb20ExtensionDescriptor;
 import org.usb4java.Version;
 import org.usb4java.mocks.PollfdListenerMock;
-import org.usb4java.utils.BufferUtils;
 
 /**
  * Tests the {@link LibUsb} class.

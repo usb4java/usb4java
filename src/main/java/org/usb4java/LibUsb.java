@@ -27,7 +27,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.usb4java.utils.BufferUtils;
 
 /**
  * Static class providing the constants and functions of libusb.

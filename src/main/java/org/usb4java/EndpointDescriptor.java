@@ -22,7 +22,6 @@ import java.nio.ByteBuffer;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.usb4java.utils.DescriptorUtils;
 
 /**
  * A structure representing the standard USB endpoint descriptor.
