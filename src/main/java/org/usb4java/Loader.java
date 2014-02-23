@@ -339,13 +339,15 @@ public final class Loader
      * @throws LoaderException
      *             When loading the native wrapper libraries failed.
      */
-    public static void load()
+    public synchronized static void load()
     {
+        // Do nothing if already loaded (or still loading)
         if (loaded)
         {
             return;
         }
-
+        
+        loaded = true;
         final String platform = getPlatform();
         final String lib = getLibName();
         final String extraLib = getExtraLibName();
@@ -354,6 +356,5 @@ public final class Loader
             System.load(extractLibrary(platform, extraLib));
         }
         System.load(extractLibrary(platform, lib));
-        loaded = true;
     }
 }
