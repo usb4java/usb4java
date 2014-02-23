@@ -41,5 +41,6 @@ public interface HotplugCallback
      * @return Whether this callback is finished processing events. Returning 1
      *         will cause this callback to be deregistered.
      */
-    int processEvent(Context context, Device device, int event, Object userData);
+    int processEvent(Context context, Device device, int event, 
+        Object userData);
 }

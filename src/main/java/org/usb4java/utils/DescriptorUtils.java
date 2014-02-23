@@ -23,7 +23,8 @@ import org.usb4java.LibUsb;
 public final class DescriptorUtils
 {
     /** Mapping from USB class id to USB class name. */
-    private static final Map<Byte, String> CLASS_NAMES = new HashMap<Byte, String>();
+    private static final Map<Byte, String> CLASS_NAMES = 
+        new HashMap<Byte, String>();
 
     static
     {
@@ -40,7 +41,8 @@ public final class DescriptorUtils
         CLASS_NAMES.put(LibUsb.CLASS_SMART_CARD, "Smart Card");
         CLASS_NAMES.put(LibUsb.CLASS_CONTENT_SECURITY, "Content Security");
         CLASS_NAMES.put(LibUsb.CLASS_VIDEO, "Video");
-        CLASS_NAMES.put(LibUsb.CLASS_PERSONAL_HEALTHCARE, "Personal Healthcare");
+        CLASS_NAMES.put(LibUsb.CLASS_PERSONAL_HEALTHCARE, 
+            "Personal Healthcare");
         CLASS_NAMES.put(LibUsb.CLASS_DIAGNOSTIC_DEVICE, "Diagnostic Device");
         CLASS_NAMES.put(LibUsb.CLASS_WIRELESS, "Wireless");
         CLASS_NAMES.put(LibUsb.CLASS_APPLICATION, "Application");
@@ -392,6 +394,7 @@ public final class DescriptorUtils
      * @return The direction name.
      */
     public static String getDirectionName(final byte bEndpointAddress) {
-        return ((bEndpointAddress & LibUsb.ENDPOINT_IN) == 0) ? ("OUT") : ("IN");
+        return ((bEndpointAddress & LibUsb.ENDPOINT_IN) == 0) ? 
+            ("OUT") : ("IN");
     }
 }

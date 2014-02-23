@@ -442,7 +442,8 @@ public final class LibUsb
 
     /** We unwrap the BOS => define its maximum size. */
     public static final byte DT_BOS_MAX_SIZE = ((DT_BOS_SIZE)
-        + (BT_USB_2_0_EXTENSION_SIZE) + (BT_SS_USB_DEVICE_CAPABILITY_SIZE) + (BT_CONTAINER_ID_SIZE));
+        + (BT_USB_2_0_EXTENSION_SIZE) + (BT_SS_USB_DEVICE_CAPABILITY_SIZE) 
+        + (BT_CONTAINER_ID_SIZE));
 
     // Endpoint direction. Values for bit 7 of the endpoint address scheme.
 
@@ -624,13 +625,15 @@ public final class LibUsb
     /**
      * Hotplug callbacks (to correctly manage calls and additional data).
      */
-    private static final ConcurrentMap<Long, ImmutablePair<HotplugCallback, Object>> hotplugCallbacks =
+    private static final ConcurrentMap<Long, 
+        ImmutablePair<HotplugCallback, Object>> hotplugCallbacks =
         new ConcurrentHashMap<Long, ImmutablePair<HotplugCallback, Object>>();
 
     /**
      * Pollfd listeners (to support different listeners for different contexts).
      */
-    private static final ConcurrentMap<Long, ImmutablePair<PollfdListener, Object>> pollfdListeners =
+    private static final ConcurrentMap<Long, 
+        ImmutablePair<PollfdListener, Object>> pollfdListeners =
         new ConcurrentHashMap<Long, ImmutablePair<PollfdListener, Object>>();
 
     static
@@ -943,7 +946,8 @@ public final class LibUsb
      *         {@link #ERROR_NO_DEVICE} if the device has been disconnected
      *         another error on other failure
      */
-    public static native int open(final Device device, final DeviceHandle handle);
+    public static native int open(final Device device, 
+        final DeviceHandle handle);
 
     /**
      * Convenience function for finding a device with a particular
@@ -1535,7 +1539,8 @@ public final class LibUsb
      * @param companionDescriptor
      *            Output location for the superspeed endpoint companion
      *            descriptor. Only valid if 0 was returned. Must be freed with
-     *            {@link #freeSsEndpointCompanionDescriptor(SsEndpointCompanionDescriptor)}
+     *            {@link #freeSsEndpointCompanionDescriptor
+     *            (SsEndpointCompanionDescriptor)}
      *            after use.
      * @return {@link #SUCCESS} on success, {@link #ERROR_NOT_FOUND} if the
      *         descriptor does not exist, another error code on error
@@ -1546,8 +1551,8 @@ public final class LibUsb
 
     /**
      * Free a superspeed endpoint companion descriptor obtained from
-     * {@link #getSsEndpointCompanionDescriptor(Context, EndpointDescriptor, SsEndpointCompanionDescriptor)}
-     * .
+     * {@link #getSsEndpointCompanionDescriptor(Context, EndpointDescriptor, 
+     * SsEndpointCompanionDescriptor)}.
      *
      * It is safe to call this function with a NULL parameter, in which case the
      * function simply returns.
@@ -1597,8 +1602,8 @@ public final class LibUsb
      * @param extensionDescriptor
      *            Output location for the USB 2.0 Extension descriptor. Only
      *            valid if 0 was returned. Must be freed with
-     *            {@link #freeUsb20ExtensionDescriptor(Usb20ExtensionDescriptor)}
-     *            after use.
+     *            {@link #freeUsb20ExtensionDescriptor(
+     *            Usb20ExtensionDescriptor)} after use.
      * @return 0 on success a LIBUSB_ERROR code on error
      */
     public static native int getUsb20ExtensionDescriptor(final Context context,
@@ -1607,8 +1612,8 @@ public final class LibUsb
 
     /**
      * Free a USB 2.0 Extension descriptor obtained from
-     * {@link #getUsb20ExtensionDescriptor(Context, BosDevCapabilityDescriptor, Usb20ExtensionDescriptor)}
-     * .
+     * {@link #getUsb20ExtensionDescriptor(Context, BosDevCapabilityDescriptor, 
+     * Usb20ExtensionDescriptor)}.
      *
      * It is safe to call this function with a NULL parameter, in which case
      * the function simply returns.
@@ -1631,8 +1636,8 @@ public final class LibUsb
      *            Output location for the SuperSpeed USB Device Capability
      *            descriptor. Only valid if {@link #SUCCESS} was returned.
      *            Must be freed with
-     *            {@link #freeSsUsbDeviceCapabilityDescriptor(SsUsbDeviceCapabilityDescriptor)}
-     *            after use.
+     *            {@link #freeSsUsbDeviceCapabilityDescriptor(
+     *            SsUsbDeviceCapabilityDescriptor)} after use.
      * @return {@link #SUCCESS} on success, an error code on error.
      */
     public static native int getSsUsbDeviceCapabilityDescriptor(
@@ -1642,8 +1647,8 @@ public final class LibUsb
 
     /**
      * Free a SuperSpeed USB Device Capability descriptor obtained from
-     * {@link #getSsUsbDeviceCapabilityDescriptor(Context, BosDevCapabilityDescriptor, SsUsbDeviceCapabilityDescriptor)}
-     * .
+     * {@link #getSsUsbDeviceCapabilityDescriptor(Context, 
+     * BosDevCapabilityDescriptor, SsUsbDeviceCapabilityDescriptor)}.
      *
      * It is safe to call this function with a NULL parameter,
      * in which case the function simply returns.
@@ -1675,8 +1680,8 @@ public final class LibUsb
 
     /**
      * Free a Container ID descriptor obtained from
-     * {@link #getContainerIdDescriptor(Context, BosDevCapabilityDescriptor, ContainerIdDescriptor)}
-     * .
+     * {@link #getContainerIdDescriptor(Context, BosDevCapabilityDescriptor, 
+     * ContainerIdDescriptor)}.
      *
      * It is safe to call this function with a NULL parameter, in which case
      * the function simply returns.
@@ -2834,8 +2839,8 @@ public final class LibUsb
                 : (vendorId & 0xFFFF),
             (productId == LibUsb.HOTPLUG_MATCH_ANY) ? (LibUsb.HOTPLUG_MATCH_ANY)
                 : (productId & 0xFFFF),
-            (deviceClass == LibUsb.HOTPLUG_MATCH_ANY) ? (LibUsb.HOTPLUG_MATCH_ANY)
-                : (deviceClass & 0xFF),
+            (deviceClass == LibUsb.HOTPLUG_MATCH_ANY) ? 
+                (LibUsb.HOTPLUG_MATCH_ANY) : (deviceClass & 0xFF),
             callbackHandle, globalHotplugId);
 
         if (result == LibUsb.SUCCESS)

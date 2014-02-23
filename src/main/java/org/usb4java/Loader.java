@@ -149,7 +149,8 @@ public final class Loader
         }
         throw new LoaderException("Unable to determine the shared library "
             + "file extension for operating system '" + os
-            + "'. Please specify Java parameter -D" + key + "=<FILE-EXTENSION>");
+            + "'. Please specify Java parameter -D" + key 
+            + "=<FILE-EXTENSION>");
     }
 
     /**
@@ -265,7 +266,8 @@ public final class Loader
      *            The library name to extract (For example "libusb0.dll")
      * @return The absolute path to the extracted library.
      */
-    private static String extractLibrary(final String platform, final String lib)
+    private static String extractLibrary(final String platform, 
+        final String lib)
     {
         // Extract the usb4java library
         final String source = '/'

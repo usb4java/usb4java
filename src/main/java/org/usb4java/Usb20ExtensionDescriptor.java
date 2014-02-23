@@ -36,7 +36,8 @@ public final class Usb20ExtensionDescriptor
 
     /**
      * Constructs a new USB 2.0 Extension descriptor which can be passed to the
-     * {@link LibUsb#getUsb20ExtensionDescriptor(Context, BosDevCapabilityDescriptor, Usb20ExtensionDescriptor)}
+     * {@link LibUsb#getUsb20ExtensionDescriptor(Context, 
+     * BosDevCapabilityDescriptor, Usb20ExtensionDescriptor)}
      * method.
      */
     public Usb20ExtensionDescriptor()

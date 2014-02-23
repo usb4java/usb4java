@@ -61,8 +61,8 @@ public final class HotplugCallbackHandle
     {
         final int prime = 31;
         int result = 1;
-        result = (prime * result)
-            + (int) (this.hotplugCallbackHandleValue ^ (this.hotplugCallbackHandleValue >>> 32));
+        result = (prime * result) + (int) (this.hotplugCallbackHandleValue ^ 
+            (this.hotplugCallbackHandleValue >>> 32));
         return result;
     }
 

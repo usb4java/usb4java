@@ -40,7 +40,8 @@ public final class ContainerIdDescriptor
 
     /**
      * Constructs a new Container Id descriptor which can be passed to the
-     * {@link LibUsb#getContainerIdDescriptor(Context, BosDevCapabilityDescriptor, ContainerIdDescriptor)}
+     * {@link LibUsb#getContainerIdDescriptor(Context, 
+     * BosDevCapabilityDescriptor, ContainerIdDescriptor)}
      * method.
      */
     public ContainerIdDescriptor()

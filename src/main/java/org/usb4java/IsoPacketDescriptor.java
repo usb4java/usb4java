@@ -84,8 +84,8 @@ public final class IsoPacketDescriptor
     {
         final int prime = 31;
         int result = 1;
-        result = (prime * result)
-            + (int) (this.isoPacketDescriptorPointer ^ (this.isoPacketDescriptorPointer >>> 32));
+        result = (prime * result) + (int) (this.isoPacketDescriptorPointer ^ 
+            (this.isoPacketDescriptorPointer >>> 32));
         return result;
     }
 

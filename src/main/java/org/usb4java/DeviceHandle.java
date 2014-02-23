@@ -59,8 +59,8 @@ public final class DeviceHandle
     {
         final int prime = 31;
         int result = 1;
-        result = (prime * result)
-            + (int) (this.deviceHandlePointer ^ (this.deviceHandlePointer >>> 32));
+        result = (prime * result) + (int) (this.deviceHandlePointer ^ 
+            (this.deviceHandlePointer >>> 32));
         return result;
     }
 

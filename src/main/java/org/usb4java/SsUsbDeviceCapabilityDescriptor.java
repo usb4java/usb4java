@@ -38,7 +38,8 @@ public final class SsUsbDeviceCapabilityDescriptor
     /**
      * Constructs a new SuperSpeed USB Device Capability descriptor which can
      * be passed to the
-     * {@link LibUsb#getSsUsbDeviceCapabilityDescriptor(Context, BosDevCapabilityDescriptor, SsUsbDeviceCapabilityDescriptor)}
+     * {@link LibUsb#getSsUsbDeviceCapabilityDescriptor(Context, 
+     * BosDevCapabilityDescriptor, SsUsbDeviceCapabilityDescriptor)}
      * method.
      */
     public SsUsbDeviceCapabilityDescriptor()
@@ -172,7 +173,8 @@ public final class SsUsbDeviceCapabilityDescriptor
             return false;
         }
 
-        final SsUsbDeviceCapabilityDescriptor other = (SsUsbDeviceCapabilityDescriptor) obj;
+        final SsUsbDeviceCapabilityDescriptor other = 
+            (SsUsbDeviceCapabilityDescriptor) obj;
 
         return new EqualsBuilder()
             .append(this.bLength(), other.bLength())

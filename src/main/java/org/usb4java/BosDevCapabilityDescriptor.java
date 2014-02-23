@@ -131,7 +131,8 @@ public final class BosDevCapabilityDescriptor
             return false;
         }
 
-        final BosDevCapabilityDescriptor other = (BosDevCapabilityDescriptor) obj;
+        final BosDevCapabilityDescriptor other = 
+            (BosDevCapabilityDescriptor) obj;
 
         return new EqualsBuilder()
             .append(this.bLength(), other.bLength())
