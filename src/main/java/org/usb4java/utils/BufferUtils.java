@@ -24,6 +24,14 @@ public final class BufferUtils
     private static final int longSize = Long.SIZE / Byte.SIZE;
 
     /**
+     * Private constructor to prevent instantiation.
+     */
+    private BufferUtils()
+    {
+        // Empty
+    }
+    
+    /**
      * Allocates a new direct {@link ByteBuffer} with the specified size and
      * returns it.
      * 
