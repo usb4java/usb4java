@@ -106,7 +106,7 @@ public final class LibUsb
     /** Other error. */
     public static final int ERROR_OTHER = -99;
 
-    /** Total number of error codes */
+    /** Total number of error codes. */
     public static final int ERROR_COUNT = 14;
 
     // Speed codes. Indicates the speed at which the device is operating.
@@ -440,7 +440,7 @@ public final class LibUsb
     /** Size of a BOS descriptor. */
     public static final byte BT_CONTAINER_ID_SIZE = 20;
 
-    /** We unwrap the BOS => define its maximum size */
+    /** We unwrap the BOS => define its maximum size. */
     public static final byte DT_BOS_MAX_SIZE = ((DT_BOS_SIZE)
         + (BT_USB_2_0_EXTENSION_SIZE) + (BT_SS_USB_DEVICE_CAPABILITY_SIZE) + (BT_CONTAINER_ID_SIZE));
 
