@@ -85,7 +85,6 @@ public final class DeviceList implements Iterable<Device>
         int result = 1;
         result = (prime * result)
             + (int) (this.deviceListPointer ^ (this.deviceListPointer >>> 32));
-        result = (prime * result) + this.size;
         return result;
     }
 
@@ -105,15 +104,7 @@ public final class DeviceList implements Iterable<Device>
             return false;
         }
         final DeviceList other = (DeviceList) obj;
-        if (this.deviceListPointer != other.deviceListPointer)
-        {
-            return false;
-        }
-        if (this.size != other.size)
-        {
-            return false;
-        }
-        return true;
+        return this.deviceListPointer == other.deviceListPointer;
     }
 
     @Override
