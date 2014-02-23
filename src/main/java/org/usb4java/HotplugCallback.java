@@ -6,10 +6,12 @@
 package org.usb4java;
 
 /**
- * Hotplug callback..
+ * Hotplug callback.
  * 
  * When requesting hotplug event notifications, you pass a callback of this
  * type.
+ * 
+ * @author Luca Longinotti (l@longi.li)
  */
 public interface HotplugCallback
 {

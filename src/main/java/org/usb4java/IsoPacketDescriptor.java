@@ -20,6 +20,8 @@ package org.usb4java;
 
 /**
  * Isochronous packet descriptor.
+ * 
+ * @author Luca Longinotti (l@longi.li)
  */
 public final class IsoPacketDescriptor
 {
