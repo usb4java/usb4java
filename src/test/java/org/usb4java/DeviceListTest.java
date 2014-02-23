@@ -49,9 +49,7 @@ public class DeviceListTest
     }
 
     /**
-     * Tests the {@link DeviceList#equals(Object)} method. This equals test
-     * is not complete because we can't generate two different device lists
-     * without user interaction.
+     * Tests the {@link DeviceList#equals(Object)} method.
      */
     @Test
     public void testEquals()
@@ -59,10 +57,13 @@ public class DeviceListTest
         assumeUsbTestsEnabled();
         DeviceList a = new DeviceList();
         DeviceList b = new DeviceList();
+        DeviceList c = new DeviceList();
+        DeviceList d = new DeviceList();
         LibUsb.getDeviceList(null, a);
         LibUsb.getDeviceList(null, b);
         try
         {
+            assertTrue(c.equals(d));
             assertTrue(a.equals(a));
             assertTrue(b.equals(b));
             assertFalse(a.equals(b));
