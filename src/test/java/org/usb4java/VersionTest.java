@@ -145,16 +145,14 @@ public class VersionTest
     }
     
     /**
-     * Tests the {@link Version#hashCode()} method. This test is not complete
-     * because we can't generate a version object with a different LibUSB
-     * version. So we just check that it doesn't crash.
+     * Tests the {@link Version#hashCode()} method.
      */
     @Test
     public void testHashCode()
     {
         assumeUsbTestsEnabled();
         Version version = LibUsb.getVersion();
-        version.hashCode();
+        assertEquals(version.hashCode(), version.hashCode());
     }
     
     /**
