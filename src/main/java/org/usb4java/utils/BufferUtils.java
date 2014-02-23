@@ -18,10 +18,10 @@ import java.nio.LongBuffer;
 public final class BufferUtils
 {
     /** The native size of the type <code>int</code>. */
-    private static final int intSize = Integer.SIZE / Byte.SIZE;
+    private static final int INT_SIZE = Integer.SIZE / Byte.SIZE;
 
     /** The native size of the type <code>long</code>. */
-    private static final int longSize = Long.SIZE / Byte.SIZE;
+    private static final int LONG_SIZE = Long.SIZE / Byte.SIZE;
 
     /**
      * Private constructor to prevent instantiation.
@@ -52,7 +52,7 @@ public final class BufferUtils
      */
     public static IntBuffer allocateIntBuffer()
     {
-        return ByteBuffer.allocateDirect(intSize).asIntBuffer();
+        return ByteBuffer.allocateDirect(INT_SIZE).asIntBuffer();
     }
 
     /**
@@ -62,7 +62,7 @@ public final class BufferUtils
      */
     public static LongBuffer allocateLongBuffer()
     {
-        return ByteBuffer.allocateDirect(longSize).asLongBuffer();
+        return ByteBuffer.allocateDirect(LONG_SIZE).asLongBuffer();
     }
 
     /**
