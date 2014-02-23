@@ -1708,7 +1708,8 @@ public final class LibUsb
         final byte index, final ByteBuffer data)
     {
         return controlTransfer(handle, ENDPOINT_IN, REQUEST_GET_DESCRIPTOR,
-            (short) ((type << 8) | index), (short) 0, data, 1000);
+            (short) (((type & 0xff) << 8) | (index & 0xff)), (short) 0, 
+            data, 1000);
     }
 
     /**
@@ -1733,7 +1734,7 @@ public final class LibUsb
         final byte index, final short langId, final ByteBuffer data)
     {
         return controlTransfer(handle, ENDPOINT_IN, REQUEST_GET_DESCRIPTOR,
-            (short) ((DT_STRING << 8) | index), langId, data, 1000);
+            (short) ((DT_STRING << 8) | (index & 0xff)), langId, data, 1000);
     }
 
     /**
