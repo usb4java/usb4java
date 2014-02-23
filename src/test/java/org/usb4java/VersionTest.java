@@ -6,6 +6,7 @@
 package org.usb4java;
 
 import static org.usb4java.test.UsbAssume.assumeUsbTestsEnabled;
+import static org.usb4java.test.UsbAssume.isUsbTestsEnabled;
 
 import org.junit.After;
 import org.junit.Before;
@@ -29,9 +30,11 @@ public class VersionTest
     @Before
     public void setUp()
     {
-        assumeUsbTestsEnabled();
-        LibUsb.init(null);
-        this.version = new Version();
+        if (isUsbTestsEnabled())
+        {
+            LibUsb.init(null);
+            this.version = new Version();
+        }
     }
 
     /**
@@ -40,7 +43,10 @@ public class VersionTest
     @After
     public void tearDown()
     {
-        LibUsb.exit(null);
+        if (isUsbTestsEnabled())
+        {
+            LibUsb.exit(null);
+        }
     }
 
     /**

@@ -6,12 +6,11 @@
 package org.usb4java;
 
 import static org.usb4java.test.UsbAssume.assumeUsbTestsEnabled;
+import static org.usb4java.test.UsbAssume.isUsbTestsEnabled;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.usb4java.BosDescriptor;
-import org.usb4java.LibUsb;
 
 /**
  * Tests the {@link BosDescriptor} class.
@@ -29,9 +28,11 @@ public class BosDescriptorTest
     @Before
     public void setUp()
     {
-        assumeUsbTestsEnabled();
-        LibUsb.init(null);
-        this.descriptor = new BosDescriptor();
+        if (isUsbTestsEnabled())
+        {
+            LibUsb.init(null);
+            this.descriptor = new BosDescriptor();
+        }
     }
 
     /**
@@ -40,7 +41,10 @@ public class BosDescriptorTest
     @After
     public void tearDown()
     {
-        LibUsb.exit(null);
+        if (isUsbTestsEnabled())
+        {
+            LibUsb.exit(null);
+        }
     }
 
     /**

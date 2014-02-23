@@ -6,6 +6,7 @@
 package org.usb4java;
 
 import static org.usb4java.test.UsbAssume.assumeUsbTestsEnabled;
+import static org.usb4java.test.UsbAssume.isUsbTestsEnabled;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
@@ -62,20 +63,23 @@ public class LibUSBDeviceTest
     @Before
     public void setUp()
     {
-        this.context = new Context();
-        LibUsb.init(this.context);
-        try
+        if (isUsbTestsEnabled())
         {
-            this.device = this.findTestDevice();
-            if (this.device == null)
+            this.context = new Context();
+            LibUsb.init(this.context);
+            try
             {
-                throw new IllegalStateException("Need at least one USB device "
-                    + "with at least one endpoint to execute this test");
+                this.device = this.findTestDevice();
+                if (this.device == null)
+                {
+                    throw new IllegalStateException("Need at least one USB device "
+                        + "with at least one endpoint to execute this test");
+                }
             }
-        }
-        catch (final Throwable e)
-        {
-            this.device = null;
+            catch (final Throwable e)
+            {
+                this.device = null;
+            }
         }
     }
 
@@ -145,13 +149,16 @@ public class LibUSBDeviceTest
     @After
     public void tearDown()
     {
-        if (this.device != null)
+        if (isUsbTestsEnabled())
         {
-            LibUsb.unrefDevice(this.device);
-        }
-        if (this.context != null)
-        {
-            LibUsb.exit(this.context);
+            if (this.device != null)
+            {
+                LibUsb.unrefDevice(this.device);
+            }
+            if (this.context != null)
+            {
+                LibUsb.exit(this.context);
+            }
         }
     }
 

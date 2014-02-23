@@ -23,19 +23,19 @@ public class UsbAssume
 
     /** If TCK tests are to be executed. */
     private static Boolean tckTests;
-
+    
     /**
-     * Assume that USB tests are enabled. Call this in the first line of
-     * tests method or preparation methods when you want to ignore the
-     * tests when the system is not able to run the tests anyway.
+     * Check if USB tests are enabled.
      * 
      * USB tests can be controlled with the system property USB_TESTS. When
      * set to true then USB tests are always run, if set to false then they
      * are never run. If this property is not set then the command-line tool
      * lsusb is called. If this tool returned at least two lines of text then
      * USB tests are enabled. In all other cases they are disabled.
+     * 
+     * @return True if USB tests are enabled, false if not.
      */
-    public static void assumeUsbTestsEnabled()
+    public static boolean isUsbTestsEnabled()
     {
         if (usbTests == null && System.getProperty("USB_TESTS") != null)
             usbTests = Boolean.valueOf(System.getProperty("USB_TESTS"));
@@ -77,8 +77,27 @@ public class UsbAssume
                 // not be run.
             }
         }
-        assumeTrue("This test is ignored when USB_TESTS property is not set",
-            usbTests);
+        return usbTests;
+    }
+
+    /**
+     * Assume that USB tests are enabled. Call this in the first line of
+     * tests method or preparation methods when you want to ignore the
+     * tests when the system is not able to run the tests anyway.
+     * 
+     * USB tests can be controlled with the system property USB_TESTS. When
+     * set to true then USB tests are always run, if set to false then they
+     * are never run. If this property is not set then the command-line tool
+     * lsusb is called. If this tool returned at least two lines of text then
+     * USB tests are enabled. In all other cases they are disabled.
+     */
+    public static void assumeUsbTestsEnabled()
+    {
+        if (!isUsbTestsEnabled())
+        {
+            assumeTrue("This test is ignored when USB_TESTS property is not set",
+                usbTests);
+        }
     }
 
     /**
