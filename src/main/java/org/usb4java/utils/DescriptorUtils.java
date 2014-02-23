@@ -177,11 +177,11 @@ public final class DescriptorUtils
             String.format("0x%04x", descriptor.idProduct() & 0xffff),
             decodeBCD(descriptor.bcdDevice()),
             descriptor.iManufacturer() & 0xff,
-            (manufacturer == null) ? ("") : (" " + manufacturer),
+            (manufacturer == null) ? "" : (" " + manufacturer),
             descriptor.iProduct() & 0xff,
-            (product == null) ? ("") : (" " + product),
+            (product == null) ? "" : (" " + product),
             descriptor.iSerialNumber() & 0xff,
-            (serial == null) ? ("") : (" " + serial),
+            (serial == null) ? "" : (" " + serial),
             descriptor.bNumConfigurations() & 0xff);
     }
 
@@ -214,9 +214,9 @@ public final class DescriptorUtils
             descriptor.bConfigurationValue() & 0xff,
             descriptor.iConfiguration() & 0xff,
             String.format("0x%02x", descriptor.bmAttributes() & 0xff),
-            ((descriptor.bmAttributes() & 64) == 0) ? ("(Bus Powered)")
-                : ("Self Powered"),
-            ((descriptor.bmAttributes() & 32) == 0) ? ("")
+            ((descriptor.bmAttributes() & 64) == 0) ? "(Bus Powered)"
+                : "Self Powered",
+            ((descriptor.bmAttributes() & 32) == 0) ? ""
                 : String.format("    Remote Wakeup%n"),
             (descriptor.bMaxPower() & 0xff) * 2);
     }
@@ -354,7 +354,8 @@ public final class DescriptorUtils
                 return "Feedback";
             case LibUsb.ISO_USAGE_TYPE_IMPLICIT:
                 return "Implicit Feedback Data";
-            case 3: // b11 is considered "Reserved" according to USB 3.0 spec.
+            case 3: 
+                // b11 is considered "Reserved" according to USB 3.0 spec.
                 return "Reserved";
             default:
                 return "Unknown";
@@ -393,8 +394,8 @@ public final class DescriptorUtils
      *            The endpoint address.
      * @return The direction name.
      */
-    public static String getDirectionName(final byte bEndpointAddress) {
-        return ((bEndpointAddress & LibUsb.ENDPOINT_IN) == 0) ? 
-            ("OUT") : ("IN");
+    public static String getDirectionName(final byte bEndpointAddress)
+    {
+        return ((bEndpointAddress & LibUsb.ENDPOINT_IN) == 0) ? "OUT" : "IN";
     }
 }

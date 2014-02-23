@@ -441,9 +441,9 @@ public final class LibUsb
     public static final byte BT_CONTAINER_ID_SIZE = 20;
 
     /** We unwrap the BOS => define its maximum size. */
-    public static final byte DT_BOS_MAX_SIZE = ((DT_BOS_SIZE)
-        + (BT_USB_2_0_EXTENSION_SIZE) + (BT_SS_USB_DEVICE_CAPABILITY_SIZE) 
-        + (BT_CONTAINER_ID_SIZE));
+    public static final byte DT_BOS_MAX_SIZE = DT_BOS_SIZE
+        + BT_USB_2_0_EXTENSION_SIZE + BT_SS_USB_DEVICE_CAPABILITY_SIZE 
+        + BT_CONTAINER_ID_SIZE;
 
     // Endpoint direction. Values for bit 7 of the endpoint address scheme.
 
@@ -520,15 +520,15 @@ public final class LibUsb
 
     /**
      * Automatically free transfer buffer during {@link #freeTransfer(Transfer)}
-     *
-     * Please note that this flag is effectively a no-op (set to zero) here in
-     * the Java wrapper, since the ByteBuffer that acts as a buffer for
-     * transfers is allocated by the JVM and is subject to garbage collection
-     * like any other object at some point. Nulling the reference is the only
-     * needed action to take, and it is already done by the
+     * 
+     * Please note that this flag (which is originally 2) is effectively a no-op
+     * (set to zero) here in the Java wrapper, since the ByteBuffer that acts as
+     * a buffer for transfers is allocated by the JVM and is subject to garbage
+     * collection like any other object at some point. Nulling the reference is
+     * the only needed action to take, and it is already done by the
      * TRANSFER_FREE_TRANSFER flag.
      */
-    public static final byte TRANSFER_FREE_BUFFER = 0; // Originally 2
+    public static final byte TRANSFER_FREE_BUFFER = 0;
 
     /**
      * Automatically call {@link #freeTransfer(Transfer)} after callback
@@ -2243,7 +2243,8 @@ public final class LibUsb
 
         if (context == null)
         {
-            contextId = 0; // NULL pointer has value 0.
+            // NULL pointer has value 0
+            contextId = 0;
         }
         else
         {
@@ -2703,7 +2704,7 @@ public final class LibUsb
             return null;
         }
 
-        final IsoPacketDescriptor isoDescriptors[] = transfer.isoPacketDesc();
+        final IsoPacketDescriptor[] isoDescriptors = transfer.isoPacketDesc();
         int offset = 0;
 
         for (int i = 0; i < packet; i++)
@@ -2744,7 +2745,7 @@ public final class LibUsb
             return null;
         }
 
-        final IsoPacketDescriptor isoDescriptors[] = transfer.isoPacketDesc();
+        final IsoPacketDescriptor[] isoDescriptors = transfer.isoPacketDesc();
         final int offset = isoDescriptors[0].length() * packet;
 
         return BufferUtils.slice(transfer.buffer(), offset,
