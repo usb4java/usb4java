@@ -61,6 +61,16 @@ public final class DeviceDescriptor
     {
         return this.deviceDescriptorPointer;
     }
+    
+    /**
+     * Returns the Java byte buffer which contains the descriptor structure.
+     *
+     * @return The descriptor structur buffer.
+     */
+    public ByteBuffer getBuffer()
+    {
+        return this.deviceDescriptorBuffer;
+    }
 
     /**
      * Returns the size of this descriptor (in bytes).
