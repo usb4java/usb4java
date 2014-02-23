@@ -5,7 +5,9 @@
 
 package org.usb4java;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.usb4java.test.UsbAssume.assumeUsbTestsEnabled;
@@ -165,5 +167,16 @@ public class VersionTest
         Version version = LibUsb.getVersion();
         assertNotNull(version.toString());
         assertTrue(version.toString().length() > 0);
+    }
+    
+    /**
+     * Tests the {@link Version#getPointer()} method
+     */
+    @Test
+    public void testGetPointer()
+    {
+        assumeUsbTestsEnabled();
+        assertEquals(0, new Version().getPointer());
+        assertNotEquals(0, LibUsb.getVersion().getPointer());
     }
 }
