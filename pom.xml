@@ -63,6 +63,7 @@
     <repoBaseUrl>http://nexus.ailis.de/content/groups/public/de/ailis/${project.artifactId}/${project.artifactId}</repoBaseUrl>
     <!--<repoBaseUrl>https://oss.sonatype.org/content/groups/public/de/ailis/${project.artifactId}/${project.artifactId}</repoBaseUrl>-->
     <artifactBaseUrl>${repoBaseUrl}/${project.version}/${project.artifactId}-${project.version}</artifactBaseUrl>
+    <libusb4java.version>1.2.0-SNAPSHOT</libusb4java.version>
   </properties>
   
   <scm>
@@ -272,8 +273,38 @@
     <dependency>
       <groupId>org.usb4java</groupId>
       <artifactId>libusb4java</artifactId>
-      <version>1.2.0-SNAPSHOT</version>
-      <scope>test</scope>
+      <version>${libusb4java.version}</version>
+      <classifier>linux-x86</classifier>
+    </dependency> 
+    <dependency>
+      <groupId>org.usb4java</groupId>
+      <artifactId>libusb4java</artifactId>
+      <version>${libusb4java.version}</version>
+      <classifier>linux-x86_64</classifier>
+    </dependency> 
+    <dependency>
+      <groupId>org.usb4java</groupId>
+      <artifactId>libusb4java</artifactId>
+      <version>${libusb4java.version}</version>
+      <classifier>windows-x86</classifier>
+    </dependency> 
+    <dependency>
+      <groupId>org.usb4java</groupId>
+      <artifactId>libusb4java</artifactId>
+      <version>${libusb4java.version}</version>
+      <classifier>windows-x86_64</classifier>
+    </dependency> 
+    <dependency>
+      <groupId>org.usb4java</groupId>
+      <artifactId>libusb4java</artifactId>
+      <version>${libusb4java.version}</version>
+      <classifier>osx-x86</classifier>
+    </dependency> 
+    <dependency>
+      <groupId>org.usb4java</groupId>
+      <artifactId>libusb4java</artifactId>
+      <version>${libusb4java.version}</version>
+      <classifier>osx-x86_64</classifier>
     </dependency> 
     <dependency>
       <groupId>org.apache.commons</groupId>
