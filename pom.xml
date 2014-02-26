@@ -286,6 +286,12 @@
       <groupId>org.usb4java</groupId>
       <artifactId>libusb4java</artifactId>
       <version>${libusb4java.version}</version>
+      <classifier>linux-arm</classifier>
+    </dependency> 
+    <dependency>
+      <groupId>org.usb4java</groupId>
+      <artifactId>libusb4java</artifactId>
+      <version>${libusb4java.version}</version>
       <classifier>windows-x86</classifier>
     </dependency> 
     <dependency>
