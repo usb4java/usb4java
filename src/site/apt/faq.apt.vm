@@ -4,8 +4,11 @@
  
 Frequently asked questions
 
-  If you have a question which is not answered here please create an
-  {{{${project.issueManagement.url}}issue on GitHub}}.
+  If you have a question which is not answered here please ask the
+  {{{mailto:usb4java@googlegroups.com}usb4java mailing list}}
+  ({{{http://groups.google.com/group/usb4java}Google group}}).
+  You can subscribe to it via email by sending a mail to 
+  {{{mailto:usb4java+subscribe@googlegroups.com}usb4java+subscribe@googlegroups.com}}.
   
 * I can't open my USB device on Linux. Why?
 
@@ -14,28 +17,25 @@ Frequently asked questions
   running your program as root. If this works then it is recommended to
   configure <udev> to give your user write permissions when the device
   is attached. You can do this by creating a file like
-  </lib/udev/rules.d/99-userusbdevices.rules> with content like this:
+  </lib/etc/udev/rules.d/99-userusbdevices.rules> with content like this:
 
 ----
-  SUBSYSTEM=="usb",ATTR{idVendor}=="89ab",ATTR{idProduct}=="4567",MODE="0660",GROUP="plugdev"
+  SUBSYSTEM=="usb",ATTR{idVendor}=="89ab",ATTR{idProduct}=="4567",MODE="0660",GROUP="wheel"
 ----
 
   This means that whenever a USB device with vendor id <0x89ab> and product id
-  <0x4567> is attached then the group <plugdev> is permitted to
+  <0x4567> is attached then the group <wheel> is permitted to
   write to the device. So make sure your user is in that group (or use a
   different group).
   
   If your device uses a shared vendor/product id then you might want to
   filter for the manufacturer and product name. This can be done by checking
-  the ATTR properties <idVendor> and <{idProduct}>.
+  the ATTR properties <idVendor> and <idProduct>.
   
-  To activate this new configuration you may have to restart your udev daemon
-  (<<</etc/init.d/udev restart>>>) and then re-attach the USB device.
+  To activate this new configuration you may need to re-attach the USB device.
 
 * I can't open my USB device on Windows. Why?
 
-  On Windows you need to create a driver for your USB device.
-  Don't worry, this isn't that complicated but still too complicated to
-  explain here. The
-  {{{https://github.com/libusbx/libusbx/wiki/Windows-Backend#wiki-How_to_use_libusbx_on_Windows}libusbx project}}
-  explains how to do it.
+  On Windows you need to create a driver for your USB device. Read the
+  {{{https://github.com/libusb/libusb/wiki/Windows#wiki-How_to_use_libusb_on_Windows}How to use libusb on Windows}} 
+  article from the  {{{http://libusb.info}libusb project}} for more information.

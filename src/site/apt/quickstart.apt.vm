@@ -1,152 +1,22 @@
  -----------------------------------------------------------------------------
  Quick start
  -----------------------------------------------------------------------------
- 
-Installation
 
-  Download the latest <usb4java.jar> and put it into your class path. Since
-  version 0.5.0 you no longer need to care about the native libraries. They
-  are included in the JAR file and will be used from there.
-  
-  If you are using the high-level <javax.usb> API then you also need the
-  <jsr80.jar> which can be downloaded from the
-  {{{http://javax-usb.sourceforge.net/}javax.usb project site}}.
-  This JAR (Which is also included in the usb4java distribution tarball/zip
-  as <usb-api.jar>) must also be copied into your class path.
-  
-  Another dependency needed since version 1.0.0 is
-  {{{http://commons.apache.org/proper/commons-lang/}commons-lang v3}}.
+API design
 
-
-The high-level API
-
-  The high-level API implements the
-  {{{http://javax-usb.sourceforge.net/}javax.usb (JSR-80)}} standard. It is
-  recommended to use this API because it is object-oriented, event-driven and
-  uses exceptions for error-handling instead of negative return values like
-  the low-level API. Another advantage is that you may switch to a
-  different <javax.usb> implementation later without changing your code.
-  For example instead of using <usb4java> you may try out the reference
-  implementation for Linux and Windows.
-  
-  
-* Configuration
-
-  To use the <usb4java> implementation you have to create a file named
-  <{{{./configuration.html}javax.usb.properties}}> in the root of your class
-  path with the following content:
-
-+-----------------------------------------------------------------------------+
-javax.usb.services = de.ailis.usb4java.Services 
-+-----------------------------------------------------------------------------+
- 
- 
-* Finding USB devices
-
-  USB devices are managed in a tree. The root of this tree is a virtual
-  USB hub to which all physical root hubs are connected. More hubs can be
-  connected to these root hubs and any hub can have a number of connected
-  USB devices.
-  
-  The following source shows how to iterate over all devices: 
-
-+-----------------------------------------------------------------------------+
-public class Dump
-{
-    private static void dump(UsbDevice device)
-    {
-        UsbDeviceDescriptor desc = device.getUsbDeviceDescriptor();
-        System.out.format("%04x:%04x%n", desc.idVendor() & 0xffff, desc.idProduct() & 0xffff);
-        if (device.isUsbHub())
-        {
-            UsbHub hub = (UsbHub) device;
-            for (UsbDevice child : (List<UsbDevice>) hub.getAttachedUsbDevices())
-            {
-                dump(child);
-            }
-        }
-    }
-
-    public static void main(String[] args) throws UsbException
-    {
-        UsbServices services = UsbHostManager.getUsbServices();
-        UsbHub rootHub = services.getRootUsbHub();
-        dump(rootHub);
-    }
-}
-+-----------------------------------------------------------------------------+
-
-  Often you need to search for a specific device before working with it. Here
-  is an example how to scan the device tree for the first device with a
-  specific vendor and product id. It can be easily expanded to check for
-  specific device classes or whatever:
-  
-+-----------------------------------------------------------------------------+
-public UsbDevice findDevice(UsbHub hub, short vendorId, short productId)
-{
-    for (UsbDevice device : (List<UsbDevice>) hub.getAttachedUsbDevices())
-    {
-        UsbDeviceDescriptor desc = device.getUsbDeviceDescriptor();
-        if (desc.idVendor() == vendorId && desc.idProduct() == productId) return device;
-        if (device.isUsbHub())
-        {
-            device = findDevice((UsbHub) device, vendorId, productId);
-            if (device != null) return device;
-        }
-    }
-    return null;
-}
-+-----------------------------------------------------------------------------+
-  
-
-* Communicate via the Default Control Pipe 
-
-  This example reads the current configuration number from a device:
-  
-+-----------------------------------------------------------------------------+
-UsbControlIrp irp = device.createUsbControlIrp(
-    (byte) (UsbConst.REQUESTTYPE_DIRECTION_IN
-          | UsbConst.REQUESTTYPE_TYPE_STANDARD
-          | UsbConst.REQUESTTYPE_RECIPIENT_DEVICE),
-    UsbConst.REQUEST_GET_CONFIGURATION,
-    (short) 0,
-    (short) 0
-    );
-irp.setData(new byte[1]);
-device.syncSubmit(irp);
-System.out.println(irp.getData()[0]);
-+-----------------------------------------------------------------------------+
-  
- 
-* More information about the high-level API
-
-  * {{{./apidocs/index.html}API documentation of usb4java}}
-  
-  * {{{http://javax-usb.sourceforge.net/}javax-usb website}}
-  
-  []
-  
-
-The low-level API
-
-  It is recommended to use the high-level javax.usb API but there are
-  situations where you might want to use the low-level API instead. 
-  For example if you are already familiar with libusb or if you
-  are porting a C program to Java then it might be easier to use the
-  low-level API which is based on libusb version 1.0.
-  
-  All global functions and constants of libusb are defined as static
-  members of the class
-  {{{./apidocs/de/ailis/usb4java/libusb/LibUsb.html}de.ailis.usb4java.libusb.LibUsb}}.
-  All structures of libusb are defined in separate classes which are named
+  The API of usb4java closely follows the C API of the
+  {{{http://libusb.info/}libusb}} project.  All global functions and
+  constants of <libusb> are defined as static members of the class
+  {{{./apidocs/org/usb4java/LibUsb.html}org.usb4java.LibUsb}}. 
+  All structures of <libusb> are defined in separate classes which are named
   similar to the original struct names but without underscores, with upper
-  case names and with the libusb prefix removed. For example the struct
+  case names and with the <libusb> prefix removed.  For example the struct
   <libusb_device_handle> is defined in the class
-  {{{./apidocs/de/ailis/usb4java/libusb/DeviceHandle.html}DeviceHandle}}. Struct
+  {{{./apidocs/org/usb4java/DeviceHandle.html}DeviceHandle}}.  Struct
   members are represented by static methods in the corresponding class.
    
   The following notable differences exists between the <libusb 1.0 API> and
-  the low-level API of <usb4java>:
+  the <usb4java> API:
     
   * <interface> in the configuration descriptor is named <iface> because
     <interface> is a reserved word in Java.
@@ -162,18 +32,33 @@ The low-level API
     passed as argument have additional simplified overloaded method
     equivalents which are returning a Java String directly.
     
-  * Currently the asynchronous functions of libusb are not wrapped by usb4java.
-    This may change in the future (Some help here is highly appreciated). So
-    currently asynchronous communication is only possible with the high-level
-    API which uses the synchronous libusb functions in Java threads.
-  
   []
-    
-* More information about the low-level API
 
-  * {{{./apidocs/de/ailis/usb4java/libusb/package-summary.html}Low-level API documentation of usb4java}}
+* Initialization/deinitialization
+
+  Before using any usb4java functionality you must initialize libusb:
   
-  * {{{http://libusb.sourceforge.net/api-1.0/}API documentatiaon of libusb}}
+----
+final Context context = new Context();
+int result = LibUsb.init(context);
+if (result < 0) throw new RuntimeException("Unable to initialize libusb. Result=" + result);
+----
+
+  Specifiying a context is optional. If your application only needs a single
+  libusb context then you can specify <null> as context.
+  
+  Before your application terminates you should deinitialize libusb:
+
+----  
+LibUsb.exit(context);
+----
+  
+
+* See also
+
+  * {{{./apidocs/org/usb4java/package-summary.html}API documentation of usb4java}}
+  
+  * {{{http://libusb.sourceforge.net/api-1.0/}API documentation of libusb}}
   
   []
   

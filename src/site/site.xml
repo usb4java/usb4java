@@ -6,7 +6,7 @@
   <bannerLeft>
     <name>usb4java</name>
     <src>images/logo.png</src>
-    <href>http://kayahr.github.com/${project.artifactId}/</href>
+    <href>http://usb4java.org/</href>
   </bannerLeft>
   
   <skin>
@@ -22,8 +22,12 @@
     
     <links>
       <item name="javax.usb" href="http://javax-usb.sourceforge.net/" />
-      <item name="libusb" href="http://www.libusb.org/" />
+      <item name="libusb" href="http://libusb.info/" />
     </links>
+    
+    <breadcrumbs>
+      <item name="${project.name}" href="${project.url}"/>
+    </breadcrumbs>
     
     <menu name="usb4java">
       <item name="About" href="./index.html" />
@@ -40,7 +44,7 @@
   <custom>
     <fluidoSkin>
       <gitHub>
-        <projectId>usb4java/usb4java</projectId>
+        <projectId>usb4java</projectId>
         <ribbonOrientation>right</ribbonOrientation>
         <ribbonColor>red</ribbonColor>
       </gitHub>

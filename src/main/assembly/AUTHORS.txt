@@ -1,0 +1,6 @@
+Developers
+----------
+
+Klaus Reimer <k@ailis.de>
+Luca Longinotti <l@longi.li>
+

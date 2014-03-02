@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document>
   <properties>
-    <title>usb4java</title>
+    <title>About</title>
   </properties>
   <body>
     <section name="What is usb4java?">
       <p>
-        usb4java is a Java library to access USB devices. The low-level 
-        part is based on the native 
-        <a href="http://www.libusb.org/">libusb 1.0</a> library. Java NIO 
-        buffers are used for data exchange between libusb and Java. The 
-        high-level part implements the 
-        <a href="http://javax-usb.sourceforge.net/">javax.usb standard (JSR-80)</a>.
+        usb4java is a Java library to access USB devices. It is based on
+        the native <a href="http://www.libusb.org/">libusb 1.0</a> library
+        and uses Java NIO buffers for data exchange between libusb and Java.
+        usb4java also supports the
+        <a href="http://javax-usb.sourceforge.net/">javax.usb standard (JSR-80)</a>
+        through the <a href="usb4java-javax/">usb4java-javax extension</a>.
       </p>
       <p>
         Supported platforms are <strong>Linux</strong> (x86 32/64 bit, ARM 32 bit), 
@@ -25,14 +25,19 @@
     <section name="Download">
       <ul class="download">
         <li>
-          Current version:<br />
+          Main library:<br />
           <strong><a href="${artifactBaseUrl}.tar.bz2">${project.artifactId}-${project.version}.tar.bz2</a></strong><br />
           <strong><a href="${artifactBaseUrl}.zip">${project.artifactId}-${project.version}.zip</a></strong><br />
+        </li>
+        <li>
+          javax-usb extension:<br />
+          <strong><a href="${artifactBaseUrl}.tar.bz2">${project.artifactId}-javax-${usb4javaJavaxVersion}.tar.bz2</a></strong><br />
+          <strong><a href="${artifactBaseUrl}.zip">${project.artifactId}-javax-${usb4javaJavaxVersion}.zip</a></strong><br />
         </li>
         <li><a href="${repoBaseUrl}/">Older versions and snapshots</a></li>
         <li>
           Source code repository:
-          <a href="http://github.com/usb4java/${project.artifactId}/">GitHub</a> 
+          <a href="http://github.com/usb4java/">GitHub</a> 
         </li>
       </ul>
       <p>
@@ -47,11 +52,21 @@
   &lt;/repository&gt;
 &lt;/repositories&gt;
 
+&lt;-- For using just usb4java without javax-usb --&gt;
 &lt;dependencies&gt;
   &lt;dependency&gt;
     &lt;groupId&gt;${project.groupId}&lt;/groupId&gt;
     &lt;artifactId&gt;${project.artifactId}&lt;/artifactId&gt;
     &lt;version&gt;${project.version}&lt;/version&gt;
+  &lt;/dependency&gt;
+&lt;/dependencies&gt;
+
+&lt;-- For using usb4java with javax-usb --&gt;
+&lt;dependencies&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;${project.groupId}&lt;/groupId&gt;
+    &lt;artifactId&gt;${project.artifactId}-javax&lt;/artifactId&gt;
+    &lt;version&gt;${usb4javaJavaxVersion}&lt;/version&gt;
   &lt;/dependency&gt;
 &lt;/dependencies&gt;</pre></div>
     </section>
@@ -74,38 +89,18 @@
     
     <section name="Getting started">
       <p>
-        <a href="${artifactBaseUrl}.jar">Download</a>
-        the latest usb4java and then read the 
-        <a href="quickstart.html">quick start guide</a> and the 
+        Read the <a href="quickstart.html">quick start guide</a> and the 
         <a href="faq.html">FAQ</a>. There are also some
         <a href="https://github.com/usb4java/usb4java-examples/">examples</a>
         available.
       </p>
     </section>
-    
-    <!--
-    <section name="Donation">
-      <p>
-        If you like ${project.name}, please consider making a small donation
-        to support my work on free software like this. Thank you!
-      </p>
-      <form action="https://www.paypal.com/cgi-bin/webscr" method="post"
-            style="display:inline;margin-right: 10px">
-        <input type="hidden" name="cmd" value="_s-xclick" />
-        <input type="hidden" name="hosted_button_id" value="KEM2AXUYDG9PN" />
-        <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!" />
-      </form>
-      <a href="http://flattr.com/thing/1149805/usb4java" target="_blank">
-        <img src="http://api.flattr.com/button/flattr-badge-large.png"
-             alt="Flattr this" title="Flattr this" />
-      </a>
-    </section>
-    -->
         
     <section name="Support">
       <p>
         For questions and discussions please use the 
-        <a href="http://groups.google.com/group/usb4java">usb4java</a> Google Group.
+        <a href="mailto:usb4java@googlegroups.com">usb4java mailing list</a> 
+        (<a href="http://groups.google.com/group/usb4java">Google group</a>).
         You can subscribe to it via email by sending a mail to 
         <a href="mailto:usb4java+subscribe@googlegroups.com">usb4java+subscribe@googlegroups.com</a>.
       </p>

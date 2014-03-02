@@ -4,20 +4,24 @@
  
 Configuration
 
+  The configuration options explained here are only valid for the javax-usb
+  extension of usb4java. If you access your USB devices with the native
+  libusb API then no configuration is needed.
+
+
+* Selecting usb4java as javax-usb implementation
+
   To tell the USB Host Manager of <javax.usb> to use the <usb4java>
   implementation you have to put the following property into the
   <javax.usb.properties> file which must be located in the root of
   your classpath:
   
 +----+
-javax.usb.services = de.ailis.usb4java.Services
+javax.usb.services = org.usb4java.javax.Services
 +----+ 
 
   <usb4java> can be configured by adding more properties to this file as
-  described in the following sections. All these properties only affect
-  the high-level <javax.usb> API of <usb4java>. The low-level API just wraps
-  the native <libusb> library so no configuration is available (or needed) for
-  it.
+  described in the following sections.
 
   
 * Communication timeout
@@ -27,7 +31,7 @@ javax.usb.services = de.ailis.usb4java.Services
   file: 
   
 +----+
-de.ailis.usb4java.timeout = 250
+org.usb4java.javax.timeout = 250
 +----+
 
 
@@ -37,7 +41,7 @@ de.ailis.usb4java.timeout = 250
   change this to 1000 milliseconds for example add this to the properties file:
 
 +----+
-de.ailis.usb4java.scanInterval = 1000
+org.usb4java.javax.scanInterval = 1000
 +----+
 
   When you set this interval to 0 then <usb4java> only scans once during
@@ -46,6 +50,6 @@ de.ailis.usb4java.scanInterval = 1000
   to the <usb4java> implementation, because this is not a javax.usb feature:
 
 +----+
-((de.ailis.usb4java.Services) UsbHostManager.getUsbServices()).scan();
+((org.usb4java.javax.Services) UsbHostManager.getUsbServices()).scan();
 +----+
   
