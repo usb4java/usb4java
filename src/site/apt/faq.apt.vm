@@ -32,7 +32,8 @@ Frequently asked questions
   filter for the manufacturer and product name. This can be done by checking
   the ATTR properties <idVendor> and <idProduct>.
   
-  To activate this new configuration you may need to re-attach the USB device.
+  To activate this new configuration you may need to re-attach the USB device
+  or run the command <<<udevadm trigger>>>.
 
 * I can't open my USB device on Windows. Why?
 
