@@ -149,7 +149,7 @@ public final class ConfigDescriptor
         final StringBuilder builder = new StringBuilder();
 
         builder.append(String.format(
-            "%s%n" +
+            "%s" +
             "  extralen %17d%n" +
             "  extra:%n" +
             "%s",
@@ -159,7 +159,7 @@ public final class ConfigDescriptor
 
         for (final Interface iface : this.iface())
         {
-            builder.append("%n" + iface.dump());
+            builder.append(String.format("%n") + iface.dump());
         }
 
         return builder.toString();

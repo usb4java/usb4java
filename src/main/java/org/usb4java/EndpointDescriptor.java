@@ -147,7 +147,7 @@ public final class EndpointDescriptor
     public String dump()
     {
         return String.format(
-            "%s%n" +
+            "%s" +
             "  extralen %17d%n" +
             "  extra:%n" +
             "%s",

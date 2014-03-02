@@ -158,7 +158,7 @@ public final class InterfaceDescriptor
         final StringBuilder builder = new StringBuilder();
 
         builder.append(String.format(
-            "%s%n" +
+            "%s" +
             "  extralen %17d%n" +
             "  extra:%n" +
             "%s",
@@ -168,7 +168,7 @@ public final class InterfaceDescriptor
 
         for (final EndpointDescriptor epDesc : this.endpoint())
         {
-            builder.append("%n" + epDesc.dump());
+            builder.append(String.format("%n") + epDesc.dump());
         }
 
         return builder.toString();

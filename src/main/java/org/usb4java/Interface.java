@@ -81,7 +81,7 @@ public final class Interface
 
         for (final InterfaceDescriptor intDesc : this.altsetting())
         {
-            builder.append("%n" + intDesc.dump());
+            builder.append(String.format("%n") + intDesc.dump());
         }
 
         return builder.toString();
