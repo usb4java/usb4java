@@ -940,9 +940,9 @@ public final class LibUsb
      * @param handle
      *            Output location for the returned device handle pointer. Only
      *            populated when the return code is 0.
-     * @return 0 on success {@link #ERROR_NO_MEM} on memory allocation failure
-     *         {@link #ERROR_ACCESS} if the user has insufficient permissions
-     *         {@link #ERROR_NO_DEVICE} if the device has been disconnected
+     * @return 0 on success, {@link #ERROR_NO_MEM} on memory allocation failure,
+     *         {@link #ERROR_ACCESS} if the user has insufficient permissions,
+     *         {@link #ERROR_NO_DEVICE} if the device has been disconnected,
      *         another error on other failure
      */
     public static native int open(final Device device, 
@@ -967,7 +967,7 @@ public final class LibUsb
      *            The idVendor value to search for.
      * @param productId
      *            The idProduct value to search for.
-     * @return A handle for the first found device, or NULL on error or if the
+     * @return A handle for the first found device or NULL on error or if the
      *         device could not be found.
      */
     public static native DeviceHandle openDeviceWithVidPid(
