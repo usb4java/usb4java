@@ -30,7 +30,7 @@
           <strong><a href="${artifactBaseUrl}.zip">${project.artifactId}-${project.version}.zip</a></strong><br />
         </li>
         <li>
-          javax-usb extension:<br />
+          javax.usb extension:<br />
           <strong><a href="${artifactBaseUrl}.tar.bz2">${project.artifactId}-javax-${usb4javaJavaxVersion}.tar.bz2</a></strong><br />
           <strong><a href="${artifactBaseUrl}.zip">${project.artifactId}-javax-${usb4javaJavaxVersion}.zip</a></strong><br />
         </li>
@@ -52,7 +52,7 @@
   &lt;/repository&gt;
 &lt;/repositories&gt;
 
-&lt;-- For using just usb4java without javax-usb --&gt;
+&lt;-- For using just usb4java without javax.usb --&gt;
 &lt;dependencies&gt;
   &lt;dependency&gt;
     &lt;groupId&gt;${project.groupId}&lt;/groupId&gt;
@@ -61,7 +61,7 @@
   &lt;/dependency&gt;
 &lt;/dependencies&gt;
 
-&lt;-- For using usb4java with javax-usb --&gt;
+&lt;-- For using usb4java with javax.usb --&gt;
 &lt;dependencies&gt;
   &lt;dependency&gt;
     &lt;groupId&gt;${project.groupId}&lt;/groupId&gt;
@@ -91,7 +91,9 @@
       <p>
         Read the <a href="quickstart.html">quick start guide</a> and the 
         <a href="faq.html">FAQ</a>. There are also some
-        <a href="https://github.com/usb4java/usb4java-examples/">examples</a>
+        <a href="https://github.com/usb4java/usb4java-examples/">low-level (libusb) examples</a>
+        and 
+        <a href="https://github.com/usb4java/usb4java-javax-examples/">high-level (javax.usb) examples</a>
         available.
       </p>
     </section>

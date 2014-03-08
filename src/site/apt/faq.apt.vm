@@ -40,3 +40,29 @@ Frequently asked questions
   On Windows you need to create a driver for your USB device. Read the
   {{{https://github.com/libusb/libusb/wiki/Windows#wiki-How_to_use_libusb_on_Windows}How to use libusb on Windows}} 
   article from the  {{{http://libusb.info}libusb project}} for more information.
+
+* My program crashes. What can I do?
+
+  If the program crashes with a Java stack trace then it is most likely a 
+  problem in your own program. If you can't find it you may find some help on 
+  the {{{./mail-lists.html}mailinglist}}. 
+  
+  If the JVM crashes the hard way because of a segfault in the native code then
+  it is more likely a problem of usb4java or libusb and you should file a 
+  {{{./issue-tracking.html}bugreport}} with as much information as possible
+  (Full stack trace, full crash log, example code how to reproduce the crash).
+  
+  If usb4java crashes on Windows then please first of all make sure you have
+  created a proper device driver as explained in the previous FAQ entry. Also
+  consider creating a new up-to-date device driver with the latest Zadig tool.
+  
+  If you have experience in C programming then it would be very helpful when
+  you could try to reproduce the problem in C by directly using libusb. If
+  this works but the same USB communication doesn't work with usb4java then it 
+  would be nice if you could give us your C source and Java source so we can 
+  track down the difference which causes the crash. If the C program also
+  crashes then your problem is located in libusb and not in usb4java and you
+  should consult the libusb mailinglist or bug tracker instead.  Never report a 
+  problem in the libusb bug tracker or the libusb mailing list if you  
+  can't reproduce the problem with a native C program! 
+  

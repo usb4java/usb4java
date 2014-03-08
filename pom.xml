@@ -83,6 +83,10 @@
     <url>https://ci.ailis.de/job/${project.artifactId}/</url>
   </ciManagement>
   
+  <prerequisites>
+    <maven>3.0</maven>
+  </prerequisites>
+  
   <reporting>
     <plugins>
       <plugin>
@@ -195,7 +199,7 @@
       <!-- Build binary artifacts for Unix, Mac OS X and Windows -->
       <plugin> 
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.2.2</version>
+        <version>2.4</version>
         <configuration>
           <appendAssemblyId>false</appendAssemblyId>
           <descriptors>

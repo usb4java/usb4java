@@ -1,0 +1,206 @@
+ -----------------------------------------------------------------------------
+ Quick start
+ -----------------------------------------------------------------------------
+
+Quick start
+
+* Choose an API
+
+  usb4java provides two different APIs you can work with:
+  
+  * The low-level (libusb) API
+  
+  * The high-level (javax.usb) API
+  
+  []
+  
+  The high-level API simply implements the 
+  {{{http://javax-usb.sourceforge.net/}javax.usb (JSR80) API}}. One advantage
+  of this API is that it is implementation-independent. So it is easy to
+  switch to a different javax.usb implementation later without changing your
+  code. Another advantage is that this API is object oriented and is much
+  easier to use for Java developers. The disadvantage is that the javax.usb 
+  project is pretty old and currently looks inactive, maybe even dead.
+  
+  The low-level API closely follows the C API of the 
+  {{{http://libusb.info/}libusb}} project. This API has the advantage that it
+  provides the same functionality as libusb does. And if you know the C API of
+  libusb then you will most likely feel right at home when using this API
+  with usb4java. The disadvantage is that you will have a hard time changing
+  your code when you later switch to a different Java USB library.
+
+* The low-level (libusb) API  
+
+** API design
+
+  The low-level API of usb4java closely follows the C API of the
+  {{{http://libusb.info/}libusb}} project.  All global functions and
+  constants of <libusb> are defined as static members of the class
+  {{{./apidocs/org/usb4java/LibUsb.html}org.usb4java.LibUsb}}. 
+  All structures of <libusb> are defined in separate classes which are named
+  similar to the original struct names but without underscores, with upper
+  case names and with the <libusb> prefix removed.  For example the struct
+  <libusb_device_handle> is defined in the class
+  {{{./apidocs/org/usb4java/DeviceHandle.html}DeviceHandle}}.  Struct
+  members are represented by static methods in the corresponding class.
+   
+  The following notable differences exists between the <libusb 1.0 API> and
+  the <usb4java> API:
+    
+  * <interface> in the configuration descriptor is named <iface> because
+    <interface> is a reserved word in Java.
+    
+  * <MaxPower> in the configuration descriptor is named <bMaxPower> to
+    be compatible to the USB specification and because method names starting
+    with upper-case letters are quite unusual in Java.
+    
+  * Whenever libusb expects a byte pointer and a length you have to use
+    a direct Java NIO ByteBuffer instead.
+    
+  * Methods which are returning a string through a byte buffer which was
+    passed as argument have additional simplified overloaded method
+    equivalents which are returning a Java String directly.
+    
+  []
+
+** Initialization/deinitialization
+
+  Before using any usb4java functionality you must initialize libusb:
+  
+----
+final Context context = new Context();
+int result = LibUsb.init(context);
+if (result < 0) throw new RuntimeException("Unable to initialize libusb. Result=" + result);
+----
+
+  Specifiying a context is optional. If your application only needs a single
+  libusb context then you can specify <null> as context.
+  
+  Before your application terminates you should deinitialize libusb:
+
+----  
+LibUsb.exit(context);
+----
+  
+  
+** Find your device
+
+  Your program most likely wants to communicate with a specific device so first
+  of all you have to find it. You have to get a list of all connected USB
+  devices and then check the vendor/product ids. Here is a method which can
+  be used for this purpose:
+  
+----
+public Device findDevice(short vendorId, short productId)
+{
+    // Read the USB device list
+    DeviceList list = new DeviceList();
+    int result = LibUsb.getDeviceList(null, list);
+    if (result < 0) throw new LibUsbException("Unable to get device list", result);
+
+    try
+    {
+        // Iterate over all devices and scan for the right one
+        for (Device device: list)
+        {
+            DeviceDescriptor descriptor = new DeviceDescriptor();
+            result = LibUsb.getDeviceDescriptor(device, descriptor);
+            if (result < 0) throw new LibUsbException("Unable to read device descriptor", result);
+            if (descriptor.idVendor() == vendorId && descriptor.idProduct() == productId) return device;
+        }
+    }
+    finally
+    {
+        // Ensure the allocated device list is freed
+        LibUsb.freeDeviceList(list, true);
+    }
+
+    // Device not found
+    return null;
+}
+----
+
+  In your application it might be a little bit more complicated. Maybe you
+  have more than one device of the same type so you may need a list of devices.
+  Or you have to identify your device by the product or vendor string 
+  descriptor instead of just checking the ID (In case you are using a
+  shared vendor/product ID). But this example should bring you on the right
+  track.
+
+** Device handles
+
+  For the real USB communication you must open a new device handle and you
+  must close it again when you are finished communicating with the device.
+  Example:
+
+----  
+DeviceHandle handle = new DeviceHandle();
+int result = LibUsb.open(device, handle);
+if (result != LibUsb.SUCCESS) throw new LibUsbException("Unable to open USB device", result);
+try
+{
+    // Use device handle here
+}
+finally
+{
+    LibUsb.close(handle);
+}
+----
+
+** Interfaces
+
+  Usually you are communicating with an interface provided by the USB device and
+  you have to claim this interface before using it and you have to release it
+  when you are finished. Example:
+
+----
+int result = LibUsb.claimInterface(handle, interfaceNumber);
+if (result != LibUsb.SUCCESS) throw new LibUsbException("Unable to claim interface", result);
+try
+{
+    // Use interface here
+}
+finally
+{
+    result = LibUsb.releaseInterface(handle, interfaceNumber);
+    if (result != LibUsb.SUCCESS) throw new LibUsbException("Unable to release interface", result);
+}
+----
+
+** Communication
+
+  For the actual USB communication you usually have to create a direct
+  byte buffer for the data to send or receive. Here is an example which
+  sends 8 bytes to a claimed interface unsing a control transfer:
+  
+----
+ByteBuffer buffer = ByteBuffer.allocateDirect(8);
+buffer.put(new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+int transfered = LibUsb.controlTransfer(handle, 
+    (byte) (LibUsb.REQUEST_TYPE_CLASS | LibUsb.RECIPIENT_INTERFACE),
+    (byte) 0x09, (short) 2, (short) 1, buffer, 2500);
+if (transfered < 0)
+    throw new LibUsbException("Control transfer failed", transfered);
+if (transfered != message.length)
+    throw new RuntimeException("Not all data was sent to device");
+----
+
+  You may also want to use 
+  {{{./apidocs/org/usb4java/LibUsb.html##bulkTransfer(org.usb4java.DeviceHandle, byte, java.nio.ByteBuffer, java.nio.IntBuffer, long)}bulkTransfer}} or
+  {{{./apidocs/org/usb4java/LibUsb.html##interruptTransfer(org.usb4java.DeviceHandle, byte, java.nio.ByteBuffer, java.nio.IntBuffer, long)}interruptTransfer}}
+  instead of
+  {{{./apidocs/org/usb4java/LibUsb.html##controlTransfer(org.usb4java.DeviceHandle, byte, byte, short, short, java.nio.ByteBuffer, long)}controlTransfer}}
+  
+  The parameters needed for the transfer calls are completely
+  device dependent so you have to check the device documentation for details.
+  
+* See also
+
+  * {{{./apidocs/org/usb4java/package-summary.html}API documentation of usb4java}}
+  
+  * {{{http://javax-usb.sourceforge.net/jdoc/}javax.usb (JSR80) API documentation}}
+  
+  * {{{http://libusb.sourceforge.net/api-1.0/}API documentation of libusb}}
+  
+  []
+  
