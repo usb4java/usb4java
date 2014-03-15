@@ -36,7 +36,7 @@ import org.usb4java.LibUsb;
  *
  * @author Klaus Reimer (k@ailis.de)
  */
-public class LibUSBDeviceTest
+public class LibUsbDeviceTest
 {
     /** The libusb contxet. */
     private Context context;

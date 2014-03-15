@@ -25,7 +25,7 @@ import org.usb4java.LibUsb;
  *
  * @author Klaus Reimer (k@ailis.de)
  */
-public class LibUSBGlobalTest
+public class LibUsbGlobalTest
 {
     /** The libusb contxet. */
     private Context context;

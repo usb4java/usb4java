@@ -43,7 +43,7 @@ import org.usb4java.mocks.PollfdListenerMock;
  *
  * @author Klaus Reimer (k@ailis.de)
  */
-public class LibUSBTest
+public class LibUsbTest
 {
     /**
      * Tests the constant values.
