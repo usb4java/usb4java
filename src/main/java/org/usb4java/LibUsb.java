@@ -2059,22 +2059,22 @@ public final class LibUsb
 
     /**
      * Handle any pending events.
-     *
+     * 
      * Like {@link #handleEventsTimeoutCompleted(Context, long, IntBuffer)}, but
      * without the completed parameter, calling this function is equivalent to
      * calling {@link #handleEventsTimeoutCompleted(Context, long, IntBuffer)}
      * with a NULL completed parameter.
-     *
+     * 
      * This function is kept primarily for backwards compatibility. All new code
      * should call {@link #handleEventsCompleted(Context, IntBuffer)} or
      * {@link #handleEventsTimeoutCompleted(Context, long, IntBuffer)} to avoid
      * race conditions.
-     *
+     * 
      * @param context
      *            The context to operate on, or NULL for the default context
      * @param timeout
-     *            The maximum time to block waiting for events, or an all zero
-     *            timeval struct for non-blocking mode
+     *            The maximum time (In microseconds) to block waiting for
+     *            events, or an all zero timeval struct for non-blocking mode
      * @return 0 on success, or a ERROR code on failure
      */
     public static native int handleEventsTimeout(final Context context,
@@ -2121,22 +2121,22 @@ public final class LibUsb
     /**
      * Handle any pending events by polling file descriptors, without checking
      * if any other threads are already doing so.
-     *
+     * 
      * Must be called with the event lock held, see {@link #lockEvents(Context)}
      * .
-     *
+     * 
      * This function is designed to be called under the situation where you have
-     * taken the event lock and are calling poll()/select() directly on
-     * libusb's file descriptors (as opposed to using
-     * {@link #handleEvents(Context)} or similar). You detect events on
-     * libusb's descriptors, so you then call this function with a zero timeout
-     * value (while still holding the event lock).
-     *
+     * taken the event lock and are calling poll()/select() directly on libusb's
+     * file descriptors (as opposed to using {@link #handleEvents(Context)} or
+     * similar). You detect events on libusb's descriptors, so you then call
+     * this function with a zero timeout value (while still holding the event
+     * lock).
+     * 
      * @param context
      *            The context to operate on, or NULL for the default context.
      * @param timeout
-     *            The maximum time to block waiting for events, or zero for
-     *            non-blocking mode
+     *            The maximum time (In microseconds) to block waiting for
+     *            events, or zero for non-blocking mode
      * @return 0 on success, or a ERROR code on failure.
      */
     public static native int handleEventsLocked(final Context context,
