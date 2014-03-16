@@ -2832,6 +2832,11 @@ public final class LibUsb
             throw new IllegalArgumentException("callback must not be null");
         }
 
+        // Callback must be added to our own list before registering it in
+        // libusb because otherwise we won't get the enumeration events
+        hotplugCallbacks.put(globalHotplugId,
+            new ImmutablePair<HotplugCallback, Object>(callback, userData));
+
         // Mask the values for conversion to int in libusb API.
         final int result = hotplugRegisterCallbackNative(
             context, events, flags,
@@ -2845,11 +2850,14 @@ public final class LibUsb
 
         if (result == LibUsb.SUCCESS)
         {
-            hotplugCallbacks.put(globalHotplugId,
-                new ImmutablePair<HotplugCallback, Object>(callback, userData));
-
             // Increment globalHotplugId by one, like the libusb handle.
             globalHotplugId++;
+        }
+        else
+        {
+            // When registration failed then remove the hotplug callback from
+            // our list.
+            hotplugCallbacks.remove(globalHotplugId);
         }
 
         return result;
