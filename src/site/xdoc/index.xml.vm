@@ -7,7 +7,7 @@
     <section name="What is usb4java?">
       <p>
         usb4java is a Java library to access USB devices. It is based on
-        the native <a href="http://www.libusb.org/">libusb 1.0</a> library
+        the native <a href="http://libusb.info/">libusb 1.0</a> library
         and uses Java NIO buffers for data exchange between libusb and Java.
         usb4java also supports the
         <a href="http://javax-usb.sourceforge.net/">javax.usb standard (JSR-80)</a>

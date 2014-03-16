@@ -3,7 +3,7 @@
  * Copyright 2013 Luca Longinotti <l@longi.li>
  * See LICENSE.md for licensing information.
  *
- * Based on libusb <http://www.libusb.org/>:
+ * Based on libusb <http://libusb.info/>:
  *
  * Copyright 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright 2007-2009 Daniel Drake <dsd@gentoo.org>
