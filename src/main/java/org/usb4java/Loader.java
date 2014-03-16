@@ -339,7 +339,7 @@ public final class Loader
      * @throws LoaderException
      *             When loading the native wrapper libraries failed.
      */
-    public synchronized static void load()
+    public static synchronized void load()
     {
         // Do nothing if already loaded (or still loading)
         if (loaded)
