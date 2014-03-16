@@ -11,6 +11,8 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import org.usb4java.LibUsb;
+
 /**
  * USB-related assumptions.
  * 
@@ -98,6 +100,17 @@ public class UsbAssume
             assumeTrue("This test is ignored when USB_TESTS property is not set",
                 usbTests);
         }
+    }
+
+    /**
+     * Assume that libusb supports hotplug on the current system.
+     */
+    public static void assumeHotplugAvailable()
+    {
+        assumeUsbTestsEnabled();
+        assumeTrue("This test is ignored because libusb doesn't support " +
+            "hotplug on this system",
+            LibUsb.hasCapability(LibUsb.CAP_HAS_HOTPLUG));
     }
 
     /**
