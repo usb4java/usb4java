@@ -1,0 +1,327 @@
+ -----------------------------------------------------------------------------
+ Low-level (libusb) API
+ -----------------------------------------------------------------------------
+
+Low-level (libusb) API  
+
+* API design
+
+  The low-level API of usb4java closely follows the C API of the
+  {{{http://libusb.info/}libusb}} project.  All global functions and
+  constants of <libusb> are defined as static members of the class
+  {{{../apidocs/org/usb4java/LibUsb.html}org.usb4java.LibUsb}}. 
+  All structures of <libusb> are defined in separate classes which are named
+  similar to the original struct names but without underscores, with camel-case 
+  names and with the <libusb> prefix removed.  For example the struct
+  <libusb_device_handle> is defined in the class
+  {{{../apidocs/org/usb4java/DeviceHandle.html}DeviceHandle}}.  Struct
+  members are represented by static methods in the corresponding class.
+   
+  The following notable differences exists between the <libusb 1.0 API> and
+  the <usb4java> API:
+    
+  * <interface> in the configuration descriptor is named <iface> because
+    <interface> is a reserved word in Java.
+    
+  * <MaxPower> in the configuration descriptor is named <bMaxPower> to
+    be compatible to the USB specification and because method names starting
+    with upper-case letters are quite unusual in Java.
+    
+  * Whenever libusb expects a byte pointer and a length you have to use
+    a direct Java NIO ByteBuffer instead.
+    
+  * Methods which are returning a string through a byte buffer which was
+    passed as argument have additional simplified overloaded method
+    equivalents which are returning a Java String directly.
+    
+  []
+
+* Initialization/deinitialization
+
+  Before using any usb4java functionality you must initialize libusb:
+  
+----
+Context context = new Context();
+int result = LibUsb.init(context);
+if (result != LibUsb.SUCCESS) throw new LibUsbException("Unable to initialize libusb.", result);
+----
+
+  Specifiying a context is optional. If your application only needs a single
+  libusb context then you can specify <null> as context.
+  
+  Before your application terminates you should deinitialize libusb:
+
+----  
+LibUsb.exit(context);
+----
+  
+  Related libusb documentation:
+
+  * {{{http://libusb.sourceforge.net/api-1.0/group__lib.html}Library initialization/deinitialization}}
+  
+  []
+ 
+* Finding USB devices
+
+  Your program most likely wants to communicate with a specific device so first
+  of all you have to find it. You have to get a list of all connected USB
+  devices and then check the vendor/product ids. Here is a method which can
+  be used for this purpose:
+  
+----
+public Device findDevice(short vendorId, short productId)
+{
+    // Read the USB device list
+    DeviceList list = new DeviceList();
+    int result = LibUsb.getDeviceList(null, list);
+    if (result < 0) throw new LibUsbException("Unable to get device list", result);
+
+    try
+    {
+        // Iterate over all devices and scan for the right one
+        for (Device device: list)
+        {
+            DeviceDescriptor descriptor = new DeviceDescriptor();
+            result = LibUsb.getDeviceDescriptor(device, descriptor);
+            if (result != LibUsb.SUCCESS) throw new LibUsbException("Unable to read device descriptor", result);
+            if (descriptor.idVendor() == vendorId && descriptor.idProduct() == productId) return device;
+        }
+    }
+    finally
+    {
+        // Ensure the allocated device list is freed
+        LibUsb.freeDeviceList(list, true);
+    }
+
+    // Device not found
+    return null;
+}
+----
+
+  In your application it might be a little bit more complicated. Maybe you
+  have more than one device of the same type so you may need a list of devices.
+  Or you have to identify your device by the product or vendor string 
+  descriptor instead of just checking the ID (In case you are using a
+  shared vendor/product ID). But this example should bring you on the right
+  track.
+
+  Related libusb documentation:
+
+  * {{{http://libusb.sourceforge.net/api-1.0/group__dev.html}Device handling and enumeration}}
+  
+  []
+
+* Device handles
+
+  For the real USB communication you must open a new device handle and you
+  must close it again when you are finished communicating with the device.
+  Example:
+
+----  
+DeviceHandle handle = new DeviceHandle();
+int result = LibUsb.open(device, handle);
+if (result != LibUsb.SUCCESS) throw new LibUsbException("Unable to open USB device", result);
+try
+{
+    // Use device handle here
+}
+finally
+{
+    LibUsb.close(handle);
+}
+----
+
+* Interfaces
+
+  When you want to communicate with an interface or with endpoints of this
+  interface then you have to claim it before using it and you have to 
+  release it when you are finished. Example:
+
+----
+int result = LibUsb.claimInterface(handle, interfaceNumber);
+if (result != LibUsb.SUCCESS) throw new LibUsbException("Unable to claim interface", result);
+try
+{
+    // Use interface here
+}
+finally
+{
+    result = LibUsb.releaseInterface(handle, interfaceNumber);
+    if (result != LibUsb.SUCCESS) throw new LibUsbException("Unable to release interface", result);
+}
+----
+
+  It is possible that the interface you want to communicate with is already
+  used by a kernel driver. In this case you have to detach the kernel driver
+  from the interface before claiming it. Example:
+  
+----
+// Check if kernel driver must be detached
+boolean detach = LibUsb.hasCapability(LibUsb.CAP_SUPPORTS_DETACH_KERNEL_DRIVER) 
+    && LibUsb.kernelDriverActive(handle, interfaceNumber);
+
+// Detach the kernel driver
+if (detach)
+{
+    int result = LibUsb.detachKernelDriver(handle,  interfaceNumber);
+    if (result != LibUsb.SUCCESS) throw new LibUsbException("Unable to detach kernel driver", result);
+}
+
+// Communicate with the device
+...
+
+// Attach the kernel driver again if needed
+if (detach)
+{
+    int result = LibUsb.attachKernelDriver(handle,  interfaceNumber);
+    if (result != LibUsb.SUCCESS) throw new LibUsbException("Unable to re-attach kernel driver", result);
+}
+----
+
+  Please note that detaching kernel drivers is not supported on Windows.
+  
+* Synchronous I/O
+
+  For the actual USB communication you usually have to create a direct
+  byte buffer for the data to send or receive. 
+  
+  This examples sends 8 bytes to a claimed interface using a control transfer:
+  
+----
+ByteBuffer buffer = ByteBuffer.allocateDirect(8);
+buffer.put(new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+int transfered = LibUsb.controlTransfer(handle, 
+    (byte) (LibUsb.REQUEST_TYPE_CLASS | LibUsb.RECIPIENT_INTERFACE),
+    (byte) 0x09, (short) 2, (short) 1, buffer, timeout);
+if (transfered < 0) throw new LibUsbException("Control transfer failed", transfered);
+System.out.println(transfered + " bytes sent");
+----
+  
+  This example sends 8 bytes to endpoint 0x03 of the claimed interface using a 
+  bulk transfer:
+  
+----
+ByteBuffer buffer = ByteBuffer.allocateDirect(8);
+buffer.put(new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+IntBuffer transfered = IntBuffer.allocate(1);
+int result = LibUsb.bulkTransfer(handle, 0x03, buffer, transfered, timeout); 
+if (result != LibUsb.SUCCESS) throw new LibUsbException("Control transfer failed", transfered);
+System.out.println(transfered.get() + " bytes sent");
+----
+
+  Related libusb documentation:
+
+  * {{{http://libusb.sourceforge.net/api-1.0/group__syncio.html}Synchronous device I/O}}
+  
+  []
+  
+* Asynchronous I/O
+
+  Asynchronous I/O is a little bit more complex than synchronous I/O. That's 
+  because libusb doesn't start its own thread to
+  handle the actual background tasks. Instead you have to create you own
+  worker thread like this:
+  
+----
+class EventHandlingThread extends Thread
+{
+    /** If thread should abort. */
+    private volatile boolean abort;
+
+    /**
+     * Aborts the event handling thread.
+     */
+    public void abort()
+    {
+        this.abort = true;
+    }
+
+    @Override
+    public void run()
+    {
+        while (!this.abort)
+        {
+            int result = LibUsb.handleEventsTimeout(null, 250000);
+            if (result != LibUsb.SUCCESS)
+                throw new LibUsbException("Unable to handle events", result);
+        }
+    }
+}
+----
+
+  This simple thread implementation doesn't use a specific libusb context so
+  it specified <<<null>>> as context. If you need contexts then you may want
+  to pass it to the thread somehow. 
+  
+  The thread must be started after you have initialized libusb:
+  
+----
+EventHandlingThread thread = new EventHandlingThread();
+thread.start();
+----
+
+  And it must be stopped before deinitializing libusb:
+  
+----
+thread.abort();
+thread.join();
+----
+
+  So now with this thread running in the background you can use the 
+  asynchronous functions of libusb. If you don't like this thread and your
+  program already has some kind of application loop then you can also simply
+  call <<<LibUsb.handleEventsTimeout(null, 0)>>> inside the loop. This call
+  returns immediately if there are no events to process.
+  
+  An actual asynchronous transfer is submitted like this (In this case
+  an outgoing bulk transfer to endpoint <0x03>):
+  
+----
+ByteBuffer buffer = BufferUtils.allocateByteBuffer(8);
+buffer.put(new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+Transfer transfer = LibUsb.allocTransfer();
+LibUsb.fillBulkTransfer(transfer, handle, 0x03, buffer, callback, null, timeout);
+int result = LibUsb.submitTransfer(transfer);
+if (result != LibUsb.SUCCESS) throw new LibUsbException("Unable to submit transfer", result);
+----
+
+  The <<<callback>>> is an object implementing the 
+  {{{../apidocs/org/usb4java/TransferCallback.html}TransferCallback}} interface. 
+  Here is an example of such a callback:
+
+----
+TransferCallback callback = new TransferCallback()
+{
+    @Override
+    public void processTransfer(Transfer transfer)
+    {
+        System.out.println(transfer.actualLength() + " bytes sent");
+        LibUsb.freeTransfer(transfer);
+    }
+};
+----
+
+  Related libusb documentation:
+
+  * {{{http://libusb.sourceforge.net/api-1.0/group__asyncio.html}Asynchronous device I/O}}
+  
+  * {{{http://libusb.sourceforge.net/api-1.0/mtasync.html}Multi-threaded applications and asynchronous I/O}}
+  
+  * {{{http://libusb.sourceforge.net/api-1.0/io.html}Synchronous and asynchronous device I/O}}
+  
+  * {{{http://libusb.sourceforge.net/api-1.0/group__poll.html}Polling and timing}}
+  
+  []
+  
+  
+  
+* See also
+
+  * {{{../apidocs/org/usb4java/package-summary.html}API documentation of usb4java}}
+  
+  * {{{https://github.com/usb4java/usb4java-examples/}usb4java examples}}
+  
+  * {{{http://libusb.sourceforge.net/api-1.0/}API documentation of libusb}}
+  
+  []
+  

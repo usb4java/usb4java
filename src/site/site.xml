@@ -31,7 +31,10 @@
     
     <menu name="usb4java">
       <item name="About" href="./index.html" />
-      <item name="Quick start" href="./quickstart.html" />
+      <item name="Quick start" href="./quickstart/index.html" collapse="true">
+        <item name="Low-level (libusb) API" href="./quickstart/libusb.html" />
+        <item name="High-level (javax-usb) API" href="./quickstart/javax-usb.html" />
+      </item>
       <item name="FAQ" href="./faq.html" />
       <item name="Configuration" href="./configuration.html" />
       <item name="Native libs" href="./nativelibs.html" />

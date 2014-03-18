@@ -1,0 +1,37 @@
+ -----------------------------------------------------------------------------
+ Quick start
+ -----------------------------------------------------------------------------
+
+Quick start
+
+* Choose an API
+
+  usb4java provides two different APIs you can choose from:
+  
+  * {{{./libusb.html}The low-level (libusb) API}}
+  
+  * {{{./javax-usb.html}The high-level (javax-usb) API}}
+  
+  []
+  
+  The low-level API closely follows the C API of the 
+  {{{http://libusb.info/}libusb}} project. This API has the advantage that it
+  provides the same functionality as libusb does. And if you know the C API of
+  libusb then you will most likely feel right at home when using this API
+  with usb4java. It is also easy to convert existing C libusb programs into
+  Java. The disadvantage is that you will have a hard time changing
+  your code when you later switch to a different Java USB library. And as a
+  pure Java developer you may dislike the API because it is too low-level (For
+  example most methods return error codes instead of throwing exceptions). 
+
+  The high-level API simply implements the 
+  {{{http://javax-usb.sourceforge.net/}javax-usb (JSR80) API}}. One advantage
+  of this API is that it is implementation-independent. So it is easy to
+  switch to a different javax-usb implementation later without changing your
+  code. Another advantage is that this API is object oriented and is much
+  easier to use for Java developers. The disadvantage is that the javax-usb 
+  specification is pretty old and may lack support for some newer USB
+  techniques provided by the low-level API.
+  
+  
+  

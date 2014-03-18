@@ -1,0 +1,188 @@
+ -----------------------------------------------------------------------------
+ High-level (javax-usb) API
+ -----------------------------------------------------------------------------
+
+High-level (javax-usb) API
+
+  The high-level API implements the
+  {{{http://javax-usb.sourceforge.net/}javax-usb (JSR-80)}} standard. This API
+  is object-oriented, event-driven and uses exceptions for error-handling 
+  instead of negative return values like the low-level API. Another advantage 
+  is that you may switch to a different <javax-usb> implementation later 
+  without changing your code. For example instead of using <usb4java> you may
+  try out the reference implementation for Linux and Windows.
+  
+ 
+* Configuration
+
+  To use the <usb4java> implementation you have to create a file named
+  <{{{./configuration.html}javax.usb.properties}}> in the root of your class
+  path with the following content:
+
++-----------------------------------------------------------------------------+
+javax.usb.services = org.usb4java.javax.Services
++-----------------------------------------------------------------------------+
+ 
+ 
+* Finding USB devices
+
+  USB devices are managed in a tree. The root of this tree is a virtual
+  USB hub to which all physical root hubs are connected. More hubs can be
+  connected to these root hubs and any hub can have a number of connected
+  USB devices.  
+
+  Often you need to search for a specific device before working with it. Here
+  is an example how to scan the device tree for the first device with a
+  specific vendor and product id. It can be easily expanded to check for
+  specific device classes or whatever:
+  
++-----------------------------------------------------------------------------+
+public UsbDevice findDevice(UsbHub hub, short vendorId, short productId)
+{
+    for (UsbDevice device : (List<UsbDevice>) hub.getAttachedUsbDevices())
+    {
+        UsbDeviceDescriptor desc = device.getUsbDeviceDescriptor();
+        if (desc.idVendor() == vendorId && desc.idProduct() == productId) return device;
+        if (device.isUsbHub())
+        {
+            device = findDevice((UsbHub) device, vendorId, productId);
+            if (device != null) return device;
+        }
+    }
+    return null;
+}
++-----------------------------------------------------------------------------+
+  
+
+* Control requests
+
+  This example reads the current configuration number from a device by
+  using a control request:
+  
++-----------------------------------------------------------------------------+
+UsbControlIrp irp = device.createUsbControlIrp(
+    (byte) (UsbConst.REQUESTTYPE_DIRECTION_IN
+          | UsbConst.REQUESTTYPE_TYPE_STANDARD
+          | UsbConst.REQUESTTYPE_RECIPIENT_DEVICE),
+    UsbConst.REQUEST_GET_CONFIGURATION,
+    (short) 0,
+    (short) 0
+    );
+irp.setData(new byte[1]);
+device.syncSubmit(irp);
+System.out.println(irp.getData()[0]);
++-----------------------------------------------------------------------------+
+  
+  
+* Interfaces
+
+  When you want to communicate with an interface or with endpoints of this
+  interface then you have to claim it before using it and you have to 
+  release it when you are finished. Example:
+
+----
+UsbConfiguration configuration = device.getActiveUsbConfiguration();
+UsbInterface iface = configuration.getUsbInterface((byte) 1);
+iface.claim();
+try
+{
+    ... Communicate with the interface or endpoints ...
+}
+finally        
+{
+    iface.release();
+}
+----
+
+  It is possible that the interface you want to communicate with is already
+  used by a kernel driver. In this case you can try to force the claiming by
+  passing an interface policy to the <<<claim>>> method:
+  
+----
+iface.claim(new UsbInterfacePolicy()
+{            
+    @Override
+    public boolean forceClaim(UsbInterface usbInterface)
+    {
+        return true;
+    }
+});
+----
+
+  Please note that interface policies are just a hint for the underlying USB
+  implementation. In case of <usb4java> the policy will be ignored on Windows
+  because <libusb> doesn't support detaching drivers on Windows.
+  
+* Synchronous I/O
+
+  This example sends 8 bytes to endpoint 0x03:
+  
+----
+UsbEndpoint endpoint = iface.getUsbEndpoint(0x03);
+UsbPipe pipe = endpoint.getUsbPipe();
+pipe.open();
+try
+{
+    int sent = pipe.syncSubmit(new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+    System.out.println(sent + " bytes sent");
+}
+finally
+{
+    pipe.close();
+}
+----
+
+  This example reads 8 bytes from endpoint 0x83:
+  
+----
+UsbEndpoint endpoint = iface.getUsbEndpoint((byte) 0x83);
+UsbPipe pipe = endpoint.getUsbPipe();
+pipe.open();
+try
+{
+    byte[] data = new byte[8];
+    int received = pipe.syncSubmit(data);
+    System.out.println(received + " bytes received");
+}
+finally
+{
+    pipe.close();
+}
+----
+
+* Asynchronous I/O
+
+  Asynchronous I/O works pretty much the same as synchronous I/O. You just
+  use the <<<asyncSubmit>>> methods instead of the <<<syncSubmit>>> methods.
+  While <<<syncSubmit>>> blocks until the request is complete 
+  <<<asyncSubmit>>> does not block and return immediately. To
+  receive the response you have to add a listener to the pipe like this:
+  
+----
+pipe.addUsbPipeListener(new UsbPipeListener()
+{            
+    @Override
+    public void errorEventOccurred(UsbPipeErrorEvent event)
+    {
+        UsbException error = event.getUsbException();
+        ... Handle error ...
+    }
+    
+    @Override
+    public void dataEventOccurred(UsbPipeDataEvent event)
+    {
+        byte[] data = event.getData();
+        ... Process received data ...
+    }
+});
+----
+ 
+* See also
+
+  * {{{../usb4java-javax/apidocs/index.html}API documentation of usb4java-javax}}
+  
+  * {{{https://github.com/usb4java/usb4java-javax-examples/}usb4java-javax examples}}
+  
+  * {{{http://javax-usb.sourceforge.net/}javax-usb website}}
+  
+  []
