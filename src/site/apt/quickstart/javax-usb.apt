@@ -16,7 +16,7 @@ High-level (javax-usb) API
 * Configuration
 
   To use the <usb4java> implementation you have to create a file named
-  <{{{./configuration.html}javax.usb.properties}}> in the root of your class
+  <{{{../configuration.html}javax.usb.properties}}> in the root of your class
   path with the following content:
 
 +-----------------------------------------------------------------------------+
