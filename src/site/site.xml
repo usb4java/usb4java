@@ -21,7 +21,7 @@
     </head>
     
     <links>
-      <item name="javax.usb" href="http://javax-usb.sourceforge.net/" />
+      <item name="javax-usb" href="http://javax-usb.sourceforge.net/" />
       <item name="libusb" href="http://libusb.info/" />
     </links>
     

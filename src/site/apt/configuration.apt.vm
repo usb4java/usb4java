@@ -11,7 +11,7 @@ Configuration
 
 * Selecting usb4java as javax-usb implementation
 
-  To tell the USB Host Manager of <javax.usb> to use the <usb4java>
+  To tell the USB Host Manager of <javax-usb> to use the <usb4java>
   implementation you have to put the following property into the
   <javax.usb.properties> file which must be located in the root of
   your classpath:
@@ -47,7 +47,7 @@ org.usb4java.javax.scanInterval = 1000
   When you set this interval to 0 then <usb4java> only scans once during
   application startup. If you want to trigger a manual device <scan> you can
   do it by calling the scan method on the USB services class (Must be casted
-  to the <usb4java> implementation, because this is not a javax.usb feature:
+  to the <usb4java> implementation, because this is not a javax-usb feature:
 
 +----+
 ((org.usb4java.javax.Services) UsbHostManager.getUsbServices()).scan();
