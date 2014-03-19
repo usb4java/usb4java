@@ -31,8 +31,8 @@
         </li>
         <li>
           javax-usb extension:<br />
-          <strong><a href="${artifactBaseUrl}.tar.bz2">${project.artifactId}-javax-${usb4javaJavaxVersion}.tar.bz2</a></strong><br />
-          <strong><a href="${artifactBaseUrl}.zip">${project.artifactId}-javax-${usb4javaJavaxVersion}.zip</a></strong><br />
+          <strong><a href="${javaxArtifactBaseUrl}.tar.bz2">${project.artifactId}-javax-${usb4javaJavaxVersion}.tar.bz2</a></strong><br />
+          <strong><a href="${javaxArtifactBaseUrl}.zip">${project.artifactId}-javax-${usb4javaJavaxVersion}.zip</a></strong><br />
         </li>
         <li><a href="${repoBaseUrl}/">Older versions and snapshots</a></li>
         <li>

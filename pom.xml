@@ -63,6 +63,7 @@
     <repoBaseUrl>http://nexus.ailis.de/content/groups/public/org/usb4java/${project.artifactId}</repoBaseUrl>
     <!--<repoBaseUrl>https://oss.sonatype.org/content/groups/public/org/usb4java</repoBaseUrl>-->
     <artifactBaseUrl>${repoBaseUrl}/${project.version}/${project.artifactId}-${project.version}</artifactBaseUrl>
+    <javaxArtifactBaseUrl>${repoBaseUrl}-javax/${usb4javaJavaxVersion}/${project.artifactId}-javax-${usb4javaJavaxVersion}</javaxArtifactBaseUrl>
     <libusb4java.version>1.2.0</libusb4java.version>
     <usb4javaJavaxVersion>1.2.0</usb4javaJavaxVersion>
   </properties>
