@@ -17,7 +17,7 @@ Frequently asked questions
   running your program as root. If this works then it is recommended to
   configure <udev> to give your user write permissions when the device
   is attached. You can do this by creating a file like
-  </lib/etc/udev/rules.d/99-userusbdevices.rules> with content like this:
+  </etc/udev/rules.d/99-userusbdevices.rules> with content like this:
 
 ----
   SUBSYSTEM=="usb",ATTR{idVendor}=="89ab",ATTR{idProduct}=="4567",MODE="0660",GROUP="wheel"
@@ -30,7 +30,7 @@ Frequently asked questions
   
   If your device uses a shared vendor/product id then you might want to
   filter for the manufacturer and product name. This can be done by checking
-  the ATTR properties <idVendor> and <idProduct>.
+  the ATTR properties <manufacturer> and <product>.
   
   To activate this new configuration you may need to re-attach the USB device
   or run the command <<<udevadm trigger>>>.
