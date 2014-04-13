@@ -44,15 +44,7 @@
         When you are using Maven then you can add the necessary dependencies 
         like this:
       </p>
-      <div class="source"><pre>&lt;repositories&gt;
-  &lt;repository&gt;
-    &lt;id&gt;ailis&lt;/id&gt;
-    &lt;name&gt;Ailis Maven Releases&lt;/name&gt;
-    &lt;url&gt;http://nexus.ailis.de/content/groups/public/&lt;/url&gt;
-  &lt;/repository&gt;
-&lt;/repositories&gt;
-
-&lt;-- For using just usb4java without javax-usb --&gt;
+      <div class="source"><pre>&lt;-- For using just usb4java without javax-usb --&gt;
 &lt;dependencies&gt;
   &lt;dependency&gt;
     &lt;groupId&gt;${project.groupId}&lt;/groupId&gt;
