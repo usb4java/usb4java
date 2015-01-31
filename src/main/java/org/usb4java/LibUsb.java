@@ -441,7 +441,7 @@ public final class LibUsb
 
     /** We unwrap the BOS => define its maximum size. */
     public static final byte DT_BOS_MAX_SIZE = DT_BOS_SIZE
-        + BT_USB_2_0_EXTENSION_SIZE + BT_SS_USB_DEVICE_CAPABILITY_SIZE 
+        + BT_USB_2_0_EXTENSION_SIZE + BT_SS_USB_DEVICE_CAPABILITY_SIZE
         + BT_CONTAINER_ID_SIZE;
 
     // Endpoint direction. Values for bit 7 of the endpoint address scheme.
@@ -477,6 +477,9 @@ public final class LibUsb
 
     /** Interrupt endpoint. */
     public static final byte TRANSFER_TYPE_INTERRUPT = 3;
+
+    /** Stream endpoint. */
+    public static final byte TRANSFER_TYPE_BULK_STREAM = 4;
 
     // Synchronization type for isochronous endpoints.
     // Values for bits 2:3 of the bmAttributes field in
@@ -519,7 +522,7 @@ public final class LibUsb
 
     /**
      * Automatically free transfer buffer during {@link #freeTransfer(Transfer)}
-     * 
+     *
      * Please note that this flag (which is originally 2) is effectively a no-op
      * (set to zero) here in the Java wrapper, since the ByteBuffer that acts as
      * a buffer for transfers is allocated by the JVM and is subject to garbage
@@ -595,6 +598,11 @@ public final class LibUsb
     // Flags for hotplug events
 
     /**
+     * Default value when not using any flags.
+     */
+    public static final int HOTPLUG_NO_FLAGS = 0;
+
+    /**
      * Arm the callback and fire it for all matching currently attached devices.
      */
     public static final int HOTPLUG_ENUMERATE = 1;
@@ -624,14 +632,14 @@ public final class LibUsb
     /**
      * Hotplug callbacks (to correctly manage calls and additional data).
      */
-    private static final ConcurrentMap<Long, 
+    private static final ConcurrentMap<Long,
         ImmutablePair<HotplugCallback, Object>> hotplugCallbacks =
         new ConcurrentHashMap<Long, ImmutablePair<HotplugCallback, Object>>();
 
     /**
      * Pollfd listeners (to support different listeners for different contexts).
      */
-    private static final ConcurrentMap<Long, 
+    private static final ConcurrentMap<Long,
         ImmutablePair<PollfdListener, Object>> pollfdListeners =
         new ConcurrentHashMap<Long, ImmutablePair<PollfdListener, Object>>();
 
@@ -945,7 +953,7 @@ public final class LibUsb
      *         {@link #ERROR_NO_DEVICE} if the device has been disconnected,
      *         another error on other failure
      */
-    public static native int open(final Device device, 
+    public static native int open(final Device device,
         final DeviceHandle handle);
 
     /**
@@ -1186,6 +1194,44 @@ public final class LibUsb
      *         code on other failure
      */
     public static native int resetDevice(final DeviceHandle handle);
+
+    /**
+     * Allocate up to numStreams USB bulk streams on the specified endpoints.
+     * This function takes an array of endpoints rather then a single endpoint
+     * because some protocols require that endpoints are setup with similar
+     * stream ids. All endpoints passed in must belong to the same interface.
+     *
+     * Note that this function may return less streams then requested.
+     *
+     * Stream id 0 is reserved, and should not be used to communicate with
+     * devices. If LibUsb.allocStreams() returns with a value of N, you may
+     * use stream ids 1 to N.
+     *
+     * @param handle
+     *            a device handle
+     * @param numStreams
+     *            number of streams to try to allocate
+     * @param endpoints
+     *            array of endpoints to allocate streams on
+     * @return The number of streams allocated, or a LIBUSB_ERROR code
+     * on failure.
+     */
+    public static native int allocStreams(final DeviceHandle handle,
+        final int numStreams, final byte[] endpoints);
+
+    /**
+     * Free USB bulk streams allocated with LibUsb.allocStreams().
+     *
+     * Note streams are automatically free-ed when releasing an interface.
+     *
+     * @param handle
+     *            a device handle
+     * @param endpoints
+     *            array of endpoints to allocate streams on
+     * @return 0 on success, or a LIBUSB_ERROR code on failure.
+     */
+    public static native int freeStreams(final DeviceHandle handle,
+        final byte[] endpoints);
 
     /**
      * Determine if a kernel driver is active on an interface.
@@ -1550,7 +1596,7 @@ public final class LibUsb
 
     /**
      * Free a superspeed endpoint companion descriptor obtained from
-     * {@link #getSsEndpointCompanionDescriptor(Context, EndpointDescriptor, 
+     * {@link #getSsEndpointCompanionDescriptor(Context, EndpointDescriptor,
      * SsEndpointCompanionDescriptor)}.
      *
      * It is safe to call this function with a NULL parameter, in which case the
@@ -1611,7 +1657,7 @@ public final class LibUsb
 
     /**
      * Free a USB 2.0 Extension descriptor obtained from
-     * {@link #getUsb20ExtensionDescriptor(Context, BosDevCapabilityDescriptor, 
+     * {@link #getUsb20ExtensionDescriptor(Context, BosDevCapabilityDescriptor,
      * Usb20ExtensionDescriptor)}.
      *
      * It is safe to call this function with a NULL parameter, in which case
@@ -1646,7 +1692,7 @@ public final class LibUsb
 
     /**
      * Free a SuperSpeed USB Device Capability descriptor obtained from
-     * {@link #getSsUsbDeviceCapabilityDescriptor(Context, 
+     * {@link #getSsUsbDeviceCapabilityDescriptor(Context,
      * BosDevCapabilityDescriptor, SsUsbDeviceCapabilityDescriptor)}.
      *
      * It is safe to call this function with a NULL parameter,
@@ -1679,7 +1725,7 @@ public final class LibUsb
 
     /**
      * Free a Container ID descriptor obtained from
-     * {@link #getContainerIdDescriptor(Context, BosDevCapabilityDescriptor, 
+     * {@link #getContainerIdDescriptor(Context, BosDevCapabilityDescriptor,
      * ContainerIdDescriptor)}.
      *
      * It is safe to call this function with a NULL parameter, in which case
@@ -1712,7 +1758,7 @@ public final class LibUsb
         final byte index, final ByteBuffer data)
     {
         return controlTransfer(handle, ENDPOINT_IN, REQUEST_GET_DESCRIPTOR,
-            (short) (((type & 0xff) << 8) | (index & 0xff)), (short) 0, 
+            (short) (((type & 0xff) << 8) | (index & 0xff)), (short) 0,
             data, 1000);
     }
 
@@ -2059,17 +2105,17 @@ public final class LibUsb
 
     /**
      * Handle any pending events.
-     * 
+     *
      * Like {@link #handleEventsTimeoutCompleted(Context, long, IntBuffer)}, but
      * without the completed parameter, calling this function is equivalent to
      * calling {@link #handleEventsTimeoutCompleted(Context, long, IntBuffer)}
      * with a NULL completed parameter.
-     * 
+     *
      * This function is kept primarily for backwards compatibility. All new code
      * should call {@link #handleEventsCompleted(Context, IntBuffer)} or
      * {@link #handleEventsTimeoutCompleted(Context, long, IntBuffer)} to avoid
      * race conditions.
-     * 
+     *
      * @param context
      *            The context to operate on, or NULL for the default context
      * @param timeout
@@ -2121,17 +2167,17 @@ public final class LibUsb
     /**
      * Handle any pending events by polling file descriptors, without checking
      * if any other threads are already doing so.
-     * 
+     *
      * Must be called with the event lock held, see {@link #lockEvents(Context)}
      * .
-     * 
+     *
      * This function is designed to be called under the situation where you have
      * taken the event lock and are calling poll()/select() directly on libusb's
      * file descriptors (as opposed to using {@link #handleEvents(Context)} or
      * similar). You detect events on libusb's descriptors, so you then call
      * this function with a zero timeout value (while still holding the event
      * lock).
-     * 
+     *
      * @param context
      *            The context to operate on, or NULL for the default context.
      * @param timeout
@@ -2589,6 +2635,37 @@ public final class LibUsb
     }
 
     /**
+     * Helper function to populate the required {@link Transfer} fields
+     * for a bulk transfer using bulk streams.
+     *
+     * @param transfer
+     *            The transfer to populate.
+     * @param handle
+     *            Handle of the device that will handle the transfer.
+     * @param endpoint
+     *            Address of the endpoint where this transfer will be sent.
+     * @param streamId
+     *            Bulk stream id for this transfer.
+     * @param buffer
+     *            Data buffer.
+     * @param callback
+     *            Callback function to be invoked on transfer completion.
+     * @param userData
+     *            User data to pass to callback function.
+     * @param timeout
+     *            Timeout for the transfer in milliseconds.
+     */
+    public static void fillBulkStreamTransfer(final Transfer transfer,
+        final DeviceHandle handle, final byte endpoint, final int streamId,
+        final ByteBuffer buffer, final TransferCallback callback,
+        final Object userData, final long timeout)
+    {
+        fillBulkTransfer(transfer, handle, endpoint, buffer, callback, userData, timeout);
+        transfer.setType(TRANSFER_TYPE_BULK_STREAM);
+        transfer.setStreamId(streamId);
+    }
+
+    /**
      * Helper function to populate the required {@link Transfer} fields for an
      * interrupt transfer.
      *
@@ -2844,7 +2921,7 @@ public final class LibUsb
                 : (vendorId & 0xFFFF),
             (productId == LibUsb.HOTPLUG_MATCH_ANY) ? (LibUsb.HOTPLUG_MATCH_ANY)
                 : (productId & 0xFFFF),
-            (deviceClass == LibUsb.HOTPLUG_MATCH_ANY) ? 
+            (deviceClass == LibUsb.HOTPLUG_MATCH_ANY) ?
                 (LibUsb.HOTPLUG_MATCH_ANY) : (deviceClass & 0xFF),
             callbackHandle, globalHotplugId);
 

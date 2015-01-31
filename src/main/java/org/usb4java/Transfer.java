@@ -191,7 +191,7 @@ public final class Transfer
 
     /**
      * Native method called internally to set the length of the data buffer.
-     * 
+     *
      * @param length
      *            The length to set.
      */
@@ -277,7 +277,7 @@ public final class Transfer
 
     /**
      * Native method called internally to set the data buffer.
-     * 
+     *
      * @param buffer
      *            The data buffer to set.
      */
@@ -305,6 +305,24 @@ public final class Transfer
      * @return The array of isochronous packet descriptors.
      */
     public native IsoPacketDescriptor[] isoPacketDesc();
+
+    /**
+     * Get a transfer's bulk stream id.
+     *
+     * @return The stream id for the transfer.
+     */
+    public native int streamId();
+
+    /**
+     * Set a transfer's bulk stream id.
+     *
+     * Note: users are advised to use LibUsb.fillBulkStreamTransfer() instead
+     * of calling this function directly.
+     *
+     * @param streamId
+     *            The stream id to set.
+     */
+    public native void setStreamId(final int streamId);
 
     @Override
     public int hashCode()
