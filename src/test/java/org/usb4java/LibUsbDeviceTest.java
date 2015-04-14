@@ -208,7 +208,7 @@ public class LibUsbDeviceTest
         assumeNotNull(this.device);
         final ByteBuffer path = BufferUtils.allocateByteBuffer(0);
         final int result = LibUsb.getPortNumbers(this.device, path);
-        assertEquals(LibUsb.ERROR_OVERFLOW, result);
+        assertEquals(LibUsb.ERROR_INVALID_PARAM, result);
     }
 
     /**
