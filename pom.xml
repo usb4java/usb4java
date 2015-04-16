@@ -325,47 +325,10 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.usb4java</groupId>
-      <artifactId>libusb4java</artifactId>
-      <version>${libusb4java.version}</version>
-      <classifier>linux-x86</classifier>
-    </dependency> 
-    <dependency>
-      <groupId>org.usb4java</groupId>
-      <artifactId>libusb4java</artifactId>
-      <version>${libusb4java.version}</version>
-      <classifier>linux-x86_64</classifier>
-    </dependency> 
-    <dependency>
-      <groupId>org.usb4java</groupId>
-      <artifactId>libusb4java</artifactId>
-      <version>${libusb4java.version}</version>
-      <classifier>linux-arm</classifier>
-    </dependency> 
-    <dependency>
-      <groupId>org.usb4java</groupId>
-      <artifactId>libusb4java</artifactId>
-      <version>${libusb4java.version}</version>
-      <classifier>windows-x86</classifier>
-    </dependency> 
-    <dependency>
-      <groupId>org.usb4java</groupId>
-      <artifactId>libusb4java</artifactId>
-      <version>${libusb4java.version}</version>
-      <classifier>windows-x86_64</classifier>
-    </dependency> 
-    <dependency>
-      <groupId>org.usb4java</groupId>
-      <artifactId>libusb4java</artifactId>
-      <version>${libusb4java.version}</version>
-      <classifier>osx-x86</classifier>
-    </dependency> 
-    <dependency>
-      <groupId>org.usb4java</groupId>
-      <artifactId>libusb4java</artifactId>
-      <version>${libusb4java.version}</version>
-      <classifier>osx-x86_64</classifier>
-    </dependency> 
+      <groupId>net.java.dev.jna</groupId>
+      <artifactId>jna</artifactId>
+      <version>4.1.0</version>
+    </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
