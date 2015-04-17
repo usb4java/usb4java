@@ -20,36 +20,47 @@ package org.usb4java;
 
 import java.util.Iterator;
 
+import com.sun.jna.Pointer;
+
 /**
- * List of devices as returned by
- * {@link LibUsb#getDeviceList(Context, DeviceList)}.
+ * List of devices as returned by {@link LibUsb#getDeviceList(Context, DeviceList)}.
  *
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class DeviceList implements Iterable<Device>
-{
+public final class DeviceList implements Iterable<Device> {
     /** The native pointer to the devices array. */
-    private long deviceListPointer;
+    private Pointer deviceListPointer;
 
     /** The number of devices in the list. */
     private int size;
 
     /**
-     * Constructs a new device list. Must be passed to
-     * {@link LibUsb#getDeviceList(Context, DeviceList)} before using it.
+     * Constructs a new device list. Must be passed to {@link LibUsb#getDeviceList(Context, DeviceList)} before using
+     * it.
      */
-    public DeviceList()
-    {
+    public DeviceList() {
         // Empty
     }
 
+    /**
+     * Initializes the device list.
+     * 
+     * @param deviceListPointer
+     *            The native pointer to set.
+     * @param size
+     *            The number of devices.
+     */
+    void init(final Pointer deviceListPointer, final int size) {
+        this.deviceListPointer = deviceListPointer;
+        this.size = size;
+    }
+    
     /**
      * Returns the native pointer.
      *
      * @return The native pointer.
      */
-    public long getPointer()
-    {
+    public Pointer getPointer() {
         return this.deviceListPointer;
     }
 
@@ -58,11 +69,10 @@ public final class DeviceList implements Iterable<Device>
      *
      * @return The number of devices in the list.
      */
-    public int getSize()
-    {
+    public int getSize() {
         return this.size;
     }
-
+    
     /**
      * Returns the device with the specified index.
      *
@@ -70,47 +80,42 @@ public final class DeviceList implements Iterable<Device>
      *            The device index.
      * @return The device or null when index is out of bounds.
      */
-    public native Device get(final int index);
+    public Device get(final int index) {
+        return new Device(this.deviceListPointer.getPointer(index * Pointer.SIZE));
+    }
 
     @Override
-    public Iterator<Device> iterator()
-    {
+    public Iterator<Device> iterator() {
         return new DeviceListIterator(this);
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
+        final long nativePointer = Pointer.nativeValue(this.deviceListPointer);
         final int prime = 31;
         int result = 1;
-        result = (prime * result)
-            + (int) (this.deviceListPointer ^ (this.deviceListPointer >>> 32));
+        result = (prime * result) + (int) (nativePointer ^ (nativePointer >>> 32));
         return result;
     }
 
     @Override
-    public boolean equals(final Object obj)
-    {
-        if (this == obj)
-        {
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (obj == null)
-        {
+        if (obj == null) {
             return false;
         }
-        if (this.getClass() != obj.getClass())
-        {
+        if (this.getClass() != obj.getClass()) {
             return false;
         }
         final DeviceList other = (DeviceList) obj;
-        return this.deviceListPointer == other.deviceListPointer;
+        return Pointer.nativeValue(this.deviceListPointer) == Pointer.nativeValue(other.deviceListPointer);
     }
 
     @Override
-    public String toString()
-    {
-        return String.format("libusb device list 0x%x with size %d",
-            this.deviceListPointer, this.size);
+    public String toString() {
+        return String.format("libusb device list 0x%x with size %d", Pointer.nativeValue(this.deviceListPointer),
+            this.size);
     }
 }

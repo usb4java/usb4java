@@ -5,6 +5,7 @@
 
 package org.usb4java.jna;
 
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,30 +22,11 @@ import com.sun.jna.ptr.PointerByReference;
  */
 public interface LibUsbNative extends Library {
 
-    public static class libusb_version extends Structure {
-        public short major;
-
-        public short minor;
-
-        public short micro;
-
-        public short nano;
-
-        public String rc;
-
-        public String describe;
-
-        @Override
-        protected List getFieldOrder() {
-            return Arrays.asList(new String[] { "major", "minor", "micro", "nano", "rc", "describe" });
-        }
-    }
-
     public String libusb_error_name(int error_code);
 
     public int libusb_has_capability(int capability);
 
-    public libusb_version libusb_get_version();
+    public NativeVersion libusb_get_version();
 
     public int libusb_setlocale(String locale);
 
@@ -64,7 +46,7 @@ public interface LibUsbNative extends Library {
 
     public byte libusb_get_port_number(Pointer device);
 
-    public int libusb_get_port_numbers(Pointer device, byte[] port_numbers, int port_numbers_len);
+    public int libusb_get_port_numbers(Pointer device, ByteBuffer port_numbers, int port_numbers_len);
 
     public Pointer libusb_get_parent(Pointer device);
 

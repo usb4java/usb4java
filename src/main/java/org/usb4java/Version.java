@@ -20,34 +20,25 @@ package org.usb4java;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.usb4java.jna.NativeVersion;
 
 /**
  * Structure providing the version of the libusb runtime.
  *
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class Version
-{
-    /** The native pointer to the version structure. */
-    private long versionPointer;
+public final class Version {
+    /** The native version structure. */
+    private final NativeVersion version;
 
     /**
-     * Package-private constructor to prevent manual instantiation. An instance
-     * is only returned by the JNI method {@link LibUsb#getVersion()}.
+     * Creates a new version container from the specified native version structure.
+     * 
+     * @param version
+     *            The native version structure.
      */
-    Version()
-    {
-        // Empty
-    }
-
-    /**
-     * Returns the native pointer.
-     *
-     * @return The native pointer.
-     */
-    public long getPointer()
-    {
-        return this.versionPointer;
+    public Version(final NativeVersion version) {
+        this.version = version;
     }
 
     /**
@@ -55,79 +46,73 @@ public final class Version
      *
      * @return The library major version.
      */
-    public native int major();
+    public int major() {
+        return this.version.major & 0xff;
+    }
 
     /**
      * Returns the library minor version.
      *
      * @return The library minor version.
      */
-    public native int minor();
+    public int minor() {
+        return this.version.minor & 0xff;
+    }
 
     /**
      * Returns the library micro version.
      *
      * @return The library micro version.
      */
-    public native int micro();
+    public int micro() {
+        return this.version.micro & 0xffff;
+    }
 
     /**
      * Returns the library nano version.
      *
      * @return The library nano version.
      */
-    public native int nano();
+    public int nano() {
+        return this.version.nano & 0xffff;
+    }
 
     /**
      * Returns the release candidate suffix string, e.g. "-rc4".
      *
      * @return The release candidate suffix string.
      */
-    public native String rc();
-
+    public String rc() {
+        return this.version.rc;
+    }
+    
     @Override
-    public int hashCode()
-    {
-        return new HashCodeBuilder()
-            .append(this.major())
-            .append(this.minor())
-            .append(this.micro())
-            .append(this.nano())
-            .append(this.rc())
-            .toHashCode();
+    public int hashCode() {
+        return new HashCodeBuilder().append(this.major()).append(this.minor()).append(this.micro()).append(this.nano())
+            .append(this.rc()).toHashCode();
     }
 
     @Override
-    public boolean equals(final Object obj)
-    {
-        if (this == obj)
-        {
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (obj == null)
-        {
+        if (obj == null) {
             return false;
         }
-        if (this.getClass() != obj.getClass())
-        {
+        if (this.getClass() != obj.getClass()) {
             return false;
         }
 
         final Version other = (Version) obj;
 
-        return new EqualsBuilder()
-            .append(this.major(), other.major())
-            .append(this.minor(), other.minor())
-            .append(this.micro(), other.micro())
-            .append(this.nano(), other.nano())
-            .append(this.rc(), other.rc())
+        return new EqualsBuilder().append(this.major(), other.major()).append(this.minor(), other.minor())
+            .append(this.micro(), other.micro()).append(this.nano(), other.nano()).append(this.rc(), other.rc())
             .isEquals();
     }
 
     @Override
-    public String toString()
-    {
-        return this.major() + "." + this.minor() + "." + this.micro() + "."
-            + this.nano() + this.rc();
+    public String toString() {
+        return this.major() + "." + this.minor() + "." + this.micro() + "." + this.nano() + this.rc();
     }
 }

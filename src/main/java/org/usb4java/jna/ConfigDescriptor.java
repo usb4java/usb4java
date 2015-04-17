@@ -18,12 +18,8 @@
 
 package org.usb4java.jna;
 
-import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.List;
-
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
@@ -70,7 +66,7 @@ public class ConfigDescriptor extends Structure {
     public byte bMaxPower;
 
     /** The array with interfaces supported by this configuration. */
-    public Pointer iface;
+    public Interface iface;
 
     /**
      * Extra descriptors.

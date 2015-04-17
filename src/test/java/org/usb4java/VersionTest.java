@@ -16,6 +16,7 @@ import static org.usb4java.test.UsbAssume.isUsbTestsEnabled;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.usb4java.jna.NativeVersion;
 
 /**
  * Tests the {@link Version} class.
@@ -65,7 +66,7 @@ public class VersionTest
     public void testUninitializedMajor()
     {
         assumeUsbTestsEnabled();
-        new Version().major();
+        new Version(new NativeVersion()).major();
     }
 
     /**
@@ -85,7 +86,7 @@ public class VersionTest
     public void testUninitializedMinor()
     {
         assumeUsbTestsEnabled();
-        new Version().minor();
+        new Version(new NativeVersion()).minor();
     }
 
     /**
@@ -105,7 +106,7 @@ public class VersionTest
     public void testUninitializedMicro()
     {
         assumeUsbTestsEnabled();
-        new Version().micro();
+        new Version(new NativeVersion()).micro();
     }
 
     /**
@@ -125,7 +126,7 @@ public class VersionTest
     public void testUninitializedRc()
     {
         assumeUsbTestsEnabled();
-        new Version().rc();
+        new Version(new NativeVersion()).rc();
     }
     
     /**
@@ -165,16 +166,5 @@ public class VersionTest
         Version version = LibUsb.getVersion();
         assertNotNull(version.toString());
         assertTrue(version.toString().length() > 0);
-    }
-    
-    /**
-     * Tests the {@link Version#getPointer()} method
-     */
-    @Test
-    public void testGetPointer()
-    {
-        assumeUsbTestsEnabled();
-        assertEquals(0, new Version().getPointer());
-        assertNotEquals(0, LibUsb.getVersion().getPointer());
     }
 }

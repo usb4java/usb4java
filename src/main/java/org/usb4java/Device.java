@@ -18,39 +18,36 @@
 
 package org.usb4java;
 
+import com.sun.jna.Pointer;
+
 /**
  * Structure representing a USB device detected on the system.
  *
- * This is an opaque type for which you are only ever provided with a pointer,
- * usually originating from {@link LibUsb#getDeviceList(Context, DeviceList)}.
+ * This is an opaque type for which you are only ever provided with a pointer, usually originating from
+ * {@link LibUsb#getDeviceList(Context, DeviceList)}.
  *
- * Certain operations can be performed on a device, but in order to do any I/O
- * you will have to first obtain a device handle using
- * {@link LibUsb#open(Device, DeviceHandle)}.
+ * Certain operations can be performed on a device, but in order to do any I/O you will have to first obtain a device
+ * handle using {@link LibUsb#open(Device, DeviceHandle)}.
  *
- * Devices are reference counted with {@link LibUsb#refDevice(Device)} and
- * {@link LibUsb#unrefDevice(Device)}, and are freed when the reference count
- * reaches 0. New devices presented by
- * {@link LibUsb#getDeviceList(Context, DeviceList)} have a reference count of
- * 1, and {@link LibUsb#freeDeviceList(DeviceList, boolean)} can optionally
- * decrease the reference count on all devices in the list.
- * {@link LibUsb#open(Device, DeviceHandle)} adds another reference which is
+ * Devices are reference counted with {@link LibUsb#refDevice(Device)} and {@link LibUsb#unrefDevice(Device)}, and are
+ * freed when the reference count reaches 0. New devices presented by {@link LibUsb#getDeviceList(Context, DeviceList)}
+ * have a reference count of 1, and {@link LibUsb#freeDeviceList(DeviceList, boolean)} can optionally decrease the
+ * reference count on all devices in the list. {@link LibUsb#open(Device, DeviceHandle)} adds another reference which is
  * later destroyed by {@link LibUsb#close(DeviceHandle)}.
  *
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class Device
-{
+public final class Device {
     /** The native pointer to the device structure. */
-    private long devicePointer;
+    private final Pointer devicePointer;
 
     /**
-     * Package-private constructor to prevent manual instantiation. Devices are
-     * always created by JNI.
+     * Creates a new device.
+     * 
+     * @param devicePointer The native device pointer.
      */
-    Device()
-    {
-        // Empty
+    Device(final Pointer devicePointer) {
+        this.devicePointer = devicePointer;
     }
 
     /**
@@ -58,47 +55,39 @@ public final class Device
      *
      * @return The native pointer to the device structure.
      */
-    public long getPointer()
-    {
+    public Pointer getPointer() {
         return this.devicePointer;
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
+        final long nativePointer = Pointer.nativeValue(this.devicePointer);
         final int prime = 31;
         int result = 1;
-        result = (prime * result)
-            + (int) (this.devicePointer ^ (this.devicePointer >>> 32));
+        result = (prime * result) + (int) (nativePointer ^ (nativePointer >>> 32));
         return result;
     }
 
     @Override
-    public boolean equals(final Object obj)
-    {
-        if (this == obj)
-        {
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (obj == null)
-        {
+        if (obj == null) {
             return false;
         }
-        if (this.getClass() != obj.getClass())
-        {
+        if (this.getClass() != obj.getClass()) {
             return false;
         }
         final Device other = (Device) obj;
-        if (this.devicePointer != other.devicePointer)
-        {
+        if (Pointer.nativeValue(this.devicePointer) != Pointer.nativeValue(other.devicePointer)) {
             return false;
         }
         return true;
     }
 
     @Override
-    public String toString()
-    {
-        return String.format("libusb device 0x%x", this.devicePointer);
+    public String toString() {
+        return String.format("libusb device 0x%x", Pointer.nativeValue(this.devicePointer));
     }
 }

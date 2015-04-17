@@ -21,93 +21,23 @@ package org.usb4java.jna;
 import java.util.Arrays;
 import java.util.List;
 
-import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
+import com.sun.jna.Structure.ByReference;
 
 /**
  * A collection of alternate settings for a particular USB interface.
  *
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class Interface extends Structure {
-    public Pointer altsetting;
+public final class Interface extends Structure implements ByReference {
+    /**
+     * The array with interface descriptors. The length of this array is determined by the {@link #num_altsetting}
+     * field.
+     */
+    public InterfaceDescriptor altsetting;
 
+    /** the number of alternate settings that belong to this interface. */
     public int num_altsetting;
-//    /**
-//     * Returns the array with interface descriptors. The length of this array is
-//     * determined by the {@link #numAltsetting()} field.
-//     *
-//     * @return The array with interface descriptors.
-//     */
-//    public native InterfaceDescriptor[] altsetting();
-//
-//    /**
-//     * Returns the number of alternate settings that belong to this interface.
-//     *
-//     * @return The number of alternate settings.
-//     */
-//    public native int numAltsetting();
-//
-//    /**
-//     * Returns a dump of this interface.
-//     *
-//     * @return The interface dump.
-//     */
-//    public String dump()
-//    {
-//        final StringBuilder builder = new StringBuilder();
-//
-//        builder.append(String.format(
-//            "Interface:%n" +
-//            "  numAltsetting %10d",
-//            this.numAltsetting()));
-//
-//        for (final InterfaceDescriptor intDesc : this.altsetting())
-//        {
-//            builder.append(String.format("%n") + intDesc.dump());
-//        }
-//
-//        return builder.toString();
-//    }
-//
-//    @Override
-//    public int hashCode()
-//    {
-//        return new HashCodeBuilder()
-//            .append(this.altsetting())
-//            .append(this.numAltsetting())
-//            .toHashCode();
-//    }
-//
-//    @Override
-//    public boolean equals(final Object obj)
-//    {
-//        if (this == obj)
-//        {
-//            return true;
-//        }
-//        if (obj == null)
-//        {
-//            return false;
-//        }
-//        if (this.getClass() != obj.getClass())
-//        {
-//            return false;
-//        }
-//
-//        final Interface other = (Interface) obj;
-//
-//        return new EqualsBuilder()
-//            .append(this.altsetting(), other.altsetting())
-//            .append(this.numAltsetting(), other.numAltsetting())
-//            .isEquals();
-//    }
-//
-//    @Override
-//    public String toString()
-//    {
-//        return this.dump();
-//    }
 
     @Override
     protected List getFieldOrder() {
