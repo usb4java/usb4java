@@ -24,6 +24,7 @@ import java.util.List;
 
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
+import com.sun.jna.Structure.ByReference;
 
 /**
  * A structure representing the standard USB configuration descriptor.
@@ -34,8 +35,20 @@ import com.sun.jna.Structure;
  * @author Klaus Reimer (k@ailis.de)
  */
 public class NativeConfigDescriptor extends Structure {
+    /**
+     * Creates a new native config descriptor backed by the memory the specified pointer points to.
+     *
+     * @param pointer
+     *            The pointer to the native config descriptor memory.
+     */
     public NativeConfigDescriptor(final Pointer pointer) {
         super(pointer);
+        if (pointer == null) {
+            throw new IllegalArgumentException("Native config descriptor pointer must not be null");
+        }
+        if (Pointer.nativeValue(pointer) == 0) {
+            throw new IllegalArgumentException("Native config descriptor pointer must not be 0");
+        }
         read();
     }
 

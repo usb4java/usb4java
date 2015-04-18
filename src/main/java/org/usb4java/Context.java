@@ -34,14 +34,22 @@ import com.sun.jna.Pointer;
  */
 public final class Context {
     /** The native pointer to the context structure. */
-    private Pointer contextPointer;
+    private Pointer nativeContextPointer;
 
     /**
-     * Constructs a new libusb context. Must be passed to {@link LibUsb#init(Context)} before passing it to any other
-     * method.
+     * Sets the context pointer. This must only be called from {@link LibUsb#init(Context)}.
+     *
+     * @param nativeContextPointer
+     *            The pointer to set. MUst not be null.
      */
-    public Context() {
-        // Empty
+    void init(final Pointer nativeContextPointer) {
+        if (nativeContextPointer == null) {
+            throw new IllegalArgumentException("Native context pointer must not be null");
+        }
+        if (this.nativeContextPointer != null) {
+            throw new IllegalStateException("Context already initialized");
+        }
+        this.nativeContextPointer = nativeContextPointer;
     }
 
     /**
@@ -49,23 +57,20 @@ public final class Context {
      *
      * @return The native pointer to the context structure.
      */
-    public Pointer getPointer() {
-        return this.contextPointer;
-    }
-
-    /**
-     * Sets the context pointer. This must only be called from {@link LibUsb#init(Context)}.
-     * 
-     * @param pointer
-     *            The pointer to set.
-     */
-    void setPointer(final Pointer pointer) {
-        this.contextPointer = pointer;
+    Pointer getNative() {
+        if (this.nativeContextPointer == null) {
+            throw new IllegalStateException("Context not initialized");
+        }
+        return this.nativeContextPointer;
     }
 
     @Override
     public int hashCode() {
-        return this.contextPointer.hashCode();
+        final long nativePointer = Pointer.nativeValue(this.nativeContextPointer);
+        final int prime = 31;
+        int result = 1;
+        result = (prime * result) + (int) (nativePointer ^ (nativePointer >>> 32));
+        return result;
     }
 
     @Override
@@ -80,11 +85,14 @@ public final class Context {
             return false;
         }
         final Context other = (Context) obj;
-        return (this.contextPointer != null && this.contextPointer.equals(other.contextPointer));
+        if (Pointer.nativeValue(this.nativeContextPointer) != Pointer.nativeValue(other.nativeContextPointer)) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
-        return String.format("libusb context " + this.contextPointer);
+        return String.format("libusb context 0x%x", Pointer.nativeValue(this.nativeContextPointer));
     }
 }

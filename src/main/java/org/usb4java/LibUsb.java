@@ -20,13 +20,11 @@
 package org.usb4java;
 
 import java.io.FileDescriptor;
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.LongBuffer;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -36,6 +34,7 @@ import org.usb4java.jna.NativeLibUsb;
 import org.usb4java.jna.NativeVersion;
 
 import com.sun.jna.Native;
+import com.sun.jna.NativeLibrary;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
@@ -446,7 +445,7 @@ public final class LibUsb {
 
     /** We unwrap the BOS => define its maximum size. */
     public static final byte DT_BOS_MAX_SIZE = DT_BOS_SIZE + BT_USB_2_0_EXTENSION_SIZE
-        + BT_SS_USB_DEVICE_CAPABILITY_SIZE + BT_CONTAINER_ID_SIZE;
+            + BT_SS_USB_DEVICE_CAPABILITY_SIZE + BT_CONTAINER_ID_SIZE;
 
     // Endpoint direction. Values for bit 7 of the endpoint address scheme.
 
@@ -625,17 +624,20 @@ public final class LibUsb {
     /**
      * Hotplug callbacks (to correctly manage calls and additional data).
      */
-    private static final ConcurrentMap<Long, ImmutablePair<HotplugCallback, Object>> hotplugCallbacks =
-        new ConcurrentHashMap<Long, ImmutablePair<HotplugCallback, Object>>();
+    private static final ConcurrentMap<Long, ImmutablePair<HotplugCallback, Object>> hotplugCallbacks = new ConcurrentHashMap<Long, ImmutablePair<HotplugCallback, Object>>();
 
     /**
      * Pollfd listeners (to support different listeners for different contexts).
      */
-    private static final ConcurrentMap<Long, ImmutablePair<PollfdListener, Object>> pollfdListeners =
-        new ConcurrentHashMap<Long, ImmutablePair<PollfdListener, Object>>();
+    private static final ConcurrentMap<Long, ImmutablePair<PollfdListener, Object>> pollfdListeners = new ConcurrentHashMap<Long, ImmutablePair<PollfdListener, Object>>();
 
     /** The JNA interface to the libusb library. */
-    private static NativeLibUsb lib = (NativeLibUsb) Native.loadLibrary("usb-1.0", NativeLibUsb.class);
+    private static NativeLibUsb lib;
+
+    static {
+        NativeLibrary.addSearchPath("usb-1.0", "/lib/arm-linux-gnueabihf");
+        lib = (NativeLibUsb) Native.loadLibrary("usb-1.0", NativeLibUsb.class);
+    }
 
     /**
      * Private constructor to prevent instantiation.
@@ -650,12 +652,12 @@ public final class LibUsb {
      *
      * @return The API version of the underlying libusb library.
      * @deprecated The API version can no longer be read from JNA because it is implemented as a define. Use
-     *             {@link #getVersion()} instead to read the libusb library version. This deprecated method converts
-     *             the library version to an API version which is not really correct but acceptable.
+     *             {@link #getVersion()} instead to read the libusb library version. This deprecated method converts the
+     *             library version to an API version which is not really correct but acceptable.
      */
     @Deprecated
     public static int getApiVersion() {
-        NativeVersion version = lib.libusb_get_version();
+        final NativeVersion version = lib.libusb_get_version();
         return version.major << 24 | version.minor << 16 | version.micro;
     }
 
@@ -680,7 +682,7 @@ public final class LibUsb {
 
         final PointerByReference contextRef = new PointerByReference();
         final int result = lib.libusb_init(contextRef);
-        context.setPointer(contextRef.getValue());
+        context.init(contextRef.getValue());
         return result;
     }
 
@@ -693,7 +695,7 @@ public final class LibUsb {
      *            The {@link Context} to deinitialize, or NULL for the default context.
      */
     public static void exit(final Context context) {
-        lib.libusb_exit(context == null ? null : context.getPointer());
+        lib.libusb_exit(context == null ? null : context.getNative());
     }
 
     /**
@@ -720,7 +722,7 @@ public final class LibUsb {
      *            The log level to set.
      */
     public static void setDebug(final Context context, final int level) {
-        lib.libusb_set_debug(context == null ? null : context.getPointer(), level);
+        lib.libusb_set_debug(context == null ? null : context.getNative(), level);
     }
 
     /**
@@ -752,7 +754,7 @@ public final class LibUsb {
      */
     public static int getDeviceList(final Context context, final DeviceList list) {
         final PointerByReference listRef = new PointerByReference();
-        final int result = lib.libusb_get_device_list(context == null ? null : context.getPointer(), listRef);
+        final int result = lib.libusb_get_device_list(context == null ? null : context.getNative(), listRef);
         if (result >= 0) {
             list.init(listRef.getValue(), result);
         }
@@ -770,7 +772,7 @@ public final class LibUsb {
      *            Whether to unref the devices in the list.
      */
     public static void freeDeviceList(final DeviceList list, final boolean unrefDevices) {
-        lib.libusb_free_device_list(list.getPointer(), unrefDevices ? 1 : 0);        
+        lib.libusb_free_device_list(list.getPointer(), unrefDevices ? 1 : 0);
     }
 
     /**
@@ -985,10 +987,9 @@ public final class LibUsb {
      *            The idProduct value to search for.
      * @return A handle for the first found device or NULL on error or if the device could not be found.
      */
-    public static DeviceHandle openDeviceWithVidPid(final Context context, final short vendorId,
-            final short productId) {
-        return new DeviceHandle(lib.libusb_open_device_with_vid_pid(context == null ? null : context.getPointer(), 
-            vendorId, productId));
+    public static DeviceHandle openDeviceWithVidPid(final Context context, final short vendorId, final short productId) {
+        return new DeviceHandle(lib.libusb_open_device_with_vid_pid(context == null ? null : context.getNative(),
+                vendorId, productId));
     }
 
     /**
@@ -1007,7 +1008,7 @@ public final class LibUsb {
     public static void close(final DeviceHandle handle) {
         lib.libusb_close(handle.getPointer());
     }
-                  
+
     /**
      * Get the underlying device for a handle.
      *
@@ -1044,7 +1045,7 @@ public final class LibUsb {
         final IntByReference configRef = new IntByReference();
         final int result = lib.libusb_get_configuration(handle.getPointer(), configRef);
         if (result == SUCCESS) {
-            config.put(0,  configRef.getValue());
+            config.put(0, configRef.getValue());
         }
         return result;
     }
@@ -1175,7 +1176,7 @@ public final class LibUsb {
     public static int clearHalt(final DeviceHandle handle, final byte endpoint) {
         return lib.libusb_clear_halt(handle.getPointer(), endpoint);
     }
-    
+
     /**
      * Perform a USB port reset to reinitialize a device.
      *
@@ -1428,7 +1429,7 @@ public final class LibUsb {
      */
     public static int getDeviceDescriptor(final Device device, final DeviceDescriptor descriptor) {
         return lib.libusb_get_device_descriptor(device.getNative(), descriptor.getNative());
-        
+
     }
 
     /**
@@ -1442,20 +1443,18 @@ public final class LibUsb {
      *            Output buffer for ASCII string descriptor.
      * @return Number of bytes returned in data, or ERROR code on failure.
      */
-    public static int getStringDescriptorAscii(final DeviceHandle handle, final byte index,
-            final StringBuffer string) {
+    public static int getStringDescriptorAscii(final DeviceHandle handle, final byte index, final StringBuffer string) {
         final ByteBuffer buffer = ByteBuffer.allocateDirect(128);
         final int result = lib.libusb_get_string_descriptor_ascii(handle.getPointer(), index, buffer, 128);
         if (result >= 0) {
             try {
                 string.append(Charset.forName("ASCII").newDecoder().decode(buffer));
-            }
-            catch (CharacterCodingException e) {
+            } catch (final CharacterCodingException e) {
                 // Should not happen because libusb returns ASCII and we decode ASCII. But just in case we forward
                 // the exception
                 throw new RuntimeException(e.toString(), e);
             }
-        }        
+        }
         return result;
     }
 
@@ -1501,8 +1500,8 @@ public final class LibUsb {
      * @see #getConfigDescriptor(Device, byte, ConfigDescriptor)
      */
     public static int getActiveConfigDescriptor(final Device device, final ConfigDescriptor descriptor) {
-        PointerByReference descriptorRef = new PointerByReference();
-        int result = lib.libusb_get_active_config_descriptor(device.getNative(), descriptorRef);
+        final PointerByReference descriptorRef = new PointerByReference();
+        final int result = lib.libusb_get_active_config_descriptor(device.getNative(), descriptorRef);
         if (result == SUCCESS) {
             descriptor.init(new NativeConfigDescriptor(descriptorRef.getValue()));
         }
@@ -1527,8 +1526,8 @@ public final class LibUsb {
      * @see #getConfigDescriptorByValue(Device, byte, ConfigDescriptor)
      */
     public static int getConfigDescriptor(final Device device, final byte index, final ConfigDescriptor descriptor) {
-        PointerByReference descriptorRef = new PointerByReference();
-        int result = lib.libusb_get_config_descriptor(device.getNative(), index, descriptorRef);
+        final PointerByReference descriptorRef = new PointerByReference();
+        final int result = lib.libusb_get_config_descriptor(device.getNative(), index, descriptorRef);
         if (result == SUCCESS) {
             descriptor.init(new NativeConfigDescriptor(descriptorRef.getValue()));
         }
@@ -1573,7 +1572,7 @@ public final class LibUsb {
      *            The configuration descriptor to free
      */
     public static void freeConfigDescriptor(final ConfigDescriptor descriptor) {
-        lib.libusb_free_config_descriptor(descriptor.getNative());
+        lib.libusb_free_config_descriptor(descriptor.getNative().getPointer());
     }
 
     /**
@@ -1590,7 +1589,7 @@ public final class LibUsb {
      *         code on error
      */
     public static int getSsEndpointCompanionDescriptor(final Context context,
-        final EndpointDescriptor endpointDescriptor, final SsEndpointCompanionDescriptor companionDescriptor) {
+            final EndpointDescriptor endpointDescriptor, final SsEndpointCompanionDescriptor companionDescriptor) {
         // TODO
         throw new RuntimeException("Not implemented yet");
     }
@@ -1651,7 +1650,7 @@ public final class LibUsb {
      * @return 0 on success a LIBUSB_ERROR code on error
      */
     public static int getUsb20ExtensionDescriptor(final Context context,
-        final BosDevCapabilityDescriptor devCapDescriptor, final Usb20ExtensionDescriptor extensionDescriptor) {
+            final BosDevCapabilityDescriptor devCapDescriptor, final Usb20ExtensionDescriptor extensionDescriptor) {
         // TODO
         throw new RuntimeException("Not implemented yet");
     }
@@ -1684,8 +1683,8 @@ public final class LibUsb {
      * @return {@link #SUCCESS} on success, an error code on error.
      */
     public static int getSsUsbDeviceCapabilityDescriptor(final Context context,
-        final BosDevCapabilityDescriptor devCapDescriptor,
-        final SsUsbDeviceCapabilityDescriptor ssUsbDeviceCapabilityDescriptor) {
+            final BosDevCapabilityDescriptor devCapDescriptor,
+            final SsUsbDeviceCapabilityDescriptor ssUsbDeviceCapabilityDescriptor) {
         // TODO
         throw new RuntimeException("Not implemented yet");
     }
@@ -1701,7 +1700,7 @@ public final class LibUsb {
      *            The descriptor to free.
      */
     public static void freeSsUsbDeviceCapabilityDescriptor(
-        final SsUsbDeviceCapabilityDescriptor ssUsbDeviceCapabilityDescriptor) {
+            final SsUsbDeviceCapabilityDescriptor ssUsbDeviceCapabilityDescriptor) {
         // TODO
         throw new RuntimeException("Not implemented yet");
     }
@@ -1719,7 +1718,7 @@ public final class LibUsb {
      * @return {@link #SUCCESS} on success or an error code on error
      */
     public static int getContainerIdDescriptor(final Context context,
-        final BosDevCapabilityDescriptor devCapDescriptor, final ContainerIdDescriptor containerIdDescriptor) {
+            final BosDevCapabilityDescriptor devCapDescriptor, final ContainerIdDescriptor containerIdDescriptor) {
         // TODO
         throw new RuntimeException("Not implemented yet");
     }
@@ -1756,7 +1755,7 @@ public final class LibUsb {
      */
     public static int getDescriptor(final DeviceHandle handle, final byte type, final byte index, final ByteBuffer data) {
         return controlTransfer(handle, ENDPOINT_IN, REQUEST_GET_DESCRIPTOR,
-            (short) (((type & 0xff) << 8) | (index & 0xff)), (short) 0, data, 1000);
+                (short) (((type & 0xff) << 8) | (index & 0xff)), (short) 0, data, 1000);
     }
 
     /**
@@ -1777,9 +1776,9 @@ public final class LibUsb {
      * @see #getStringDescriptorAscii(DeviceHandle, byte, StringBuffer)
      */
     public static int getStringDescriptor(final DeviceHandle handle, final byte index, final short langId,
-        final ByteBuffer data) {
+            final ByteBuffer data) {
         return controlTransfer(handle, ENDPOINT_IN, REQUEST_GET_DESCRIPTOR,
-            (short) ((DT_STRING << 8) | (index & 0xff)), langId, data, 1000);
+                (short) ((DT_STRING << 8) | (index & 0xff)), langId, data, 1000);
     }
 
     /**
@@ -1810,9 +1809,9 @@ public final class LibUsb {
      *         the device has been disconnected, another ERROR code on other failures
      */
     public static int controlTransfer(final DeviceHandle handle, final byte bmRequestType, final byte bRequest,
-        final short wValue, final short wIndex, final ByteBuffer data, final long timeout) {
-        // TODO
-        throw new RuntimeException("Not implemented yet");
+            final short wValue, final short wIndex, final ByteBuffer data, final long timeout) {
+        return lib.libusb_control_transfer(handle.getPointer(), bmRequestType, bRequest, wValue, wIndex,
+                data, (short) data.remaining(), (int) timeout);
     }
 
     /**
@@ -1847,7 +1846,7 @@ public final class LibUsb {
      *         another ERROR code on other failures.
      */
     public static int bulkTransfer(final DeviceHandle handle, final byte endpoint, final ByteBuffer data,
-        final IntBuffer transferred, final long timeout) {
+            final IntBuffer transferred, final long timeout) {
         // TODO
         throw new RuntimeException("Not implemented yet");
     }
@@ -1887,7 +1886,7 @@ public final class LibUsb {
      *         on other error
      */
     public static int interruptTransfer(final DeviceHandle handle, final byte endpoint, final ByteBuffer data,
-        final IntBuffer transferred, final long timeout) {
+            final IntBuffer transferred, final long timeout) {
         // TODO
         throw new RuntimeException("Not implemented yet");
     }
@@ -2071,8 +2070,7 @@ public final class LibUsb {
      *            Buffer for completion integer to check, or NULL.
      * @return 0 on success, or a ERROR code on failure
      */
-    public static int handleEventsTimeoutCompleted(final Context context, final long timeout,
-        final IntBuffer completed) {
+    public static int handleEventsTimeoutCompleted(final Context context, final long timeout, final IntBuffer completed) {
         // TODO
         throw new RuntimeException("Not implemented yet");
     }
@@ -2240,7 +2238,7 @@ public final class LibUsb {
      *            User data to be passed back to callbacks (useful for passing context information).
      */
     public static synchronized void setPollfdNotifiers(final Context context, final PollfdListener listener,
-        final Object userData) {
+            final Object userData) {
         // TODO
         // long contextId;
         //
@@ -2470,7 +2468,7 @@ public final class LibUsb {
      *            See {@link ControlSetup#wLength()}.
      */
     public static void fillControlSetup(final ByteBuffer buffer, final byte bmRequestType, final byte bRequest,
-        final short wValue, final short wIndex, final short wLength) {
+            final short wValue, final short wIndex, final short wLength) {
         final ControlSetup setup = new ControlSetup(buffer);
         setup.setBmRequestType(bmRequestType);
         setup.setBRequest(bRequest);
@@ -2514,7 +2512,7 @@ public final class LibUsb {
      *            Timeout for the transfer in milliseconds.
      */
     public static void fillControlTransfer(final Transfer transfer, final DeviceHandle handle, final ByteBuffer buffer,
-        final TransferCallback callback, final Object userData, final long timeout) {
+            final TransferCallback callback, final Object userData, final long timeout) {
         transfer.setDevHandle(handle);
         transfer.setEndpoint((byte) 0);
         transfer.setType(TRANSFER_TYPE_CONTROL);
@@ -2547,7 +2545,7 @@ public final class LibUsb {
      *            Timeout for the transfer in milliseconds.
      */
     public static void fillBulkTransfer(final Transfer transfer, final DeviceHandle handle, final byte endpoint,
-        final ByteBuffer buffer, final TransferCallback callback, final Object userData, final long timeout) {
+            final ByteBuffer buffer, final TransferCallback callback, final Object userData, final long timeout) {
         transfer.setDevHandle(handle);
         transfer.setEndpoint(endpoint);
         transfer.setType(TRANSFER_TYPE_BULK);
@@ -2578,8 +2576,8 @@ public final class LibUsb {
      *            Timeout for the transfer in milliseconds.
      */
     public static void fillBulkStreamTransfer(final Transfer transfer, final DeviceHandle handle, final byte endpoint,
-        final int streamId, final ByteBuffer buffer, final TransferCallback callback, final Object userData,
-        final long timeout) {
+            final int streamId, final ByteBuffer buffer, final TransferCallback callback, final Object userData,
+            final long timeout) {
         fillBulkTransfer(transfer, handle, endpoint, buffer, callback, userData, timeout);
         transfer.setType(TRANSFER_TYPE_BULK_STREAM);
         transfer.setStreamId(streamId);
@@ -2604,7 +2602,7 @@ public final class LibUsb {
      *            Timeout for the transfer in milliseconds.
      */
     public static void fillInterruptTransfer(final Transfer transfer, final DeviceHandle handle, final byte endpoint,
-        final ByteBuffer buffer, final TransferCallback callback, final Object userData, final long timeout) {
+            final ByteBuffer buffer, final TransferCallback callback, final Object userData, final long timeout) {
         transfer.setDevHandle(handle);
         transfer.setEndpoint(endpoint);
         transfer.setType(TRANSFER_TYPE_INTERRUPT);
@@ -2635,8 +2633,8 @@ public final class LibUsb {
      *            Timeout for the transfer in milliseconds.
      */
     public static void fillIsoTransfer(final Transfer transfer, final DeviceHandle handle, final byte endpoint,
-        final ByteBuffer buffer, final int numIsoPackets, final TransferCallback callback, final Object userData,
-        final long timeout) {
+            final ByteBuffer buffer, final int numIsoPackets, final TransferCallback callback, final Object userData,
+            final long timeout) {
         transfer.setDevHandle(handle);
         transfer.setEndpoint(endpoint);
         transfer.setType(TRANSFER_TYPE_ISOCHRONOUS);
@@ -2658,7 +2656,7 @@ public final class LibUsb {
      * @see #getMaxPacketSize(Device, byte)
      */
     public static void setIsoPacketLengths(final Transfer transfer, final int length) {
-        for (final IsoPacketDescriptor isoDesc: transfer.isoPacketDesc()) {
+        for (final IsoPacketDescriptor isoDesc : transfer.isoPacketDesc()) {
             isoDesc.setLength(length);
         }
     }
@@ -2785,8 +2783,8 @@ public final class LibUsb {
      * @return {@link #SUCCESS} on success, some ERROR code on failure.
      */
     public static synchronized int hotplugRegisterCallback(final Context context, final int events, final int flags,
-        final int vendorId, final int productId, final int deviceClass, final HotplugCallback callback,
-        final Object userData, final HotplugCallbackHandle callbackHandle) {
+            final int vendorId, final int productId, final int deviceClass, final HotplugCallback callback,
+            final Object userData, final HotplugCallbackHandle callbackHandle) {
         if (callback == null) {
             throw new IllegalArgumentException("callback must not be null");
         }
@@ -2796,17 +2794,16 @@ public final class LibUsb {
         hotplugCallbacks.put(globalHotplugId, new ImmutablePair<HotplugCallback, Object>(callback, userData));
 
         // Mask the values for conversion to int in libusb API.
-        final int result =
-            hotplugRegisterCallbackNative(context, events, flags, (vendorId == LibUsb.HOTPLUG_MATCH_ANY)
-                ? (LibUsb.HOTPLUG_MATCH_ANY) : (vendorId & 0xFFFF), (productId == LibUsb.HOTPLUG_MATCH_ANY)
-                ? (LibUsb.HOTPLUG_MATCH_ANY) : (productId & 0xFFFF), (deviceClass == LibUsb.HOTPLUG_MATCH_ANY)
-                ? (LibUsb.HOTPLUG_MATCH_ANY) : (deviceClass & 0xFF), callbackHandle, globalHotplugId);
+        final int result = hotplugRegisterCallbackNative(context, events, flags,
+                (vendorId == LibUsb.HOTPLUG_MATCH_ANY) ? (LibUsb.HOTPLUG_MATCH_ANY) : (vendorId & 0xFFFF),
+                (productId == LibUsb.HOTPLUG_MATCH_ANY) ? (LibUsb.HOTPLUG_MATCH_ANY) : (productId & 0xFFFF),
+                (deviceClass == LibUsb.HOTPLUG_MATCH_ANY) ? (LibUsb.HOTPLUG_MATCH_ANY) : (deviceClass & 0xFF),
+                callbackHandle, globalHotplugId);
 
         if (result == LibUsb.SUCCESS) {
             // Increment globalHotplugId by one, like the libusb handle.
             globalHotplugId++;
-        }
-        else {
+        } else {
             // When registration failed then remove the hotplug callback from
             // our list.
             hotplugCallbacks.remove(globalHotplugId);
@@ -2838,8 +2835,8 @@ public final class LibUsb {
      * @return {@link #SUCCESS} on success, some ERROR code on failure.
      */
     static int hotplugRegisterCallbackNative(final Context context, final int events, final int flags,
-        final int vendorId, final int productId, final int deviceClass, final HotplugCallbackHandle callbackHandle,
-        final long hotplugId) {
+            final int vendorId, final int productId, final int deviceClass, final HotplugCallbackHandle callbackHandle,
+            final long hotplugId) {
         // TODO
         throw new RuntimeException("Not implemented yet");
     }

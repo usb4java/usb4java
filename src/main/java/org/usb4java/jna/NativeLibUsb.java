@@ -97,9 +97,33 @@ public interface NativeLibUsb extends Library {
 
     int libusb_get_config_descriptor_by_value(Pointer device, byte bConfigurationValue, PointerByReference config);
 
-    void libusb_free_config_descriptor(NativeConfigDescriptor config);
-    
-    /* ... */
-    
+    void libusb_free_config_descriptor(Pointer config);
+
+    int libusb_get_ss_endpoint_companion_descriptor(Pointer context, NativeEndpointDescriptor endpoint,
+            PointerByReference ep_comp);
+
+    void libusb_free_ss_endpoint_companion_descriptor(Pointer ep_comp);
+
+    int libusb_get_bos_descriptor(Pointer handle, PointerByReference bos);
+
+    void libusb_free_bos_descriptor(Pointer bos);
+
+    int libusb_get_usb_2_0_extension_descriptor(Pointer context, NativeBosDevCapabilityDescriptor dev_cap,
+            PointerByReference usb_2_0_extension);
+
+    void libusb_free_usb_2_0_extension_descriptor(Pointer usb_2_0_extension);
+
+    int libusb_get_ss_usb_device_capability_descriptor(Pointer context, NativeBosDevCapabilityDescriptor dev_cap,
+            PointerByReference ss_usb_device_cap);
+
+    void libusb_free_ss_usb_device_capability_descriptor(Pointer ss_usb_device_cap);
+
+    int libusb_get_container_id_descriptor(Pointer context, NativeBosDevCapabilityDescriptor dev_cap,
+            PointerByReference container_id);
+
+    void libusb_free_container_id_descriptor(Pointer container_id);
+
     int libusb_get_string_descriptor_ascii(Pointer handle, byte desc_index, ByteBuffer data, int length);
+
+    int libusb_control_transfer(Pointer handle, byte bmRequestType, byte bRequest, short wValue, short wIndex, ByteBuffer data, short wLength, int timeout);
 }
