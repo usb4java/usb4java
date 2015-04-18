@@ -631,6 +631,12 @@ public final class LibUsb {
      */
     private static final ConcurrentMap<Long, ImmutablePair<PollfdListener, Object>> pollfdListeners = new ConcurrentHashMap<Long, ImmutablePair<PollfdListener, Object>>();
 
+    /** The cached libusb version. Automatically set when {@link #getVersion()} is called for the first time. */
+    private static Version version;
+
+    /** Constant for version 1.0.12 to check for existance of some methods introduces in this version. */
+    private static final Version VERSION_1_0_12 = new Version(1, 0, 12);
+
     /** The JNA interface to the libusb library. */
     private static NativeLibUsb lib;
 
@@ -726,12 +732,16 @@ public final class LibUsb {
     }
 
     /**
-     * Returns the version of the libusb runtime.
+     * Returns the version of the libusb runtime. The version is only read once and then it is cached so no native
+     * communication is needed anymore during runtime when it has first been read.
      *
      * @return The version of the libusb runtime.
      */
     public static Version getVersion() {
-        return new Version(lib.libusb_get_version());
+        if (version == null) {
+            version = new Version(lib.libusb_get_version());
+        }
+        return version;
     }
 
     /**
@@ -794,6 +804,9 @@ public final class LibUsb {
      * @return The port number (0 if not available).
      */
     public static int getPortNumber(final Device device) {
+        if (getVersion().isOlderThan(VERSION_1_0_12)) {
+            return 0;
+        }
         return lib.libusb_get_port_number(device.getNative());
     }
 
@@ -846,6 +859,9 @@ public final class LibUsb {
      *         {@link #freeDeviceList(DeviceList, boolean)} block.
      */
     public static Device getParent(final Device device) {
+        if (getVersion().isOlderThan(VERSION_1_0_12)) {
+            return null;
+        }
         final Pointer pointer = lib.libusb_get_parent(device.getNative());
         return pointer == null ? null : new Device(pointer);
     }

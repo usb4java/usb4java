@@ -27,18 +27,98 @@ import org.usb4java.jna.NativeVersion;
  *
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class Version {
-    /** The native version structure. */
-    private final NativeVersion version;
+public final class Version implements Comparable<Version> {
+    /** The major version. */
+    private final int major;
+
+    /** The minor version. */
+    private final int minor;
+
+    /** The micro version. */
+    private final int micro;
+
+    /** The nano version. */
+    private final int nano;
+
+    /** The release candidate suffix string. */
+    private final String rc;
+
+    /**
+     * Creates a new version container with the specified components.
+     *
+     * @param major
+     *            The major version.
+     * @param minor
+     *            The minor version.
+     */
+    public Version(final int major, final int minor) {
+        this(major, minor, 0, 0, "");
+    }
+
+    /**
+     * Creates a new version container with the specified components.
+     *
+     * @param major
+     *            The major version.
+     * @param minor
+     *            The minor version.
+     * @param micro
+     *            The micro version.
+     */
+    public Version(final int major, final int minor, final int micro) {
+        this(major, minor, micro, 0, "");
+    }
+
+    /**
+     * Creates a new version container with the specified components.
+     *
+     * @param major
+     *            The major version.
+     * @param minor
+     *            The minor version.
+     * @param micro
+     *            The micro version.
+     * @param nano
+     *            The nano version.
+     */
+    public Version(final int major, final int minor, final int micro, final int nano) {
+        this(major, minor, micro, nano, "");
+    }
+
+    /**
+     * Creates a new version container with the specified components.
+     *
+     * @param major
+     *            The major version.
+     * @param minor
+     *            The minor version.
+     * @param micro
+     *            The micro version.
+     * @param nano
+     *            The nano version.
+     * @param rc
+     *            The release candidate suffix string.
+     */
+    public Version(final int major, final int minor, final int micro, final int nano, final String rc) {
+        this.major = major;
+        this.minor = minor;
+        this.micro = micro;
+        this.nano = nano;
+        this.rc = rc;
+    }
 
     /**
      * Creates a new version container from the specified native version structure.
-     * 
+     *
      * @param version
      *            The native version structure.
      */
     public Version(final NativeVersion version) {
-        this.version = version;
+        this.major = version.major & 0xff;
+        this.minor = version.minor & 0xff;
+        this.micro = version.micro & 0xffff;
+        this.nano = version.nano & 0xffff;
+        this.rc = version.rc;
     }
 
     /**
@@ -47,7 +127,7 @@ public final class Version {
      * @return The library major version.
      */
     public int major() {
-        return this.version.major & 0xff;
+        return this.major;
     }
 
     /**
@@ -56,7 +136,7 @@ public final class Version {
      * @return The library minor version.
      */
     public int minor() {
-        return this.version.minor & 0xff;
+        return this.minor;
     }
 
     /**
@@ -65,7 +145,7 @@ public final class Version {
      * @return The library micro version.
      */
     public int micro() {
-        return this.version.micro & 0xffff;
+        return this.micro;
     }
 
     /**
@@ -74,7 +154,7 @@ public final class Version {
      * @return The library nano version.
      */
     public int nano() {
-        return this.version.nano & 0xffff;
+        return this.nano;
     }
 
     /**
@@ -83,13 +163,13 @@ public final class Version {
      * @return The release candidate suffix string.
      */
     public String rc() {
-        return this.version.rc;
+        return this.rc;
     }
-    
+
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(this.major()).append(this.minor()).append(this.micro()).append(this.nano())
-            .append(this.rc()).toHashCode();
+        return new HashCodeBuilder().append(this.major).append(this.minor).append(this.micro).append(this.nano)
+                .append(this.rc).toHashCode();
     }
 
     @Override
@@ -106,13 +186,45 @@ public final class Version {
 
         final Version other = (Version) obj;
 
-        return new EqualsBuilder().append(this.major(), other.major()).append(this.minor(), other.minor())
-            .append(this.micro(), other.micro()).append(this.nano(), other.nano()).append(this.rc(), other.rc())
-            .isEquals();
+        return new EqualsBuilder().append(this.major, other.major).append(this.minor, other.minor)
+                .append(this.micro, other.micro).append(this.nano, other.nano).append(this.rc, other.rc).isEquals();
     }
 
     @Override
     public String toString() {
-        return this.major() + "." + this.minor() + "." + this.micro() + "." + this.nano() + this.rc();
+        return this.major + "." + this.minor + "." + this.micro + "." + this.nano + this.rc;
+    }
+
+    @Override
+    public int compareTo(final Version other) {
+        if (this.major > other.major) {
+            return 1;
+        }
+        if (this.major < other.major) {
+            return -1;
+        }
+        if (this.minor > other.minor) {
+            return 1;
+        }
+        if (this.minor < other.minor) {
+            return -1;
+        }
+        if (this.micro > other.micro) {
+            return 1;
+        }
+        if (this.micro < other.micro) {
+            return -1;
+        }
+        if (this.nano > other.nano) {
+            return 1;
+        }
+        if (this.nano < other.nano) {
+            return -1;
+        }
+        return 0;
+    }
+
+    public boolean isOlderThan(final Version other) {
+        return compareTo(other) < 0;
     }
 }
