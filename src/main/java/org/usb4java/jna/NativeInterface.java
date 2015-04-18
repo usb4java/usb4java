@@ -29,12 +29,12 @@ import com.sun.jna.Structure.ByReference;
  *
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class Interface extends Structure implements ByReference {
+public final class NativeInterface extends Structure implements ByReference {
     /**
      * The array with interface descriptors. The length of this array is determined by the {@link #num_altsetting}
      * field.
      */
-    public InterfaceDescriptor altsetting;
+    public NativeInterfaceDescriptor altsetting;
 
     /** the number of alternate settings that belong to this interface. */
     public int num_altsetting;

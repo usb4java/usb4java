@@ -92,26 +92,27 @@ public final class DescriptorUtils
      */
     public static String dump(final ByteBuffer bytes)
     {
-        bytes.rewind();
-        final int columns = 16;
         final StringBuilder builder = new StringBuilder();
-
-        int i = 0;
-        while (bytes.hasRemaining())
-        {
-            if ((i % columns) != 0)
+        if (bytes != null) {
+            bytes.rewind();
+            final int columns = 16;
+    
+            int i = 0;
+            while (bytes.hasRemaining())
             {
-                builder.append(' ');
+                if ((i % columns) != 0)
+                {
+                    builder.append(' ');
+                }
+                else if (i >= columns)
+                {
+                    builder.append(String.format("%n"));
+                }
+    
+                builder.append(String.format("%02x", bytes.get()));
+                i++;
             }
-            else if (i >= columns)
-            {
-                builder.append(String.format("%n"));
-            }
-
-            builder.append(String.format("%02x", bytes.get()));
-            i++;
         }
-
         return builder.toString();
     }
 

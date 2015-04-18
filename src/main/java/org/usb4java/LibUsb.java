@@ -20,14 +20,19 @@
 package org.usb4java;
 
 import java.io.FileDescriptor;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.LongBuffer;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.usb4java.jna.LibUsbNative;
+import org.usb4java.jna.NativeConfigDescriptor;
+import org.usb4java.jna.NativeLibUsb;
 import org.usb4java.jna.NativeVersion;
 
 import com.sun.jna.Native;
@@ -630,7 +635,7 @@ public final class LibUsb {
         new ConcurrentHashMap<Long, ImmutablePair<PollfdListener, Object>>();
 
     /** The JNA interface to the libusb library. */
-    private static LibUsbNative lib = (LibUsbNative) Native.loadLibrary("usb-1.0", LibUsbNative.class);
+    private static NativeLibUsb lib = (NativeLibUsb) Native.loadLibrary("usb-1.0", NativeLibUsb.class);
 
     /**
      * Private constructor to prevent instantiation.
@@ -747,12 +752,11 @@ public final class LibUsb {
      */
     public static int getDeviceList(final Context context, final DeviceList list) {
         final PointerByReference listRef = new PointerByReference();
-        final int size = lib.libusb_get_device_list(context == null ? null : context.getPointer(), listRef);
-        if (size < 0) {
-            return size;
+        final int result = lib.libusb_get_device_list(context == null ? null : context.getPointer(), listRef);
+        if (result >= 0) {
+            list.init(listRef.getValue(), result);
         }
-        list.init(listRef.getValue(), size);
-        return size;
+        return result;
     }
 
     /**
@@ -777,7 +781,7 @@ public final class LibUsb {
      * @return The bus number
      */
     public static int getBusNumber(final Device device) {
-        return lib.libusb_get_bus_number(device.getPointer());
+        return lib.libusb_get_bus_number(device.getNative());
     }
 
     /**
@@ -788,7 +792,7 @@ public final class LibUsb {
      * @return The port number (0 if not available).
      */
     public static int getPortNumber(final Device device) {
-        return lib.libusb_get_port_number(device.getPointer());
+        return lib.libusb_get_port_number(device.getNative());
     }
 
     /**
@@ -802,7 +806,7 @@ public final class LibUsb {
      * @return The number of elements filled, {@link #ERROR_OVERFLOW} if the array is too small
      */
     public static int getPortNumbers(final Device device, final ByteBuffer path) {
-        return lib.libusb_get_port_numbers(device.getPointer(), path, path.capacity());
+        return lib.libusb_get_port_numbers(device.getNative(), path, path.capacity());
     }
 
     /**
@@ -840,7 +844,8 @@ public final class LibUsb {
      *         {@link #freeDeviceList(DeviceList, boolean)} block.
      */
     public static Device getParent(final Device device) {
-        return new Device(lib.libusb_get_parent(device.getPointer()));
+        final Pointer pointer = lib.libusb_get_parent(device.getNative());
+        return pointer == null ? null : new Device(pointer);
     }
 
     /**
@@ -851,7 +856,7 @@ public final class LibUsb {
      * @return The device address
      */
     public static int getDeviceAddress(final Device device) {
-        return lib.libusb_get_device_address(device.getPointer());
+        return lib.libusb_get_device_address(device.getNative());
     }
 
     /**
@@ -863,7 +868,7 @@ public final class LibUsb {
      *         the negotiated speed.
      */
     public static int getDeviceSpeed(final Device device) {
-        return lib.libusb_get_device_speed(device.getPointer());
+        return lib.libusb_get_device_speed(device.getNative());
     }
 
     /**
@@ -883,7 +888,7 @@ public final class LibUsb {
      *         other failure
      */
     public static int getMaxPacketSize(final Device device, final byte endpoint) {
-        return lib.libusb_get_max_packet_size(device.getPointer(), endpoint);
+        return lib.libusb_get_max_packet_size(device.getNative(), endpoint);
     }
 
     /**
@@ -909,7 +914,7 @@ public final class LibUsb {
      *         endpoint does not exist {@link #ERROR_OTHER} on other failure.
      */
     public static int getMaxIsoPacketSize(final Device device, final byte endpoint) {
-        return lib.libusb_get_max_iso_packet_size(device.getPointer(), endpoint);
+        return lib.libusb_get_max_iso_packet_size(device.getNative(), endpoint);
     }
 
     /**
@@ -920,7 +925,7 @@ public final class LibUsb {
      * @return The same device.
      */
     public static Device refDevice(final Device device) {
-        return new Device(lib.libusb_ref_device(device.getPointer()));
+        return new Device(lib.libusb_ref_device(device.getNative()));
     }
 
     /**
@@ -932,7 +937,7 @@ public final class LibUsb {
      *            the device to unreference.
      */
     public static void unrefDevice(final Device device) {
-        lib.libusb_unref_device(device.getPointer());
+        lib.libusb_unref_device(device.getNative());
     }
 
     /**
@@ -955,7 +960,7 @@ public final class LibUsb {
      */
     public static int open(final Device device, final DeviceHandle handle) {
         final PointerByReference handleRef = new PointerByReference();
-        final int result = lib.libusb_open(device.getPointer(), handleRef);
+        final int result = lib.libusb_open(device.getNative(), handleRef);
         if (result == SUCCESS) {
             handle.init(handleRef.getValue());
         }
@@ -1210,7 +1215,10 @@ public final class LibUsb {
      *            array of endpoints to allocate streams on
      * @return The number of streams allocated, or a LIBUSB_ERROR code on failure.
      */
-    public static native int allocStreams(final DeviceHandle handle, final int numStreams, final byte[] endpoints);
+    public static int allocStreams(final DeviceHandle handle, final int numStreams, final byte[] endpoints) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Free USB bulk streams allocated with LibUsb.allocStreams().
@@ -1223,7 +1231,10 @@ public final class LibUsb {
      *            array of endpoints to allocate streams on
      * @return 0 on success, or a LIBUSB_ERROR code on failure.
      */
-    public static native int freeStreams(final DeviceHandle handle, final byte[] endpoints);
+    public static int freeStreams(final DeviceHandle handle, final byte[] endpoints) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Determine if a kernel driver is active on an interface.
@@ -1385,7 +1396,10 @@ public final class LibUsb {
      *            The little-endian value to convert
      * @return the value in host-endian byte order
      */
-    public static native short le16ToCpu(final short x);
+    public static short le16ToCpu(final short x) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Convert a 16-bit value from host-endian to little-endian format.
@@ -1396,7 +1410,10 @@ public final class LibUsb {
      *            The host-endian value to convert
      * @return the value in little-endian byte order
      */
-    public static native short cpuToLe16(final short x);
+    public static short cpuToLe16(final short x) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Get the USB device descriptor for a given device.
@@ -1409,14 +1426,10 @@ public final class LibUsb {
      *            output location for the descriptor data
      * @return 0 on success or a ERROR code on failure
      */
-    public static native int getDeviceDescriptor(final Device device, final DeviceDescriptor descriptor);
-
-    /**
-     * Returns the size in bytes of the buffer that's required to hold all of a device descriptor's data.
-     *
-     * @return buffer size in bytes
-     */
-    static native int deviceDescriptorStructSize();
+    public static int getDeviceDescriptor(final Device device, final DeviceDescriptor descriptor) {
+        return lib.libusb_get_device_descriptor(device.getNative(), descriptor.getNative());
+        
+    }
 
     /**
      * Retrieve a string descriptor in C style ASCII.
@@ -1429,8 +1442,22 @@ public final class LibUsb {
      *            Output buffer for ASCII string descriptor.
      * @return Number of bytes returned in data, or ERROR code on failure.
      */
-    public static native int getStringDescriptorAscii(final DeviceHandle handle, final byte index,
-        final StringBuffer string);
+    public static int getStringDescriptorAscii(final DeviceHandle handle, final byte index,
+            final StringBuffer string) {
+        final ByteBuffer buffer = ByteBuffer.allocateDirect(128);
+        final int result = lib.libusb_get_string_descriptor_ascii(handle.getPointer(), index, buffer, 128);
+        if (result >= 0) {
+            try {
+                string.append(Charset.forName("ASCII").newDecoder().decode(buffer));
+            }
+            catch (CharacterCodingException e) {
+                // Should not happen because libusb returns ASCII and we decode ASCII. But just in case we forward
+                // the exception
+                throw new RuntimeException(e.toString(), e);
+            }
+        }        
+        return result;
+    }
 
     /**
      * A simple wrapper around {@link #getStringDescriptorAscii(DeviceHandle, byte, StringBuffer)}. It simply returns
@@ -1473,7 +1500,14 @@ public final class LibUsb {
      *
      * @see #getConfigDescriptor(Device, byte, ConfigDescriptor)
      */
-    public static native int getActiveConfigDescriptor(final Device device, final ConfigDescriptor descriptor);
+    public static int getActiveConfigDescriptor(final Device device, final ConfigDescriptor descriptor) {
+        PointerByReference descriptorRef = new PointerByReference();
+        int result = lib.libusb_get_active_config_descriptor(device.getNative(), descriptorRef);
+        if (result == SUCCESS) {
+            descriptor.init(new NativeConfigDescriptor(descriptorRef.getValue()));
+        }
+        return result;
+    }
 
     /**
      * Get a USB configuration descriptor based on its index.
@@ -1492,8 +1526,14 @@ public final class LibUsb {
      * @see #getActiveConfigDescriptor(Device, ConfigDescriptor)
      * @see #getConfigDescriptorByValue(Device, byte, ConfigDescriptor)
      */
-    public static native int getConfigDescriptor(final Device device, final byte index,
-        final ConfigDescriptor descriptor);
+    public static int getConfigDescriptor(final Device device, final byte index, final ConfigDescriptor descriptor) {
+        PointerByReference descriptorRef = new PointerByReference();
+        int result = lib.libusb_get_config_descriptor(device.getNative(), index, descriptorRef);
+        if (result == SUCCESS) {
+            descriptor.init(new NativeConfigDescriptor(descriptorRef.getValue()));
+        }
+        return result;
+    }
 
     /**
      * Get a USB configuration descriptor with a specific bConfigurationValue.
@@ -1513,8 +1553,15 @@ public final class LibUsb {
      * @see #getActiveConfigDescriptor(Device, ConfigDescriptor)
      * @see #getConfigDescriptor(Device, byte, ConfigDescriptor)
      */
-    public static native int getConfigDescriptorByValue(final Device device, final byte value,
-        final ConfigDescriptor descriptor);
+    public static int getConfigDescriptorByValue(final Device device, final byte value,
+            final ConfigDescriptor descriptor) {
+        final PointerByReference descriptorRef = new PointerByReference();
+        final int result = lib.libusb_get_config_descriptor_by_value(device.getNative(), value, descriptorRef);
+        if (result == SUCCESS) {
+            descriptor.init(new NativeConfigDescriptor(descriptorRef.getValue()));
+        }
+        return result;
+    }
 
     /**
      * Free a configuration descriptor obtained from {@link #getConfigDescriptor(Device, byte, ConfigDescriptor)} or
@@ -1525,7 +1572,9 @@ public final class LibUsb {
      * @param descriptor
      *            The configuration descriptor to free
      */
-    public static native void freeConfigDescriptor(final ConfigDescriptor descriptor);
+    public static void freeConfigDescriptor(final ConfigDescriptor descriptor) {
+        lib.libusb_free_config_descriptor(descriptor.getNative());
+    }
 
     /**
      * Get an endpoints superspeed endpoint companion descriptor (if any).
@@ -1540,8 +1589,11 @@ public final class LibUsb {
      * @return {@link #SUCCESS} on success, {@link #ERROR_NOT_FOUND} if the descriptor does not exist, another error
      *         code on error
      */
-    public static native int getSsEndpointCompanionDescriptor(final Context context,
-        final EndpointDescriptor endpointDescriptor, final SsEndpointCompanionDescriptor companionDescriptor);
+    public static int getSsEndpointCompanionDescriptor(final Context context,
+        final EndpointDescriptor endpointDescriptor, final SsEndpointCompanionDescriptor companionDescriptor) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Free a superspeed endpoint companion descriptor obtained from
@@ -1552,7 +1604,10 @@ public final class LibUsb {
      * @param companionDescriptor
      *            The superspeed endpoint companion descriptor to free
      */
-    public static native void freeSsEndpointCompanionDescriptor(final SsEndpointCompanionDescriptor companionDescriptor);
+    public static void freeSsEndpointCompanionDescriptor(final SsEndpointCompanionDescriptor companionDescriptor) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Get a Binary Object Store (BOS) descriptor. This is a BLOCKING function, which will send requests to the device.
@@ -1565,7 +1620,10 @@ public final class LibUsb {
      * @return {@link #SUCCESS} on success, {@link #ERROR_NOT_FOUND} if the device doesn't have a BOS descriptor,
      *         another error code on error
      */
-    public static native int getBosDescriptor(final DeviceHandle handle, final BosDescriptor descriptor);
+    public static int getBosDescriptor(final DeviceHandle handle, final BosDescriptor descriptor) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Free a BOS descriptor obtained from {@link #getBosDescriptor(DeviceHandle, BosDescriptor)}.
@@ -1575,7 +1633,10 @@ public final class LibUsb {
      * @param descriptor
      *            The BOS descriptor to free.
      */
-    public static native void freeBosDescriptor(final BosDescriptor descriptor);
+    public static void freeBosDescriptor(final BosDescriptor descriptor) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Get an USB 2.0 Extension descriptor.
@@ -1589,8 +1650,11 @@ public final class LibUsb {
      *            {@link #freeUsb20ExtensionDescriptor(Usb20ExtensionDescriptor)} after use.
      * @return 0 on success a LIBUSB_ERROR code on error
      */
-    public static native int getUsb20ExtensionDescriptor(final Context context,
-        final BosDevCapabilityDescriptor devCapDescriptor, final Usb20ExtensionDescriptor extensionDescriptor);
+    public static int getUsb20ExtensionDescriptor(final Context context,
+        final BosDevCapabilityDescriptor devCapDescriptor, final Usb20ExtensionDescriptor extensionDescriptor) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Free a USB 2.0 Extension descriptor obtained from
@@ -1601,7 +1665,10 @@ public final class LibUsb {
      * @param extensionDescriptor
      *            The USB 2.0 Extension descriptor to free.
      */
-    public static native void freeUsb20ExtensionDescriptor(final Usb20ExtensionDescriptor extensionDescriptor);
+    public static void freeUsb20ExtensionDescriptor(final Usb20ExtensionDescriptor extensionDescriptor) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Get a SuperSpeed USB Device Capability descriptor.
@@ -1616,9 +1683,12 @@ public final class LibUsb {
      *            {@link #freeSsUsbDeviceCapabilityDescriptor(SsUsbDeviceCapabilityDescriptor)} after use.
      * @return {@link #SUCCESS} on success, an error code on error.
      */
-    public static native int getSsUsbDeviceCapabilityDescriptor(final Context context,
+    public static int getSsUsbDeviceCapabilityDescriptor(final Context context,
         final BosDevCapabilityDescriptor devCapDescriptor,
-        final SsUsbDeviceCapabilityDescriptor ssUsbDeviceCapabilityDescriptor);
+        final SsUsbDeviceCapabilityDescriptor ssUsbDeviceCapabilityDescriptor) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Free a SuperSpeed USB Device Capability descriptor obtained from
@@ -1630,8 +1700,11 @@ public final class LibUsb {
      * @param ssUsbDeviceCapabilityDescriptor
      *            The descriptor to free.
      */
-    public static native void freeSsUsbDeviceCapabilityDescriptor(
-        final SsUsbDeviceCapabilityDescriptor ssUsbDeviceCapabilityDescriptor);
+    public static void freeSsUsbDeviceCapabilityDescriptor(
+        final SsUsbDeviceCapabilityDescriptor ssUsbDeviceCapabilityDescriptor) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Get a Container ID descriptor.
@@ -1645,8 +1718,11 @@ public final class LibUsb {
      *            freed with {@link #freeContainerIdDescriptor(ContainerIdDescriptor)} after use.
      * @return {@link #SUCCESS} on success or an error code on error
      */
-    public static native int getContainerIdDescriptor(final Context context,
-        final BosDevCapabilityDescriptor devCapDescriptor, final ContainerIdDescriptor containerIdDescriptor);
+    public static int getContainerIdDescriptor(final Context context,
+        final BosDevCapabilityDescriptor devCapDescriptor, final ContainerIdDescriptor containerIdDescriptor) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Free a Container ID descriptor obtained from
@@ -1657,7 +1733,10 @@ public final class LibUsb {
      * @param containerIdDescriptor
      *            The descriptor to free.
      */
-    public static native void freeContainerIdDescriptor(final ContainerIdDescriptor containerIdDescriptor);
+    public static void freeContainerIdDescriptor(final ContainerIdDescriptor containerIdDescriptor) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Retrieve a descriptor from the default control pipe.
@@ -1730,8 +1809,11 @@ public final class LibUsb {
      *         {@link #ERROR_PIPE} if the control request was not supported by the device, {@link #ERROR_NO_DEVICE} if
      *         the device has been disconnected, another ERROR code on other failures
      */
-    public static native int controlTransfer(final DeviceHandle handle, final byte bmRequestType, final byte bRequest,
-        final short wValue, final short wIndex, final ByteBuffer data, final long timeout);
+    public static int controlTransfer(final DeviceHandle handle, final byte bmRequestType, final byte bRequest,
+        final short wValue, final short wIndex, final ByteBuffer data, final long timeout) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Perform a USB bulk transfer.
@@ -1764,8 +1846,11 @@ public final class LibUsb {
      *         more data, see Packets and overflows, {@link #ERROR_NO_DEVICE} if the device has been disconnected,
      *         another ERROR code on other failures.
      */
-    public static native int bulkTransfer(final DeviceHandle handle, final byte endpoint, final ByteBuffer data,
-        final IntBuffer transferred, final long timeout);
+    public static int bulkTransfer(final DeviceHandle handle, final byte endpoint, final ByteBuffer data,
+        final IntBuffer transferred, final long timeout) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Perform a USB interrupt transfer.
@@ -1801,8 +1886,11 @@ public final class LibUsb {
      *         Packets and overflows, {@link #ERROR_NO_DEVICE} if the device has been disconnected, another ERROR code
      *         on other error
      */
-    public static native int interruptTransfer(final DeviceHandle handle, final byte endpoint, final ByteBuffer data,
-        final IntBuffer transferred, final long timeout);
+    public static int interruptTransfer(final DeviceHandle handle, final byte endpoint, final ByteBuffer data,
+        final IntBuffer transferred, final long timeout) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Attempt to acquire the event handling lock.
@@ -1821,7 +1909,10 @@ public final class LibUsb {
      * @return 0 if the lock was obtained successfully, 1 if the lock was not obtained (i.e. another thread holds the
      *         lock)
      */
-    public static native int tryLockEvents(final Context context);
+    public static int tryLockEvents(final Context context) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Acquire the event handling lock, blocking until successful acquisition if it is contended.
@@ -1838,7 +1929,10 @@ public final class LibUsb {
      * @param context
      *            The context to operate on, or NULL for the default context.
      */
-    public static native void lockEvents(final Context context);
+    public static void lockEvents(final Context context) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Release the lock previously acquired with {@link #tryLockEvents(Context)} or {@link #lockEvents(Context)}.
@@ -1848,7 +1942,10 @@ public final class LibUsb {
      * @param context
      *            The context to operate on, or NULL for the default context
      */
-    public static native void unlockEvents(final Context context);
+    public static void unlockEvents(final Context context) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Determine if it is still OK for this thread to be doing event handling.
@@ -1867,7 +1964,10 @@ public final class LibUsb {
      *            The context to operate on, or NULL for the default context.
      * @return 1 if event handling can start or continue, 0 if this thread must give up the events lock
      */
-    public static native int eventHandlingOk(final Context context);
+    public static int eventHandlingOk(final Context context) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Determine if an active thread is handling events (i.e. if anyone is holding the event handling lock).
@@ -1876,7 +1976,10 @@ public final class LibUsb {
      *            The context to operate on, or NULL for the default context.
      * @return 1 if a thread is handling events, 0 if there are no threads currently handling events.
      */
-    public static native int eventHandlerActive(final Context context);
+    public static int eventHandlerActive(final Context context) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Acquire the event waiters lock.
@@ -1895,7 +1998,10 @@ public final class LibUsb {
      * @param context
      *            The context to operate on, or NULL for the default context.
      */
-    public static native void lockEventWaiters(final Context context);
+    public static void lockEventWaiters(final Context context) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Release the event waiters lock.
@@ -1903,7 +2009,10 @@ public final class LibUsb {
      * @param context
      *            The context to operate on, or NULL for the default context.
      */
-    public static native void unlockEventWaiters(final Context context);
+    public static void unlockEventWaiters(final Context context) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Wait for another thread to signal completion of an event.
@@ -1928,7 +2037,10 @@ public final class LibUsb {
      *
      * @return 0 after a transfer completes or another thread stops event handling, 1 if the timeout expired
      */
-    public static native int waitForEvent(final Context context, final long timeout);
+    public static int waitForEvent(final Context context, final long timeout) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Handle any pending events.
@@ -1959,8 +2071,11 @@ public final class LibUsb {
      *            Buffer for completion integer to check, or NULL.
      * @return 0 on success, or a ERROR code on failure
      */
-    public static native int handleEventsTimeoutCompleted(final Context context, final long timeout,
-        final IntBuffer completed);
+    public static int handleEventsTimeoutCompleted(final Context context, final long timeout,
+        final IntBuffer completed) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Handle any pending events.
@@ -1980,7 +2095,10 @@ public final class LibUsb {
      *            non-blocking mode
      * @return 0 on success, or a ERROR code on failure
      */
-    public static native int handleEventsTimeout(final Context context, final long timeout);
+    public static int handleEventsTimeout(final Context context, final long timeout) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Handle any pending events in blocking mode.
@@ -1997,7 +2115,10 @@ public final class LibUsb {
      *            The context to operate on, or NULL for the default context.
      * @return 0 on success, or a ERROR code on failure.
      */
-    public static native int handleEvents(final Context context);
+    public static int handleEvents(final Context context) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Handle any pending events in blocking mode.
@@ -2013,7 +2134,10 @@ public final class LibUsb {
      *            Buffer for completion integer to check, or NULL.
      * @return 0 on success, or a ERROR code on failure.
      */
-    public static native int handleEventsCompleted(final Context context, final IntBuffer completed);
+    public static int handleEventsCompleted(final Context context, final IntBuffer completed) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Handle any pending events by polling file descriptors, without checking if any other threads are already doing
@@ -2032,7 +2156,10 @@ public final class LibUsb {
      *            The maximum time (In microseconds) to block waiting for events, or zero for non-blocking mode
      * @return 0 on success, or a ERROR code on failure.
      */
-    public static native int handleEventsLocked(final Context context, final long timeout);
+    public static int handleEventsLocked(final Context context, final long timeout) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Determines whether your application must apply special timing considerations when monitoring libusb's file
@@ -2055,7 +2182,10 @@ public final class LibUsb {
      * @return 0 if you must call into libusb at times determined by {@link #getNextTimeout(Context, LongBuffer)}, or 1
      *         if all timeout events are handled internally or through regular activity on the file descriptors.
      */
-    public static native int pollfdsHandleTimeouts(final Context context);
+    public static int pollfdsHandleTimeouts(final Context context) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Determine the next internal timeout that libusb needs to handle.
@@ -2083,7 +2213,10 @@ public final class LibUsb {
      *            order to process timeout events
      * @return 0 if there are no pending timeouts, 1 if a timeout was returned, or {@link #ERROR_OTHER} failure
      */
-    public static native int getNextTimeout(final Context context, final LongBuffer timeout);
+    public static int getNextTimeout(final Context context, final LongBuffer timeout) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Register notification functions for file descriptor additions/removals.
@@ -2179,7 +2312,10 @@ public final class LibUsb {
      * @param contextId
      *            A unique identifier for the given context.
      */
-    static native void setPollfdNotifiersNative(final Context context, final long contextId);
+    static void setPollfdNotifiersNative(final Context context, final long contextId) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Tells libusb to stop informing this class about pollfd additions and removals.
@@ -2187,7 +2323,10 @@ public final class LibUsb {
      * @param context
      *            The context to operate on, or NULL for the default context
      */
-    static native void unsetPollfdNotifiersNative(final Context context);
+    static void unsetPollfdNotifiersNative(final Context context) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Allocate a libusb transfer without support for isochronous transfers.
@@ -2222,7 +2361,10 @@ public final class LibUsb {
      *            Number of isochronous packet descriptors to allocate.
      * @return A newly allocated transfer, or NULL on error
      */
-    public static native Transfer allocTransfer(final int isoPackets);
+    public static Transfer allocTransfer(final int isoPackets) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Free a transfer structure.
@@ -2238,7 +2380,10 @@ public final class LibUsb {
      * @param transfer
      *            The transfer to free
      */
-    public static native void freeTransfer(final Transfer transfer);
+    public static void freeTransfer(final Transfer transfer) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Submit a transfer.
@@ -2251,7 +2396,10 @@ public final class LibUsb {
      *         transfer has already been submitted. {@link #ERROR_NOT_SUPPORTED} if the transfer flags are not supported
      *         by the operating system. Another LIBUSB_ERROR code on failure.
      */
-    public static native int submitTransfer(final Transfer transfer);
+    public static int submitTransfer(final Transfer transfer) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Asynchronously cancel a previously submitted transfer.
@@ -2264,7 +2412,10 @@ public final class LibUsb {
      * @return 0 on success, {@link #ERROR_NOT_FOUND} if the transfer is already complete or cancelled. Another
      *         LIBUSB_ERROR code on failure.
      */
-    public static native int cancelTransfer(final Transfer transfer);
+    public static int cancelTransfer(final Transfer transfer) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Get the data section of a control transfer.
@@ -2665,7 +2816,7 @@ public final class LibUsb {
     }
 
     /**
-     * Internally called native method for registering a hotplug callback.
+     * Internally called method for registering a hotplug callback.
      *
      * @param context
      *            Context to register this callback with.
@@ -2686,9 +2837,12 @@ public final class LibUsb {
      *            The hotplug callback ID.
      * @return {@link #SUCCESS} on success, some ERROR code on failure.
      */
-    static native int hotplugRegisterCallbackNative(final Context context, final int events, final int flags,
+    static int hotplugRegisterCallbackNative(final Context context, final int events, final int flags,
         final int vendorId, final int productId, final int deviceClass, final HotplugCallbackHandle callbackHandle,
-        final long hotplugId);
+        final long hotplugId) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Deregisters a hotplug callback.
@@ -2716,7 +2870,7 @@ public final class LibUsb {
     }
 
     /**
-     * Internally called native method for unregistering a hotplug callback.
+     * Internally called method for unregistering a hotplug callback.
      *
      * Deregister a callback from a {@link Context}. This function is safe to call from within a hotplug callback.
      *
@@ -2726,5 +2880,8 @@ public final class LibUsb {
      *            the handle of the callback to deregister
      * @return The hotplug callback ID.
      */
-    static native long hotplugDeregisterCallbackNative(final Context context, final HotplugCallbackHandle callbackHandle);
+    static long hotplugDeregisterCallbackNative(final Context context, final HotplugCallbackHandle callbackHandle) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 }

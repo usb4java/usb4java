@@ -58,35 +58,50 @@ public final class BosDescriptor
      *
      * @return The descriptor size in bytes;
      */
-    public native byte bLength();
+    public byte bLength() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the descriptor type.
      *
      * @return The descriptor type.
      */
-    public native byte bDescriptorType();
+    public byte bDescriptorType() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the length of this descriptor and all of its sub descriptors.
      *
      * @return The total descriptor length.
      */
-    public native short wTotalLength();
+    public short wTotalLength() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the number of separate device capability descriptors in the BOS.
      *
      * @return The number of device capability descriptors.
      */
-    public native byte bNumDeviceCaps();
+    public byte bNumDeviceCaps() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the array with the device capability descriptors.
      *
      * @return The array with device capability descriptors.
      */
-    public native BosDevCapabilityDescriptor[] devCapability();
+    public BosDevCapabilityDescriptor[] devCapability() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns a dump of this descriptor.

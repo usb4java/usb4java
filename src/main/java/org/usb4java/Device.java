@@ -39,15 +39,15 @@ import com.sun.jna.Pointer;
  */
 public final class Device {
     /** The native pointer to the device structure. */
-    private final Pointer devicePointer;
+    private final Pointer nativeDevicePointer;
 
     /**
      * Creates a new device.
      * 
-     * @param devicePointer The native device pointer.
+     * @param nativeDevicePointer The native device pointer.
      */
-    Device(final Pointer devicePointer) {
-        this.devicePointer = devicePointer;
+    Device(final Pointer nativeDevicePointer) {
+        this.nativeDevicePointer = nativeDevicePointer;
     }
 
     /**
@@ -55,13 +55,13 @@ public final class Device {
      *
      * @return The native pointer to the device structure.
      */
-    public Pointer getPointer() {
-        return this.devicePointer;
+    Pointer getNative() {
+        return this.nativeDevicePointer;
     }
 
     @Override
     public int hashCode() {
-        final long nativePointer = Pointer.nativeValue(this.devicePointer);
+        final long nativePointer = Pointer.nativeValue(this.nativeDevicePointer);
         final int prime = 31;
         int result = 1;
         result = (prime * result) + (int) (nativePointer ^ (nativePointer >>> 32));
@@ -80,7 +80,7 @@ public final class Device {
             return false;
         }
         final Device other = (Device) obj;
-        if (Pointer.nativeValue(this.devicePointer) != Pointer.nativeValue(other.devicePointer)) {
+        if (Pointer.nativeValue(this.nativeDevicePointer) != Pointer.nativeValue(other.nativeDevicePointer)) {
             return false;
         }
         return true;
@@ -88,6 +88,6 @@ public final class Device {
 
     @Override
     public String toString() {
-        return String.format("libusb device 0x%x", Pointer.nativeValue(this.devicePointer));
+        return String.format("libusb device 0x%x", Pointer.nativeValue(this.nativeDevicePointer));
     }
 }

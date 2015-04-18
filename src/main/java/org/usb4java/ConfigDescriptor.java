@@ -22,143 +22,170 @@ import java.nio.ByteBuffer;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.usb4java.jna.NativeConfigDescriptor;
+import org.usb4java.jna.NativeInterface;
+
+import com.sun.jna.Pointer;
 
 /**
  * A structure representing the standard USB configuration descriptor.
  *
- * This descriptor is documented in section 9.6.3 of the USB 3.0 specification.
- * All multiple-byte fields are represented in host-endian format.
+ * This descriptor is documented in section 9.6.3 of the USB 3.0 specification. All multiple-byte fields are represented
+ * in host-endian format.
  *
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class ConfigDescriptor
-{
-    /** The native pointer to the descriptor structure. */
-    private long configDescriptorPointer;
-
+public final class ConfigDescriptor {
+    /** The config descriptor structure. */
+    private NativeConfigDescriptor nativeConfigDescriptor;
+    
     /**
      * Constructs a new config descriptor which can be passed to the
-     * {@link LibUsb#getConfigDescriptor(Device, byte, ConfigDescriptor)} 
-     * method.
+     * {@link LibUsb#getConfigDescriptor(Device, byte, ConfigDescriptor)} method.
      */
-    public ConfigDescriptor()
-    {
-        // Empty
+    public ConfigDescriptor() {
     }
 
+    void init(final NativeConfigDescriptor nativeConfigDescriptor) {
+        this.nativeConfigDescriptor = nativeConfigDescriptor;
+    }
+    
     /**
-     * Returns the native pointer.
+     * Returns the config descriptor structure.
      *
-     * @return The native pointer.
+     * @return The config descriptor structure.
      */
-    public long getPointer()
-    {
-        return this.configDescriptorPointer;
+    NativeConfigDescriptor getNative() {
+        return this.nativeConfigDescriptor;
     }
 
     /**
      * Returns the size of this descriptor (in bytes).
      * 
-     * @return The size of this descriptor (in bytes). 
+     * @return The size of this descriptor (in bytes).
      */
-    public native byte bLength();
+    public byte bLength() {
+        return this.nativeConfigDescriptor.bLength;
+    }
 
     /**
-     * Returns the descriptor type. Will have value {@link LibUsb#DT_CONFIG}
-     * in this context. 
+     * Returns the descriptor type. Will have value {@link LibUsb#DT_CONFIG} in this context.
      * 
      * @return The descriptor type.
      */
-    public native byte bDescriptorType();
+    public byte bDescriptorType() {
+        return this.nativeConfigDescriptor.bDescriptorType;
+    }
 
     /**
      * Returns the total length of data returned for this configuration.
      * 
      * @return The total length of data.
      */
-    public native short wTotalLength();
+    public short wTotalLength() {
+        return this.nativeConfigDescriptor.wTotalLength;
+    }
 
     /**
      * Returns the number of interfaces supported by this configuration.
      * 
      * @return The number of supported interfaces.
-     */ 
-    public native byte bNumInterfaces();
+     */
+    public byte bNumInterfaces() {
+        return this.nativeConfigDescriptor.bNumInterfaces;
+    }
 
     /**
      * Returns the identifier value for this configuration.
      * 
      * @return The identifier value.
      */
-    public native byte bConfigurationValue();
+    public byte bConfigurationValue() {
+        return this.nativeConfigDescriptor.bConfigurationValue;
+    }
 
     /**
      * Returns the index of string descriptor describing this configuration.
      * 
      * @return The string descriptor index.
      */
-    public native byte iConfiguration();
+    public byte iConfiguration() {
+        return this.nativeConfigDescriptor.iConfiguration;
+    }
 
     /**
      * Returns the configuration characteristics.
      * 
      * @return The configuration characteristics.
      */
-    public native byte bmAttributes();
+    public byte bmAttributes() {
+        return this.nativeConfigDescriptor.bmAttributes;
+    }
 
     /**
-     * Returns the maximum power consumption of the USB device from this bus 
-     * in this configuration when the device is fully operation. Expressed in 
-     * units of 2 mA.
+     * Returns the maximum power consumption of the USB device from this bus in this configuration when the device is
+     * fully operation. Expressed in units of 2 mA.
      * 
      * @return The maximum power consumption.
      */
-    public native byte bMaxPower();
+    public byte bMaxPower() {
+        return this.nativeConfigDescriptor.bMaxPower;
+    }
 
     /**
      * Returns the array with interfaces supported by this configuration.
      *
      * @return The array with interfaces.
      */
-    public native Interface[] iface();
+    public Interface[] iface() {
+        final int numInterfaces = bNumInterfaces() & 0xff;
+        final Interface[] ifaces = new Interface[numInterfaces];
+        if (numInterfaces > 0) {
+            final NativeInterface[] nativeInterfaces = (NativeInterface[]) this.nativeConfigDescriptor.iface.toArray(numInterfaces);
+            for (int i = 0; i != numInterfaces; ++i) {
+                ifaces[i] = new Interface(nativeInterfaces[i]);
+            }
+        }
+        return ifaces;
+    }
 
     /**
      * Extra descriptors.
      *
-     * If libusb encounters unknown interface descriptors, it will store them
-     * here, should you wish to parse them.
+     * If libusb encounters unknown interface descriptors, it will store them here, should you wish to parse them.
      *
      * @return The extra descriptors.
      */
-    public native ByteBuffer extra();
+    public ByteBuffer extra() {
+        Pointer pointer = this.nativeConfigDescriptor.extra;
+        if (pointer == null) {
+            return ByteBuffer.allocate(0);
+        } else {
+            return pointer.getByteBuffer(0, extraLength());
+        }
+    }
 
     /**
      * Length of the extra descriptors, in bytes.
      *
      * @return The extra descriptors length.
      */
-    public native int extraLength();
-
+    public int extraLength() {
+        return this.nativeConfigDescriptor.extra_length;
+    }
+     
     /**
      * Returns a dump of this descriptor.
      *
      * @return The descriptor dump.
      */
-    public String dump()
-    {
+    public String dump() {
         final StringBuilder builder = new StringBuilder();
 
-        builder.append(String.format(
-            "%s" +
-            "  extralen %17d%n" +
-            "  extra:%n" +
-            "%s",
-            DescriptorUtils.dump(this),
-            this.extraLength(),
-            DescriptorUtils.dump(this.extra()).replaceAll("(?m)^", "    ")));
+        builder.append(String.format("%s" + "  extralen %17d%n" + "  extra:%n" + "%s", DescriptorUtils.dump(this),
+            this.extraLength(), DescriptorUtils.dump(this.extra()).replaceAll("(?m)^", "    ")));
 
-        for (final Interface iface : this.iface())
-        {
+        for (final Interface iface: this.iface()) {
             builder.append(String.format("%n") + iface.dump());
         }
 
@@ -166,59 +193,38 @@ public final class ConfigDescriptor
     }
 
     @Override
-    public int hashCode()
-    {
-        return new HashCodeBuilder()
-            .append(this.bLength())
-            .append(this.bDescriptorType())
-            .append(this.wTotalLength())
-            .append(this.bNumInterfaces())
-            .append(this.bConfigurationValue())
-            .append(this.iConfiguration())
-            .append(this.bmAttributes())
-            .append(this.bMaxPower())
-            .append(this.iface())
-            .append(this.extra())
-            .append(this.extraLength())
-            .toHashCode();
+    public int hashCode() {
+        return new HashCodeBuilder().append(this.bLength()).append(this.bDescriptorType()).append(this.wTotalLength())
+            .append(this.bNumInterfaces()).append(this.bConfigurationValue()).append(this.iConfiguration())
+            .append(this.bmAttributes()).append(this.bMaxPower()).append(this.iface()).append(this.extra())
+            .append(this.extraLength()).toHashCode();
     }
 
     @Override
-    public boolean equals(final Object obj)
-    {
-        if (this == obj)
-        {
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (obj == null)
-        {
+        if (obj == null) {
             return false;
         }
-        if (this.getClass() != obj.getClass())
-        {
+        if (this.getClass() != obj.getClass()) {
             return false;
         }
 
         final ConfigDescriptor other = (ConfigDescriptor) obj;
 
-        return new EqualsBuilder()
-            .append(this.bLength(), other.bLength())
-            .append(this.bDescriptorType(), other.bDescriptorType())
-            .append(this.wTotalLength(), other.wTotalLength())
+        return new EqualsBuilder().append(this.bLength(), other.bLength())
+            .append(this.bDescriptorType(), other.bDescriptorType()).append(this.wTotalLength(), other.wTotalLength())
             .append(this.bNumInterfaces(), other.bNumInterfaces())
             .append(this.bConfigurationValue(), other.bConfigurationValue())
-            .append(this.iConfiguration(), other.iConfiguration())
-            .append(this.bmAttributes(), other.bmAttributes())
-            .append(this.bMaxPower(), other.bMaxPower())
-            .append(this.iface(), other.iface())
-            .append(this.extra(), other.extra())
-            .append(this.extraLength(), other.extraLength())
-            .isEquals();
+            .append(this.iConfiguration(), other.iConfiguration()).append(this.bmAttributes(), other.bmAttributes())
+            .append(this.bMaxPower(), other.bMaxPower()).append(this.iface(), other.iface())
+            .append(this.extra(), other.extra()).append(this.extraLength(), other.extraLength()).isEquals();
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return this.dump();
     }
 }

@@ -6,12 +6,9 @@
 package org.usb4java.jna;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
-import java.util.List;
 
 import com.sun.jna.Library;
 import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 
@@ -20,7 +17,7 @@ import com.sun.jna.ptr.PointerByReference;
  *
  * @author Klaus Reimer (k@ailis.de)
  */
-public interface LibUsbNative extends Library {
+public interface NativeLibUsb extends Library {
 
     public String libusb_error_name(int error_code);
 
@@ -92,7 +89,7 @@ public interface LibUsbNative extends Library {
 
     int libusb_set_auto_detach_kernel_driver(Pointer handle, int enable);
 
-    int libusb_get_device_descriptor(Pointer device, DeviceDescriptor descriptor);
+    int libusb_get_device_descriptor(Pointer device, NativeDeviceDescriptor descriptor);
 
     int libusb_get_active_config_descriptor(Pointer device, PointerByReference config);
 
@@ -100,5 +97,9 @@ public interface LibUsbNative extends Library {
 
     int libusb_get_config_descriptor_by_value(Pointer device, byte bConfigurationValue, PointerByReference config);
 
-    void libusb_free_config_descriptor(ConfigDescriptor config);
+    void libusb_free_config_descriptor(NativeConfigDescriptor config);
+    
+    /* ... */
+    
+    int libusb_get_string_descriptor_ascii(Pointer handle, byte desc_index, ByteBuffer data, int length);
 }

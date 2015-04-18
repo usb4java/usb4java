@@ -35,7 +35,7 @@ import com.sun.jna.Structure.ByReference;
  *
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class EndpointDescriptor extends Structure implements ByReference {
+public final class NativeEndpointDescriptor extends Structure implements ByReference {
     /** The size of this descriptor (in bytes). */
     public byte bLength;
 

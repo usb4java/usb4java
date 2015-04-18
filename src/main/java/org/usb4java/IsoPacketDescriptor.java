@@ -52,7 +52,10 @@ public final class IsoPacketDescriptor
      * 
      * @return The length of data to request in this packet.
      */
-    public native int length();
+    public int length() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Sets the length of data to request in this packet.
@@ -63,21 +66,30 @@ public final class IsoPacketDescriptor
     // Theoretically the right representation for a C unsigned int would be a
     // Java long, but the maximum length for ISO Packets is 1024 bytes, so an
     // int more than suffices to hold any possible valid values here.
-    public native void setLength(final int length);
+    public void setLength(final int length) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the amount of data that was actually transferred.
      * 
      * @return The amount of data that was actually transferred.
      */
-    public native int actualLength();
+    public int actualLength() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the status code for this packet.
      * 
      * @return The status code for this packet.
      */
-    public native int status();
+    public int status() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     @Override
     public int hashCode()

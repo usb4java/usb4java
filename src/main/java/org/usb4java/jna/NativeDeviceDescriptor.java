@@ -31,7 +31,7 @@ import com.sun.jna.Structure;
  *
  * @author Klaus Reimer (k@ailis.de)
  */
-public class DeviceDescriptor extends Structure {
+public class NativeDeviceDescriptor extends Structure {
     public byte bLength;
     public byte bDescriptorType;
     public short bcdUSB;

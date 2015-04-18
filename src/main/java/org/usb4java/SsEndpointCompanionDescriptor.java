@@ -60,14 +60,20 @@ public final class SsEndpointCompanionDescriptor
      *
      * @return The descriptor size in bytes;
      */
-    public native byte bLength();
+    public byte bLength() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the descriptor type.
      *
      * @return The descriptor type.
      */
-    public native byte bDescriptorType();
+    public byte bDescriptorType() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the maximum number of packets the endpoint can send or receive as
@@ -75,7 +81,10 @@ public final class SsEndpointCompanionDescriptor
      *
      * @return The maximum number of packets as part of a burst.
      */
-    public native byte bMaxBurst();
+    public byte bMaxBurst() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the attributes. In bulk endpoint: bits 4:0 represents the
@@ -85,7 +94,10 @@ public final class SsEndpointCompanionDescriptor
      *
      * @return The attributes.
      */
-    public native byte bmAttributes();
+    public byte bmAttributes() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the total number of bytes this endpoint will transfer every
@@ -93,7 +105,10 @@ public final class SsEndpointCompanionDescriptor
      *
      * @return The total number of bytes per service interval.
      */
-    public native short wBytesPerInterval();
+    public short wBytesPerInterval() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns a dump of this descriptor.

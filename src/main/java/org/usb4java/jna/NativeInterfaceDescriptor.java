@@ -18,6 +18,7 @@
 
 package org.usb4java.jna;
 
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,7 +36,7 @@ import com.sun.jna.Structure.ByReference;
  *
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class InterfaceDescriptor extends Structure implements ByReference {
+public final class NativeInterfaceDescriptor extends Structure implements ByReference {
 
     /** The size of this descriptor (in bytes). */
     public byte bLength;
@@ -65,7 +66,7 @@ public final class InterfaceDescriptor extends Structure implements ByReference 
     public byte iInterface;
 
     /** The array with endpoints. */
-    public EndpointDescriptor endpoint;
+    public NativeEndpointDescriptor endpoint;
 
     /**
      * Extra descriptors. If libusb encounters unknown interface descriptors, it will store them here, should you wish

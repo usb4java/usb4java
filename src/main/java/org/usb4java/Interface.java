@@ -20,67 +20,61 @@ package org.usb4java;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.usb4java.jna.NativeInterface;
+import org.usb4java.jna.NativeInterfaceDescriptor;
 
 /**
  * A collection of alternate settings for a particular USB interface.
  *
  * @author Klaus Reimer (k@ailis.de)
  */
-public final class Interface
-{
-    /** The native pointer to the descriptor structure. */
-    private long interfacePointer;
+public final class Interface {
+    /** The native interface structure. */
+    private final NativeInterface nativeInterface;
 
-    /**
-     * Package-private constructor to prevent manual instantiation. Interfaces
-     * are always created by JNI.
-     */
-    Interface()
-    {
-        // Empty
+    Interface(final NativeInterface nativeInterface) {
+        this.nativeInterface = nativeInterface;
     }
 
     /**
-     * Returns the native pointer.
-     *
-     * @return The native pointer.
-     */
-    public long getPointer()
-    {
-        return this.interfacePointer;
-    }
-
-    /**
-     * Returns the array with interface descriptors. The length of this array is
-     * determined by the {@link #numAltsetting()} field.
+     * Returns the array with interface descriptors. The length of this array is determined by the
+     * {@link #numAltsetting()} field.
      *
      * @return The array with interface descriptors.
      */
-    public native InterfaceDescriptor[] altsetting();
+    public InterfaceDescriptor[] altsetting() {
+        final int numAltsetting = numAltsetting();
+        final InterfaceDescriptor[] descriptors = new InterfaceDescriptor[numAltsetting];
+        if (numAltsetting > 0) {
+            final NativeInterfaceDescriptor[] nativeDescriptors =
+                (NativeInterfaceDescriptor[]) this.nativeInterface.altsetting.toArray(numAltsetting);
+            for (int i = 0; i != numAltsetting; ++i) {
+                descriptors[i] = new InterfaceDescriptor(nativeDescriptors[i]);
+            }
+        }
+        return descriptors;
+    }
 
     /**
      * Returns the number of alternate settings that belong to this interface.
      *
      * @return The number of alternate settings.
      */
-    public native int numAltsetting();
+    public int numAltsetting() {
+        return this.nativeInterface.num_altsetting;
+    }
 
     /**
      * Returns a dump of this interface.
      *
      * @return The interface dump.
      */
-    public String dump()
-    {
+    public String dump() {
         final StringBuilder builder = new StringBuilder();
 
-        builder.append(String.format(
-            "Interface:%n" +
-            "  numAltsetting %10d",
-            this.numAltsetting()));
+        builder.append(String.format("Interface:%n" + "  numAltsetting %10d", this.numAltsetting()));
 
-        for (final InterfaceDescriptor intDesc : this.altsetting())
-        {
+        for (final InterfaceDescriptor intDesc: this.altsetting()) {
             builder.append(String.format("%n") + intDesc.dump());
         }
 
@@ -88,41 +82,30 @@ public final class Interface
     }
 
     @Override
-    public int hashCode()
-    {
-        return new HashCodeBuilder()
-            .append(this.altsetting())
-            .append(this.numAltsetting())
-            .toHashCode();
+    public int hashCode() {
+        return new HashCodeBuilder().append(this.altsetting()).append(this.numAltsetting()).toHashCode();
     }
 
     @Override
-    public boolean equals(final Object obj)
-    {
-        if (this == obj)
-        {
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (obj == null)
-        {
+        if (obj == null) {
             return false;
         }
-        if (this.getClass() != obj.getClass())
-        {
+        if (this.getClass() != obj.getClass()) {
             return false;
         }
 
         final Interface other = (Interface) obj;
 
-        return new EqualsBuilder()
-            .append(this.altsetting(), other.altsetting())
-            .append(this.numAltsetting(), other.numAltsetting())
-            .isEquals();
+        return new EqualsBuilder().append(this.altsetting(), other.altsetting())
+            .append(this.numAltsetting(), other.numAltsetting()).isEquals();
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return this.dump();
     }
 }

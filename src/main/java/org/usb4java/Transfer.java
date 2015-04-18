@@ -66,7 +66,10 @@ public final class Transfer
      *
      * @return The handle of the device.
      */
-    public native DeviceHandle devHandle();
+    public DeviceHandle devHandle() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Sets the handle of the device that this transfer will be submitted to.
@@ -74,14 +77,20 @@ public final class Transfer
      * @param handle
      *            The handle of the device.
      */
-    public native void setDevHandle(final DeviceHandle handle);
+    public void setDevHandle(final DeviceHandle handle) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the bitwise OR combination of libusb transfer flags.
      *
      * @return The transfer flags.
      */
-    public native byte flags();
+    public byte flags() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Sets the bitwise OR combination of libusb transfer flags.
@@ -89,14 +98,20 @@ public final class Transfer
      * @param flags
      *            The transfer flags to set.
      */
-    public native void setFlags(final byte flags);
+    public void setFlags(final byte flags) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the address of the endpoint where this transfer will be sent.
      *
      * @return The endpoint address.
      */
-    public native byte endpoint();
+    public byte endpoint() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Sets the address of the endpoint where this transfer will be sent.
@@ -104,14 +119,20 @@ public final class Transfer
      * @param endpoint
      *            The endpoint address to set
      */
-    public native void setEndpoint(final byte endpoint);
+    public void setEndpoint(final byte endpoint) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the type of the endpoint.
      *
      * @return The endpoint type.
      */
-    public native byte type();
+    public byte type() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Sets the type of the endpoint.
@@ -119,7 +140,10 @@ public final class Transfer
      * @param type
      *            The endpoint type to set.
      */
-    public native void setType(final byte type);
+    public void setType(final byte type) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the timeout for this transfer in milliseconds. A value of 0
@@ -127,7 +151,10 @@ public final class Transfer
      *
      * @return The timeout.
      */
-    public native long timeout();
+    public long timeout() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Sets the timeout for this transfer in milliseconds. A value of 0
@@ -136,7 +163,10 @@ public final class Transfer
      * @param timeout
      *            The timeout to set.
      */
-    public native void setTimeout(final long timeout);
+    public void setTimeout(final long timeout) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the status of the transfer. Read-only, and only for use within
@@ -149,14 +179,20 @@ public final class Transfer
      *
      * @return The transfer status.
      */
-    public native int status();
+    public int status() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the length of the data buffer.
      *
      * @return The data buffer length.
      */
-    public native int length();
+    public int length() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Sets the length of the data buffer.
@@ -195,7 +231,10 @@ public final class Transfer
      * @param length
      *            The length to set.
      */
-    native void setLengthNative(final int length);
+    void setLengthNative(final int length) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the actual length of data that was transferred. Read-only, and
@@ -204,14 +243,20 @@ public final class Transfer
      *
      * @return The actual length of the transferred data.
      */
-    public native int actualLength();
+    public int actualLength() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the current callback object.
      *
      * @return The current callback object.
      */
-    public native TransferCallback callback();
+    public TransferCallback callback() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Sets the callback object.
@@ -221,14 +266,20 @@ public final class Transfer
      * @param callback
      *            The callback object to use.
      */
-    public native void setCallback(final TransferCallback callback);
+    public void setCallback(final TransferCallback callback) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the current user data object.
      *
      * @return The current user data object.
      */
-    public native Object userData();
+    public Object userData() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Sets the user data object, representing user context data to pass to
@@ -237,7 +288,10 @@ public final class Transfer
      * @param userData
      *            The user data object to set.
      */
-    public native void setUserData(final Object userData);
+    public void setUserData(final Object userData) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the data buffer.
@@ -270,7 +324,7 @@ public final class Transfer
             this.setLengthNative(0);
         }
 
-        // Once we know the native calls have gone through, update the
+        // Once we know the calls have gone through, update the
         // reference.
         this.transferBuffer = buffer;
     }
@@ -281,7 +335,10 @@ public final class Transfer
      * @param buffer
      *            The data buffer to set.
      */
-    native void setBufferNative(final ByteBuffer buffer);
+    void setBufferNative(final ByteBuffer buffer) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the number of isochronous packets. Only used for I/O with
@@ -289,7 +346,10 @@ public final class Transfer
      *
      * @return The number of isochronous packets.
      */
-    public native int numIsoPackets();
+    public int numIsoPackets() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Sets the number of isochronous packets.
@@ -297,21 +357,30 @@ public final class Transfer
      * @param numIsoPackets
      *            The number of isochronous packets to set.
      */
-    public native void setNumIsoPackets(final int numIsoPackets);
+    public void setNumIsoPackets(final int numIsoPackets) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Array of isochronous packet descriptors, for isochronous transfers only.
      *
      * @return The array of isochronous packet descriptors.
      */
-    public native IsoPacketDescriptor[] isoPacketDesc();
+    public IsoPacketDescriptor[] isoPacketDesc() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Get a transfer's bulk stream id.
      *
      * @return The stream id for the transfer.
      */
-    public native int streamId();
+    public int streamId() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Set a transfer's bulk stream id.
@@ -322,7 +391,10 @@ public final class Transfer
      * @param streamId
      *            The stream id to set.
      */
-    public native void setStreamId(final int streamId);
+    public void setStreamId(final int streamId) {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     @Override
     public int hashCode()

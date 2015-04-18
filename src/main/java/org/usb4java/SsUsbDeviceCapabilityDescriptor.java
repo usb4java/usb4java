@@ -62,28 +62,40 @@ public final class SsUsbDeviceCapabilityDescriptor
      *
      * @return The descriptor size in bytes;
      */
-    public native byte bLength();
+    public byte bLength() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the descriptor type.
      *
      * @return The descriptor type.
      */
-    public native byte bDescriptorType();
+    public byte bDescriptorType() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the device capability type.
      *
      * @return The device capability type.
      */
-    public native byte bDevCapabilityType();
+    public byte bDevCapabilityType() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the bitmap of supported device level features.
      *
      * @return The supported device level features.
      */
-    public native byte bmAttributes();
+    public byte bmAttributes() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the bitmap encoding of the speed supported by this device when
@@ -91,7 +103,10 @@ public final class SsUsbDeviceCapabilityDescriptor
      *
      * @return The supported speed.
      */
-    public native short wSpeedSupported();
+    public short wSpeedSupported() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the lowest speed at which all the functionality supported by the
@@ -99,21 +114,30 @@ public final class SsUsbDeviceCapabilityDescriptor
      *
      * @return The lowest speed.
      */
-    public native byte bFunctionalitySupport();
+    public byte bFunctionalitySupport() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the U1 Device Exit Latency.
      *
      * @return The U1 Device Exit Latency.
      */
-    public native byte bU1DevExitLat();
+    public byte bU1DevExitLat() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the U2 Device Exit Latency.
      *
      * @return The U2 Device Exit Latency.
      */
-    public native short bU2DevExitLat();
+    public short bU2DevExitLat() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns a dump of this descriptor.

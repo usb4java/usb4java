@@ -60,28 +60,40 @@ public final class Usb20ExtensionDescriptor
      *
      * @return The descriptor size in bytes;
      */
-    public native byte bLength();
+    public byte bLength() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the descriptor type.
      *
      * @return The descriptor type.
      */
-    public native byte bDescriptorType();
+    public byte bDescriptorType() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the device capability type.
      *
      * @return The device capability type.
      */
-    public native byte bDevCapabilityType();
+    public byte bDevCapabilityType() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns the bitmap of supported device level features.
      *
      * @return The supported device level features.
      */
-    public native int bmAttributes();
+    public int bmAttributes() {
+        // TODO
+        throw new RuntimeException("Not implemented yet");
+    }
 
     /**
      * Returns a dump of this descriptor.
