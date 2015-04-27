@@ -149,7 +149,7 @@ public final class Loader
         }
         throw new LoaderException("Unable to determine the shared library "
             + "file extension for operating system '" + os
-            + "'. Please specify Java parameter -D" + key 
+            + "'. Please specify Java parameter -D" + key
             + "=<FILE-EXTENSION>");
     }
 
@@ -214,17 +214,13 @@ public final class Loader
     /**
      * Returns the name of the libusb native library. This could be
      * "libusb0.dll" for example or null if this library is not needed on the
-     * current platform (Because it is provided by the operating system).
+     * current platform (Because it is provided by the operating system or
+     * statically linked into the libusb4java library).
      *
      * @return The libusb native library name or null if not needed.
      */
     private static String getExtraLibName()
     {
-        final String os = getOS();
-        if (os.equals(OS_WINDOWS))
-        {
-            return "libusb-1.0." + EXT_DLL;
-        }
         return null;
     }
 
@@ -266,7 +262,7 @@ public final class Loader
      *            The library name to extract (For example "libusb0.dll")
      * @return The absolute path to the extracted library.
      */
-    private static String extractLibrary(final String platform, 
+    private static String extractLibrary(final String platform,
         final String lib)
     {
         // Extract the usb4java library
@@ -346,7 +342,7 @@ public final class Loader
         {
             return;
         }
-        
+
         loaded = true;
         final String platform = getPlatform();
         final String lib = getLibName();
