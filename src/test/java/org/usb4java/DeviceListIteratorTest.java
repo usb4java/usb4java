@@ -24,7 +24,7 @@ public class DeviceListIteratorTest
 {
     /** The test subject. */
     private DeviceListIterator iterator;
-    
+
     /**
      * Setup test.
      */
@@ -51,11 +51,11 @@ public class DeviceListIteratorTest
             LibUsb.exit(null);
         }
     }
-    
+
     /**
      * Tests the {@link DeviceListIterator#hasNext()} method. It just checks
      * that this call doesn't crash because we can't assume that a device is
-     * connected at all. 
+     * connected at all.
      */
     @Test
     public void testHasNext()
@@ -63,7 +63,7 @@ public class DeviceListIteratorTest
         assumeUsbTestsEnabled();
         this.iterator.hasNext();
     }
-    
+
     /**
      * Tests the {@link DeviceListIterator#next()} method.
      */
@@ -74,9 +74,9 @@ public class DeviceListIteratorTest
         while (this.iterator.hasNext())
         {
             assertNotNull(this.iterator.next());
-        }        
+        }
     }
-    
+
     /**
      * Ensures that {@link DeviceListIterator#next()} method throws
      * a {@link NoSuchElementException} when accessing elements after the end
@@ -85,10 +85,12 @@ public class DeviceListIteratorTest
     public void testNextAfterend()
     {
         assumeUsbTestsEnabled();
-        while (this.iterator.hasNext()) this.iterator.next();
+        while (this.iterator.hasNext()) {
+            this.iterator.next();
+        }
         this.iterator.next();
     }
-    
+
     /**
      * Ensures that {@link DeviceListIterator#remove()} throws an exception
      * because the list is read-only.
@@ -96,6 +98,7 @@ public class DeviceListIteratorTest
     @Test(expected = UnsupportedOperationException.class)
     public void testRemove()
     {
+        assumeUsbTestsEnabled();
         this.iterator.remove();
     }
 }
