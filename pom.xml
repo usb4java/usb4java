@@ -19,7 +19,7 @@
   
   <licenses>
     <license>
-      <name>LGPL</name>
+      <name>MIT</name>
       <url>LICENSE.md</url>
       <distribution>repo</distribution>
     </license>
