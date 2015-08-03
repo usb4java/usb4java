@@ -107,9 +107,10 @@ public final class ConfigDescriptor
     public native byte bmAttributes();
 
     /**
-     * Returns the maximum power consumption of the USB device from this bus 
-     * in this configuration when the device is fully operation. Expressed in 
-     * units of 2 mA.
+     * Returns the maximum power consumption of the USB device from this bus
+     * configuration when the device is fully operation. Expressed in units
+     * of 2 mA when the device is operating in high-speed mode and in units
+     * of 8 mA when the device is operating in super-speed mode.
      * 
      * @return The maximum power consumption.
      */
