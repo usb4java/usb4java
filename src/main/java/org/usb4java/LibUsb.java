@@ -1817,7 +1817,9 @@ public final class LibUsb
      *         {@link #ERROR_TIMEOUT} if the transfer timed out,
      *         {@link #ERROR_PIPE} if the control request was not supported by
      *         the device, {@link #ERROR_NO_DEVICE} if the device has been
-     *         disconnected, another ERROR code on other failures
+     *         disconnected, {@link LIBUSB_ERROR_INVALID_PARAM} if the transfer
+     *         size is larger than the operating system and/or hardware can 
+     *         support. Another ERROR code on other failures
      */
     public static native int controlTransfer(final DeviceHandle handle,
         final byte bmRequestType, final byte bRequest, final short wValue,
