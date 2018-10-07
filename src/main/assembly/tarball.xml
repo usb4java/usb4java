@@ -9,7 +9,7 @@
   <fileSets>
     <fileSet>
       <directory></directory>
-      <outputDirectory>/</outputDirectory>
+      <outputDirectory></outputDirectory>
       <includes>
         <include>LICENSE.md</include>
       </includes>
@@ -18,7 +18,7 @@
     </fileSet>
     <fileSet>
       <directory>src/main/assembly</directory>
-      <outputDirectory>/</outputDirectory>
+      <outputDirectory></outputDirectory>
       <includes>
         <include>README.txt</include>
         <include>AUTHORS.txt</include>
