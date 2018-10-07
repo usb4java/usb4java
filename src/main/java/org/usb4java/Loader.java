@@ -23,7 +23,7 @@ public final class Loader
     private static final int BUFFER_SIZE = 8192;
 
     /** Constant for OS X operating system. */
-    private static final String OS_OSX = "osx";
+    private static final String OS_MACOS = "macos";
 
     /** Constant for OS X operating system. */
     private static final String OS_MACOSX = "macosx";
@@ -51,6 +51,18 @@ public final class Loader
 
     /** Constant for amd64 architecture. */
     private static final String ARCH_AMD64 = "amd64";
+    
+    /** Constant for armhf architecture. */
+    private static final String ARCH_ARMHF = "armhf";
+    
+    /** Constant for aarch64 architecture. */
+    private static final String ARCH_AARCH64 = "aarch64";
+    
+    /** Constant for arm architecture. */
+    private static final String ARCH_ARM = "arm";
+    
+    /** Constant for arm64 architecture. */
+    private static final String ARCH_ARM64 = "arm64";
 
     /** Constant for so file extension. */
     private static final String EXT_SO = "so";
@@ -77,7 +89,7 @@ public final class Loader
 
     /**
      * Returns the operating system name. This could be "linux", "windows" or
-     * "osx" or (for any other non-supported platform) the value of the
+     * "macos" or (for any other non-supported platform) the value of the
      * "os.name" property converted to lower case and with removed space
      * characters.
      *
@@ -93,7 +105,7 @@ public final class Loader
         }
         if (os.equals(OS_MACOSX))
         {
-            return OS_OSX;
+            return OS_MACOS;
         }
         return os;
     }
@@ -117,6 +129,14 @@ public final class Loader
         if (arch.equals(ARCH_AMD64))
         {
             return ARCH_X86_64;
+        }
+        if (arch.equals(ARCH_AARCH64))
+        {
+            return ARCH_ARM64;
+        }
+        if (arch.equals(ARCH_ARM))
+        {
+            return ARCH_ARMHF;
         }
         return arch;
     }
@@ -143,7 +163,7 @@ public final class Loader
         {
             return EXT_DLL;
         }
-        if (os.equals(OS_OSX))
+        if (os.equals(OS_MACOS))
         {
             return EXT_DYLIB;
         }
