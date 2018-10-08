@@ -13,7 +13,7 @@
         Add missing SPEED_SUPER_PLUS constant.
       </action>
       <action dev="kayahr" type="add" date="2018-10-08">
-        Wrap new libusb functions: setOption, devMemAlloc, devMemFree.
+        Wrap new libusb functions: setOption, devMemAlloc, devMemFree, interruptEventHandler.
       </action>
       <action dev="kayahr" type="update" date="2018-10-07">
         Updated to libusb 1.0.22.

@@ -2135,6 +2135,19 @@ public final class LibUsb
     public static native int eventHandlerActive(final Context context);
 
     /**
+     * Interrupt any active thread that is handling events.
+     *
+     * This is mainly useful for interrupting a dedicated event handling thread when an application wishes to call
+     * {@link #exit()}.
+     *
+     * Since version 1.0.21, LIBUSB_API_VERSION >= 0x01000105
+     *
+     * @param ctx
+     *            The context to operate on, or NULL for the default context.
+     */
+    public static native void interruptEventHandler(final Context context);
+
+    /**
      * Acquire the event waiters lock.
      *
      * This lock is designed to be obtained under the situation where you want

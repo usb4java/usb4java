@@ -1099,6 +1099,17 @@ public class LibUsbTest
     }
 
     /**
+     * Tests {@link LibUsb#interruptEventHandler(Context)} with uninitialized USB context.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testInterruptEventHandlerWithUninitializedContext()
+    {
+        assumeUsbTestsEnabled();
+        final Context context = new Context();
+        LibUsb.interruptEventHandler(context);
+    }
+
+    /**
      * Tests {@link LibUsb#lockEventWaiters(Context)} with uninitialized USB
      * context.
      */
@@ -1296,5 +1307,17 @@ public class LibUsbTest
         assertNull(listener.addedUserData);
         assertNull(listener.removedFd);
         assertNull(listener.removedUserData);
+    }
+
+    /**
+     * Tests the {@link LibUsb#interruptEventHandler(Context)} method. Must not crash.
+     */
+    @Test
+    public void testInterruptEventHandler()
+    {
+        assumeUsbTestsEnabled();
+        final Context context = new Context();
+        assertEquals(LibUsb.SUCCESS, LibUsb.init(context));
+        LibUsb.interruptEventHandler(context);
     }
 }
