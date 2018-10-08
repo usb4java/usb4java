@@ -201,13 +201,16 @@ public class LibUsbTest
         assumeUsbTestsEnabled();
         final Context context = new Context();
         assertEquals(LibUsb.SUCCESS, LibUsb.init(context));
-        assertEquals(LibUsb.SUCCESS, LibUsb.setOption(context, LibUsb.OPTION_LOG_LEVEL, LibUsb.LOG_LEVEL_NONE));
-        assertEquals(LibUsb.SUCCESS, LibUsb.setOption(context, LibUsb.OPTION_LOG_LEVEL, LibUsb.LOG_LEVEL_DEBUG));
         if (System.getProperty("os.name").toLowerCase().contains("windows")) {
-            assertEquals(LibUsb.SUCCESS, LibUsb.setOption(context, LibUsb.OPTION_USE_USBDK));
+            // On Windows this is either a success when USBDK is found or ERROR_NOT_FOUND when not
+            final int result = LibUsb.setOption(context, LibUsb.OPTION_USE_USBDK);
+            assertTrue(result == LibUsb.SUCCESS || result == LibUsb.ERROR_NOT_FOUND);
         } else {
+            // On other operating systems it is always ERROR_NOT_SUPPORTED
             assertEquals(LibUsb.ERROR_NOT_SUPPORTED, LibUsb.setOption(context, LibUsb.OPTION_USE_USBDK));
         }
+        assertEquals(LibUsb.SUCCESS, LibUsb.setOption(context, LibUsb.OPTION_LOG_LEVEL, LibUsb.LOG_LEVEL_NONE));
+        assertEquals(LibUsb.SUCCESS, LibUsb.setOption(context, LibUsb.OPTION_LOG_LEVEL, LibUsb.LOG_LEVEL_DEBUG));
     }
 
     /**
