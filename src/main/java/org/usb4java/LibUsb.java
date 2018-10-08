@@ -59,6 +59,44 @@ public final class LibUsb
      */
     public static final int LOG_LEVEL_DEBUG = 4;
 
+
+    // Available option values for {@link #setOption()}
+
+    /**
+     * Set the log message verbosity.
+     *
+     * The default level is {@link #LOG_LEVEL_NONE}, which means no messages are ever
+     * printed. If you choose to increase the message verbosity level, ensure
+     * that your application does not close the stderr file descriptor.
+     *
+     * You are advised to use level {@link #LOG_LEVEL_WARNING}. libusb is conservative
+     * with its message logging and most of the time, will only log messages that
+     * explain error conditions and other oddities. This will help you debug
+     * your software.
+     *
+     * If the LIBUSB_DEBUG environment variable was set when libusb was
+     * initialized, this function does nothing: the message verbosity is fixed
+     * to the value in the environment variable.
+     *
+     * If libusb was compiled without any message logging, this function does
+     * nothing: you'll never get any messages.
+     *
+     * If libusb was compiled with verbose debug message logging, this function
+     * does nothing: you'll always get messages from all levels.
+     */
+    public static final int OPTION_LOG_LEVEL = 0;
+
+    /**
+     * Use the UsbDk backend for a specific context, if available.
+     *
+     * This option should be set immediately after calling {@link #init()}, otherwise
+     * unspecified behavior may occur.
+     *
+     * Only valid on Windows.
+     */
+    public static final int OPTION_USE_USBDK = 1;
+
+
     // Error codes. Most libusb functions return 0 on success or one of these
     // codes on failure. You can call errorName() to retrieve a string
     // representation of an error code.
@@ -720,8 +758,52 @@ public final class LibUsb
      *            context.
      * @param level
      *            The log level to set.
+     *
+     * @deprecated Use {@link #setOption()} instead using the {@link #OPTION_LOG_LEVEL} option.
      */
     public static native void setDebug(final Context context, final int level);
+
+    /**
+     * Set an option in the library.
+     *
+     * Use this function to configure a specific option within the library.
+     *
+     * Some options require one or more arguments to be provided. Consult each option's documentation for specific
+     * requirements.
+     *
+     * Since libusb version 1.0.22, LIBUSB_API_VERSION >= 0x01000106
+     *
+     * @param context
+     *            The {@link Context} on which to operate.
+     * @param option
+     *            Which option to set.
+     * @return {@link #SUCCESS} on success, {@link #ERROR_INVALID_PARAM} if the option or arguments are invalid,
+     *         {@link #ERROR_NOT_SUPPORTED} if the option is valid but not supported on this platform.
+     */
+    public static int setOption(final Context context, final int option) {
+        return setOption(context, option, 0);
+    }
+
+    /**
+     * Set an option in the library.
+     *
+     * Use this function to configure a specific option within the library.
+     *
+     * Some options require one or more arguments to be provided. Consult each option's documentation for specific
+     * requirements.
+     *
+     * Since libusb version 1.0.22, LIBUSB_API_VERSION >= 0x01000106
+     *
+     * @param context
+     *            The {@link Context} on which to operate.
+     * @param option
+     *            Which option to set.
+     * @param value
+     *            Required argument for the specified option.
+     * @return {@link #SUCCESS} on success, {@link #ERROR_INVALID_PARAM} if the option or arguments are invalid,
+     *         {@link #ERROR_NOT_SUPPORTED} if the option is valid but not supported on this platform.
+     */
+    public static native int setOption(final Context context, final int option, final int value);
 
     /**
      * Returns the version of the libusb runtime.
@@ -1462,7 +1544,7 @@ public final class LibUsb
      * A simple wrapper around
      * {@link #getStringDescriptorAscii(DeviceHandle, byte, StringBuffer)}.
      * It simply returns the string (maximum length of 127) if possible. If not
-     * possible (NULL handle or 0-index specified or error occured) then null is
+     * possible (NULL handle or 0-index specified or error occurred) then null is
      * returned.
      *
      * This method is not part of libusb.
@@ -1810,7 +1892,7 @@ public final class LibUsb
      *            A suitably-sized data buffer for either input or output
      *            (depending on direction bits within bmRequestType).
      * @param timeout
-     *            Timeout (in millseconds) that this function should wait before
+     *            Timeout (in milliseconds) that this function should wait before
      *            giving up due to no response being received. For an unlimited
      *            timeout, use value 0.
      * @return on success the number of bytes actually transferred,
@@ -1854,7 +1936,7 @@ public final class LibUsb
      * @param transferred
      *            Output location for the number of bytes actually transferred.
      * @param timeout
-     *            timeout (in millseconds) that this function should wait before
+     *            timeout (in milliseconds) that this function should wait before
      *            giving up due to no response being received. For an unlimited
      *            timeout, use value 0.
      * @return 0 on success (and populates transferred), {@link #ERROR_TIMEOUT}
@@ -1901,7 +1983,7 @@ public final class LibUsb
      * @param transferred
      *            Output location for the number of bytes actually transferred.
      * @param timeout
-     *            Timeout (in millseconds) that this function should wait before
+     *            Timeout (in milliseconds) that this function should wait before
      *            giving up due to no response being received. For an unlimited
      *            timeout, use value 0.
      * @return 0 on success (and populates transferred), {@link #ERROR_TIMEOUT}
@@ -2018,7 +2100,7 @@ public final class LibUsb
      *
      * You only need to use this lock if you are developing an application which
      * calls poll() or select() on libusb's file descriptors directly, and may
-     * potentially be handling events from 2 threads simultaenously. If you
+     * potentially be handling events from 2 threads simultaneously. If you
      * stick to libusb's event handling loop functions (e.g.
      * {@link #handleEvents(Context)}) then you do not need to be concerned with
      * this locking.

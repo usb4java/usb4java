@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<document xmlns="http://maven.apache.org/changes/1.0.0" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-         xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 
+<document xmlns="http://maven.apache.org/changes/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/changes/1.0.0
                              http://maven.apache.org/plugins/maven-changes-plugin/xsd/changes-1.0.0.xsd">
   <properties>
     <title>Changelog</title>
     <author email="k@ailis.de">Klaus Reimer</author>
   </properties>
-  <body>    
+  <body>
     <release version="1.3.0" date="2018-10-07" description="Major update">
+      <action dev="kayahr" type="update" date="2018-10-08">
+        Wrap new libusb functions: setOption.
+      </action>
       <action dev="kayahr" type="update" date="2018-10-07">
         Updated to libusb 1.0.22.
       </action>
@@ -25,23 +28,23 @@
         (javax-usb extension) and libusb4java (Native code).
       </action>
       <action dev="llongi" type="add" date="2013-09-14">
-        Add hotplug support to low-level API.  
+        Add hotplug support to low-level API.
       </action>
       <action dev="llongi" type="add" date="2013-09-14">
-        Add asynchronous I/O support to low-level API.  
+        Add asynchronous I/O support to low-level API.
       </action>
     </release>
     <release version="1.1.0" date="2013-07-13" description="Major update">
       <action dev="kayahr" type="update" date="2013-07-13">
-        Using reunited libusb/libusbx 1.0.16 as backend.  
+        Using reunited libusb/libusbx 1.0.16 as backend.
       </action>
       <action dev="kayahr" type="add" date="2013-07-13">
-        Add new libusb constants: LOW_SPEED_OPERATION, FULL_SPEED_OPERATION, 
+        Add new libusb constants: LOW_SPEED_OPERATION, FULL_SPEED_OPERATION,
         HIGH_SPEED_OPERATION, SUPER_SPEED_OPERATION, BM_LPM_SUPPORT,
         BM_LTM_SUPPORT, BT_WIRELESS_USB_DEVICE_CAPABILITY, BT_USB_2_0_EXTENSION,
         BT_SS_USB_DEVICE_CAPABILITY, BT_CONTAINER_ID, CAP_HAS_HOTPLUG,
         CAP_HAS_HID_ACCESS, CAP_SUPPORTS_DETACH_KERNEL_DRIVER, DT_BOS,
-        DT_DEVICE_CAPABILITY, DT_SS_ENDPOINT_COMPANION 
+        DT_DEVICE_CAPABILITY, DT_SS_ENDPOINT_COMPANION
       </action>
       <action dev="kayahr" type="add" date="2013-07-13">
         Wrap new libusb methods: getPortNumbers, setAutoDetachKernelDriver,
@@ -62,26 +65,26 @@
     </release>
     <release version="1.0.0" date="2013-05-01" description="Major update">
       <action dev="kayahr" type="add" date="2013-05-01">
-        Rewritten library to use libusb 1.0 as backend.  
+        Rewritten library to use libusb 1.0 as backend.
       </action>
       <action dev="kayahr" type="add" date="2013-02-16">
         Made library loading more universal to support loading shared libraries
-        for platforms not officially supported by usb4java.  
+        for platforms not officially supported by usb4java.
       </action>
       <action dev="kayahr" type="add" date="2013-02-16">
-        Add native library for linux-arm platform (Raspberry Pi).          
+        Add native library for linux-arm platform (Raspberry Pi).
       </action>
       <action dev="kayahr" type="update" date="2013-02-16">
         Native libraries are no longer extracted to a temporary directory when
         they are not in a JAR file.
-      </action>      
+      </action>
       <action dev="kayahr" type="fix" date="2013-02-18">
         Improve error handling during native lib loading so javax-usb no
         longer hides the important exceptions.
-      </action>      
+      </action>
       <action dev="kayahr" type="fix" date="2013-02-20">
         Fix logic error in AbstractIrpQueue#isBusy().
-      </action>      
+      </action>
     </release>
     <release version="0.5.0" date="2013-02-15" description="Major update">
       <action dev="kayahr" type="add" date="2013-02-15">
@@ -108,7 +111,7 @@
     </release>
     <release version="0.3.3" date="2011-03-28" description="Minor update">
       <action dev="kayahr" type="fix" date="2011-03-28">
-        Fixed library paths in dylibs so they can be placed in 
+        Fixed library paths in dylibs so they can be placed in
         *.app/Contents/MacOS.
       </action>
     </release>
@@ -141,7 +144,7 @@
       <action dev="kayahr" type="fix" date="2011-02-08">
         libusb reports broken bus root devices when detaching USB devices
         and when user has no root permissions on linux. Fixed it by
-        only trusting root devices which are also in the device list of a bus. 
+        only trusting root devices which are also in the device list of a bus.
       </action>
     </release>
   </body>

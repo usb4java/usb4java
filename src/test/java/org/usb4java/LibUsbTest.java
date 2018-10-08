@@ -193,6 +193,37 @@ public class LibUsbTest
     }
 
     /**
+     * Tests the {@link LibUsb#setOption(Context, int, int)} method with valid options and values.
+     */
+    @Test
+    public void testSetOption()
+    {
+        assumeUsbTestsEnabled();
+        final Context context = new Context();
+        assertEquals(LibUsb.SUCCESS, LibUsb.init(context));
+        assertEquals(LibUsb.SUCCESS, LibUsb.setOption(context, LibUsb.OPTION_LOG_LEVEL, LibUsb.LOG_LEVEL_NONE));
+        assertEquals(LibUsb.SUCCESS, LibUsb.setOption(context, LibUsb.OPTION_LOG_LEVEL, LibUsb.LOG_LEVEL_DEBUG));
+        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+            assertEquals(LibUsb.SUCCESS, LibUsb.setOption(context, LibUsb.OPTION_USE_USBDK));
+        } else {
+            assertEquals(LibUsb.ERROR_NOT_SUPPORTED, LibUsb.setOption(context, LibUsb.OPTION_USE_USBDK));
+        }
+    }
+
+    /**
+     * Tests the {@link LibUsb#setOption(Context, int, int)} method with invalid options and values.
+     */
+    @Test
+    public void testSetOptionWithInvalidParameters()
+    {
+        assumeUsbTestsEnabled();
+        final Context context = new Context();
+        assertEquals(LibUsb.SUCCESS, LibUsb.init(context));
+        assertEquals(LibUsb.ERROR_INVALID_PARAM, LibUsb.setOption(context, LibUsb.OPTION_LOG_LEVEL, 234));
+        assertEquals(LibUsb.ERROR_INVALID_PARAM, LibUsb.setOption(context, 123));
+    }
+
+    /**
      * Tests the initialization and deinitialization of libusb with default
      * context.
      */
@@ -254,6 +285,7 @@ public class LibUsbTest
      * context
      */
     @Test(expected = IllegalStateException.class)
+    @Deprecated
     public void testSetDebugWithUninitializedContext()
     {
         assumeUsbTestsEnabled();
@@ -262,8 +294,19 @@ public class LibUsbTest
     }
 
     /**
-     * Tests {@link LibUsb#getDeviceList(Context, DeviceList)} method with
-     * uninitialized USB context.
+     * Tests {@link LibUsb#setOption(Context, int, int)} method with uninitialized USB context.
+     */
+    @Test(expected = IllegalStateException.class)
+    @Deprecated
+    public void testSetOptionWithUninitializedContext()
+    {
+        assumeUsbTestsEnabled();
+        final Context context = new Context();
+        LibUsb.setOption(context, 0);
+    }
+
+    /**
+     * Tests {@link LibUsb#getDeviceList(Context, DeviceList)} method with uninitialized USB context.
      */
     @Test(expected = IllegalStateException.class)
     public void testGetDeviceListWithUninitializedContext()
