@@ -18,12 +18,12 @@ import org.junit.Test;
 
 /**
  * Tests the hotplug part of the {@link LibUsb} class.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public class LibUsbHotplugTest
 {
-    /** The libusb contxet. */
+    /** The libusb context. */
     private Context context;
 
     /**
@@ -95,7 +95,7 @@ public class LibUsbHotplugTest
     }
 
     /**
-     * Ensures that no hotplug event is fired when enumeration is deactived.
+     * Ensures that no hotplug event is fired when enumeration is deactivated.
      * When no devices are connected then this test is pretty much useless but
      * won't fail because of that.
      */

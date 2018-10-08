@@ -3,5 +3,6 @@ target
 .classpath
 .project
 .idea
+.vscode
 *.iml
 hs_err_*.log

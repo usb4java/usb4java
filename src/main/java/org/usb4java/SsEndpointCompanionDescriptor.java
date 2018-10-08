@@ -36,7 +36,7 @@ public final class SsEndpointCompanionDescriptor
 
     /**
      * Constructs a new descriptor which can be passed to the
-     * {@link LibUsb#getSsEndpointCompanionDescriptor(Context, 
+     * {@link LibUsb#getSsEndpointCompanionDescriptor(Context,
      * EndpointDescriptor, SsEndpointCompanionDescriptor)}
      * method.
      */
@@ -144,7 +144,7 @@ public final class SsEndpointCompanionDescriptor
             return false;
         }
 
-        final SsEndpointCompanionDescriptor other = 
+        final SsEndpointCompanionDescriptor other =
             (SsEndpointCompanionDescriptor) obj;
 
         return new EqualsBuilder()

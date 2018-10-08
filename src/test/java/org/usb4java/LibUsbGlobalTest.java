@@ -27,7 +27,7 @@ import org.usb4java.LibUsb;
  */
 public class LibUsbGlobalTest
 {
-    /** The libusb contxet. */
+    /** The libusb context. */
     private Context context;
 
     /**
@@ -63,6 +63,7 @@ public class LibUsbGlobalTest
      * Tests the {@link LibUsb#setDebug(Context, int)} method.
      */
     @Test
+    @Deprecated
     public void testSetDebug()
     {
         assumeUsbTestsEnabled();

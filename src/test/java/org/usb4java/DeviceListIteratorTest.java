@@ -82,7 +82,7 @@ public class DeviceListIteratorTest
      * a {@link NoSuchElementException} when accessing elements after the end
      */
     @Test(expected = NoSuchElementException.class)
-    public void testNextAfterend()
+    public void testNextAfterEnd()
     {
         assumeUsbTestsEnabled();
         while (this.iterator.hasNext()) {

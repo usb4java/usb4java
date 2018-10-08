@@ -38,7 +38,7 @@ import org.usb4java.LibUsb;
  */
 public class LibUsbDeviceTest
 {
-    /** The libusb contxet. */
+    /** The libusb context. */
     private Context context;
 
     /** The device to run the tests on. */
@@ -785,7 +785,7 @@ public class LibUsbDeviceTest
     }
 
     /**
-     * Validates the specified endpoint desriptor.
+     * Validates the specified endpoint descriptor.
      *
      * @param desc
      *            The endpoint descriptor to validate.

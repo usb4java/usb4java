@@ -30,7 +30,7 @@ import org.usb4java.Transfer;
  */
 public class TransferTest
 {
-    /** The libusb contxet. */
+    /** The libusb context. */
     private Context context;
 
     /**

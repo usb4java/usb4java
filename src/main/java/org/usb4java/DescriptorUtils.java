@@ -17,7 +17,7 @@ import java.util.Map;
 public final class DescriptorUtils
 {
     /** Mapping from USB class id to USB class name. */
-    private static final Map<Byte, String> CLASS_NAMES = 
+    private static final Map<Byte, String> CLASS_NAMES =
         new HashMap<Byte, String>();
 
     static
@@ -35,8 +35,7 @@ public final class DescriptorUtils
         CLASS_NAMES.put(LibUsb.CLASS_SMART_CARD, "Smart Card");
         CLASS_NAMES.put(LibUsb.CLASS_CONTENT_SECURITY, "Content Security");
         CLASS_NAMES.put(LibUsb.CLASS_VIDEO, "Video");
-        CLASS_NAMES.put(LibUsb.CLASS_PERSONAL_HEALTHCARE, 
-            "Personal Healthcare");
+        CLASS_NAMES.put(LibUsb.CLASS_PERSONAL_HEALTHCARE, "Personal Healthcare");
         CLASS_NAMES.put(LibUsb.CLASS_DIAGNOSTIC_DEVICE, "Diagnostic Device");
         CLASS_NAMES.put(LibUsb.CLASS_WIRELESS, "Wireless");
         CLASS_NAMES.put(LibUsb.CLASS_APPLICATION, "Application");
@@ -137,7 +136,7 @@ public final class DescriptorUtils
      * @param product
      *            The product string or null if unknown.
      * @param serial
-     *            The serial number strsing or null if unknown.
+     *            The serial number string or null if unknown.
      * @return The descriptor dump.
      */
     public static String dump(final DeviceDescriptor descriptor,
@@ -348,7 +347,7 @@ public final class DescriptorUtils
                 return "Feedback";
             case LibUsb.ISO_USAGE_TYPE_IMPLICIT:
                 return "Implicit Feedback Data";
-            case 3: 
+            case 3:
                 // b11 is considered "Reserved" according to USB 3.0 spec.
                 return "Reserved";
             default:

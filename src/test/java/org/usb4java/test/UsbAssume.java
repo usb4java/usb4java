@@ -15,7 +15,7 @@ import org.usb4java.LibUsb;
 
 /**
  * USB-related assumptions.
- * 
+ *
  * @author Klaus Reimer (k@ailis.de)
  */
 public class UsbAssume
@@ -25,16 +25,16 @@ public class UsbAssume
 
     /** If TCK tests are to be executed. */
     private static Boolean tckTests;
-    
+
     /**
      * Check if USB tests are enabled.
-     * 
+     *
      * USB tests can be controlled with the system property USB_TESTS. When
      * set to true then USB tests are always run, if set to false then they
      * are never run. If this property is not set then the command-line tool
      * lsusb is called. If this tool returned at least two lines of text then
      * USB tests are enabled. In all other cases they are disabled.
-     * 
+     *
      * @return True if USB tests are enabled, false if not.
      */
     public static boolean isUsbTestsEnabled()
@@ -86,7 +86,7 @@ public class UsbAssume
      * Assume that USB tests are enabled. Call this in the first line of
      * tests method or preparation methods when you want to ignore the
      * tests when the system is not able to run the tests anyway.
-     * 
+     *
      * USB tests can be controlled with the system property USB_TESTS. When
      * set to true then USB tests are always run, if set to false then they
      * are never run. If this property is not set then the command-line tool
@@ -117,7 +117,7 @@ public class UsbAssume
      * Assume that TCK tests are enabled. Call this in the first line of
      * tests method or preparation methods when you want to ignore the
      * tests when the system is not able to run the TCK tests anyway.
-     * 
+     *
      * TCK tests can be controlled with the system property TCK_TESTS. When
      * set to true then TCK tests are always run, if set to false then they
      * are never run. If this property is not set then the command-line tool

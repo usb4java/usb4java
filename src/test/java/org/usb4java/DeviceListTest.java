@@ -76,7 +76,7 @@ public class DeviceListTest
             LibUsb.freeDeviceList(b, true);
         }
     }
-    
+
     /**
      * Tests the {@link DeviceList#hashCode()} method.
      */
@@ -95,7 +95,7 @@ public class DeviceListTest
             LibUsb.freeDeviceList(list, true);
         }
     }
-    
+
     /**
      * Tests the {@link DeviceList#toString()} method
      */
@@ -115,7 +115,7 @@ public class DeviceListTest
             LibUsb.freeDeviceList(list, true);
         }
     }
-    
+
     /**
      * Tests the {@link DeviceList#getPointer()} method
      */

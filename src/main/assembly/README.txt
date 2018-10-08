@@ -11,6 +11,6 @@ libusb4java-*.jar          (The native libraries for the various platforms)
 commons-lang3-*.jar        (Apache Commons Lang library needed by usb4java)
 
 If you don't want usb4java to extract the native libraries into a temporary
-directoy on each program start then you might want to distribute them in
+directory on each program start then you might want to distribute them in
 extracted form with your application. Just make sure your classpath points
 to the directory where you extracted the JARs.
