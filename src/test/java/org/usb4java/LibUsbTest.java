@@ -309,6 +309,47 @@ public class LibUsbTest
     }
 
     /**
+     * Tests {@link LibUsb#getDeviceList(Context, DeviceList)} method.
+     */
+    @Test
+    public void testGetDeviceList()
+    {
+        assumeUsbTestsEnabled();
+        final Context context = new Context();
+        final DeviceList deviceList = new DeviceList();
+        LibUsb.init(context);
+        try
+        {
+            assertTrue(LibUsb.getDeviceList(context, deviceList) >= 0);
+            LibUsb.freeDeviceList(deviceList, true);
+        }
+        finally
+        {
+            LibUsb.exit(context);
+        }
+    }
+
+    /**
+     * Tests {@link LibUsb#getDeviceList(Context, DeviceList)} method with the default context.
+     */
+    @Test
+    public void testGetDeviceListFromDefaultContext()
+    {
+        assumeUsbTestsEnabled();
+        final DeviceList deviceList = new DeviceList();
+        LibUsb.init(null);
+        try
+        {
+            assertTrue(LibUsb.getDeviceList(null, deviceList) >= 0);
+            LibUsb.freeDeviceList(deviceList, true);
+        }
+        finally
+        {
+            LibUsb.exit(null);
+        }
+    }
+
+    /**
      * Tests {@link LibUsb#getDeviceList(Context, DeviceList)} method with uninitialized USB context.
      */
     @Test(expected = IllegalStateException.class)
@@ -317,6 +358,16 @@ public class LibUsbTest
         assumeUsbTestsEnabled();
         final Context context = new Context();
         LibUsb.getDeviceList(context, new DeviceList());
+    }
+
+    /**
+     * Tests {@link LibUsb#getDeviceList(Context, DeviceList)} method with uninitialized default USB context.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testGetDeviceListWithUninitializedDefaultContext()
+    {
+        assumeUsbTestsEnabled();
+        LibUsb.getDeviceList(null, new DeviceList());
     }
 
     /**
