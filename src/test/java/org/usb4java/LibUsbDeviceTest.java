@@ -120,7 +120,7 @@ public class LibUsbDeviceTest
                         {
                             final InterfaceDescriptor ifaceDescriptor = iface
                                 .altsetting()[k];
-                            if (ifaceDescriptor.bNumEndpoints() > 1)
+                            if (ifaceDescriptor.bNumEndpoints() > 0)
                             {
                                 this.endpoint = ifaceDescriptor.endpoint()[0]
                                     .bEndpointAddress();
