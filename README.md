@@ -21,5 +21,3 @@ and loaded so you don't need to care about them.
 
 For more detailed information please visit the [usb4java website](http://usb4java.org/).
 
-[![Build Status](https://ci.ailis.de/job/usb4java/badge/icon)](https://ci.ailis.de/job/usb4java/)
-
