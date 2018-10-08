@@ -1082,7 +1082,7 @@ public final class LibUsb
      */
     public static native void close(final DeviceHandle handle);
 
-/**
+    /**
      * Get the underlying device for a handle.
      *
      * Please note that the reference count of the returned device is not
@@ -1318,6 +1318,45 @@ public final class LibUsb
      */
     public static native int freeStreams(final DeviceHandle handle,
         final byte[] endpoints);
+
+
+    /**
+     * Attempts to allocate a block of persistent DMA memory suitable for transfers against the given device.
+     *
+     * If successful, will return a block of memory that is suitable for use as "buffer" in {@link Transfer}
+     * against this device. Using this memory instead of regular memory means that the host controller can use DMA
+     * directly into the buffer to increase performance, and also that transfers can no longer fail due to kernel
+     * memory fragmentation.
+     *
+     * Note that this means you should not modify this memory (or even data on the same cache lines) when a transfer
+     * is in progress, although it is legal to have several transfers going on within the same memory block.
+     *
+     * Will return NULL on failure. Many systems do not support such zerocopy and will always return NULL. Memory
+     * allocated with this function must be freed with {@link #devMemFree()}. Specifically, this means that the flag
+     * {@link #TRANSFER_FREE_BUFFER} cannot be used to free memory allocated with this function.
+     *
+     * Since version 1.0.21, LIBUSB_API_VERSION >= 0x01000105
+     *
+     * @param handle
+     *            A device handle.
+     * @param length
+     *            Size of desired data buffer.
+     * @return The newly allocated memory, or NULL on failure.
+     */
+    public static native ByteBuffer devMemAlloc(final DeviceHandle handle, final int length);
+
+    /**
+     * Free device memory allocated with {@link #devMemAlloc()}.
+     *
+     * @param handle
+     *            A device handle.
+     * @param buffer
+     *            The previously allocated memory.
+     * @param size
+     *            The size of the previously allocated memory.
+     * @return {@link #SUCCESS}, or a LIBUSB_ERROR code on failure.
+     */
+    public static native int devMemFree(final DeviceHandle handle, final ByteBuffer buffer, final int length);
 
     /**
      * Determine if a kernel driver is active on an interface.
