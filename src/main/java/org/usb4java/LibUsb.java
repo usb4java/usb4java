@@ -163,6 +163,10 @@ public final class LibUsb
     /** The device is operating at super speed (5000MBit/s). */
     public static final int SPEED_SUPER = 4;
 
+    /** The device is operating at super speed plus (10000MBit/s). */
+    public static final int SPEED_SUPER_PLUS = 5;
+
+
     // Supported speeds (wSpeedSupported) bitfield. Indicates what speeds the
     // device supports.
 

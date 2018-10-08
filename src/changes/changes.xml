@@ -9,7 +9,10 @@
   </properties>
   <body>
     <release version="1.3.0" date="2018-10-07" description="Major update">
-      <action dev="kayahr" type="update" date="2018-10-08">
+      <action dev="kayahr" type="add" date="2018-10-08">
+        Add missing SPEED_SUPER_PLUS constant.
+      </action>
+      <action dev="kayahr" type="add" date="2018-10-08">
         Wrap new libusb functions: setOption.
       </action>
       <action dev="kayahr" type="update" date="2018-10-07">
