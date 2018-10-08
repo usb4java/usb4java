@@ -193,7 +193,7 @@ public class LibUsbDeviceTest
         assumeNotNull(this.device);
         final ByteBuffer path = BufferUtils.allocateByteBuffer(8);
         final int result = LibUsb.getPortNumbers(this.device, path);
-        assertTrue(result > 0);
+        assertTrue(result >= 0);
         assertTrue(result <= path.capacity());
     }
 
