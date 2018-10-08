@@ -436,7 +436,7 @@ public class LibUsbDeviceTest
      * Tests the {@link LibUsb#open(Device, DeviceHandle)} method. This can't be
      * really tested in a simple unit test like this. Most likely the user has
      * no access to the device. So this test succeeds on SUCCESS and on
-     * ERROR_ACCESS. At least we have to make sure then open() method doesn't
+     * ERROR_ACCESS. At least we have to make sure that the open() method doesn't
      * crash.
      */
     @Test
