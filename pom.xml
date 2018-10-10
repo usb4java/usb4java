@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  
+
   <groupId>org.usb4java</groupId>
   <artifactId>usb4java</artifactId>
   <packaging>jar</packaging>
@@ -16,7 +16,7 @@
     <name>usb4java Team</name>
     <url>http://usb4java.org/</url>
   </organization>
-  
+
   <licenses>
     <license>
       <name>MIT</name>
@@ -24,7 +24,7 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-    
+
   <mailingLists>
     <mailingList>
       <name>Discussions</name>
@@ -32,9 +32,9 @@
       <unsubscribe>usb4java+unsubscribe@googlegroups.com</unsubscribe>
       <post>usb4java@googlegroups.com</post>
       <archive>http://groups.google.com/group/usb4java</archive>
-    </mailingList>  
-  </mailingLists>    
-  
+    </mailingList>
+  </mailingLists>
+
   <developers>
     <developer>
       <id>kayahr</id>
@@ -45,7 +45,7 @@
       </roles>
       <timezone>+1</timezone>
       <url>http://www.ailis.de/~k/</url>
-    </developer>        
+    </developer>
     <developer>
       <id>llongi</id>
       <name>Luca Longinotti</name>
@@ -55,7 +55,7 @@
       </roles>
       <timezone>+1</timezone>
       <url>http://l.longi.li/</url>
-    </developer>        
+    </developer>
   </developers>
 
   <properties>
@@ -67,28 +67,28 @@
     <libusb4java.version>1.3.0-SNAPSHOT</libusb4java.version>
     <usb4javaJavaxVersion>1.3.0-SNAPSHOT</usb4javaJavaxVersion>
   </properties>
-  
+
   <scm>
     <connection>scm:git:git://github.com/usb4java/${project.artifactId}.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/usb4java/${project.artifactId}.git</developerConnection>
     <url>http://github.com/usb4java/${project.artifactId}</url>
     <tag>HEAD</tag>
   </scm>
-       
+
   <issueManagement>
     <system>GitHub</system>
     <url>https://github.com/usb4java/${project.artifactId}/issues</url>
   </issueManagement>
-  
+
   <ciManagement>
     <system>Jenkins</system>
     <url>https://ci.ailis.de/job/${project.artifactId}/</url>
   </ciManagement>
-  
+
   <prerequisites>
     <maven>3.0.5</maven>
   </prerequisites>
-  
+
   <reporting>
     <plugins>
       <plugin>
@@ -111,11 +111,11 @@
               <report>dependencies</report>
               <report>plugins</report>
               <report>plugin-management</report>
-            </reports>            
-          </reportSet>            
-        </reportSets>             
+            </reports>
+          </reportSet>
+        </reportSets>
       </plugin>
-      <plugin> 
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-changes-plugin</artifactId>
         <version>2.12.1</version>
@@ -142,12 +142,12 @@
           </reportSet>
         </reportSets>
       </plugin>
-    </plugins> 
-  </reporting> 
-  
+    </plugins>
+  </reporting>
+
   <build>
     <plugins>
-    
+
       <!-- Use Java 6 -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -159,11 +159,11 @@
           <encoding>${project.build.sourceEncoding}</encoding>
         </configuration>
       </plugin>
-      
+
       <!-- Build the web site -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-site-plugin</artifactId> 
+        <artifactId>maven-site-plugin</artifactId>
         <version>3.7.1</version>
         <configuration>
           <chmod>false</chmod>
@@ -172,10 +172,10 @@
           <outputEncoding>${project.build.sourceEncoding}</outputEncoding>
         </configuration>
       </plugin>
-      
+
 
       <!-- Build binary artifacts for Unix, Mac OS X and Windows -->
-      <plugin> 
+      <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <version>3.1.0</version>
         <configuration>
@@ -194,7 +194,7 @@
               <goal>single</goal>
             </goals>
           </execution>
-        </executions> 
+        </executions>
       </plugin>
 
       <plugin>
@@ -224,12 +224,12 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>  
+        <artifactId>maven-jar-plugin</artifactId>
         <version>3.1.0</version>
       </plugin>
     </plugins>
-  </build>  
-  
+  </build>
+
   <!--
   <profiles>
     <profile>
@@ -260,7 +260,7 @@
     </profile>
   </profiles>
   -->
-  
+
   <repositories>
     <repository>
       <id>ailis</id>
@@ -284,7 +284,7 @@
       <id>sonatype-snapshots</id>
       <name>Sonatype Snapshot Repository</name>
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>    
+    </snapshotRepository>
     -->
     <repository>
       <id>ailis-releases</id>
@@ -295,10 +295,10 @@
       <id>ailis-snapshots</id>
       <name>Ailis Maven Snapshots</name>
       <url>http://nexus.ailis.de/content/repositories/snapshots</url>
-    </snapshotRepository>    
+    </snapshotRepository>
 
   </distributionManagement>
-  
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -311,48 +311,48 @@
       <artifactId>libusb4java</artifactId>
       <version>${libusb4java.version}</version>
       <classifier>linux-x86</classifier>
-    </dependency> 
+    </dependency>
     <dependency>
       <groupId>org.usb4java</groupId>
       <artifactId>libusb4java</artifactId>
       <version>${libusb4java.version}</version>
-      <classifier>linux-x86_64</classifier>
-    </dependency> 
+      <classifier>linux-x86-64</classifier>
+    </dependency>
     <dependency>
       <groupId>org.usb4java</groupId>
       <artifactId>libusb4java</artifactId>
       <version>${libusb4java.version}</version>
-      <classifier>windows-x86</classifier>
-    </dependency> 
+      <classifier>win32-x86</classifier>
+    </dependency>
     <dependency>
       <groupId>org.usb4java</groupId>
       <artifactId>libusb4java</artifactId>
       <version>${libusb4java.version}</version>
-      <classifier>windows-x86_64</classifier>
-    </dependency> 
+      <classifier>win32-x86-64</classifier>
+    </dependency>
     <dependency>
       <groupId>org.usb4java</groupId>
       <artifactId>libusb4java</artifactId>
       <version>${libusb4java.version}</version>
-      <classifier>macos-x86_64</classifier>
-    </dependency> 
+      <classifier>darwin-x86-64</classifier>
+    </dependency>
     <dependency>
       <groupId>org.usb4java</groupId>
       <artifactId>libusb4java</artifactId>
       <version>${libusb4java.version}</version>
-      <classifier>linux-armhf</classifier>
-    </dependency> 
+      <classifier>linux-arm</classifier>
+    </dependency>
     <dependency>
       <groupId>org.usb4java</groupId>
       <artifactId>libusb4java</artifactId>
       <version>${libusb4java.version}</version>
-      <classifier>linux-arm64</classifier>
-    </dependency> 
+      <classifier>linux-aarch64</classifier>
+    </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
       <version>3.8.1</version>
     </dependency>
   </dependencies>
-  
+
 </project>

@@ -22,57 +22,6 @@ public final class Loader
     /** Buffer size used for copying data. */
     private static final int BUFFER_SIZE = 8192;
 
-    /** Constant for OS X operating system. */
-    private static final String OS_MACOS = "macos";
-
-    /** Constant for OS X operating system. */
-    private static final String OS_MACOSX = "macosx";
-
-    /** Constant for Linux operating system. */
-    private static final String OS_LINUX = "linux";
-
-    /** Constant for Windows operating system. */
-    private static final String OS_WINDOWS = "windows";
-
-    /** Constant for FreeBSD operating system. */
-    private static final String OS_FREEBSD = "freebsd";
-
-    /** Constant for SunOS operating system. */
-    private static final String OS_SUNOS = "sunos";
-
-    /** Constant for i386 architecture. */
-    private static final String ARCH_I386 = "i386";
-
-    /** Constant for x86 architecture. */
-    private static final String ARCH_X86 = "x86";
-
-    /** Constant for x86_64 architecture. */
-    private static final String ARCH_X86_64 = "x86_64";
-
-    /** Constant for amd64 architecture. */
-    private static final String ARCH_AMD64 = "amd64";
-    
-    /** Constant for armhf architecture. */
-    private static final String ARCH_ARMHF = "armhf";
-    
-    /** Constant for aarch64 architecture. */
-    private static final String ARCH_AARCH64 = "aarch64";
-    
-    /** Constant for arm architecture. */
-    private static final String ARCH_ARM = "arm";
-    
-    /** Constant for arm64 architecture. */
-    private static final String ARCH_ARM64 = "arm64";
-
-    /** Constant for so file extension. */
-    private static final String EXT_SO = "so";
-
-    /** Constant for dll file extension. */
-    private static final String EXT_DLL = "dll";
-
-    /** Constant for dylib file extension. */
-    private static final String EXT_DYLIB = "dylib";
-
     /** The temporary directory for native libraries. */
     private static File tmp;
 
@@ -99,13 +48,13 @@ public final class Loader
     {
         final String os = System.getProperty("os.name").toLowerCase()
             .replace(" ", "");
-        if (os.contains(OS_WINDOWS))
+        if (os.contains("windows"))
         {
-            return OS_WINDOWS;
+            return "win32";
         }
-        if (os.equals(OS_MACOSX))
+        if (os.equals("macosx") || os.equals("macos"))
         {
-            return OS_MACOS;
+            return "darwin";
         }
         return os;
     }
@@ -122,21 +71,21 @@ public final class Loader
     {
         final String arch = System.getProperty("os.arch").toLowerCase()
             .replace(" ", "");
-        if (arch.equals(ARCH_I386))
+        if (arch.equals("i386"))
         {
-            return ARCH_X86;
+            return "x86";
         }
-        if (arch.equals(ARCH_AMD64))
+        if (arch.equals("amd64") || arch.equals("x86_64"))
         {
-            return ARCH_X86_64;
+            return "x86-64";
         }
-        if (arch.equals(ARCH_AARCH64))
+        if (arch.equals("arm64"))
         {
-            return ARCH_ARM64;
+            return "aarch64";
         }
-        if (arch.equals(ARCH_ARM))
+        if (arch.equals("armhf") || arch.equals("aarch32"))
         {
-            return ARCH_ARMHF;
+            return "arm";
         }
         return arch;
     }
@@ -155,17 +104,17 @@ public final class Loader
         {
             return ext;
         }
-        if (os.equals(OS_LINUX) || os.equals(OS_FREEBSD) || os.equals(OS_SUNOS))
+        if (os.equals("linux") || os.equals("freebsd") || os.equals("sunos"))
         {
-            return EXT_SO;
+            return "so";
         }
-        if (os.equals(OS_WINDOWS))
+        if (os.equals("win32"))
         {
-            return EXT_DLL;
+            return "dll";
         }
-        if (os.equals(OS_MACOS))
+        if (os.equals("darwin"))
         {
-            return EXT_DYLIB;
+            return "dylib";
         }
         throw new LoaderException("Unable to determine the shared library "
             + "file extension for operating system '" + os
