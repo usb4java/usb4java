@@ -83,7 +83,7 @@ public final class Loader
         {
             return "aarch64";
         }
-        if (arch.equals("armhf") || arch.equals("aarch32"))
+        if (arch.equals("armhf") || arch.equals("aarch32") || arch.equals("armv7l"))
         {
             return "arm";
         }
