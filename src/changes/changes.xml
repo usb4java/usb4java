@@ -9,6 +9,12 @@
   </properties>
   <body>
     <release version="1.3.0" date="2018-10-07" description="Major update">
+      <action dev="kayahr" type="update" date="2018-10-11">
+        Renamed os and architecture identifiers to the naming conventions of
+        the JNA project. So the platforms are now named: linux-x86,
+        linux-x86-64, linux-arm, linux-aarch64, darwin-x86-64, win32-x86 and
+        win32-x86-64.
+      </action>
       <action dev="kayahr" type="add" date="2018-10-08">
         Add missing SPEED_SUPER_PLUS constant.
       </action>
