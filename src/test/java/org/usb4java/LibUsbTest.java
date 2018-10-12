@@ -201,16 +201,23 @@ public class LibUsbTest
         assumeUsbTestsEnabled();
         final Context context = new Context();
         assertEquals(LibUsb.SUCCESS, LibUsb.init(context));
-        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
-            // On Windows this is either a success when USBDK is found or ERROR_NOT_FOUND when not
-            final int result = LibUsb.setOption(context, LibUsb.OPTION_USE_USBDK);
-            assertTrue(result == LibUsb.SUCCESS || result == LibUsb.ERROR_NOT_FOUND);
-        } else {
-            // On other operating systems it is always ERROR_NOT_SUPPORTED
-            assertEquals(LibUsb.ERROR_NOT_SUPPORTED, LibUsb.setOption(context, LibUsb.OPTION_USE_USBDK));
+        try
+        {
+            if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+                // On Windows this is either a success when USBDK is found or ERROR_NOT_FOUND when not
+                final int result = LibUsb.setOption(context, LibUsb.OPTION_USE_USBDK);
+                assertTrue(result == LibUsb.SUCCESS || result == LibUsb.ERROR_NOT_FOUND);
+            } else {
+                // On other operating systems it is always ERROR_NOT_SUPPORTED
+                assertEquals(LibUsb.ERROR_NOT_SUPPORTED, LibUsb.setOption(context, LibUsb.OPTION_USE_USBDK));
+            }
+            assertEquals(LibUsb.SUCCESS, LibUsb.setOption(context, LibUsb.OPTION_LOG_LEVEL, LibUsb.LOG_LEVEL_NONE));
+            assertEquals(LibUsb.SUCCESS, LibUsb.setOption(context, LibUsb.OPTION_LOG_LEVEL, LibUsb.LOG_LEVEL_DEBUG));
         }
-        assertEquals(LibUsb.SUCCESS, LibUsb.setOption(context, LibUsb.OPTION_LOG_LEVEL, LibUsb.LOG_LEVEL_NONE));
-        assertEquals(LibUsb.SUCCESS, LibUsb.setOption(context, LibUsb.OPTION_LOG_LEVEL, LibUsb.LOG_LEVEL_DEBUG));
+        finally
+        {
+            LibUsb.exit(context);
+        }
     }
 
     /**
@@ -222,8 +229,15 @@ public class LibUsbTest
         assumeUsbTestsEnabled();
         final Context context = new Context();
         assertEquals(LibUsb.SUCCESS, LibUsb.init(context));
-        assertEquals(LibUsb.ERROR_INVALID_PARAM, LibUsb.setOption(context, LibUsb.OPTION_LOG_LEVEL, 234));
-        assertEquals(LibUsb.ERROR_INVALID_PARAM, LibUsb.setOption(context, 123));
+        try
+        {
+            assertEquals(LibUsb.ERROR_INVALID_PARAM, LibUsb.setOption(context, LibUsb.OPTION_LOG_LEVEL, 234));
+            assertEquals(LibUsb.ERROR_INVALID_PARAM, LibUsb.setOption(context, 123));
+        }
+        finally
+        {
+            LibUsb.exit(context);
+        }
     }
 
     /**
@@ -1318,46 +1332,53 @@ public class LibUsbTest
         final PollfdListenerMock listener = new PollfdListenerMock();
         final Context context = new Context();
         LibUsb.init(context);
-        LibUsb.setPollfdNotifiers(context, listener, "test");
+        try
+        {
+            LibUsb.setPollfdNotifiers(context, listener, "test");
 
-        FileDescriptor fd = new FileDescriptor();
-        LibUsb.triggerPollfdAdded(fd, 53, context.getPointer());
-        assertEquals(53, listener.addedEvents);
-        assertSame(fd, listener.addedFd);
-        assertSame("test", listener.addedUserData);
-        assertNull(listener.removedFd);
-        assertNull(listener.removedUserData);
+            FileDescriptor fd = new FileDescriptor();
+            LibUsb.triggerPollfdAdded(fd, 53, context.getPointer());
+            assertEquals(53, listener.addedEvents);
+            assertSame(fd, listener.addedFd);
+            assertSame("test", listener.addedUserData);
+            assertNull(listener.removedFd);
+            assertNull(listener.removedUserData);
 
-        listener.reset();
+            listener.reset();
 
-        fd = new FileDescriptor();
-        LibUsb.triggerPollfdRemoved(fd, context.getPointer());
-        assertEquals(0, listener.addedEvents);
-        assertNull(listener.addedFd);
-        assertNull(listener.addedUserData);
-        assertSame(fd, listener.removedFd);
-        assertSame("test", listener.removedUserData);
+            fd = new FileDescriptor();
+            LibUsb.triggerPollfdRemoved(fd, context.getPointer());
+            assertEquals(0, listener.addedEvents);
+            assertNull(listener.addedFd);
+            assertNull(listener.addedUserData);
+            assertSame(fd, listener.removedFd);
+            assertSame("test", listener.removedUserData);
 
-        LibUsb.setPollfdNotifiers(context, null, null);
-        listener.reset();
+            LibUsb.setPollfdNotifiers(context, null, null);
+            listener.reset();
 
-        fd = new FileDescriptor();
-        LibUsb.triggerPollfdAdded(fd, 53, context.getPointer());
-        assertEquals(0, listener.addedEvents);
-        assertNull(listener.addedFd);
-        assertNull(listener.addedUserData);
-        assertNull(listener.removedFd);
-        assertNull(listener.removedUserData);
+            fd = new FileDescriptor();
+            LibUsb.triggerPollfdAdded(fd, 53, context.getPointer());
+            assertEquals(0, listener.addedEvents);
+            assertNull(listener.addedFd);
+            assertNull(listener.addedUserData);
+            assertNull(listener.removedFd);
+            assertNull(listener.removedUserData);
 
-        listener.reset();
+            listener.reset();
 
-        fd = new FileDescriptor();
-        LibUsb.triggerPollfdRemoved(fd, context.getPointer());
-        assertEquals(0, listener.addedEvents);
-        assertNull(listener.addedFd);
-        assertNull(listener.addedUserData);
-        assertNull(listener.removedFd);
-        assertNull(listener.removedUserData);
+            fd = new FileDescriptor();
+            LibUsb.triggerPollfdRemoved(fd, context.getPointer());
+            assertEquals(0, listener.addedEvents);
+            assertNull(listener.addedFd);
+            assertNull(listener.addedUserData);
+            assertNull(listener.removedFd);
+            assertNull(listener.removedUserData);
+        }
+        finally
+        {
+            LibUsb.exit(context);
+        }
     }
 
     /**
@@ -1369,6 +1390,13 @@ public class LibUsbTest
         assumeUsbTestsEnabled();
         final Context context = new Context();
         assertEquals(LibUsb.SUCCESS, LibUsb.init(context));
-        LibUsb.interruptEventHandler(context);
+        try
+        {
+            LibUsb.interruptEventHandler(context);
+        }
+        finally
+        {
+            LibUsb.exit(context);
+        }
     }
 }

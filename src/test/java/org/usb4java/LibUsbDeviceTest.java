@@ -1253,23 +1253,30 @@ public class LibUsbDeviceTest
         assumeUsbTestsEnabled();
 
         assertEquals(0, LibUsb.init(null));
-        final Pollfds pollfds = LibUsb.getPollfds(null);
-        try {
-            if (System.getProperty("os.name").toLowerCase().contains("windows")) {
-                assertNull(pollfds);
-            } else {
-                assertNotNull(pollfds);
-                assertTrue("Size must be >= 0", pollfds.getSize() >= 0);
-                int i = 0;
-                for (Pollfd pollfd : pollfds) {
-                    assertEquals(pollfds.get(i), pollfd);
-                    assertTrue("File descriptor must be > 0", pollfd.fd() > 0);
-                    assertTrue("Events must be > 0", pollfd.events() > 0);
-                    i++;
+        try
+        {
+            final Pollfds pollfds = LibUsb.getPollfds(null);
+            try {
+                if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+                    assertNull(pollfds);
+                } else {
+                    assertNotNull(pollfds);
+                    assertTrue("Size must be >= 0", pollfds.getSize() >= 0);
+                    int i = 0;
+                    for (Pollfd pollfd : pollfds) {
+                        assertEquals(pollfds.get(i), pollfd);
+                        assertTrue("File descriptor must be > 0", pollfd.fd() > 0);
+                        assertTrue("Events must be > 0", pollfd.events() > 0);
+                        i++;
+                    }
                 }
+            } finally {
+                LibUsb.freePollfds(pollfds);
             }
-        } finally {
-            LibUsb.freePollfds(pollfds);
+        }
+        finally
+        {
+            LibUsb.exit(null);
         }
     }
 
@@ -1306,9 +1313,16 @@ public class LibUsbDeviceTest
         assumeFalse(System.getProperty("os.name").toLowerCase().contains("windows"));
         assumeUsbTestsEnabled();
         assertEquals(0, LibUsb.init(null));
-        final Pollfds pollfds = LibUsb.getPollfds(null);
-        assertNotNull(pollfds);
-        LibUsb.freePollfds(pollfds);
-        assertNotNull(pollfds.get(0));
+        try
+        {
+            final Pollfds pollfds = LibUsb.getPollfds(null);
+            assertNotNull(pollfds);
+            LibUsb.freePollfds(pollfds);
+            assertNotNull(pollfds.get(0));
+        }
+        finally
+        {
+            LibUsb.exit(null);
+        }
     }
 }
