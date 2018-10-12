@@ -775,8 +775,6 @@ public final class LibUsb
      * Some options require one or more arguments to be provided. Consult each option's documentation for specific
      * requirements.
      *
-     * Since libusb version 1.0.22, LIBUSB_API_VERSION >= 0x01000106
-     *
      * @param context
      *            The {@link Context} on which to operate.
      * @param option
@@ -795,8 +793,6 @@ public final class LibUsb
      *
      * Some options require one or more arguments to be provided. Consult each option's documentation for specific
      * requirements.
-     *
-     * Since libusb version 1.0.22, LIBUSB_API_VERSION >= 0x01000106
      *
      * @param context
      *            The {@link Context} on which to operate.
@@ -1334,8 +1330,6 @@ public final class LibUsb
      * Will return NULL on failure. Many systems do not support such zerocopy and will always return NULL. Memory
      * allocated with this function must be freed with {@link #devMemFree()}. Specifically, this means that the flag
      * {@link #TRANSFER_FREE_BUFFER} cannot be used to free memory allocated with this function.
-     *
-     * Since version 1.0.21, LIBUSB_API_VERSION >= 0x01000105
      *
      * @param handle
      *            A device handle.
@@ -2140,8 +2134,6 @@ public final class LibUsb
      * This is mainly useful for interrupting a dedicated event handling thread when an application wishes to call
      * {@link #exit()}.
      *
-     * Since version 1.0.21, LIBUSB_API_VERSION >= 0x01000105
-     *
      * @param ctx
      *            The context to operate on, or NULL for the default context.
      */
@@ -2515,6 +2507,31 @@ public final class LibUsb
      *            The context to operate on, or NULL for the default context
      */
     static native void unsetPollfdNotifiersNative(final Context context);
+
+    /**
+     * Retrieve a list of file descriptors that should be polled by your main loop as libusb event sources.
+     *
+     * The returned list should be freed with {@link #freePollfds()} when done. The actual list contents must not be
+     * touched.
+     *
+     * As file descriptors are a Unix-specific concept, this function is not available on Windows and will always
+     * return NULL.
+     *
+     * @param context
+     *            The context to operate on, or NULL for the default context.
+     * @return A list of libusb_pollfd structures, NULL on error, NULL on platforms where the functionality is not
+     *         available.
+     */
+    public static native Pollfds getPollfds(final Context context);
+
+    /**
+     * Free a list of {@link Pollfd} structures.
+     *
+     * This should be called for all pollfd lists allocated with {@link #getPollfds()}.
+     *
+     * It is legal to call this function with a NULL pollfd list. In this case, the function will simply return safely.
+     */
+    public static native void freePollfds(final Pollfds pollfds);
 
     /**
      * Allocate a libusb transfer without support for isochronous transfers.

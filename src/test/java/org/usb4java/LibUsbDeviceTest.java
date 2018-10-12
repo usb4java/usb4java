@@ -9,8 +9,11 @@ import static org.usb4java.test.UsbAssume.assumeUsbTestsEnabled;
 import static org.usb4java.test.UsbAssume.isUsbTestsEnabled;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeNotNull;
 
 import java.nio.ByteBuffer;
@@ -1211,5 +1214,101 @@ public class LibUsbDeviceTest
         {
             LibUsb.exit(null);
         }
+    }
+
+    /**
+     * Tests the {@link LibUsb#getPollfds()} and {@link LibUsb#freePollfds()} methods.
+     */
+    @Test
+    public void testGetAndFreePollfds()
+    {
+        assumeUsbTestsEnabled();
+
+        final Pollfds pollfds = LibUsb.getPollfds(this.context);
+        try {
+            if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+                assertNull(pollfds);
+            } else {
+                assertNotNull(pollfds);
+                assertTrue("Size must be >= 0", pollfds.getSize() >= 0);
+                int i = 0;
+                for (Pollfd pollfd : pollfds) {
+                    assertEquals(pollfds.get(i), pollfd);
+                    assertTrue("File descriptor must be > 0", pollfd.fd() > 0);
+                    assertTrue("Events must be > 0", pollfd.events() > 0);
+                    i++;
+                }
+            }
+        } finally {
+            LibUsb.freePollfds(pollfds);
+        }
+    }
+
+    /**
+     * Tests the {@link LibUsb#getPollfds()} and {@link LibUsb#freePollfds()} methods with the default context.
+     */
+    @Test
+    public void testGetAndFreePollfdsWithDefaultContext()
+    {
+        assumeUsbTestsEnabled();
+
+        assertEquals(0, LibUsb.init(null));
+        final Pollfds pollfds = LibUsb.getPollfds(null);
+        try {
+            if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+                assertNull(pollfds);
+            } else {
+                assertNotNull(pollfds);
+                assertTrue("Size must be >= 0", pollfds.getSize() >= 0);
+                int i = 0;
+                for (Pollfd pollfd : pollfds) {
+                    assertEquals(pollfds.get(i), pollfd);
+                    assertTrue("File descriptor must be > 0", pollfd.fd() > 0);
+                    assertTrue("Events must be > 0", pollfd.events() > 0);
+                    i++;
+                }
+            }
+        } finally {
+            LibUsb.freePollfds(pollfds);
+        }
+    }
+
+    /**
+     * Ensures that {@link LibUsb#freePollfds()} doesn't throw an error when called with null argument.
+     */
+    @Test
+    public void testFreePollfdsWithNullArgument()
+    {
+        LibUsb.freePollfds(null);
+    }
+
+    /**
+     * Ensures that {@link LibUsb#freePollfds()} doesn't crash when called twice and throws an IllegalStateException
+     * instead.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testDoubleFreePollfds()
+    {
+        assumeFalse(System.getProperty("os.name").toLowerCase().contains("windows"));
+        assumeUsbTestsEnabled();
+        final Pollfds pollfds = LibUsb.getPollfds(this.context);
+        LibUsb.freePollfds(pollfds);
+        LibUsb.freePollfds(pollfds);
+    }
+
+    /**
+     * Ensures that accessing Pollfds properties after calling {@link LibUsb#freePollfds()} doesn't crash and
+     * throws an IllegalStateException instead.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testPollfdsAccessAfterFree()
+    {
+        assumeFalse(System.getProperty("os.name").toLowerCase().contains("windows"));
+        assumeUsbTestsEnabled();
+        assertEquals(0, LibUsb.init(null));
+        final Pollfds pollfds = LibUsb.getPollfds(null);
+        assertNotNull(pollfds);
+        LibUsb.freePollfds(pollfds);
+        assertNotNull(pollfds.get(0));
     }
 }
