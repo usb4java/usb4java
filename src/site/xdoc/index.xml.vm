@@ -25,21 +25,15 @@
     <section name="Download">
       <ul class="download">
         <li>
-          Main library:<br />
-          <strong><a href="${artifactBaseUrl}.tar.xz">${project.artifactId}-${project.version}.tar.xz</a></strong><br />
-          <strong><a href="${artifactBaseUrl}.zip">${project.artifactId}-${project.version}.zip</a></strong><br />
+          <a href="https://github.com/usb4java/usb4java/releases">usb4java</a> (Main library)
         </li>
         <li>
-          javax-usb extension:<br />
-          <strong><a href="${javaxArtifactBaseUrl}.tar.xz">${project.artifactId}-javax-${usb4javaJavaxVersion}.tar.xz</a></strong><br />
-          <strong><a href="${javaxArtifactBaseUrl}.zip">${project.artifactId}-javax-${usb4javaJavaxVersion}.zip</a></strong><br />
-        </li>
-        <li><a href="${repoBaseUrl}/">Older versions and snapshots</a></li>
-        <li>
-          Source code repository:
-          <a href="http://github.com/usb4java/">GitHub</a>
+          <a href="https://github.com/usb4java/usb4java-javax/releases">usb4java-javax</a> (javax-usb extension)
         </li>
       </ul>
+    </section>
+
+    <section name="Maven">
       <p>
         When you are using Maven then you can add the necessary dependencies
         like this:
