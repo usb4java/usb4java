@@ -60,8 +60,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <libusb4java.version>1.3.0-SNAPSHOT</libusb4java.version>
-    <usb4javaJavaxVersion>1.3.0-SNAPSHOT</usb4javaJavaxVersion>
+    <libusb4java.version>1.3.0</libusb4java.version>
   </properties>
 
   <scm>
@@ -254,9 +253,17 @@
 
   <repositories>
     <repository>
+      <id>sonatype-releases</id>
+      <name>Sonatype Snapshot Repository</name>
+      <url>https://oss.sonatype.org/content/repositories/releases</url>
+      <releases><enabled>true</enabled></releases>
+      <snapshots><enabled>false</enabled></snapshots>
+    </repository>
+    <repository>
       <id>sonatype-snapshots</id>
       <name>Sonatype Snapshot Repository</name>
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <releases><enabled>false</enabled></releases>
       <snapshots><enabled>true</enabled></snapshots>
     </repository>
   </repositories>

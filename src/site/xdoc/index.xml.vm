@@ -52,7 +52,7 @@
   &lt;dependency&gt;
     &lt;groupId&gt;${project.groupId}&lt;/groupId&gt;
     &lt;artifactId&gt;${project.artifactId}-javax&lt;/artifactId&gt;
-    &lt;version&gt;${usb4javaJavaxVersion}&lt;/version&gt;
+    &lt;version&gt;${project.version}&lt;/version&gt;
   &lt;/dependency&gt;
 &lt;/dependencies&gt;</pre></div>
     </section>
