@@ -76,11 +76,6 @@
     <url>https://github.com/usb4java/${project.artifactId}/issues</url>
   </issueManagement>
 
-  <ciManagement>
-    <system>Jenkins</system>
-    <url>https://ci.ailis.de/job/${project.artifactId}/</url>
-  </ciManagement>
-
   <prerequisites>
     <maven>3.0.5</maven>
   </prerequisites>
@@ -175,7 +170,7 @@
         <artifactId>maven-assembly-plugin</artifactId>
         <version>3.1.0</version>
         <configuration>
-          <append>true</append>
+          <attach>false</attach>
           <appendAssemblyId>false</appendAssemblyId>
           <descriptors>
             <descriptor>src/main/assembly/tarball.xml</descriptor>
@@ -259,9 +254,10 @@
 
   <repositories>
     <repository>
-      <id>ailis</id>
-      <name>Ailis Maven Repository</name>
-      <url>http://nexus.ailis.de/content/groups/public/</url>
+      <id>sonatype-snapshots</id>
+      <name>Sonatype Snapshot Repository</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <snapshots><enabled>true</enabled></snapshots>
     </repository>
   </repositories>
 
@@ -270,7 +266,6 @@
       <id>project-website</id>
       <url>file://${project.basedir}/../${project.artifactId}-site/</url>
     </site>
-    <!--
     <repository>
       <id>sonatype-staging</id>
       <name>Sonatype Staging Repository</name>
@@ -281,18 +276,6 @@
       <name>Sonatype Snapshot Repository</name>
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </snapshotRepository>
-    -->
-    <repository>
-      <id>ailis-releases</id>
-      <name>Ailis Maven Releases</name>
-      <url>http://nexus.ailis.de/content/repositories/releases</url>
-    </repository>
-    <snapshotRepository>
-      <id>ailis-snapshots</id>
-      <name>Ailis Maven Snapshots</name>
-      <url>http://nexus.ailis.de/content/repositories/snapshots</url>
-    </snapshotRepository>
-
   </distributionManagement>
 
   <dependencies>
