@@ -1,7 +1,7 @@
  -----------------------------------------------------------------------------
  Configuration
  -----------------------------------------------------------------------------
- 
+
 Configuration
 
   The configuration options explained here are only valid for the javax-usb
@@ -15,21 +15,21 @@ Configuration
   implementation you have to put the following property into the
   <javax.usb.properties> file which must be located in the root of
   your classpath:
-  
+
 +----+
 javax.usb.services = org.usb4java.javax.Services
-+----+ 
++----+
 
   <usb4java> can be configured by adding more properties to this file as
   described in the following sections.
 
-  
+
 * Communication timeout
 
   The default USB communication timeout of <usb4java> is 2500 milliseconds.
   To change this to 250 milliseconds for example add this to the properties
-  file: 
-  
+  file:
+
 +----+
 org.usb4java.javax.timeout = 250
 +----+
@@ -52,4 +52,15 @@ org.usb4java.javax.scanInterval = 1000
 +----+
 ((org.usb4java.javax.Services) UsbHostManager.getUsbServices()).scan();
 +----+
-  
+
+
+* Use USBDK
+
+  If you want to use {{{https://github.com/daynix/UsbDk}USBDK}} on Windows
+  then you have to enable the feature with the following entry:
+
++----+
+org.usb4java.javax.useUSBDK = true
++----+
+
+  This setting is ignored on other platforms.

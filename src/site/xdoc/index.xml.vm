@@ -14,34 +14,34 @@
         through the <a href="usb4java-javax/">usb4java-javax extension</a>.
       </p>
       <p>
-        Supported platforms are <strong>Linux</strong> (x86 32/64 bit, ARM 32 bit), 
-        <strong>OS X</strong> (x86 32/64 bit) and 
+        Supported platforms are <strong>Linux</strong> (x86 32/64 bit, ARM 32/64 bit),
+        <strong>OS X</strong> (x86 64 bit) and
         <strong>Windows</strong> (x86 32/64 bit). But other platforms may work
-        as well (as long as they have at least Java 6 and are supported by 
+        as well (as long as they have at least Java 6 and are supported by
         libusb) by compiling the JNI library manually.
       </p>
     </section>
-    
+
     <section name="Download">
       <ul class="download">
         <li>
           Main library:<br />
-          <strong><a href="${artifactBaseUrl}.tar.bz2">${project.artifactId}-${project.version}.tar.bz2</a></strong><br />
+          <strong><a href="${artifactBaseUrl}.tar.xz">${project.artifactId}-${project.version}.tar.xz</a></strong><br />
           <strong><a href="${artifactBaseUrl}.zip">${project.artifactId}-${project.version}.zip</a></strong><br />
         </li>
         <li>
           javax-usb extension:<br />
-          <strong><a href="${javaxArtifactBaseUrl}.tar.bz2">${project.artifactId}-javax-${usb4javaJavaxVersion}.tar.bz2</a></strong><br />
+          <strong><a href="${javaxArtifactBaseUrl}.tar.xz">${project.artifactId}-javax-${usb4javaJavaxVersion}.tar.xz</a></strong><br />
           <strong><a href="${javaxArtifactBaseUrl}.zip">${project.artifactId}-javax-${usb4javaJavaxVersion}.zip</a></strong><br />
         </li>
         <li><a href="${repoBaseUrl}/">Older versions and snapshots</a></li>
         <li>
           Source code repository:
-          <a href="http://github.com/usb4java/">GitHub</a> 
+          <a href="http://github.com/usb4java/">GitHub</a>
         </li>
       </ul>
       <p>
-        When you are using Maven then you can add the necessary dependencies 
+        When you are using Maven then you can add the necessary dependencies
         like this:
       </p>
       <div class="source"><pre>&lt;-- For using just usb4java without javax-usb --&gt;
@@ -62,13 +62,13 @@
   &lt;/dependency&gt;
 &lt;/dependencies&gt;</pre></div>
     </section>
-    
+
     <section name="License">
       <p>
-        Copyright (C) 2011 Klaus Reimer, k@ailis.de<br />  
+        Copyright (C) 2011 Klaus Reimer, k@ailis.de<br />
         Copyright (C) 2013 Luca Longinotti, l@longi.li
       </p>
-      
+
       <p>
         Permission is hereby granted, free of charge, to any person obtaining a copy
         of this software and associated documentation files (the "Software"), to deal
@@ -91,30 +91,30 @@
         THE SOFTWARE.
       </p>
     </section>
-    
+
     <section name="Getting started">
       <p>
-        Read the <a href="quickstart/index.html">quick start guide</a> and the 
+        Read the <a href="quickstart/index.html">quick start guide</a> and the
         <a href="faq.html">FAQ</a>. There are also some
         <a href="https://github.com/usb4java/usb4java-examples/">low-level (libusb) examples</a>
-        and 
+        and
         <a href="https://github.com/usb4java/usb4java-javax-examples/">high-level (javax-usb) examples</a>
         available.
       </p>
     </section>
-        
+
     <section name="Support">
       <p>
-        For questions and discussions please use the 
-        <a href="mailto:usb4java@googlegroups.com">usb4java mailing list</a> 
+        For questions and discussions please use the
+        <a href="mailto:usb4java@googlegroups.com">usb4java mailing list</a>
         (<a href="http://groups.google.com/group/usb4java">Google group</a>).
-        You can subscribe to it via email by sending a mail to 
+        You can subscribe to it via email by sending a mail to
         <a href="mailto:usb4java+subscribe@googlegroups.com">usb4java+subscribe@googlegroups.com</a>.
       </p>
-      <p> 
+      <p>
         If you have found a bug in the software or this
         web site (even if it's just a typo) then please create
-        an <a href="${project.issueManagement.url}">issue on GitHub</a>. 
+        an <a href="${project.issueManagement.url}">issue on GitHub</a>.
       </p>
     </section>
   </body>
