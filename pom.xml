@@ -6,7 +6,7 @@
   <artifactId>usb4java</artifactId>
   <packaging>jar</packaging>
   <name>usb4java</name>
-  <version>1.3.0-SNAPSHOT</version>
+  <version>1.3.0</version>
   <url>http://usb4java.org/</url>
   <description>
     USB library for Java based on libusb and implementing javax-usb (JSR-80).
@@ -67,6 +67,7 @@
     <connection>scm:git:git://github.com/usb4java/${project.artifactId}.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/usb4java/${project.artifactId}.git</developerConnection>
     <url>http://github.com/usb4java/${project.artifactId}</url>
+    <tag>usb4java-1.3.0</tag>
   </scm>
 
   <issueManagement>
