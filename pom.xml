@@ -67,7 +67,6 @@
     <connection>scm:git:git://github.com/usb4java/${project.artifactId}.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/usb4java/${project.artifactId}.git</developerConnection>
     <url>http://github.com/usb4java/${project.artifactId}</url>
-    <tag>HEAD</tag>
   </scm>
 
   <issueManagement>
