@@ -89,7 +89,7 @@ public final class LibUsb
     /**
      * Use the UsbDk backend for a specific context, if available.
      *
-     * This option should be set immediately after calling {@link #init()}, otherwise
+     * This option should be set immediately after calling {@link #init(Context)}, otherwise
      * unspecified behavior may occur.
      *
      * Only valid on Windows.
@@ -763,7 +763,7 @@ public final class LibUsb
      * @param level
      *            The log level to set.
      *
-     * @deprecated Use {@link #setOption()} instead using the {@link #OPTION_LOG_LEVEL} option.
+     * @deprecated Use {@link #setOption(Context, int, int)} instead using the {@link #OPTION_LOG_LEVEL} option.
      */
     public static native void setDebug(final Context context, final int level);
 
@@ -1328,8 +1328,9 @@ public final class LibUsb
      * is in progress, although it is legal to have several transfers going on within the same memory block.
      *
      * Will return NULL on failure. Many systems do not support such zerocopy and will always return NULL. Memory
-     * allocated with this function must be freed with {@link #devMemFree()}. Specifically, this means that the flag
-     * {@link #TRANSFER_FREE_BUFFER} cannot be used to free memory allocated with this function.
+     * allocated with this function must be freed with {@link #devMemFree(DeviceHandle, ByteBuffer, int)}.
+     * Specifically, this means that the flag {@link #TRANSFER_FREE_BUFFER} cannot be used to free memory
+     * allocated with this function.
      *
      * @param handle
      *            A device handle.
@@ -1340,7 +1341,7 @@ public final class LibUsb
     public static native ByteBuffer devMemAlloc(final DeviceHandle handle, final int length);
 
     /**
-     * Free device memory allocated with {@link #devMemAlloc()}.
+     * Free device memory allocated with {@link #devMemAlloc(DeviceHandle, int)}.
      *
      * @param handle
      *            A device handle.
@@ -1350,7 +1351,7 @@ public final class LibUsb
      *            The size of the previously allocated memory.
      * @return {@link #SUCCESS}, or a LIBUSB_ERROR code on failure.
      */
-    public static native int devMemFree(final DeviceHandle handle, final ByteBuffer buffer, final int length);
+    public static native int devMemFree(final DeviceHandle handle, final ByteBuffer buffer, final int size);
 
     /**
      * Determine if a kernel driver is active on an interface.
@@ -2132,9 +2133,9 @@ public final class LibUsb
      * Interrupt any active thread that is handling events.
      *
      * This is mainly useful for interrupting a dedicated event handling thread when an application wishes to call
-     * {@link #exit()}.
+     * {@link #exit(Context)}.
      *
-     * @param ctx
+     * @param context
      *            The context to operate on, or NULL for the default context.
      */
     public static native void interruptEventHandler(final Context context);
@@ -2511,7 +2512,7 @@ public final class LibUsb
     /**
      * Retrieve a list of file descriptors that should be polled by your main loop as libusb event sources.
      *
-     * The returned list should be freed with {@link #freePollfds()} when done. The actual list contents must not be
+     * The returned list should be freed with {@link #freePollfds(Pollfds)} when done. The actual list contents must not be
      * touched.
      *
      * As file descriptors are a Unix-specific concept, this function is not available on Windows and will always
@@ -2527,7 +2528,7 @@ public final class LibUsb
     /**
      * Free a list of {@link Pollfd} structures.
      *
-     * This should be called for all pollfd lists allocated with {@link #getPollfds()}.
+     * This should be called for all pollfd lists allocated with {@link #getPollfds(Context)}.
      *
      * It is legal to call this function with a NULL pollfd list. In this case, the function will simply return safely.
      */
