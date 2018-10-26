@@ -24,7 +24,7 @@ Frequently asked questions
 ----
 
   This means that whenever a USB device with vendor id <0x89ab> and product id
-  <0x4567> is attached then the group <wheel> is permitted to
+  <0x4567> is attached then the group <plugdev> is permitted to
   write to the device. So make sure your user is in that group (or use a
   different group).
 
