@@ -300,6 +300,11 @@ public final class Loader
      * times. Duplicate calls are ignored. This method is automatically called
      * when the {@link LibUsb} class is loaded. When you need to do it earlier
      * (To catch exceptions for example) then simply call this method manually.
+     * <p/>
+     * If the system property <tt>org.usb4java.LibraryName</tt> is defined, then
+     * instead of going through the classpath looking for the appropriate DLL,
+     * extracting it, etc., we simply call {@link System#loadLibrary}, passing
+     * in the value of the property.
      *
      * @throws LoaderException
      *             When loading the native wrapper libraries failed.
@@ -313,13 +318,21 @@ public final class Loader
         }
 
         loaded = true;
-        final String platform = getPlatform();
-        final String lib = getLibName();
-        final String extraLib = getExtraLibName();
-        if (extraLib != null)
+        final String libraryName = System.getProperty("org.usb4java.LibraryName");
+        if (libraryName != null)
         {
-            System.load(extractLibrary(platform, extraLib));
+            System.loadLibrary(libraryName);
         }
-        System.load(extractLibrary(platform, lib));
+        else
+        {
+            final String platform = getPlatform();
+            final String lib = getLibName();
+            final String extraLib = getExtraLibName();
+            if (extraLib != null)
+            {
+                System.load(extractLibrary(platform, extraLib));
+            }
+            System.load(extractLibrary(platform, lib));
+        }
     }
 }
